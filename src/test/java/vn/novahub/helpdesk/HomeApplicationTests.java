@@ -1,4 +1,4 @@
-package vn.novahub.profile.home;
+package vn.novahub.helpdesk;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -1,12 +1,12 @@
-package vn.novahub.profile.home;
+package vn.novahub.helpdesk;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class HomeApplication {
+public class Application {
 
 	public static void main(String[] args) {
-		SpringApplication.run(HomeApplication.class, args);
+		SpringApplication.run(Application.class, args);
 	}
 }
