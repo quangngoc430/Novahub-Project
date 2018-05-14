@@ -10,3 +10,7 @@ Upon finishing:
 - create pull request
 - change status of Jira ticket to review.
 - assign Jira ticket to mentor.
+Mentor will:
+- Review code
+- Upon approved, merge code, deploy to develop.
+- Change status of ticket to Done.
