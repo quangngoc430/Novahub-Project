@@ -1,4 +1,4 @@
-package vn.novahub.helpdesk;
+package vn.novahub.helpdesk.Controller;
 
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
