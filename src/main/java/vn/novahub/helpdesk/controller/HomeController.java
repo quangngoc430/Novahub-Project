@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import vn.novahub.helpdesk.service.AccountService;
 import vn.novahub.helpdesk.test.MailSenderService;
-import vn.novahub.helpdesk.test.SimpleMail;
 
 import javax.servlet.http.HttpServletRequest;
 
