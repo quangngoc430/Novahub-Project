@@ -6,9 +6,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import vn.novahub.helpdesk.model.Account;
 import vn.novahub.helpdesk.model.Issue;
-
-import java.util.List;
 
 @Repository
 public interface IssueRepository extends PagingAndSortingRepository<Issue, Long> {
@@ -63,4 +62,6 @@ public interface IssueRepository extends PagingAndSortingRepository<Issue, Long>
                                             @Param("keyword") String keyword,
                                             @Param("status") String status,
                                             Pageable pageable);
+
+    Issue findByIdAndToken(long id, String token);
 }

@@ -1,7 +1,9 @@
 package vn.novahub.helpdesk.model;
 
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -25,22 +27,21 @@ public class Issue implements Serializable {
     @Column(name = "status")
     private String status;
 
-    @NotEmpty
+    @NotNull
     @Column(name = "created_at")
     private Date createdAt;
 
-    @NotEmpty
+    @NotNull
     @Column(name = "updated_at")
     private Date updatedAt;
 
     @Column(name = "reply_message")
     private String replyMessage;
 
-    @NotEmpty
+    @NotNull
     @Column(name = "account_id")
     private long accountId;
 
-    @NotEmpty
     @Column(name = "token")
     private String token;
 

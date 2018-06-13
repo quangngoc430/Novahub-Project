@@ -3,8 +3,8 @@ package vn.novahub.helpdesk.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "date_off_type")
-public class DateOffType {
+@Table(name = "day_off_type")
+public class DayOffType {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -31,7 +31,7 @@ public class DateOffType {
 
     @Override
     public String toString() {
-        return "DateOffType{" +
+        return "DayOffType{" +
                 "id=" + id +
                 ", type='" + type + '\'' +
                 '}';

@@ -2,6 +2,7 @@ package vn.novahub.helpdesk.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -49,11 +50,11 @@ public class Account implements Serializable {
     @Column(name = "status")
     private String status;
 
-    @NotEmpty
+    @NotNull
     @Column(name = "created_at")
     private Date createdAt;
 
-    @NotEmpty
+    @NotNull
     @Column(name = "updated_at")
     private Date updatedAt;
 
@@ -184,5 +185,26 @@ public class Account implements Serializable {
 
     public void setRoleId(long roleId) {
         this.roleId = roleId;
+    }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", address='" + address + '\'' +
+                ", avatarUrl='" + avatarUrl + '\'' +
+                ", password='" + password + '\'' +
+                ", totalNumberOfHours=" + totalNumberOfHours +
+                ", remainNumberOfHours=" + remainNumberOfHours +
+                ", status='" + status + '\'' +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", token='" + token + '\'' +
+                ", roleId=" + roleId +
+                '}';
     }
 }
