@@ -6,4 +6,7 @@ import vn.novahub.helpdesk.model.AccountHasSkill;
 
 @Repository
 public interface AccountHasSkillRepository extends PagingAndSortingRepository<AccountHasSkill, Long> {
+
+    AccountHasSkill findByAccountIdAndSkillId(long accountId, long skillId);
+
 }

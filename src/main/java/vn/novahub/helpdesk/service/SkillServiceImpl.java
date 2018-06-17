@@ -22,7 +22,7 @@ public class SkillServiceImpl implements SkillService {
 
         if(oldSkill == null) {
             skill.setName(skill.getName().toLowerCase());
-            skillRepository.save(skill);
+            Skill newSkill = skillRepository.save(skill);
         } else {
             AccountHasSkill accountHasSkill = new AccountHasSkill();
             accountHasSkill.setAccountId(accountId);
@@ -44,6 +44,35 @@ public class SkillServiceImpl implements SkillService {
         skill.setName(skill.getName().toLowerCase());
 
         return skillRepository.save(skill);
+    }
+
+    public Skill updateSkill(Skill skill, long accountId, long skillId) {
+        Skill oldSkill = skillRepository.findByName(skill.getName().toLowerCase());
+
+        if(oldSkill == null){
+            skill.setName(skill.getName().toLowerCase());
+            Skill newSkill = skillRepository.save(skill);
+
+            AccountHasSkill accountHasSkill = accountHasSkillRepository.findByAccountIdAndSkillId(accountId, skillId);
+            accountHasSkill.setSkillId(newSkill.getId());
+            accountHasSkillRepository.save(accountHasSkill);
+
+            return newSkill;
+        } else {
+            AccountHasSkill accountHasSkill = accountHasSkillRepository.findByAccountIdAndSkillId(accountId, skillId);
+            accountHasSkill.setSkillId(oldSkill.getId());
+            accountHasSkillRepository.save(accountHasSkill);
+
+            // delete old skill if is don't belong to any accounts
+            skillRepository.deleteById(skillId);
+
+            return oldSkill;
+        }
+    }
+
+    @Override
+    public Skill getSkillBySkillId(long skillId) {
+        return skillRepository.findById(skillId).get();
     }
 
 
