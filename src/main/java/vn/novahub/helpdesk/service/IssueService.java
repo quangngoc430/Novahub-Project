@@ -20,7 +20,7 @@ public interface IssueService {
 
     Issue updateIssue(long issuetId, Issue issue, HttpServletRequest request);
 
-    boolean deleteIssue(long issueId);
+    void deleteIssue(long issueId);
 
     boolean approveIssue(long issueId, String token);
 

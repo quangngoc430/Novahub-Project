@@ -102,14 +102,9 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public boolean deleteIssue(long issueId) {
+    public void deleteIssue(long issueId) {
 
-        boolean output = checkDeleteIssue(issueId);
-
-        if(output == true)
-            issueRepository.deleteById(issueId);
-
-        return output;
+        issueRepository.deleteById(issueId);
     }
 
     @Override
@@ -146,10 +141,6 @@ public class IssueServiceImpl implements IssueService {
         } else {
             return false;
         }
-    }
-
-    boolean checkDeleteIssue(long issueId){
-        return true;
     }
 
 }

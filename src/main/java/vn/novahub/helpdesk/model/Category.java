@@ -13,7 +13,7 @@ public class Category implements Serializable {
     private long id;
 
     @Column(name = "name")
-    private long name;
+    private String name;
 
     @OneToMany
     private List<Skill> skillList;
@@ -26,11 +26,11 @@ public class Category implements Serializable {
         this.id = id;
     }
 
-    public long getName() {
+    public String getName() {
         return name;
     }
 
-    public void setName(long name) {
+    public void setName(String name) {
         this.name = name;
     }
 

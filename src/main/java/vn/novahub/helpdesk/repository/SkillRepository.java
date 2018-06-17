@@ -31,6 +31,4 @@ public interface SkillRepository extends PagingAndSortingRepository<Skill, Long>
 
     @Transactional
     Skill save(Skill skill);
-
-    boolean deleteById(long skillId);
 }
