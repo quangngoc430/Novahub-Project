@@ -1,10 +1,13 @@
 package vn.novahub.helpdesk.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "skill")
-public class Skill {
+public class Skill implements Serializable {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -16,6 +19,12 @@ public class Skill {
     @Column(name = "category_id")
     private long categoryId;
 
+    @OneToMany(fetch = FetchType.LAZY )
+    private List<AccountHasSkill> accountHasSkillList;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", insertable = false, updatable = false)
+    private Category category;
 
     public long getId() {
         return id;
@@ -41,6 +50,27 @@ public class Skill {
         this.categoryId = categoryId;
     }
 
+    public List<AccountHasSkill> getAccountHasSkillList() {
+        return accountHasSkillList;
+    }
+
+    public void setAccountHasSkillList(List<AccountHasSkill> accountHasSkillList) {
+        this.accountHasSkillList = accountHasSkillList;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(name);
+    }
 
     @Override
     public String toString() {
@@ -48,6 +78,8 @@ public class Skill {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", categoryId=" + categoryId +
+                ", accountHasSkillList=" + accountHasSkillList +
+                ", category=" + category +
                 '}';
     }
 }

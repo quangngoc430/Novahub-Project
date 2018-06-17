@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import vn.novahub.helpdesk.model.Mail;
 import vn.novahub.helpdesk.service.AccountService;
-import vn.novahub.helpdesk.test.MailSenderService;
+import vn.novahub.helpdesk.service.MailService;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
@@ -25,11 +27,15 @@ public class HomeController {
     private AccountService accountService;
 
     @Autowired
-    private MailSenderService mailSenderService;
+    private MailService mailService;
 
     @RequestMapping("/")
-    public String index() {
-        mailSenderService.sendSimpleMail(new SimpleMail("ngoc.bui150019@vnuk.edu.vn"));
+    public String index() throws MessagingException {
+        Mail mail = new Mail();
+        mail.setEmailReceiving("ngoc.bui150019@vnuk.edu.vn");
+        mail.setSubject("Gửi mail nè =)))");
+        mail.setContent("Content");
+        mailService.sendSimpleMail(mail);
         return "Greetings from Spring Boot!";
     }
 

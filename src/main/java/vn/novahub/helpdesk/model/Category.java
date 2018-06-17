@@ -1,10 +1,12 @@
 package vn.novahub.helpdesk.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "category")
-public class Category {
+public class Category implements Serializable {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -12,6 +14,9 @@ public class Category {
 
     @Column(name = "name")
     private long name;
+
+    @OneToMany
+    private List<Skill> skillList;
 
     public long getId() {
         return id;
@@ -29,4 +34,20 @@ public class Category {
         this.name = name;
     }
 
+    public List<Skill> getSkillList() {
+        return skillList;
+    }
+
+    public void setSkillList(List<Skill> skillList) {
+        this.skillList = skillList;
+    }
+
+    @Override
+    public String toString() {
+        return "Category{" +
+                "id=" + id +
+                ", name=" + name +
+                ", skillList=" + skillList +
+                '}';
+    }
 }

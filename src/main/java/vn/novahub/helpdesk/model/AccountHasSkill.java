@@ -16,7 +16,6 @@ public class AccountHasSkill {
     @Column(name = "skill_id")
     private long skillId;
 
-
     public long getId() {
         return id;
     }
@@ -25,7 +24,7 @@ public class AccountHasSkill {
         this.id = id;
     }
 
-    public long getAccountId() {
+    public long getAccwountId() {
         return accountId;
     }
 
@@ -41,6 +40,33 @@ public class AccountHasSkill {
         this.skillId = skillId;
     }
 
+    public long getAccountId() {
+        return accountId;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
+    public Skill getSkill() {
+        return skill;
+    }
+
+    public void setSkill(Skill skill) {
+        this.skill = skill;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "account_id", insertable = false, updatable = false)
+    private Account account;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "skill_id", insertable = false, updatable = false)
+    private Skill skill;
 
     @Override
     public String toString() {
@@ -48,6 +74,8 @@ public class AccountHasSkill {
                 "id=" + id +
                 ", accountId=" + accountId +
                 ", skillId=" + skillId +
+                ", account=" + account +
+                ", skill=" + skill +
                 '}';
     }
 }
