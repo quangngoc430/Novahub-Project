@@ -107,7 +107,7 @@ public class IssueController {
     @DeleteMapping(value = "/api/issues/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> deleteIssue(@PathVariable(name = "issueId") long issueId){
         // TODO check issueId is exist
-        boolean isDeleted = issueService.deleteIssue(issueId);
+        issueService.deleteIssue(issueId);
 
         return new ResponseEntity<>(isDeleted, HttpStatus.OK);
     }

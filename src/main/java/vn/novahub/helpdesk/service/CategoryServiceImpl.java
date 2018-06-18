@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import vn.novahub.helpdesk.model.Category;
 import vn.novahub.helpdesk.repository.CategoryRepository;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 
 @Service
@@ -14,12 +15,15 @@ public class CategoryServiceImpl implements CategoryService{
     private CategoryRepository categoryRepository;
 
     @Override
-    public Category createCategory(Category category) {
+    public Category createCategory(Category category,
+                                   HttpServletRequest request) {
         return categoryRepository.save(category);
     }
 
     @Override
-    public Category updateCategory(Category category, long categoryId) {
+    public Category updateCategory(Category category,
+                                   long categoryId,
+                                   HttpServletRequest request) {
         // TODO: check category is exist
 
         Category oldCategory = categoryRepository.findById(categoryId).get();
@@ -32,17 +36,20 @@ public class CategoryServiceImpl implements CategoryService{
     }
 
     @Override
-    public Category getCategoryByCategoryId(long categoryId) {
+    public Category getCategoryByCategoryId(long categoryId,
+                                            HttpServletRequest request) {
         return categoryRepository.findById(categoryId).get();
     }
 
     @Override
-    public ArrayList<Category> getAllCategories(String name) {
+    public ArrayList<Category> getAllCategories(String name,
+                                                HttpServletRequest request) {
         return (ArrayList<Category>) categoryRepository.getAllByNameLike("%" + name.toLowerCase() + "%");
     }
 
     @Override
-    public void deleteCategoryByCategoryId(long categoryId) {
+    public void deleteCategoryByCategoryId(long categoryId,
+                                           HttpServletRequest request) {
         categoryRepository.deleteById(categoryId);
     }
 }

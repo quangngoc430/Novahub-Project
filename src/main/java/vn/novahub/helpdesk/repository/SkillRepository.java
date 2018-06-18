@@ -29,6 +29,5 @@ public interface SkillRepository extends PagingAndSortingRepository<Skill, Long>
 
     Skill findByName(String skillName);
 
-    @Transactional
-    Skill save(Skill skill);
+    Skill findByIdAndCategoryId(long skillId, long categoryId);
 }

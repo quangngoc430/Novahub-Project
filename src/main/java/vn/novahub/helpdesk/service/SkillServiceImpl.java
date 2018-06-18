@@ -7,6 +7,9 @@ import vn.novahub.helpdesk.model.Skill;
 import vn.novahub.helpdesk.repository.AccountHasSkillRepository;
 import vn.novahub.helpdesk.repository.SkillRepository;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+
 @Service
 public class SkillServiceImpl implements SkillService {
 
@@ -71,8 +74,18 @@ public class SkillServiceImpl implements SkillService {
     }
 
     @Override
+    public ArrayList<Skill> getAllSkillsOfACategoryByCategoryId(long categoryId, HttpServletRequest request) {
+        return skillRepository.getAllByCategoryId(categoryId);
+    }
+
+    @Override
     public Skill getSkillBySkillId(long skillId) {
         return skillRepository.findById(skillId).get();
+    }
+
+    @Override
+    public Skill getASkillByCategoryIdAndSkillId(long categoryId, long skillId, HttpServletRequest request) {
+        return skillRepository.findByIdAndCategoryId(skillId, categoryId);
     }
 
 
