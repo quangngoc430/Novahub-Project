@@ -9,7 +9,7 @@ public interface SkillService {
 
     Skill createSkillByAccount(Skill skill, long accountId);
 
-    Skill createSkill(Skill skill);
+    Skill createASkillOfACategory(Skill skill, long categoryId, HttpServletRequest request);
 
     Skill updateSkill(Skill skill, long accountId, long skillId);
 

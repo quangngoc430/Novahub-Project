@@ -37,14 +37,15 @@ public class SkillServiceImpl implements SkillService {
     }
 
     @Override
-    public Skill createSkill(Skill skill) {
+    public Skill createASkillOfACategory(Skill skill, long categoryId, HttpServletRequest request) {
         Skill oldSkill = skillRepository.findByName(skill.getName().toLowerCase());
 
-        if(oldSkill == null){
-            return null;
+        if(oldSkill != null){
+            return oldSkill;
         }
 
         skill.setName(skill.getName().toLowerCase());
+        skill.setCategoryId(categoryId);
 
         return skillRepository.save(skill);
     }

@@ -109,6 +109,6 @@ public class IssueController {
         // TODO check issueId is exist
         issueService.deleteIssue(issueId);
 
-        return new ResponseEntity<>(isDeleted, HttpStatus.OK);
+        return new ResponseEntity<>(true, HttpStatus.OK);
     }
 }
