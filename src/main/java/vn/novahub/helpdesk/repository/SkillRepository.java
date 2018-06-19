@@ -30,4 +30,7 @@ public interface SkillRepository extends PagingAndSortingRepository<Skill, Long>
     Skill findByName(String skillName);
 
     Skill findByIdAndCategoryId(long skillId, long categoryId);
+
+    void deleteByIdAndCategoryId(long skillId, long categoryId);
+
 }

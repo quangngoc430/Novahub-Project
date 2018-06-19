@@ -58,4 +58,22 @@ public class CategoryController {
         Skill newSkill = skillService.createASkillOfACategory(skill, categoryId, request);
         return new ResponseEntity<>(newSkill, HttpStatus.OK);
     }
+
+    @PutMapping(value = "/api/categories/{id}/skills/{skill_id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<?> updateASkillOfACategory(@PathVariable("id") long categoryId,
+                                                     @PathVariable("skill_id") long skillId,
+                                                     @RequestBody Skill skill,
+                                                     HttpServletRequest request){
+        Skill newSkil = skillService.getASkillByCategoryIdAndSkillId(categoryId, skillId, request);
+        return new ResponseEntity<>( newSkil, HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/api/categories/{id}/skills/{skill_id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<?> deleteASkillOfCategory(@PathVariable("id") long categoryId,
+                                                    @PathVariable("skill_id") long skillId,
+                                                    HttpServletRequest request){
+        skillService.deteleASkillByCategoryIdAndSkillId(categoryId, skillId, request);
+
+        return new ResponseEntity<>( "OK", HttpStatus.OK);
+    }
 }

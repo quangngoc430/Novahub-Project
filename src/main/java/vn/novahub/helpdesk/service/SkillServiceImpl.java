@@ -75,6 +75,22 @@ public class SkillServiceImpl implements SkillService {
     }
 
     @Override
+    public Skill updateSkillByCategoryIdAndSkillId(Skill skill, long categoryId, long skillId) {
+        Skill oldSkill = skillRepository.findByIdAndCategoryId(skillId, categoryId);
+
+        if(oldSkill == null){
+
+            // handle skill isn;t exist
+            return null;
+        }
+
+        oldSkill.setName(skill.getName());
+        oldSkill = skillRepository.save(oldSkill);
+
+        return oldSkill;
+    }
+
+    @Override
     public ArrayList<Skill> getAllSkillsOfACategoryByCategoryId(long categoryId, HttpServletRequest request) {
         return skillRepository.getAllByCategoryId(categoryId);
     }
@@ -87,6 +103,11 @@ public class SkillServiceImpl implements SkillService {
     @Override
     public Skill getASkillByCategoryIdAndSkillId(long categoryId, long skillId, HttpServletRequest request) {
         return skillRepository.findByIdAndCategoryId(skillId, categoryId);
+    }
+
+    @Override
+    public void deteleASkillByCategoryIdAndSkillId(long categoryId, long skillId, HttpServletRequest request) {
+        skillRepository.deleteByIdAndCategoryId(skillId, categoryId);
     }
 
 
