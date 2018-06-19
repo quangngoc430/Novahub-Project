@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import vn.novahub.helpdesk.model.AccountHasSkill;
 import vn.novahub.helpdesk.model.Skill;
 import vn.novahub.helpdesk.repository.AccountHasSkillRepository;
+import vn.novahub.helpdesk.repository.CategoryRepository;
 import vn.novahub.helpdesk.repository.SkillRepository;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +19,9 @@ public class SkillServiceImpl implements SkillService {
 
     @Autowired
     private AccountHasSkillRepository accountHasSkillRepository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @Override
     public Skill createSkillByAccount(Skill skill, long accountId) {
@@ -75,19 +79,26 @@ public class SkillServiceImpl implements SkillService {
     }
 
     @Override
-    public Skill updateSkillByCategoryIdAndSkillId(Skill skill, long categoryId, long skillId) {
-        Skill oldSkill = skillRepository.findByIdAndCategoryId(skillId, categoryId);
-
-        if(oldSkill == null){
-
-            // handle skill isn;t exist
+    public Skill updateSkillByCategoryIdAndSkillId(Skill skill, long categoryId, long skillId, HttpServletRequest request) {
+        if(categoryRepository.findById(categoryId).get() == null)
             return null;
+
+        if(skillRepository.findById(skillId).get() == null)
+            return null;
+
+        // Get list accountHasSkill have skill which has skillId
+        // If size of list > 1 then create new skill. Because Having more than one account have skill
+        ArrayList<AccountHasSkill> accountHasSkillArrayList = accountHasSkillRepository.findBySkillId(skillId);
+
+        if(accountHasSkillArrayList.size() > 1){
+            skill.setCategoryId(categoryId);
+            skill = skillRepository.save(skill);
+            return skill;
+        } else {
+            skill.setId(skillId);
+            skill = skillRepository.save(skill);
+            return skill;
         }
-
-        oldSkill.setName(skill.getName());
-        oldSkill = skillRepository.save(oldSkill);
-
-        return oldSkill;
     }
 
     @Override

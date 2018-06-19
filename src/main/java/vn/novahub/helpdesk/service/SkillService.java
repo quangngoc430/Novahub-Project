@@ -13,7 +13,7 @@ public interface SkillService {
 
     Skill updateSkill(Skill skill, long accountId, long skillId);
 
-    Skill updateSkillByCategoryIdAndSkillId(Skill skill, long categoryId, long skillId);
+    Skill updateSkillByCategoryIdAndSkillId(Skill skill, long categoryId, long skillId, HttpServletRequest request);
 
     ArrayList<Skill> getAllSkillsOfACategoryByCategoryId(long categoryId, HttpServletRequest request);
 
