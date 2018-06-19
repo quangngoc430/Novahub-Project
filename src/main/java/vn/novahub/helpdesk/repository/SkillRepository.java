@@ -18,8 +18,11 @@ public interface SkillRepository extends PagingAndSortingRepository<Skill, Long>
 
     ArrayList<Skill> getAllByCategoryId(long categoryId);
 
-    @Query("FROM Skill skill JOIN AccountHasSkill accountHasSkill ON skill.id = accountHasSkill.skillId WHERE accountHasSkill.accountId = :accountId")
-    ArrayList<Skill> getAllSkillsByAccountId(@Param("accountId") long accountId);
+    @Query("FROM Skill skill " +
+           "JOIN AccountHasSkill accountHasSkill ON skill.id = accountHasSkill.skillId " +
+           "WHERE accountHasSkill.accountId = :accountId AND skill.name LIKE :nameSkill")
+    ArrayList<Skill> getAllSkillsByAccountIdAndNameLike(@Param("accountId") long accountId,
+                                                        @Param("name") String nameSkill);
 
     @Query("FROM Skill skill JOIN AccountHasSkill accountHasSkill ON skill.id = accountHasSkill.skillId WHERE accountHasSkill.accountId = :accountId AND skill.categoryId = :categoryId")
     ArrayList<Skill> getAllSkillsByAccountIdAndCategoryId(@Param("accountId") long accountId,
@@ -27,7 +30,6 @@ public interface SkillRepository extends PagingAndSortingRepository<Skill, Long>
 
     @Query("FROM Skill skill WHERE skill.name LIKE :name")
     ArrayList<Skill> getAllSkillsByNameLike(@Param("name") String name);
-
 
     ArrayList<Skill> getAllByCategoryIdAndNameLike(long categoryId, String name);
 

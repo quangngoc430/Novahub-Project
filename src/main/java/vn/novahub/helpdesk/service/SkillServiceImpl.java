@@ -2,6 +2,7 @@ package vn.novahub.helpdesk.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import vn.novahub.helpdesk.model.Account;
 import vn.novahub.helpdesk.model.AccountHasSkill;
 import vn.novahub.helpdesk.model.Category;
 import vn.novahub.helpdesk.model.Skill;
@@ -95,7 +96,7 @@ public class SkillServiceImpl implements SkillService {
     }
 
     @Override
-    public Skill getSkillBySkillId(long skillId) {
+    public Skill getASkillBySkillId(long skillId) {
         return skillRepository.findById(skillId).get();
     }
 
@@ -130,5 +131,18 @@ public class SkillServiceImpl implements SkillService {
 
         return skillRepository.getAllByCategoryIdAndNameLike(categoryId, "%" + name + "%");
     }
+
+    @Override
+    public ArrayList<Skill> getAllSkillsOfAnAccount(String nameSkill, HttpServletRequest request) {
+        nameSkill = "%" + nameSkill + "%";
+
+        Account accountLogin = (Account) request.getSession().getAttribute("accountLogin");
+
+        ArrayList<Skill> skillArrayList = skillRepository.getAllSkillsByAccountIdAndNameLike(accountLogin.getId(), nameSkill);
+
+        return skillArrayList;
+    }
+
+
 
 }

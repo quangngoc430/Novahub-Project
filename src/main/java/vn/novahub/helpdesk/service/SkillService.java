@@ -17,7 +17,9 @@ public interface SkillService {
 
     ArrayList<Skill> getAllSkillsOfACategory(long categoryId, String name, HttpServletRequest request);
 
-    Skill getSkillBySkillId(long skillId);
+    ArrayList<Skill> getAllSkillsOfAnAccount(String nameSkill, HttpServletRequest request);
+
+    Skill getASkillBySkillId(long skillId);
 
     Skill getASkillByCategoryIdAndSkillId(long categoryId, long skillId, HttpServletRequest request);
 

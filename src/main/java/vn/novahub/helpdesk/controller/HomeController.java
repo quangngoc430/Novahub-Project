@@ -31,11 +31,6 @@ public class HomeController {
 
     @RequestMapping("/")
     public String index() throws MessagingException {
-        Mail mail = new Mail();
-        mail.setEmailReceiving("ngoc.bui150019@vnuk.edu.vn");
-        mail.setSubject("Gửi mail nè =)))");
-        mail.setContent("Content");
-        mailService.sendSimpleMail(mail);
         return "Greetings from Spring Boot!";
     }
 
