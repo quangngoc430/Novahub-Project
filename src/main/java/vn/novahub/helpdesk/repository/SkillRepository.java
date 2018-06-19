@@ -10,6 +10,7 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 
 @Repository
+@Transactional
 public interface SkillRepository extends PagingAndSortingRepository<Skill, Long> {
 
     @Query("FROM Skill skill")
@@ -26,6 +27,9 @@ public interface SkillRepository extends PagingAndSortingRepository<Skill, Long>
 
     @Query("FROM Skill skill WHERE skill.name LIKE :name")
     ArrayList<Skill> getAllSkillsByNameLike(@Param("name") String name);
+
+
+    ArrayList<Skill> getAllByCategoryIdAndNameLike(long categoryId, String name);
 
     Skill findByName(String skillName);
 

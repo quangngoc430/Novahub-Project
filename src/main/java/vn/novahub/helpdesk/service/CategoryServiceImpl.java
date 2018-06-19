@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vn.novahub.helpdesk.model.Category;
 import vn.novahub.helpdesk.repository.CategoryRepository;
+import vn.novahub.helpdesk.repository.SkillRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -14,41 +15,44 @@ public class CategoryServiceImpl implements CategoryService{
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @Autowired
+    private SkillRepository skillRepository;
+
     @Override
-    public Category createCategory(Category category,
+    public ArrayList<Category> getAllCategories(String name,
+                                                HttpServletRequest request) {
+        return (ArrayList<Category>) categoryRepository.getAllByNameLike("%" + name + "%");
+    }
+
+    @Override
+    public Category getACategory(long categoryId,
+                                 HttpServletRequest request) {
+        return categoryRepository.findById(categoryId).get();
+    }
+
+    @Override
+    public Category createACategory(Category category,
                                    HttpServletRequest request) {
         return categoryRepository.save(category);
     }
 
     @Override
-    public Category updateCategory(Category category,
+    public Category updateACategory(Category category,
                                    long categoryId,
                                    HttpServletRequest request) {
-        // TODO: check category is exist
-
         Category oldCategory = categoryRepository.findById(categoryId).get();
-        oldCategory.setName(category.getName().toLowerCase());
-        Category newCategory = categoryRepository.save(oldCategory);
 
-        // TODO: delete category if it don't belong to any skills
+        if(oldCategory == null)
+            return null;
+
+        oldCategory.setName(category.getName());
+        Category newCategory = categoryRepository.save(oldCategory);
 
         return newCategory;
     }
 
     @Override
-    public Category getCategoryByCategoryId(long categoryId,
-                                            HttpServletRequest request) {
-        return categoryRepository.findById(categoryId).get();
-    }
-
-    @Override
-    public ArrayList<Category> getAllCategories(String name,
-                                                HttpServletRequest request) {
-        return (ArrayList<Category>) categoryRepository.getAllByNameLike("%" + name.toLowerCase() + "%");
-    }
-
-    @Override
-    public void deleteCategoryByCategoryId(long categoryId,
+    public void deleteACategory(long categoryId,
                                            HttpServletRequest request) {
         categoryRepository.deleteById(categoryId);
     }

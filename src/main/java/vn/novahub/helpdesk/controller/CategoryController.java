@@ -23,7 +23,7 @@ public class CategoryController {
     private SkillService skillService;
 
     @GetMapping(value = "/api/categories", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> getAllCategories(@RequestParam(value = "keyword", required = false) String keyword,
+    public ResponseEntity<?> getAllCategories(@RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
                                               HttpServletRequest request){
         ArrayList<Category> categoryArrayList = categoryService.getAllCategories(keyword, request);
         return new ResponseEntity<>(categoryArrayList, HttpStatus.OK);
@@ -32,14 +32,15 @@ public class CategoryController {
     @GetMapping(value = "/api/categories/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> getACategory(@PathVariable("id") long categoryId,
                                           HttpServletRequest request){
-        Category category = categoryService.getCategoryByCategoryId(categoryId, request);
+        Category category = categoryService.getACategory(categoryId, request);
         return new ResponseEntity<>(category, HttpStatus.OK);
     }
 
     @GetMapping(value = "/api/categories/{id}/skills", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> getAllSkillsOfACategory(@PathVariable("id") long categoryId,
+                                                    @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
                                                     HttpServletRequest request){
-        ArrayList<Skill> skillArrayList = skillService.getAllSkillsOfACategoryByCategoryId(categoryId, request);
+        ArrayList<Skill> skillArrayList = skillService.getAllSkillsOfACategory(categoryId, keyword, request);
         return new ResponseEntity<>(skillArrayList, HttpStatus.OK);
     }
 
@@ -64,7 +65,7 @@ public class CategoryController {
                                                      @PathVariable("skill_id") long skillId,
                                                      @RequestBody Skill skill,
                                                      HttpServletRequest request){
-        Skill newSkil = skillService.getASkillByCategoryIdAndSkillId(categoryId, skillId, request);
+        Skill newSkil = skillService.updateSkillByCategoryIdAndSkillId(skill, categoryId, skillId, request);
         return new ResponseEntity<>( newSkil, HttpStatus.OK);
     }
 

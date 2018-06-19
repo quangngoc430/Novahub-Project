@@ -3,6 +3,7 @@ package vn.novahub.helpdesk.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vn.novahub.helpdesk.model.AccountHasSkill;
+import vn.novahub.helpdesk.model.Category;
 import vn.novahub.helpdesk.model.Skill;
 import vn.novahub.helpdesk.repository.AccountHasSkillRepository;
 import vn.novahub.helpdesk.repository.CategoryRepository;
@@ -42,7 +43,7 @@ public class SkillServiceImpl implements SkillService {
 
     @Override
     public Skill createASkillOfACategory(Skill skill, long categoryId, HttpServletRequest request) {
-        Skill oldSkill = skillRepository.findByName(skill.getName().toLowerCase());
+        Skill oldSkill = skillRepository.findByName(skill.getName());
 
         if(oldSkill != null){
             return oldSkill;
@@ -54,6 +55,7 @@ public class SkillServiceImpl implements SkillService {
         return skillRepository.save(skill);
     }
 
+    @Override
     public Skill updateSkill(Skill skill, long accountId, long skillId) {
         Skill oldSkill = skillRepository.findByName(skill.getName().toLowerCase());
 
@@ -86,24 +88,10 @@ public class SkillServiceImpl implements SkillService {
         if(skillRepository.findById(skillId).get() == null)
             return null;
 
-        // Get list accountHasSkill have skill which has skillId
-        // If size of list > 1 then create new skill. Because Having more than one account have skill
-        ArrayList<AccountHasSkill> accountHasSkillArrayList = accountHasSkillRepository.findBySkillId(skillId);
-
-        if(accountHasSkillArrayList.size() > 1){
-            skill.setCategoryId(categoryId);
-            skill = skillRepository.save(skill);
-            return skill;
-        } else {
-            skill.setId(skillId);
-            skill = skillRepository.save(skill);
-            return skill;
-        }
-    }
-
-    @Override
-    public ArrayList<Skill> getAllSkillsOfACategoryByCategoryId(long categoryId, HttpServletRequest request) {
-        return skillRepository.getAllByCategoryId(categoryId);
+        skill.setId(skillId);
+        skill.setCategoryId(categoryId);
+        skill = skillRepository.save(skill);
+        return skill;
     }
 
     @Override
@@ -118,8 +106,29 @@ public class SkillServiceImpl implements SkillService {
 
     @Override
     public void deteleASkillByCategoryIdAndSkillId(long categoryId, long skillId, HttpServletRequest request) {
-        skillRepository.deleteByIdAndCategoryId(skillId, categoryId);
+        Category category = categoryRepository.findById(categoryId).get();
+
+        if(category == null){
+            // TODO: noti the categoryId isn't exist
+        }
+
+        Skill skill = skillRepository.findById(skillId).get();
+
+        if(skill == null){
+            // TODO: noti the skillId isn't exist
+        }
+
+        skillRepository.deleteById(skillId);
     }
 
+    @Override
+    public ArrayList<Skill> getAllSkillsOfACategory(long categoryId, String name, HttpServletRequest request) {
+        Category category = categoryRepository.findById(categoryId).get();
+
+        if(category == null)
+            return null;
+
+        return skillRepository.getAllByCategoryIdAndNameLike(categoryId, "%" + name + "%");
+    }
 
 }

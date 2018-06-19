@@ -15,7 +15,7 @@ public interface SkillService {
 
     Skill updateSkillByCategoryIdAndSkillId(Skill skill, long categoryId, long skillId, HttpServletRequest request);
 
-    ArrayList<Skill> getAllSkillsOfACategoryByCategoryId(long categoryId, HttpServletRequest request);
+    ArrayList<Skill> getAllSkillsOfACategory(long categoryId, String name, HttpServletRequest request);
 
     Skill getSkillBySkillId(long skillId);
 

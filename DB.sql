@@ -50,7 +50,7 @@ CREATE TABLE `skill` (
   `name` varchar(45) DEFAULT NULL,
   `category_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),  
-  CONSTRAINT `fk_skill_category` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`)
+  CONSTRAINT `fk_skill_category` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;	
 
 CREATE TABLE `account_has_skill` (
@@ -58,8 +58,8 @@ CREATE TABLE `account_has_skill` (
   `account_id` int(11) NOT NULL,
   `skill_id` int(11) NOT NULL,
   PRIMARY KEY(`id`), 
-  CONSTRAINT `fk_account_has_skill_account` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`),
-  CONSTRAINT `fk_account_has_skill_skill` FOREIGN KEY (`skill_id`) REFERENCES `skill` (`id`)
+  CONSTRAINT `fk_account_has_skill_account` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`) ON DELETE CASCADE ,
+  CONSTRAINT `fk_account_has_skill_skill` FOREIGN KEY (`skill_id`) REFERENCES `skill` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `day_off_type` (
@@ -83,8 +83,8 @@ CREATE TABLE `day_off` (
   `account_id` int(11) NOT NULL,
   `type_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  CONSTRAINT `fk_day_off_account` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`),
-  CONSTRAINT `fk_day_off_type` FOREIGN KEY (`type_id`) REFERENCES `day_off_type` (`id`)
+  CONSTRAINT `fk_day_off_account` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`) ON DELETE CASCADE ,
+  CONSTRAINT `fk_day_off_type` FOREIGN KEY (`type_id`) REFERENCES `day_off_type` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `issue` (
@@ -98,7 +98,7 @@ CREATE TABLE `issue` (
   `account_id` int(11) NOT NULL,
   `token` varchar(256),
   PRIMARY KEY (`id`),
-  CONSTRAINT `fk_issue_account` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`)
+  CONSTRAINT `fk_issue_account` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -106,7 +106,6 @@ CREATE TABLE `issue` (
 INSERT INTO `role`(name) VALUES ("ADMIN");
 INSERT INTO `role`(name) VALUES ("CLERK");
 INSERT INTO `role`(name) VALUES ("USER");
-
 
 INSERT INTO `account`(email, first_name, last_name, password, total_number_of_hours, remain_number_of_hours, status, token, role_id) 
 VALUES("admin@gmail.com", "ngoc", "bui", "password", 14, 14, "NONE", "abcdefghijk123456789", 1);
@@ -117,6 +116,29 @@ VALUES("ngoc@gmail.com", "bui lam", "quang ngoc", "password", 14, 14, "NONE", "a
 INSERT INTO `account`(email, first_name, last_name, password, total_number_of_hours, remain_number_of_hours, status, token, role_id) 
 VALUES("hai@gmail.com", "bui lam", "thanh hai", "password", 14, 14, "NONE", "abcdefghijk123456789", 3); 
 
+INSERT INTO `category`(name) VALUES
+("Programming Language"),
+("Backend Framework"),
+("Frontend Framework");
+
+INSERT INTO `skill`(name, category_id) VALUES 
+("Java", 1),
+("Ruby", 1),
+("C#", 1),
+("Python", 1),
+("Spring", 2),
+("Rails", 2),
+("Angular", 3),
+("Reactjs", 3);
+
+INSERT INTO `account_has_skill`(account_id, skill_id) VALUES
+(1, 1),
+(1, 2),
+(1, 3),
+(1, 4),
+(2, 2),
+(2, 3),
+(2, 6);
 
 INSERT INTO `issue`(title, content, status, account_id)
 VALUES("title", "content", "pending", 1);
