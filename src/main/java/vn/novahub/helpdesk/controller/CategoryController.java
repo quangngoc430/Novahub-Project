@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 
 @RestController
+@RequestMapping(path = "/api")
 public class CategoryController {
 
     @Autowired
@@ -22,21 +23,21 @@ public class CategoryController {
     @Autowired
     private SkillService skillService;
 
-    @GetMapping(value = "/api/categories", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(path = "/categories", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> getAllCategories(@RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
                                               HttpServletRequest request){
         ArrayList<Category> categoryArrayList = categoryService.getAllCategories(keyword, request);
         return new ResponseEntity<>(categoryArrayList, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/api/categories/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(path = "/categories/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> getACategory(@PathVariable("id") long categoryId,
                                           HttpServletRequest request){
         Category category = categoryService.getACategory(categoryId, request);
         return new ResponseEntity<>(category, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/api/categories/{id}/skills", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(path = "/categories/{id}/skills", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> getAllSkillsOfACategory(@PathVariable("id") long categoryId,
                                                     @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
                                                     HttpServletRequest request){
@@ -44,7 +45,7 @@ public class CategoryController {
         return new ResponseEntity<>(skillArrayList, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/api/categories/{id}/skills/{skill_id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(path = "/categories/{id}/skills/{skill_id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> getASkillOfACategory(@PathVariable("id") long categoryId,
                                                   @PathVariable("skill_id") long skillId,
                                                   HttpServletRequest request){
@@ -52,7 +53,7 @@ public class CategoryController {
         return  new ResponseEntity<>(skill, HttpStatus.OK);
     }
 
-    @PostMapping(value = "/api/categories/{id}/skills", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(path = "/categories/{id}/skills", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> createASkillOfACategory(@PathVariable("id") long categoryId,
                                                      @RequestBody Skill skill,
                                                      HttpServletRequest request){
@@ -60,7 +61,7 @@ public class CategoryController {
         return new ResponseEntity<>(newSkill, HttpStatus.OK);
     }
 
-    @PutMapping(value = "/api/categories/{id}/skills/{skill_id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PutMapping(path = "/categories/{id}/skills/{skill_id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> updateASkillOfACategory(@PathVariable("id") long categoryId,
                                                      @PathVariable("skill_id") long skillId,
                                                      @RequestBody Skill skill,
@@ -69,7 +70,7 @@ public class CategoryController {
         return new ResponseEntity<>( newSkil, HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "/api/categories/{id}/skills/{skill_id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @DeleteMapping(path = "/categories/{id}/skills/{skill_id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> deleteASkillOfCategory(@PathVariable("id") long categoryId,
                                                     @PathVariable("skill_id") long skillId,
                                                     HttpServletRequest request){

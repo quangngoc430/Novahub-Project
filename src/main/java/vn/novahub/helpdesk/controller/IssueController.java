@@ -9,14 +9,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import vn.novahub.helpdesk.model.Account;
+import vn.novahub.helpdesk.constant.ExceptionConstant;
+import vn.novahub.helpdesk.constant.ResponseConstant;
+import vn.novahub.helpdesk.exception.IssueNotFoundException;
 import vn.novahub.helpdesk.model.Issue;
-import vn.novahub.helpdesk.service.AccountService;
+import vn.novahub.helpdesk.model.ResponseJSON;
 import vn.novahub.helpdesk.service.IssueService;
-import org.springframework.web.servlet.ModelAndView;
+
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
+@RequestMapping(path = "/api")
 public class IssueController {
 
     private static final Logger logger = LoggerFactory.getLogger(IssueController.class);
@@ -24,91 +27,117 @@ public class IssueController {
     @Autowired
     private IssueService issueService;
 
-    @Autowired
-    private AccountService accountService;
 
-    @GetMapping(value = "/admin/issues")
-    public ModelAndView getAdminIssues(){
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("issues_admin");
-
-        return modelAndView;
+    private static void log(HttpServletRequest request){
+        logger.info("URL : " + request.getRequestURL().toString());
+        logger.info("Method : " + request.getMethod());
+        logger.info("IP : " + request.getRemoteAddr());
     }
 
-    @GetMapping(value = "/api/issues", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> getAllIssues(@RequestParam(name = "keyword", required = false) String keyword,
+    @ExceptionHandler(IssueNotFoundException.class)
+    public ResponseEntity<ResponseJSON> handleEmployeeNotFoundException(HttpServletRequest request, Exception ex){
+        ResponseJSON responseJSON = new ResponseJSON();
+        responseJSON.setCode(ExceptionConstant.CODE_ISSUE_IS_NOT_EXIST);
+        responseJSON.setData(ExceptionConstant.MESSAGE_ISSUE_IS_NOT_EXIST);
+
+        return new ResponseEntity<ResponseJSON>(responseJSON, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/issues", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<ResponseJSON> getAllIssues(@RequestParam(name = "keyword", required = false) String keyword,
                                           @RequestParam(name = "status", required = false) String status,
-                                          Pageable pageable){
-        Page<Issue> issues = issueService.getAllIssuesByKeyword(keyword, status, pageable);
+                                          Pageable pageable,
+                                          HttpServletRequest request){
+        log(request);
+        Page<Issue> issuePage = issueService.getAllByKeyword(keyword, status, pageable, request);
 
-        return new ResponseEntity<>(issues, HttpStatus.OK);
+        ResponseJSON responseJSON = new ResponseJSON();
+        responseJSON.setCode(ResponseConstant.OK);
+        responseJSON.setData(issuePage);
+
+        return new ResponseEntity<ResponseJSON>(responseJSON, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/api/issues/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> getAnIssue(@PathVariable(name = "issueId") long issueId,
-                                        HttpServletRequest request){
-        //TODO check accountId is exist
+    @GetMapping(path = "/issues/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<ResponseJSON> get(@PathVariable(name = "issueId") long issueId,
+                                        HttpServletRequest request) throws IssueNotFoundException {
+        log(request);
+        Issue issue = issueService.getByIssueId(issueId, request);
 
-        logger.info("accountLogin : " + request.getSession().getAttribute("accountLogin").toString());
+        ResponseJSON responseJSON = new ResponseJSON();
+        responseJSON.setCode(ResponseConstant.OK);
+        responseJSON.setData(issue);
 
-        Issue issue = issueService.getIssueByIssueId(issueId);
-
-        return new ResponseEntity<>(issue, HttpStatus.OK);
+        return new ResponseEntity<ResponseJSON>(responseJSON, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/api/accounts/issues", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> getAllIssuesOfAnAccount(@RequestParam(name = "keyword", required = false) String keyword,
+    @GetMapping(path = "/accounts/issues", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<ResponseJSON> getAllOfAnAccount(@RequestParam(name = "keyword", required = false) String keyword,
                                                      @RequestParam(name = "status", required = false) String status,
                                                      HttpServletRequest request,
                                                      Pageable pageable){
-        Account accountLogin = accountService.getAccountLogin(request);
+        log(request);
+        Page<Issue> issuePage = issueService.getAllOfAccountByKeyword(keyword, status, pageable, request);
 
-        Page<Issue> issues = issueService.getAllIssuesOfAccountByKeyword(accountLogin.getId(), keyword, status, pageable);
+        ResponseJSON responseJSON = new ResponseJSON();
+        responseJSON.setCode(ResponseConstant.OK);
+        responseJSON.setData(issuePage);
 
-        return new ResponseEntity<>(issues, HttpStatus.OK);
+        return new ResponseEntity<ResponseJSON>(responseJSON, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/api/issues/{issueId}/approve", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void approveIssue(@RequestParam(name = "token") String token,
-                                          @PathVariable(name = "issueId") long issueId,
-                                          HttpServletRequest request){
-        System.out.println(issueService.approveIssue(issueId, token));
-    }
-
-    @GetMapping(value = "/api/issues/{issueId}/deny", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void denyIssue(@RequestParam(name = "token") String token,
-                             @PathVariable(name = "issueId") long issueId,
-                             HttpServletRequest request){
-        System.out.println(issueService.denyIssue(issueId, token));
-    }
-
-
-    @PostMapping(value = "/api/issues", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> createAnIssue(HttpServletRequest request,
+    @PostMapping(path = "/issues", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<ResponseJSON> create(HttpServletRequest request,
                                            @RequestBody Issue issue){
-        logger.info("URL : " + request.getRequestURL());
-        //TODO check value of issue 
-        issue = issueService.createIssue(issue, request);
+        log(request);
+        issue = issueService.create(issue, request);
 
-        return new ResponseEntity<>(issue, HttpStatus.OK);
+        ResponseJSON responseJSON = new ResponseJSON();
+        responseJSON.setCode(ResponseConstant.OK);
+        responseJSON.setData(issue);
+
+        return new ResponseEntity<ResponseJSON>(responseJSON, HttpStatus.OK);
     }
 
-    @PutMapping(value = "/api/issues/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> updateIssue(HttpServletRequest request,
+    @PutMapping(path = "/issues/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<ResponseJSON> update(HttpServletRequest request,
                                          @RequestBody Issue issue,
-                                         @PathVariable(name = "issueId") long issueId){
-        logger.info("URL : " + request.getRequestURL());
-        //TODO check issueId is exist
-        issue = issueService.updateIssue(issueId, issue, request);
+                                         @PathVariable(name = "issueId") long issueId) throws IssueNotFoundException {
+        log(request);
+        issue = issueService.update(issueId, issue, request);
 
-        return new ResponseEntity<>(issue, HttpStatus.OK);
+        ResponseJSON responseJSON = new ResponseJSON();
+        responseJSON.setCode(ResponseConstant.OK);
+        responseJSON.setData(issue);
+
+        return new ResponseEntity<ResponseJSON>(responseJSON, HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "/api/issues/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> deleteIssue(@PathVariable(name = "issueId") long issueId){
-        // TODO check issueId is exist
-        issueService.deleteIssue(issueId);
+    @DeleteMapping(path = "/issues/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<ResponseJSON> delete(@PathVariable(name = "issueId") long issueId,
+                                         HttpServletRequest request) throws IssueNotFoundException {
+        log(request);
+        issueService.delete(issueId, request);
 
-        return new ResponseEntity<>(true, HttpStatus.OK);
+        ResponseJSON responseJSON = new ResponseJSON();
+        responseJSON.setCode(ResponseConstant.OK);
+
+        return new ResponseEntity<ResponseJSON>(responseJSON, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/issues/{issueId}/approve", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public void approve(@RequestParam(name = "token") String token,
+                             @PathVariable(name = "issueId") long issueId,
+                             HttpServletRequest request) throws IssueNotFoundException {
+        log(request);
+        System.out.println(issueService.approve(issueId, token, request));
+    }
+
+    @GetMapping(path = "/issues/{issueId}/deny", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public void deny(@RequestParam(name = "token") String token,
+                          @PathVariable(name = "issueId") long issueId,
+                          HttpServletRequest request) throws IssueNotFoundException {
+        log(request);
+        System.out.println(issueService.deny(issueId, token, request));
     }
 }

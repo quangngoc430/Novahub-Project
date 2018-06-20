@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vn.novahub.helpdesk.constant.IssueConstant;
+import vn.novahub.helpdesk.exception.IssueNotFoundException;
 import vn.novahub.helpdesk.model.Account;
 import vn.novahub.helpdesk.model.Issue;
 import vn.novahub.helpdesk.repository.IssueRepository;
@@ -26,17 +27,29 @@ public class IssueServiceImpl implements IssueService {
     private AccountService accountService;
 
     @Override
-    public Issue getIssueByIssueId(long issueId) {
-        return issueRepository.findById(issueId).get();
+    public Issue getByIssueId(long issueId, HttpServletRequest request) throws IssueNotFoundException {
+        Issue issue = issueRepository.findById(issueId).get();
+
+        if(issue == null)
+            throw new IssueNotFoundException(issueId);
+
+        return issue;
     }
 
     @Override
-    public Issue getIssueOfAccountByIssueIdAndAccountId(long issueId, long accountId){
-        return issueRepository.getAnIssueByIssueIdAndAccountId(issueId, accountId);
+    public Issue getOfAccountByIssueIdAndAccountId(long issueId, HttpServletRequest request) throws IssueNotFoundException {
+        Account accountLogin = accountService.getAccountLogin(request);
+
+        Issue issue = issueRepository.getAnIssueByIssueIdAndAccountId(issueId, accountLogin.getId());
+
+        if(issue == null)
+            throw new IssueNotFoundException(issueId);
+
+        return issue;
     }
 
     @Override
-    public Page<Issue> getAllIssuesByKeyword(String keyword, String status, Pageable pageable) {
+    public Page<Issue> getAllByKeyword(String keyword, String status, Pageable pageable, HttpServletRequest request) {
         Page<Issue> issues;
 
         if(keyword == null)
@@ -53,24 +66,27 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public Page<Issue> getAllIssuesOfAccountByKeyword(long accountId, String keyword, String status, Pageable pageable) {
-        Page<Issue> issues;
+    public Page<Issue> getAllOfAccountByKeyword(String keyword, String status, Pageable pageable, HttpServletRequest request) {
+
+        Account accountLogin = accountService.getAccountLogin(request);
 
         if(keyword == null)
             keyword = "";
         keyword = "%" + keyword + "%";
 
+        Page<Issue> issues;
+
         if(status == null){
-            issues = issueRepository.getAllIssuesByAccountIdAndKeyWord(accountId, keyword, pageable);
+            issues = issueRepository.getAllIssuesByAccountIdAndKeyWord(accountLogin.getId(), keyword, pageable);
         } else {
-            issues = issueRepository.getAllIssuesByAccountIdAndKeyWordAndStatus(accountId, keyword, status, pageable);
+            issues = issueRepository.getAllIssuesByAccountIdAndKeyWordAndStatus(accountLogin.getId(), keyword, status, pageable);
         }
 
         return issues;
     }
 
     @Override
-    public Issue createIssue(Issue issue, HttpServletRequest request) {
+    public Issue create(Issue issue, HttpServletRequest request) {
         Account accountLogin = accountService.getAccountLogin(request);
 
         issue.setCreatedAt(new Date());
@@ -83,8 +99,12 @@ public class IssueServiceImpl implements IssueService {
 
     @Override
     @Transactional
-    public Issue updateIssue(long issueId, Issue issue, HttpServletRequest request) {
+    public Issue update(long issueId, Issue issue, HttpServletRequest request) throws IssueNotFoundException {
         Issue oldIssue = issueRepository.findById(issueId).get();
+
+        if(oldIssue == null)
+            throw new IssueNotFoundException(issueId);
+
         oldIssue.setUpdatedAt(new Date());
 
         if(!issue.getTitle().equals(oldIssue.getTitle()))
@@ -102,18 +122,20 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public void deleteIssue(long issueId) {
+    public void delete(long issueId, HttpServletRequest request) throws IssueNotFoundException {
+
+        if(!issueRepository.existsById(issueId))
+            throw new IssueNotFoundException(issueId);
 
         issueRepository.deleteById(issueId);
     }
 
     @Override
-    public boolean approveIssue(long issueId, String token) {
+    public boolean approve(long issueId, String token, HttpServletRequest request) throws IssueNotFoundException {
         Issue issue = issueRepository.findByIdAndToken(issueId, token);
 
-        if(issue == null){
-            return false;
-        }
+        if(issue == null)
+            throw new IssueNotFoundException(issueId);
 
         if(issue.getToken() != null) {
             issue.setToken(null);
@@ -126,12 +148,11 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public boolean denyIssue(long issueId, String token) {
+    public boolean deny(long issueId, String token, HttpServletRequest request) throws IssueNotFoundException {
         Issue issue = issueRepository.findByIdAndToken(issueId, token);
 
-        if(issue == null){
-            return false;
-        }
+        if(issue == null)
+            throw new IssueNotFoundException(issueId);
 
         if(issue.getToken() != null) {
             issue.setToken(null);

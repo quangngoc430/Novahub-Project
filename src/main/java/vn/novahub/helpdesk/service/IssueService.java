@@ -2,27 +2,28 @@ package vn.novahub.helpdesk.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import vn.novahub.helpdesk.exception.IssueNotFoundException;
 import vn.novahub.helpdesk.model.Issue;
 
 import javax.servlet.http.HttpServletRequest;
 
 public interface IssueService {
 
-    Issue getIssueByIssueId(long issueId);
+    Issue getByIssueId(long issueId, HttpServletRequest request) throws IssueNotFoundException;
 
-    Issue getIssueOfAccountByIssueIdAndAccountId(long issueId, long accountId);
+    Issue getOfAccountByIssueIdAndAccountId(long issueId, HttpServletRequest request) throws IssueNotFoundException;
 
-    Page<Issue> getAllIssuesByKeyword(String keyword, String status, Pageable pageable);
+    Page<Issue> getAllByKeyword(String keyword, String status, Pageable pageable, HttpServletRequest request);
 
-    Page<Issue> getAllIssuesOfAccountByKeyword(long accountId, String keyword, String status, Pageable pageable);
+    Page<Issue> getAllOfAccountByKeyword(String keyword, String status, Pageable pageable, HttpServletRequest request);
 
-    Issue createIssue(Issue issue, HttpServletRequest request);
+    Issue create(Issue issue, HttpServletRequest request);
 
-    Issue updateIssue(long issuetId, Issue issue, HttpServletRequest request);
+    Issue update(long issuetId, Issue issue, HttpServletRequest request) throws IssueNotFoundException;
 
-    void deleteIssue(long issueId);
+    void delete(long issueId, HttpServletRequest request) throws IssueNotFoundException;
 
-    boolean approveIssue(long issueId, String token);
+    boolean approve(long issueId, String token, HttpServletRequest request) throws IssueNotFoundException;
 
-    boolean denyIssue(long issueId, String token);
+    boolean deny(long issueId, String token, HttpServletRequest request) throws IssueNotFoundException;
 }
