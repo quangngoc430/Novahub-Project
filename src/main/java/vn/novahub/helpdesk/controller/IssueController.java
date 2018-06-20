@@ -15,6 +15,7 @@ import vn.novahub.helpdesk.exception.IssueNotFoundException;
 import vn.novahub.helpdesk.model.Issue;
 import vn.novahub.helpdesk.model.ResponseJSON;
 import vn.novahub.helpdesk.service.IssueService;
+import vn.novahub.helpdesk.service.LogService;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -27,12 +28,9 @@ public class IssueController {
     @Autowired
     private IssueService issueService;
 
+    @Autowired
+    private LogService logService;
 
-    private static void log(HttpServletRequest request){
-        logger.info("URL : " + request.getRequestURL().toString());
-        logger.info("Method : " + request.getMethod());
-        logger.info("IP : " + request.getRemoteAddr());
-    }
 
     @ExceptionHandler(IssueNotFoundException.class)
     public ResponseEntity<ResponseJSON> handleEmployeeNotFoundException(HttpServletRequest request, Exception ex){
@@ -48,7 +46,7 @@ public class IssueController {
                                           @RequestParam(name = "status", required = false) String status,
                                           Pageable pageable,
                                           HttpServletRequest request){
-        log(request);
+        logService.log(request, logger);
         Page<Issue> issuePage = issueService.getAllByKeyword(keyword, status, pageable, request);
 
         ResponseJSON responseJSON = new ResponseJSON();
@@ -61,7 +59,7 @@ public class IssueController {
     @GetMapping(path = "/issues/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<ResponseJSON> get(@PathVariable(name = "issueId") long issueId,
                                         HttpServletRequest request) throws IssueNotFoundException {
-        log(request);
+        logService.log(request, logger);
         Issue issue = issueService.getByIssueId(issueId, request);
 
         ResponseJSON responseJSON = new ResponseJSON();
@@ -76,7 +74,7 @@ public class IssueController {
                                                      @RequestParam(name = "status", required = false) String status,
                                                      HttpServletRequest request,
                                                      Pageable pageable){
-        log(request);
+        logService.log(request, logger);
         Page<Issue> issuePage = issueService.getAllOfAccountByKeyword(keyword, status, pageable, request);
 
         ResponseJSON responseJSON = new ResponseJSON();
@@ -89,7 +87,7 @@ public class IssueController {
     @PostMapping(path = "/issues", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<ResponseJSON> create(HttpServletRequest request,
                                            @RequestBody Issue issue){
-        log(request);
+        logService.log(request, logger);
         issue = issueService.create(issue, request);
 
         ResponseJSON responseJSON = new ResponseJSON();
@@ -103,7 +101,7 @@ public class IssueController {
     public ResponseEntity<ResponseJSON> update(HttpServletRequest request,
                                          @RequestBody Issue issue,
                                          @PathVariable(name = "issueId") long issueId) throws IssueNotFoundException {
-        log(request);
+        logService.log(request, logger);
         issue = issueService.update(issueId, issue, request);
 
         ResponseJSON responseJSON = new ResponseJSON();
@@ -116,7 +114,7 @@ public class IssueController {
     @DeleteMapping(path = "/issues/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<ResponseJSON> delete(@PathVariable(name = "issueId") long issueId,
                                          HttpServletRequest request) throws IssueNotFoundException {
-        log(request);
+        logService.log(request, logger);
         issueService.delete(issueId, request);
 
         ResponseJSON responseJSON = new ResponseJSON();
@@ -129,7 +127,7 @@ public class IssueController {
     public void approve(@RequestParam(name = "token") String token,
                              @PathVariable(name = "issueId") long issueId,
                              HttpServletRequest request) throws IssueNotFoundException {
-        log(request);
+        logService.log(request, logger);
         System.out.println(issueService.approve(issueId, token, request));
     }
 
@@ -137,7 +135,7 @@ public class IssueController {
     public void deny(@RequestParam(name = "token") String token,
                           @PathVariable(name = "issueId") long issueId,
                           HttpServletRequest request) throws IssueNotFoundException {
-        log(request);
+        logService.log(request, logger);
         System.out.println(issueService.deny(issueId, token, request));
     }
 }

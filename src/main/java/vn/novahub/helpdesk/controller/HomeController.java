@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import vn.novahub.helpdesk.model.Mail;
 import vn.novahub.helpdesk.service.AccountService;
+import vn.novahub.helpdesk.service.LogService;
 import vn.novahub.helpdesk.service.MailService;
 
 import javax.mail.MessagingException;
@@ -21,13 +22,9 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 public class HomeController {
 
-    private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
-
     @Autowired
     private AccountService accountService;
 
-    @Autowired
-    private MailService mailService;
 
     @RequestMapping("/")
     public String index() throws MessagingException {
@@ -46,8 +43,6 @@ public class HomeController {
     public ResponseEntity<?> loginAccount(@RequestHeader("email") String email,
                                        @RequestHeader("password") String password,
                                        HttpServletRequest request){
-        logger.info("URL : " + request.getRequestURL());
-
         if(accountService.loginAccount(email, password, request))
             return new ResponseEntity<>("success", HttpStatus.OK);
         else
