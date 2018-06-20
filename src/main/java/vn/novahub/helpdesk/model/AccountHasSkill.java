@@ -6,7 +6,8 @@ import javax.persistence.*;
 @Table(name = "account_has_skill")
 public class AccountHasSkill {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private long id;
 
@@ -15,6 +16,14 @@ public class AccountHasSkill {
 
     @Column(name = "skill_id")
     private long skillId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "account_id", insertable = false, updatable = false)
+    private Account account;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "skill_id", insertable = false, updatable = false)
+    private Skill skill;
 
     public long getId() {
         return id;
@@ -60,13 +69,7 @@ public class AccountHasSkill {
         this.skill = skill;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "account_id", insertable = false, updatable = false)
-    private Account account;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "skill_id", insertable = false, updatable = false)
-    private Skill skill;
 
     @Override
     public String toString() {

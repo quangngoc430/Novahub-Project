@@ -7,7 +7,7 @@ import javax.validation.constraints.NotEmpty;
 @Table(name = "role")
 public class Role {
 
-    @Id @NotEmpty
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private long id;

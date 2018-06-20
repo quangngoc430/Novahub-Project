@@ -6,7 +6,8 @@ import javax.persistence.*;
 @Table(name = "day_off_type")
 public class DayOffType {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private long id;
 

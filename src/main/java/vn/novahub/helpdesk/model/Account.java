@@ -10,7 +10,7 @@ import java.util.Date;
 @Table(name = "account")
 public class Account implements Serializable {
 
-    @Id @NotEmpty
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private long id;

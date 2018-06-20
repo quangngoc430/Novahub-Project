@@ -7,7 +7,8 @@ import java.util.Date;
 @Table(name = "day_off")
 public class DayOff {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private long id;
 

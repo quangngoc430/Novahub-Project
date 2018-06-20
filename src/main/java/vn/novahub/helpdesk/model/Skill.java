@@ -9,7 +9,8 @@ import java.util.Objects;
 @Table(name = "skill")
 public class Skill implements Serializable {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private long id;
 
