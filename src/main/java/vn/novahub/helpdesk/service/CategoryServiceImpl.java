@@ -1,7 +1,10 @@
 package vn.novahub.helpdesk.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import vn.novahub.helpdesk.exception.CategoryNotFoundException;
 import vn.novahub.helpdesk.model.Category;
 import vn.novahub.helpdesk.repository.CategoryRepository;
 import vn.novahub.helpdesk.repository.SkillRepository;
@@ -15,35 +18,39 @@ public class CategoryServiceImpl implements CategoryService{
     @Autowired
     private CategoryRepository categoryRepository;
 
-    @Autowired
-    private SkillRepository skillRepository;
-
     @Override
-    public ArrayList<Category> getAllCategories(String name,
-                                                HttpServletRequest request) {
-        return (ArrayList<Category>) categoryRepository.getAllByNameLike("%" + name + "%");
+    public Page<Category> getAllByName(String name,
+                                       Pageable pageable,
+                                       HttpServletRequest request) {
+        name = "%" + name + "%";
+        return categoryRepository.getAllByNameLike(name, pageable);
     }
 
     @Override
-    public Category getACategory(long categoryId,
-                                 HttpServletRequest request) {
-        return categoryRepository.findById(categoryId).get();
+    public Category get(long categoryId,
+                        HttpServletRequest request) throws CategoryNotFoundException {
+        Category category = categoryRepository.findById(categoryId).get();
+
+        if(category == null)
+            throw new CategoryNotFoundException(categoryId);
+
+        return category;
     }
 
     @Override
-    public Category createACategory(Category category,
-                                   HttpServletRequest request) {
+    public Category create(Category category,
+                           HttpServletRequest request) {
         return categoryRepository.save(category);
     }
 
     @Override
-    public Category updateACategory(Category category,
-                                   long categoryId,
-                                   HttpServletRequest request) {
+    public Category update(Category category,
+                           long categoryId,
+                           HttpServletRequest request) throws CategoryNotFoundException {
         Category oldCategory = categoryRepository.findById(categoryId).get();
 
         if(oldCategory == null)
-            return null;
+            throw new CategoryNotFoundException(categoryId);
 
         oldCategory.setName(category.getName());
         Category newCategory = categoryRepository.save(oldCategory);
@@ -52,8 +59,12 @@ public class CategoryServiceImpl implements CategoryService{
     }
 
     @Override
-    public void deleteACategory(long categoryId,
-                                           HttpServletRequest request) {
+    public void delete(long categoryId,
+                       HttpServletRequest request) throws CategoryNotFoundException {
+
+        if(!categoryRepository.existsById(categoryId))
+            throw new CategoryNotFoundException(categoryId);
+
         categoryRepository.deleteById(categoryId);
     }
 }

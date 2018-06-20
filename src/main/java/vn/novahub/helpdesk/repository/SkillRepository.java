@@ -1,5 +1,7 @@
 package vn.novahub.helpdesk.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
@@ -13,30 +15,32 @@ import java.util.ArrayList;
 @Transactional
 public interface SkillRepository extends PagingAndSortingRepository<Skill, Long> {
 
-    @Query("FROM Skill skill")
-    ArrayList<Skill> getAllSkills();
-
-    ArrayList<Skill> getAllByCategoryId(long categoryId);
+    Page<Skill> getAllByCategoryId(long categoryId, Pageable pageable);
 
     @Query("FROM Skill skill " +
            "JOIN AccountHasSkill accountHasSkill ON skill.id = accountHasSkill.skillId " +
            "WHERE accountHasSkill.accountId = :accountId AND skill.name LIKE :nameSkill")
-    ArrayList<Skill> getAllSkillsByAccountIdAndNameLike(@Param("accountId") long accountId,
-                                                        @Param("name") String nameSkill);
+    Page<Skill> getAllSkillsByAccountIdAndNameLike(@Param("accountId") long accountId,
+                                                   @Param("name") String nameSkill,
+                                                   Pageable pageable);
 
     @Query("FROM Skill skill JOIN AccountHasSkill accountHasSkill ON skill.id = accountHasSkill.skillId WHERE accountHasSkill.accountId = :accountId AND skill.categoryId = :categoryId")
-    ArrayList<Skill> getAllSkillsByAccountIdAndCategoryId(@Param("accountId") long accountId,
-                                                          @Param("categoryId") long categoryId);
+    Page<Skill> getAllByAccountId(@Param("accountId") long accountId,
+                                                          @Param("categoryId") long categoryId,
+                                                          Pageable pageable);
 
     @Query("FROM Skill skill WHERE skill.name LIKE :name")
-    ArrayList<Skill> getAllSkillsByNameLike(@Param("name") String name);
+    Page<Skill> getAllSkillsByNameLike(@Param("name") String name,
+                                       Pageable pageable);
 
-    ArrayList<Skill> getAllByCategoryIdAndNameLike(long categoryId, String name);
+    Page<Skill> getAllByCategoryIdAndNameLike(long categoryId, String name, Pageable pageable);
 
     Skill findByName(String skillName);
 
     Skill findByIdAndCategoryId(long skillId, long categoryId);
 
     void deleteByIdAndCategoryId(long skillId, long categoryId);
+
+    boolean existsByIdAndCategoryId(long skillId, long categoryId);
 
 }

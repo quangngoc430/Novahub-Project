@@ -5,12 +5,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import vn.novahub.helpdesk.constant.ExceptionConstant;
+import vn.novahub.helpdesk.exception.SkillNotFoundException;
+import vn.novahub.helpdesk.model.ResponseObject;
 import vn.novahub.helpdesk.service.LogService;
 import vn.novahub.helpdesk.service.SkillService;
 
@@ -28,11 +27,13 @@ public class SkillController {
     @Autowired
     private LogService logService;
 
-    @GetMapping(path = "/skills", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> getAll(@RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
-                                          HttpServletRequest request){
-        logService.log(request, logger);
-        return new ResponseEntity<>(skillService.getAllSkillsOfAnAccount(keyword, request), HttpStatus.OK);
+    @ExceptionHandler(SkillNotFoundException.class)
+    public ResponseEntity<ResponseObject> handleSkillNotFoundException(HttpServletRequest request, Exception ex){
+        ResponseObject responseObject = new ResponseObject();
+        responseObject.setCode(ExceptionConstant.CODE_SKILL_IS_NOT_EXIST);
+        responseObject.setData(ExceptionConstant.MESSAGE_SKILL_IS_NOT_EXIST);
+
+        return new ResponseEntity<ResponseObject>(responseObject, HttpStatus.OK);
     }
 
 }

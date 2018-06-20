@@ -1,5 +1,8 @@
 package vn.novahub.helpdesk.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import vn.novahub.helpdesk.exception.CategoryNotFoundException;
 import vn.novahub.helpdesk.model.Category;
 import vn.novahub.helpdesk.model.Skill;
 
@@ -8,13 +11,13 @@ import java.util.ArrayList;
 
 public interface CategoryService {
 
-    Category createACategory(Category category, HttpServletRequest request);
+    Category create(Category category, HttpServletRequest request);
 
-    Category updateACategory(Category category, long categoryId, HttpServletRequest request);
+    Category update(Category category, long categoryId, HttpServletRequest request) throws CategoryNotFoundException;
 
-    Category getACategory(long categoryId, HttpServletRequest request);
+    Category get(long categoryId, HttpServletRequest request) throws CategoryNotFoundException;
 
-    ArrayList<Category> getAllCategories(String name, HttpServletRequest request);
+    Page<Category> getAllByName(String name, Pageable pageable, HttpServletRequest request);
 
-    void deleteACategory(long categoryId, HttpServletRequest request);
+    void delete(long categoryId, HttpServletRequest request) throws CategoryNotFoundException;
 }

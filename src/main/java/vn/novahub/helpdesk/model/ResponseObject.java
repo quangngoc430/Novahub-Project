@@ -1,6 +1,6 @@
 package vn.novahub.helpdesk.model;
 
-public class ResponseJSON {
+public class ResponseObject {
 
     private Object data;
     private long code;
@@ -23,7 +23,7 @@ public class ResponseJSON {
 
     @Override
     public String toString() {
-        return "ResponseJSON{" +
+        return "ResponseObject{" +
                 "data=" + data +
                 ", code=" + code +
                 '}';

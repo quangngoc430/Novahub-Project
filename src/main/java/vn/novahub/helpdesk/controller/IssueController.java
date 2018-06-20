@@ -13,7 +13,7 @@ import vn.novahub.helpdesk.constant.ExceptionConstant;
 import vn.novahub.helpdesk.constant.ResponseConstant;
 import vn.novahub.helpdesk.exception.IssueNotFoundException;
 import vn.novahub.helpdesk.model.Issue;
-import vn.novahub.helpdesk.model.ResponseJSON;
+import vn.novahub.helpdesk.model.ResponseObject;
 import vn.novahub.helpdesk.service.IssueService;
 import vn.novahub.helpdesk.service.LogService;
 
@@ -33,108 +33,108 @@ public class IssueController {
 
 
     @ExceptionHandler(IssueNotFoundException.class)
-    public ResponseEntity<ResponseJSON> handleEmployeeNotFoundException(HttpServletRequest request, Exception ex){
-        ResponseJSON responseJSON = new ResponseJSON();
-        responseJSON.setCode(ExceptionConstant.CODE_ISSUE_IS_NOT_EXIST);
-        responseJSON.setData(ExceptionConstant.MESSAGE_ISSUE_IS_NOT_EXIST);
+    public ResponseEntity<ResponseObject> handleIssueNotFoundException(HttpServletRequest request, Exception ex){
+        ResponseObject responseObject = new ResponseObject();
+        responseObject.setCode(ExceptionConstant.CODE_ISSUE_IS_NOT_EXIST);
+        responseObject.setData(ExceptionConstant.MESSAGE_ISSUE_IS_NOT_EXIST);
 
-        return new ResponseEntity<ResponseJSON>(responseJSON, HttpStatus.OK);
+        return new ResponseEntity<ResponseObject>(responseObject, HttpStatus.OK);
     }
 
     @GetMapping(path = "/issues", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<ResponseJSON> getAllIssues(@RequestParam(name = "keyword", required = false) String keyword,
-                                          @RequestParam(name = "status", required = false) String status,
-                                          Pageable pageable,
-                                          HttpServletRequest request){
+    public ResponseEntity<ResponseObject> getAllIssues(@RequestParam(name = "keyword", required = false) String keyword,
+                                                       @RequestParam(name = "status", required = false) String status,
+                                                       Pageable pageable,
+                                                       HttpServletRequest request){
         logService.log(request, logger);
         Page<Issue> issuePage = issueService.getAllByKeyword(keyword, status, pageable, request);
 
-        ResponseJSON responseJSON = new ResponseJSON();
-        responseJSON.setCode(ResponseConstant.OK);
-        responseJSON.setData(issuePage);
+        ResponseObject responseObject = new ResponseObject();
+        responseObject.setCode(ResponseConstant.OK);
+        responseObject.setData(issuePage);
 
-        return new ResponseEntity<ResponseJSON>(responseJSON, HttpStatus.OK);
+        return new ResponseEntity<ResponseObject>(responseObject, HttpStatus.OK);
     }
 
     @GetMapping(path = "/issues/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<ResponseJSON> get(@PathVariable(name = "issueId") long issueId,
-                                        HttpServletRequest request) throws IssueNotFoundException {
+    public ResponseEntity<ResponseObject> get(@PathVariable(name = "issueId") long issueId,
+                                              HttpServletRequest request) throws IssueNotFoundException {
         logService.log(request, logger);
         Issue issue = issueService.getByIssueId(issueId, request);
 
-        ResponseJSON responseJSON = new ResponseJSON();
-        responseJSON.setCode(ResponseConstant.OK);
-        responseJSON.setData(issue);
+        ResponseObject responseObject = new ResponseObject();
+        responseObject.setCode(ResponseConstant.OK);
+        responseObject.setData(issue);
 
-        return new ResponseEntity<ResponseJSON>(responseJSON, HttpStatus.OK);
+        return new ResponseEntity<ResponseObject>(responseObject, HttpStatus.OK);
     }
 
     @GetMapping(path = "/accounts/issues", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<ResponseJSON> getAllOfAnAccount(@RequestParam(name = "keyword", required = false) String keyword,
-                                                     @RequestParam(name = "status", required = false) String status,
-                                                     HttpServletRequest request,
-                                                     Pageable pageable){
+    public ResponseEntity<ResponseObject> getAllOfAnAccount(@RequestParam(name = "keyword", required = false) String keyword,
+                                                            @RequestParam(name = "status", required = false) String status,
+                                                            HttpServletRequest request,
+                                                            Pageable pageable){
         logService.log(request, logger);
         Page<Issue> issuePage = issueService.getAllOfAccountByKeyword(keyword, status, pageable, request);
 
-        ResponseJSON responseJSON = new ResponseJSON();
-        responseJSON.setCode(ResponseConstant.OK);
-        responseJSON.setData(issuePage);
+        ResponseObject responseObject = new ResponseObject();
+        responseObject.setCode(ResponseConstant.OK);
+        responseObject.setData(issuePage);
 
-        return new ResponseEntity<ResponseJSON>(responseJSON, HttpStatus.OK);
+        return new ResponseEntity<ResponseObject>(responseObject, HttpStatus.OK);
     }
 
     @PostMapping(path = "/issues", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<ResponseJSON> create(HttpServletRequest request,
-                                           @RequestBody Issue issue){
+    public ResponseEntity<ResponseObject> create(HttpServletRequest request,
+                                                 @RequestBody Issue issue){
         logService.log(request, logger);
         issue = issueService.create(issue, request);
 
-        ResponseJSON responseJSON = new ResponseJSON();
-        responseJSON.setCode(ResponseConstant.OK);
-        responseJSON.setData(issue);
+        ResponseObject responseObject = new ResponseObject();
+        responseObject.setCode(ResponseConstant.OK);
+        responseObject.setData(issue);
 
-        return new ResponseEntity<ResponseJSON>(responseJSON, HttpStatus.OK);
+        return new ResponseEntity<ResponseObject>(responseObject, HttpStatus.OK);
     }
 
     @PutMapping(path = "/issues/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<ResponseJSON> update(HttpServletRequest request,
-                                         @RequestBody Issue issue,
-                                         @PathVariable(name = "issueId") long issueId) throws IssueNotFoundException {
+    public ResponseEntity<ResponseObject> update(HttpServletRequest request,
+                                                 @RequestBody Issue issue,
+                                                 @PathVariable(name = "issueId") long issueId) throws IssueNotFoundException {
         logService.log(request, logger);
         issue = issueService.update(issueId, issue, request);
 
-        ResponseJSON responseJSON = new ResponseJSON();
-        responseJSON.setCode(ResponseConstant.OK);
-        responseJSON.setData(issue);
+        ResponseObject responseObject = new ResponseObject();
+        responseObject.setCode(ResponseConstant.OK);
+        responseObject.setData(issue);
 
-        return new ResponseEntity<ResponseJSON>(responseJSON, HttpStatus.OK);
+        return new ResponseEntity<ResponseObject>(responseObject, HttpStatus.OK);
     }
 
     @DeleteMapping(path = "/issues/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<ResponseJSON> delete(@PathVariable(name = "issueId") long issueId,
-                                         HttpServletRequest request) throws IssueNotFoundException {
+    public ResponseEntity<ResponseObject> delete(@PathVariable(name = "issueId") long issueId,
+                                                 HttpServletRequest request) throws IssueNotFoundException {
         logService.log(request, logger);
         issueService.delete(issueId, request);
 
-        ResponseJSON responseJSON = new ResponseJSON();
-        responseJSON.setCode(ResponseConstant.OK);
+        ResponseObject responseObject = new ResponseObject();
+        responseObject.setCode(ResponseConstant.OK);
 
-        return new ResponseEntity<ResponseJSON>(responseJSON, HttpStatus.OK);
+        return new ResponseEntity<ResponseObject>(responseObject, HttpStatus.OK);
     }
 
     @GetMapping(path = "/issues/{issueId}/approve", produces = {MediaType.APPLICATION_JSON_VALUE})
     public void approve(@RequestParam(name = "token") String token,
-                             @PathVariable(name = "issueId") long issueId,
-                             HttpServletRequest request) throws IssueNotFoundException {
+                        @PathVariable(name = "issueId") long issueId,
+                        HttpServletRequest request) throws IssueNotFoundException {
         logService.log(request, logger);
         System.out.println(issueService.approve(issueId, token, request));
     }
 
     @GetMapping(path = "/issues/{issueId}/deny", produces = {MediaType.APPLICATION_JSON_VALUE})
     public void deny(@RequestParam(name = "token") String token,
-                          @PathVariable(name = "issueId") long issueId,
-                          HttpServletRequest request) throws IssueNotFoundException {
+                     @PathVariable(name = "issueId") long issueId,
+                     HttpServletRequest request) throws IssueNotFoundException {
         logService.log(request, logger);
         System.out.println(issueService.deny(issueId, token, request));
     }

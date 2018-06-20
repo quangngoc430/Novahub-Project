@@ -1,5 +1,9 @@
 package vn.novahub.helpdesk.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import vn.novahub.helpdesk.exception.CategoryNotFoundException;
+import vn.novahub.helpdesk.exception.SkillNotFoundException;
 import vn.novahub.helpdesk.model.Skill;
 
 import javax.servlet.http.HttpServletRequest;
@@ -7,22 +11,22 @@ import java.util.ArrayList;
 
 public interface SkillService {
 
-    Skill createSkillByAccount(Skill skill, long accountId);
+    Skill create(Skill skill, HttpServletRequest request);
 
-    Skill createASkillOfACategory(Skill skill, long categoryId, HttpServletRequest request);
+    Skill createByCategoryId(Skill skill, long categoryId, HttpServletRequest request);
 
-    Skill updateSkill(Skill skill, long accountId, long skillId);
+    Skill updateBySkillId(Skill skill, long skillId, HttpServletRequest request);
 
-    Skill updateSkillByCategoryIdAndSkillId(Skill skill, long categoryId, long skillId, HttpServletRequest request);
+    Skill updateByCategoryIdAndSkillId(Skill skill, long categoryId, long skillId, HttpServletRequest request) throws CategoryNotFoundException, SkillNotFoundException;
 
-    ArrayList<Skill> getAllSkillsOfACategory(long categoryId, String name, HttpServletRequest request);
+    Page<Skill> getAllByCategoryIdAndName(long categoryId, String name, Pageable pageable, HttpServletRequest request) throws CategoryNotFoundException;
 
-    ArrayList<Skill> getAllSkillsOfAnAccount(String nameSkill, HttpServletRequest request);
+    Page<Skill> getAllByName(String name, Pageable pageable, HttpServletRequest request);
 
-    Skill getASkillBySkillId(long skillId);
+    Skill getBySkillId(long skillId, HttpServletRequest request) throws SkillNotFoundException;
 
-    Skill getASkillByCategoryIdAndSkillId(long categoryId, long skillId, HttpServletRequest request);
+    Skill getByCategoryIdAndSkillId(long categoryId, long skillId, HttpServletRequest request);
 
-    void deteleASkillByCategoryIdAndSkillId(long categoryId, long skillId, HttpServletRequest request);
+    void deteleByCategoryIdAndSkillId(long categoryId, long skillId, HttpServletRequest request) throws CategoryNotFoundException, SkillNotFoundException;
 
 }
