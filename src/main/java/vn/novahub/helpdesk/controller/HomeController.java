@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import vn.novahub.helpdesk.constant.ResponseConstant;
 import vn.novahub.helpdesk.model.Mail;
+import vn.novahub.helpdesk.model.ResponseObject;
 import vn.novahub.helpdesk.service.AccountService;
 import vn.novahub.helpdesk.service.LogService;
 import vn.novahub.helpdesk.service.MailService;
@@ -40,13 +42,20 @@ public class HomeController {
     }
 
     @GetMapping(value = "/api/login", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> loginAccount(@RequestHeader("email") String email,
-                                       @RequestHeader("password") String password,
-                                       HttpServletRequest request){
+    public ResponseEntity<ResponseObject> loginAccount(@RequestHeader("email") String email,
+                                                       @RequestHeader("password") String password,
+                                                       HttpServletRequest request){
+        String result;
         if(accountService.loginAccount(email, password, request))
-            return new ResponseEntity<>("success", HttpStatus.OK);
+            result = "Success";
         else
-            return new ResponseEntity<>("fail", HttpStatus.OK);
+            result = "Fail";
+
+        ResponseObject responseObject = new ResponseObject();
+        responseObject.setCode(ResponseConstant.OK);
+        responseObject.setData(result);
+
+        return new ResponseEntity<ResponseObject>(responseObject, HttpStatus.OK);
     }
     
 }
