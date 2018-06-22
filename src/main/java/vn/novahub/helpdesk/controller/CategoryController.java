@@ -53,6 +53,18 @@ public class CategoryController {
         return new ResponseEntity<>(category, HttpStatus.OK);
     }
 
+    @PostMapping(path = "/categories", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Category> create(@RequestBody Category category,
+                                           HttpServletRequest request){
+        logService.log(request, logger);
+        Category newCategory = categoryService.create(category, request);
+
+        return new ResponseEntity<>(newCategory, HttpStatus.OK);
+    }
+
+    
+
+
     @GetMapping(path = "/categories/{id}/skills", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Page<Skill>> getAllSkillsOfACategory(@PathVariable("id") long categoryId,
                                                                @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
