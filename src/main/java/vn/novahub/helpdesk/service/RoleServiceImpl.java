@@ -2,7 +2,9 @@ package vn.novahub.helpdesk.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import vn.novahub.helpdesk.exception.RoleNotFoundException;
 import vn.novahub.helpdesk.model.Role;
 import vn.novahub.helpdesk.repository.RoleRepository;
 
@@ -15,23 +17,33 @@ public class RoleServiceImpl implements RoleService {
     private RoleRepository roleRepository;
 
     @Override
-    public Role getById(long roleId, HttpServletRequest request) {
+    public Role getById(long roleId, HttpServletRequest request) throws RoleNotFoundException {
 
         Role role = roleRepository.getById(roleId);
 
         if (role == null)
+            throw new RoleNotFoundException(roleId);
 
-        return null;
+        return role;
     }
 
     @Override
-    public Role getByName(String roleName, HttpServletRequest request) {
-        return null;
+    public Role getByName(String roleName, HttpServletRequest request) throws RoleNotFoundException {
+
+        Role role = roleRepository.getByName(roleName);
+
+        if(role == null)
+            throw new RoleNotFoundException(roleName);
+
+        return role;
     }
 
     @Override
-    public Page<Role> getAllByName(String roleName, HttpServletRequest request) {
-        return null;
+    public Page<Role> getAll(Pageable pageable, HttpServletRequest request) {
+
+        Page<Role> rolePage = roleRepository.findAll(pageable);
+
+        return rolePage;
     }
 
 }
