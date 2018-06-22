@@ -81,12 +81,12 @@ public class IssueController {
     }
 
     @DeleteMapping(path = "/issues/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<String> delete(@PathVariable(name = "issueId") long issueId,
+    public ResponseEntity<Void> delete(@PathVariable(name = "issueId") long issueId,
                                                  HttpServletRequest request) throws IssueNotFoundException {
         logService.log(request, logger);
         issueService.delete(issueId, request);
 
-        return new ResponseEntity<>("Deleted", HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping(path = "/issues/{issueId}/approve", produces = {MediaType.APPLICATION_JSON_VALUE})

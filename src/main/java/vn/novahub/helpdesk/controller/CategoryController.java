@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import vn.novahub.helpdesk.constant.ResponseConstant;
 import vn.novahub.helpdesk.exception.CategoryNotFoundException;
 import vn.novahub.helpdesk.exception.SkillNotFoundException;
 import vn.novahub.helpdesk.model.Category;
@@ -47,7 +46,7 @@ public class CategoryController {
 
     @GetMapping(path = "/categories/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Category> get(@PathVariable("id") long categoryId,
-                                              HttpServletRequest request) throws CategoryNotFoundException {
+                                        HttpServletRequest request) throws CategoryNotFoundException {
         logService.log(request, logger);
         Category category = categoryService.get(categoryId, request);
 
@@ -56,9 +55,9 @@ public class CategoryController {
 
     @GetMapping(path = "/categories/{id}/skills", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Page<Skill>> getAllSkillsOfACategory(@PathVariable("id") long categoryId,
-                                                                  @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
-                                                                  Pageable pageable,
-                                                                  HttpServletRequest request) throws CategoryNotFoundException {
+                                                               @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
+                                                               Pageable pageable,
+                                                               HttpServletRequest request) throws CategoryNotFoundException {
         logService.log(request, logger);
         Page<Skill> skillPage = skillService.getAllByCategoryIdAndName(categoryId, keyword, pageable, request);
 
@@ -67,8 +66,8 @@ public class CategoryController {
 
     @GetMapping(path = "/categories/{id}/skills/{skill_id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Skill> getASkill(@PathVariable("id") long categoryId,
-                                                    @PathVariable("skill_id") long skillId,
-                                                    HttpServletRequest request){
+                                           @PathVariable("skill_id") long skillId,
+                                           HttpServletRequest request){
         logService.log(request, logger);
         Skill skill = skillService.getByCategoryIdAndSkillId(categoryId, skillId, request);
 
@@ -77,8 +76,8 @@ public class CategoryController {
 
     @PostMapping(path = "/categories/{id}/skills", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Skill> createASkill(@PathVariable("id") long categoryId,
-                                                       @RequestBody Skill skill,
-                                                       HttpServletRequest request){
+                                              @RequestBody Skill skill,
+                                              HttpServletRequest request){
         logService.log(request, logger);
         Skill newSkill = skillService.createByCategoryId(skill, categoryId, request);
 
@@ -87,9 +86,9 @@ public class CategoryController {
 
     @PutMapping(path = "/categories/{id}/skills/{skill_id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Skill> updateASkill(@PathVariable("id") long categoryId,
-                                                       @PathVariable("skill_id") long skillId,
-                                                       @RequestBody Skill skill,
-                                                       HttpServletRequest request) throws CategoryNotFoundException, SkillNotFoundException {
+                                              @PathVariable("skill_id") long skillId,
+                                              @RequestBody Skill skill,
+                                              HttpServletRequest request) throws CategoryNotFoundException, SkillNotFoundException {
         logService.log(request, logger);
         Skill skillUpdated = skillService.updateByCategoryIdAndSkillId(skill, categoryId, skillId, request);
 
@@ -97,12 +96,12 @@ public class CategoryController {
     }
 
     @DeleteMapping(path = "/categories/{id}/skills/{skill_id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<String> deleteASkill(@PathVariable("id") long categoryId,
-                                         @PathVariable("skill_id") long skillId,
-                                         HttpServletRequest request) throws CategoryNotFoundException, SkillNotFoundException {
+    public ResponseEntity<Void> deleteASkill(@PathVariable("id") long categoryId,
+                                             @PathVariable("skill_id") long skillId,
+                                             HttpServletRequest request) throws CategoryNotFoundException, SkillNotFoundException {
         logService.log(request, logger);
         skillService.deteleByCategoryIdAndSkillId(categoryId, skillId, request);
 
-        return new ResponseEntity<>("Deleted", HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
