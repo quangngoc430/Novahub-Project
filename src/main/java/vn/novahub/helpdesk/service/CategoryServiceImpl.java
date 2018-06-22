@@ -29,7 +29,7 @@ public class CategoryServiceImpl implements CategoryService{
     @Override
     public Category get(long categoryId,
                         HttpServletRequest request) throws CategoryNotFoundException {
-        Category category = categoryRepository.findById(categoryId).get();
+        Category category = categoryRepository.getById(categoryId);
 
         if(category == null)
             throw new CategoryNotFoundException(categoryId);
@@ -47,7 +47,7 @@ public class CategoryServiceImpl implements CategoryService{
     public Category update(Category category,
                            long categoryId,
                            HttpServletRequest request) throws CategoryNotFoundException {
-        Category oldCategory = categoryRepository.findById(categoryId).get();
+        Category oldCategory = categoryRepository.getById(categoryId);
 
         if(oldCategory == null)
             throw new CategoryNotFoundException(categoryId);

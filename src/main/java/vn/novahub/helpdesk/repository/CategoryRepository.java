@@ -12,4 +12,6 @@ import java.util.List;
 public interface CategoryRepository extends PagingAndSortingRepository<Category, Long> {
 
     Page<Category> getAllByNameLike(String name, Pageable pageable);
+
+    Category getById(long id);
 }

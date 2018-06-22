@@ -10,7 +10,7 @@ public class LogServiceImpl implements LogService {
 
     @Override
     public void log(HttpServletRequest request, Logger logger) {
-        logger.info("URL : " + request.getRequestURL().toString());
+        logger.info("URL : " + request.getRequestURL());
         logger.info("Method : " + request.getMethod());
         logger.info("IP : " + request.getRemoteAddr());
     }
