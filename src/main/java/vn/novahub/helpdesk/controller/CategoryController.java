@@ -62,7 +62,24 @@ public class CategoryController {
         return new ResponseEntity<>(newCategory, HttpStatus.OK);
     }
 
-    
+    @PutMapping(path = "/categories/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Category> update(@PathVariable("id") long categoryId,
+                                           @RequestBody Category category,
+                                           HttpServletRequest request) throws CategoryNotFoundException {
+        logService.log(request, logger);
+        Category categoryUpdated = categoryService.update(category, categoryId, request);
+
+        return new ResponseEntity<>(categoryUpdated, HttpStatus.OK);
+    }
+
+    @DeleteMapping(path = "/categories/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Void> delete(@PathVariable("id") long categoryId,
+                                       HttpServletRequest request) throws CategoryNotFoundException {
+        logService.log(request, logger);
+        categoryService.delete(categoryId, request);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
 
     @GetMapping(path = "/categories/{id}/skills", produces = {MediaType.APPLICATION_JSON_VALUE})
