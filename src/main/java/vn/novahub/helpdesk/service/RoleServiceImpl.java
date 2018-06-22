@@ -41,9 +41,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Page<Role> getAll(Pageable pageable, HttpServletRequest request) {
 
-        Page<Role> rolePage = roleRepository.findAll(pageable);
-
-        return rolePage;
+        return roleRepository.findAll(pageable);
     }
 
 }
