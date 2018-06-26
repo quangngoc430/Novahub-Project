@@ -20,15 +20,13 @@ public class CategoryServiceImpl implements CategoryService{
 
     @Override
     public Page<Category> getAllByName(String name,
-                                       Pageable pageable,
-                                       HttpServletRequest request) {
+                                       Pageable pageable) {
         name = "%" + name + "%";
         return categoryRepository.getAllByNameLike(name, pageable);
     }
 
     @Override
-    public Category get(long categoryId,
-                        HttpServletRequest request) throws CategoryNotFoundException {
+    public Category get(long categoryId) throws CategoryNotFoundException {
         Category category = categoryRepository.getById(categoryId);
 
         if(category == null)
@@ -38,15 +36,13 @@ public class CategoryServiceImpl implements CategoryService{
     }
 
     @Override
-    public Category create(Category category,
-                           HttpServletRequest request) {
+    public Category create(Category category) {
         return categoryRepository.save(category);
     }
 
     @Override
     public Category update(Category category,
-                           long categoryId,
-                           HttpServletRequest request) throws CategoryNotFoundException {
+                           long categoryId) throws CategoryNotFoundException {
         Category oldCategory = categoryRepository.getById(categoryId);
 
         if(oldCategory == null)
@@ -59,8 +55,7 @@ public class CategoryServiceImpl implements CategoryService{
     }
 
     @Override
-    public void delete(long categoryId,
-                       HttpServletRequest request) throws CategoryNotFoundException {
+    public void delete(long categoryId) throws CategoryNotFoundException {
 
         if(!categoryRepository.existsById(categoryId))
             throw new CategoryNotFoundException(categoryId);

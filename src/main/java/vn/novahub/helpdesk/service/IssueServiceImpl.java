@@ -27,7 +27,7 @@ public class IssueServiceImpl implements IssueService {
     private AccountService accountService;
 
     @Override
-    public Issue getByIssueId(long issueId, HttpServletRequest request) throws IssueNotFoundException {
+    public Issue getByIssueId(long issueId) throws IssueNotFoundException {
         Issue issue = issueRepository.findById(issueId).get();
 
         if(issue == null)
@@ -49,7 +49,7 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public Page<Issue> getAllByKeyword(String keyword, String status, Pageable pageable, HttpServletRequest request) {
+    public Page<Issue> getAllByKeyword(String keyword, String status, Pageable pageable) {
         Page<Issue> issues;
 
         if(keyword == null)
@@ -99,7 +99,7 @@ public class IssueServiceImpl implements IssueService {
 
     @Override
     @Transactional
-    public Issue update(long issueId, Issue issue, HttpServletRequest request) throws IssueNotFoundException {
+    public Issue update(long issueId, Issue issue) throws IssueNotFoundException {
         Issue oldIssue = issueRepository.findById(issueId).get();
 
         if(oldIssue == null)
@@ -122,7 +122,7 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public void delete(long issueId, HttpServletRequest request) throws IssueNotFoundException {
+    public void delete(long issueId) throws IssueNotFoundException {
 
         if(!issueRepository.existsById(issueId))
             throw new IssueNotFoundException(issueId);
@@ -131,7 +131,7 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public boolean approve(long issueId, String token, HttpServletRequest request) throws IssueNotFoundException {
+    public boolean approve(long issueId, String token) throws IssueNotFoundException {
         Issue issue = issueRepository.findByIdAndToken(issueId, token);
 
         if(issue == null)
@@ -148,7 +148,7 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public boolean deny(long issueId, String token, HttpServletRequest request) throws IssueNotFoundException {
+    public boolean deny(long issueId, String token) throws IssueNotFoundException {
         Issue issue = issueRepository.findByIdAndToken(issueId, token);
 
         if(issue == null)

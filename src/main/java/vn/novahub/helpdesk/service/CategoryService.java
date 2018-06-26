@@ -11,13 +11,13 @@ import java.util.ArrayList;
 
 public interface CategoryService {
 
-    Category create(Category category, HttpServletRequest request);
+    Category create(Category category);
 
-    Category update(Category category, long categoryId, HttpServletRequest request) throws CategoryNotFoundException;
+    Category update(Category category, long categoryId) throws CategoryNotFoundException;
 
-    Category get(long categoryId, HttpServletRequest request) throws CategoryNotFoundException;
+    Category get(long categoryId) throws CategoryNotFoundException;
 
-    Page<Category> getAllByName(String name, Pageable pageable, HttpServletRequest request);
+    Page<Category> getAllByName(String name, Pageable pageable);
 
-    void delete(long categoryId, HttpServletRequest request) throws CategoryNotFoundException;
+    void delete(long categoryId) throws CategoryNotFoundException;
 }

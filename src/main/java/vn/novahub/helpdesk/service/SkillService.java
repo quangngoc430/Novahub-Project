@@ -13,20 +13,20 @@ public interface SkillService {
 
     Skill create(Skill skill, HttpServletRequest request);
 
-    Skill createByCategoryId(Skill skill, long categoryId, HttpServletRequest request);
+    Skill createByCategoryId(Skill skill, long categoryId);
 
     Skill updateBySkillId(Skill skill, long skillId, HttpServletRequest request);
 
-    Skill updateByCategoryIdAndSkillId(Skill skill, long categoryId, long skillId, HttpServletRequest request) throws CategoryNotFoundException, SkillNotFoundException;
+    Skill updateByCategoryIdAndSkillId(Skill skill, long categoryId, long skillId) throws CategoryNotFoundException, SkillNotFoundException;
 
-    Page<Skill> getAllByCategoryIdAndName(long categoryId, String name, Pageable pageable, HttpServletRequest request) throws CategoryNotFoundException;
+    Page<Skill> getAllByCategoryIdAndName(long categoryId, String name, Pageable pageable) throws CategoryNotFoundException;
 
     Page<Skill> getAllByName(String name, Pageable pageable, HttpServletRequest request);
 
-    Skill getBySkillId(long skillId, HttpServletRequest request) throws SkillNotFoundException;
+    Skill getBySkillId(long skillId) throws SkillNotFoundException;
 
-    Skill getByCategoryIdAndSkillId(long categoryId, long skillId, HttpServletRequest request);
+    Skill getByCategoryIdAndSkillId(long categoryId, long skillId);
 
-    void deteleByCategoryIdAndSkillId(long categoryId, long skillId, HttpServletRequest request) throws CategoryNotFoundException, SkillNotFoundException;
+    void deteleByCategoryIdAndSkillId(long categoryId, long skillId) throws CategoryNotFoundException, SkillNotFoundException;
 
 }
