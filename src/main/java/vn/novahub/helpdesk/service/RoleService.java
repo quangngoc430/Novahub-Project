@@ -9,9 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 
 public interface RoleService {
 
-    Role getById(long roleId, HttpServletRequest request) throws RoleNotFoundException;
+    Role getById(long roleId) throws RoleNotFoundException;
 
-    Role getByName(String roleName, HttpServletRequest request) throws RoleNotFoundException;
+    Role getByName(String roleName) throws RoleNotFoundException;
 
-    Page<Role> getAll(Pageable pageable, HttpServletRequest request);
+    Page<Role> getAll(Pageable pageable);
 }

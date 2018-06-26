@@ -17,7 +17,7 @@ public class RoleServiceImpl implements RoleService {
     private RoleRepository roleRepository;
 
     @Override
-    public Role getById(long roleId, HttpServletRequest request) throws RoleNotFoundException {
+    public Role getById(long roleId) throws RoleNotFoundException {
 
         Role role = roleRepository.getById(roleId);
 
@@ -28,7 +28,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public Role getByName(String roleName, HttpServletRequest request) throws RoleNotFoundException {
+    public Role getByName(String roleName) throws RoleNotFoundException {
 
         Role role = roleRepository.getByName(roleName);
 
@@ -39,7 +39,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public Page<Role> getAll(Pageable pageable, HttpServletRequest request) {
+    public Page<Role> getAll(Pageable pageable) {
 
         return roleRepository.findAll(pageable);
     }
