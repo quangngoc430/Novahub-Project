@@ -36,7 +36,7 @@ public class IssueController {
                                                        Pageable pageable,
                                                        HttpServletRequest request){
         logService.log(request, logger);
-        Page<Issue> issuePage = issueService.getAllByKeyword(keyword, status, pageable, request);
+        Page<Issue> issuePage = issueService.getAllByKeyword(keyword, status, pageable);
 
         return new ResponseEntity<>(issuePage, HttpStatus.OK);
     }
@@ -45,7 +45,7 @@ public class IssueController {
     public ResponseEntity<Issue> get(@PathVariable(name = "issueId") long issueId,
                                               HttpServletRequest request) throws IssueNotFoundException {
         logService.log(request, logger);
-        Issue issue = issueService.getByIssueId(issueId, request);
+        Issue issue = issueService.getByIssueId(issueId);
 
         return new ResponseEntity<>(issue, HttpStatus.OK);
     }
@@ -75,7 +75,7 @@ public class IssueController {
                                                  @RequestBody Issue issue,
                                                  @PathVariable(name = "issueId") long issueId) throws IssueNotFoundException {
         logService.log(request, logger);
-        issue = issueService.update(issueId, issue, request);
+        issue = issueService.update(issueId, issue);
 
         return new ResponseEntity<>(issue, HttpStatus.OK);
     }
@@ -84,7 +84,7 @@ public class IssueController {
     public ResponseEntity<Void> delete(@PathVariable(name = "issueId") long issueId,
                                                  HttpServletRequest request) throws IssueNotFoundException {
         logService.log(request, logger);
-        issueService.delete(issueId, request);
+        issueService.delete(issueId);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -94,7 +94,7 @@ public class IssueController {
                         @PathVariable(name = "issueId") long issueId,
                         HttpServletRequest request) throws IssueNotFoundException {
         logService.log(request, logger);
-        issueService.approve(issueId, token, request);
+        issueService.approve(issueId, token);
     }
 
     @GetMapping(path = "/issues/{issueId}/deny", produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -102,6 +102,6 @@ public class IssueController {
                      @PathVariable(name = "issueId") long issueId,
                      HttpServletRequest request) throws IssueNotFoundException {
         logService.log(request, logger);
-        issueService.deny(issueId, token, request);
+        issueService.deny(issueId, token);
     }
 }
