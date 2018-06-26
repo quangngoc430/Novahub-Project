@@ -33,7 +33,7 @@ public class RoleController {
                                     HttpServletRequest request) throws RoleNotFoundException {
         logService.log(request, logger);
 
-        Role role = roleService.getById(roleId, request);
+        Role role = roleService.getById(roleId);
 
         return new ResponseEntity<>(role, HttpStatus.OK);
     }
@@ -45,8 +45,8 @@ public class RoleController {
         logService.log(request, logger);
 
         if(roleName != null)
-            return new ResponseEntity<Role>(roleService.getByName(roleName, request), HttpStatus.OK);
+            return new ResponseEntity<Role>(roleService.getByName(roleName), HttpStatus.OK);
 
-        return new ResponseEntity<Page<Role>>(roleService.getAll(pageable, request), HttpStatus.OK);
+        return new ResponseEntity<Page<Role>>(roleService.getAll(pageable), HttpStatus.OK);
     }
 }
