@@ -14,12 +14,10 @@ public class IssueExceptionHandler {
 
     @ExceptionHandler(value = IssueNotFoundException.class)
     public ResponseEntity<ApiError> handleIssueNotFoundException(HttpServletRequest request, Exception ex){
-        ApiError apiError = new ApiError();
-        apiError.setTimestamp(Instant.now());
-        apiError.setStatus(HttpStatus.NOT_FOUND.value());
-        apiError.setError(HttpStatus.NOT_FOUND.name());
-        apiError.setError(ex.getMessage());
-        apiError.setPath(request.getRequestURI());
+        ApiError apiError = new ApiError(HttpStatus.NOT_FOUND.value(),
+                                        HttpStatus.NOT_FOUND.name(),
+                                        request.getRequestURI(),
+                                        ex.getMessage());
         return new ResponseEntity<ApiError>(apiError, HttpStatus.NOT_FOUND);
     }
 
