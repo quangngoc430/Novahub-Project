@@ -7,7 +7,6 @@ import vn.novahub.helpdesk.exception.SkillNotFoundException;
 import vn.novahub.helpdesk.model.Skill;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 
 public interface SkillService {
 

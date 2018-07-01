@@ -1,15 +1,14 @@
 package vn.novahub.helpdesk.model;
 
-import org.springframework.http.HttpStatus;
 
 import java.time.Instant;
-import java.util.List;
+import java.util.HashMap;
 
 public class ApiError {
 
     private Instant timestamp;
     private int status;
-    private String error;
+    private HashMap<String, String> errors;
     private String message;
     private String path;
 
@@ -17,10 +16,10 @@ public class ApiError {
         super();
     }
 
-    public ApiError(int status, String error, String message, String path) {
+    public ApiError(int status, HashMap<String, String> errors, String message, String path) {
         super();
         this.status = status;
-        this.error = error;
+        this.errors = errors;
         this.message = message;
         this.path = path;
         this.timestamp = Instant.now();
@@ -42,12 +41,12 @@ public class ApiError {
         this.status = status;
     }
 
-    public String getError() {
-        return error;
+    public HashMap<String, String> getErrors() {
+        return errors;
     }
 
-    public void setError(String error) {
-        this.error = error;
+    public void setErrors(HashMap<String, String> errors) {
+        this.errors = errors;
     }
 
     public String getMessage() {
@@ -64,5 +63,16 @@ public class ApiError {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    @Override
+    public String toString() {
+        return "ApiError{" +
+                "timestamp=" + timestamp +
+                ", status=" + status +
+                ", errors=" + errors +
+                ", message='" + message + '\'' +
+                ", path='" + path + '\'' +
+                '}';
     }
 }

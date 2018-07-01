@@ -9,8 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import vn.novahub.helpdesk.constant.ExceptionConstant;
-import vn.novahub.helpdesk.constant.ResponseConstant;
 import vn.novahub.helpdesk.exception.IssueNotFoundException;
 import vn.novahub.helpdesk.model.Issue;
 import vn.novahub.helpdesk.service.IssueService;

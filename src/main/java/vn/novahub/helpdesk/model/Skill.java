@@ -68,12 +68,6 @@ public class Skill implements Serializable {
     }
 
     @Override
-    public int hashCode() {
-
-        return Objects.hash(name);
-    }
-
-    @Override
     public String toString() {
         return "Skill{" +
                 "id=" + id +
