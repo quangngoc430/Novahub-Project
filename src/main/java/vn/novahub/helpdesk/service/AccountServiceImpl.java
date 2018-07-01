@@ -1,8 +1,6 @@
 package vn.novahub.helpdesk.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,9 +25,9 @@ import javax.transaction.Transactional;
 import java.util.Date;
 
 @Service
-@PropertySource("classpath:email.properties")
 public class AccountServiceImpl implements AccountService {
 
+    @Autowired
     private Environment env;
 
     @Autowired
@@ -95,7 +93,7 @@ public class AccountServiceImpl implements AccountService {
 
         Account account = accountRepository.getByEmail(accountInput.getEmail());
 
-        if(account.isPasswordNull() || !bCryptPasswordEncoder.matches(accountInput.getPassword(), account.getPassword()))
+        if(account.getPassword() == null || !bCryptPasswordEncoder.matches(accountInput.getPassword(), account.getPassword()))
             throw new AccountInvalidException();
 
         if(account.getStatus().equals(AccountConstant.STATUS_INACTIVE))
@@ -174,6 +172,7 @@ public class AccountServiceImpl implements AccountService {
         account.setRemainNumberOfHours(AccountConstant.REMAIN_NUMBER_OF_HOURS_DEFAULT);
         account.setStatus(AccountConstant.STATUS_ACTIVE);
         account.setRoleId(roleService.getByName(RoleConstant.ROLE_USER).getId());
+        account.setPassword(null);
         account.setToken(null);
         account.setCreatedAt(new Date());
         account.setUpdatedAt(new Date());
@@ -189,11 +188,16 @@ public class AccountServiceImpl implements AccountService {
         Account oldAccount = getAccountLogin();
 
         // check changing password
-        if(account.getNewPassword() != null || account.getPassword() != null){
-            if(oldAccount.isPasswordNull() || !bCryptPasswordEncoder.matches(account.getPassword(), oldAccount.getPassword()))
-                throw new AccountPasswordNotEqualException("Password do not match");
+        if(oldAccount.getPassword() != null){
+            if(account.getNewPassword() != null || account.getPassword() != null){
+                if(!bCryptPasswordEncoder.matches(account.getPassword(), oldAccount.getPassword()))
+                    throw new AccountPasswordNotEqualException("Password do not match");
 
-            oldAccount.setPassword(bCryptPasswordEncoder.encode(account.getNewPassword()));
+                oldAccount.setPassword(bCryptPasswordEncoder.encode(account.getNewPassword()));
+            }
+        } else {
+            if(account.getPassword() != null)
+                oldAccount.setPassword(bCryptPasswordEncoder.encode(account.getPassword()));
         }
 
         if(account.getFirstName() != null)
@@ -208,7 +212,7 @@ public class AccountServiceImpl implements AccountService {
             oldAccount.setAvatarUrl(account.getAvatarUrl());
         oldAccount.setUpdatedAt(new Date());
 
-        accountValidation.validateAccount(account, GroupUpdatePasswordAccount.class);
+        accountValidation.validateAccount(account, GroupUpdateAccount.class);
 
         return accountRepository.save(oldAccount);
     }
