@@ -44,9 +44,7 @@ public class CategoryServiceImpl implements CategoryService{
             throw new CategoryNotFoundException(categoryId);
 
         oldCategory.setName(category.getName());
-        Category newCategory = categoryRepository.save(oldCategory);
-
-        return newCategory;
+        return categoryRepository.save(oldCategory);
     }
 
     @Override

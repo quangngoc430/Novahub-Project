@@ -3,6 +3,7 @@ package vn.novahub.helpdesk.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,8 +30,7 @@ import java.util.Date;
 @PropertySource("classpath:email.properties")
 public class AccountServiceImpl implements AccountService {
 
-    @Value("${content_email_sign_up}")
-    private String contentEmailSignUp;
+    private Environment env;
 
     @Autowired
     private AccountRepository accountRepository;
@@ -95,7 +95,7 @@ public class AccountServiceImpl implements AccountService {
 
         Account account = accountRepository.getByEmail(accountInput.getEmail());
 
-        if(!bCryptPasswordEncoder.matches(accountInput.getPassword(), account.getPassword()))
+        if(account.isPasswordNull() || !bCryptPasswordEncoder.matches(accountInput.getPassword(), account.getPassword()))
             throw new AccountInvalidException();
 
         if(account.getStatus().equals(AccountConstant.STATUS_INACTIVE))
@@ -151,8 +151,9 @@ public class AccountServiceImpl implements AccountService {
 
         Mail mail = new Mail();
         mail.setEmailReceiving(account.getEmail());
-        mail.setSubject("Activate account");
+        mail.setSubject(env.getProperty("subject_email_sign_up"));
         String urlAccountActive = "http://localhost:8080/api/users/" + account.getId() + "/active?token=" + account .getVertificationToken();
+        String contentEmailSignUp = env.getProperty("content_email_sign_up");
         contentEmailSignUp = contentEmailSignUp.replace("{url-activate-account}", urlAccountActive);
         mail.setContent(contentEmailSignUp);
         mailService.sendHTMLMail(mail);
@@ -173,6 +174,7 @@ public class AccountServiceImpl implements AccountService {
         account.setRemainNumberOfHours(AccountConstant.REMAIN_NUMBER_OF_HOURS_DEFAULT);
         account.setStatus(AccountConstant.STATUS_ACTIVE);
         account.setRoleId(roleService.getByName(RoleConstant.ROLE_USER).getId());
+        account.setToken(null);
         account.setCreatedAt(new Date());
         account.setUpdatedAt(new Date());
 
@@ -188,7 +190,7 @@ public class AccountServiceImpl implements AccountService {
 
         // check changing password
         if(account.getNewPassword() != null || account.getPassword() != null){
-            if(!bCryptPasswordEncoder.matches(account.getPassword(), oldAccount.getPassword()))
+            if(oldAccount.isPasswordNull() || !bCryptPasswordEncoder.matches(account.getPassword(), oldAccount.getPassword()))
                 throw new AccountPasswordNotEqualException("Password do not match");
 
             oldAccount.setPassword(bCryptPasswordEncoder.encode(account.getNewPassword()));

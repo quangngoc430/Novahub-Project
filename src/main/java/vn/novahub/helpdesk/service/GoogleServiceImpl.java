@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.fluent.Form;
 import org.apache.http.client.fluent.Request;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,10 +49,7 @@ public class GoogleServiceImpl implements GoogleService{
         if(!node.textValue().endsWith("@novahub.vn"))
             throw new EmailFormatException(node.textValue());
 
-        GooglePojo googlePojo = mapper.readValue(response, GooglePojo.class);
-
-        return googlePojo;
-
+        return mapper.readValue(response, GooglePojo.class);
     }
 
     public UserDetails buildUser(GooglePojo googlePojo, String roleName) {

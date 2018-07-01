@@ -1,7 +1,5 @@
 package vn.novahub.helpdesk.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -44,11 +42,11 @@ public class HomeController {
 
         String roleName = (SecurityContextHolder.getContext().getAuthentication().getAuthorities().toArray())[0].toString();
 
-        if(roleName.equals("ROLE_" + RoleConstant.ROLE_ADMIN))
+        if(roleName.equals(RoleConstant.PREFIX_ROLE + RoleConstant.ROLE_ADMIN))
             return "redirect:/admin";
-        else if(roleName.equals("ROLE_" + RoleConstant.ROLE_CLERK))
+        else if(roleName.equals(RoleConstant.PREFIX_ROLE + RoleConstant.ROLE_CLERK))
             return "redirect:/clerk";
-        else if(roleName.equals("ROLE_" + RoleConstant.ROLE_USER))
+        else if(roleName.equals(RoleConstant.PREFIX_ROLE + RoleConstant.ROLE_USER))
             return "redirect:/user";
 
         return "login";
@@ -94,8 +92,6 @@ public class HomeController {
         return "403";
     }
 
-    private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
-
     @RequestMapping("/login-google")
     public String loginGoogle(@RequestParam(value = "code", defaultValue = "") String code,
                               HttpServletRequest request) throws IOException, EmailFormatException, AccountIsExistException, AccountValidationException, RoleNotFoundException {
@@ -124,8 +120,7 @@ public class HomeController {
             account = accountService.updateToken(account, accessToken);
         }
 
-
-        UserDetails userDetail = googleService.buildUser(googlePojo, "ROLE_" + account.getRole().getName());
+        UserDetails userDetail = googleService.buildUser(googlePojo, RoleConstant.PREFIX_ROLE + account.getRole().getName());
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetail, null,
                 userDetail.getAuthorities());
         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

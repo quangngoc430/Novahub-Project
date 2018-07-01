@@ -1,7 +1,6 @@
 package vn.novahub.helpdesk.model;
 
 import com.fasterxml.jackson.annotation.*;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import vn.novahub.helpdesk.validation.*;
@@ -91,6 +90,9 @@ public class Account implements Serializable {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String newPassword;
 
+    @Transient
+    private boolean passwordNull;
+
     @ManyToOne(fetch = FetchType.EAGER, targetEntity = Role.class)
     @JoinColumn(name = "role_id", insertable = false, updatable = false)
     private Role role;
@@ -152,11 +154,18 @@ public class Account implements Serializable {
     }
 
     public String getPassword() {
+        if(password == null)
+            passwordNull = true;
+        passwordNull = false;
+
         return password;
     }
 
     public void setPassword(String password) {
         this.password = password;
+        if(password == null)
+            passwordNull = true;
+        passwordNull = false;
     }
 
     public String getNewPassword() {
@@ -235,6 +244,14 @@ public class Account implements Serializable {
         return vertificationToken;
     }
 
+    public boolean isPasswordNull() {
+        return passwordNull;
+    }
+
+    public void setPasswordNull(boolean passwordNull) {
+        this.passwordNull = passwordNull;
+    }
+
     public void setVertificationToken(String vertificationToken) {
         this.vertificationToken = vertificationToken;
     }
@@ -248,4 +265,28 @@ public class Account implements Serializable {
         return authorities;
     }
 
+    @Override
+    public String toString() {
+        return "Account{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", dayOfBirth=" + dayOfBirth +
+                ", address='" + address + '\'' +
+                ", avatarUrl='" + avatarUrl + '\'' +
+                ", password='" + password + '\'' +
+                ", totalNumberOfHours=" + totalNumberOfHours +
+                ", remainNumberOfHours=" + remainNumberOfHours +
+                ", status='" + status + '\'' +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", token='" + token + '\'' +
+                ", vertificationToken='" + vertificationToken + '\'' +
+                ", roleId=" + roleId +
+                ", newPassword='" + newPassword + '\'' +
+                ", passwordNull=" + passwordNull +
+                ", role=" + role +
+                '}';
+    }
 }

@@ -2,13 +2,13 @@ package vn.novahub.helpdesk.model;
 
 
 import java.time.Instant;
-import java.util.HashMap;
+import java.util.Map;
 
 public class ApiError {
 
     private Instant timestamp;
     private int status;
-    private HashMap<String, String> errors;
+    private Map<String, String> errors;
     private String message;
     private String path;
 
@@ -16,7 +16,7 @@ public class ApiError {
         super();
     }
 
-    public ApiError(int status, HashMap<String, String> errors, String message, String path) {
+    public ApiError(int status, Map<String, String> errors, String message, String path) {
         super();
         this.status = status;
         this.errors = errors;
@@ -41,11 +41,11 @@ public class ApiError {
         this.status = status;
     }
 
-    public HashMap<String, String> getErrors() {
+    public Map<String, String> getErrors() {
         return errors;
     }
 
-    public void setErrors(HashMap<String, String> errors) {
+    public void setErrors(Map<String, String> errors) {
         this.errors = errors;
     }
 

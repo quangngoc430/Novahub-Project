@@ -34,7 +34,7 @@ public class AccountController {
     @PreAuthorize("hasRole('ROLE_ANONYMOUS')")
     @PostMapping(path = "/login", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Account> login(@RequestBody Account account,
-                                      HttpServletRequest request) throws AccountInactiveException, AccountInvalidException, AccountLockedException, AccountValidationException {
+                                      HttpServletRequest request) throws AccountInvalidException, AccountLockedException, AccountValidationException, AccountInactiveException {
         logService.log(request, logger);
 
         Account accountLogin = accountService.login(account, request);
