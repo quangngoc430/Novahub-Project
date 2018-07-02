@@ -5,5 +5,5 @@ import vn.novahub.helpdesk.model.Account;
 
 public interface AccountValidation {
 
-    void validateAccount(Account account, Class groupClassValidation) throws AccountValidationException;
+    void validate(Account account, Class groupClassValidation) throws AccountValidationException;
 }

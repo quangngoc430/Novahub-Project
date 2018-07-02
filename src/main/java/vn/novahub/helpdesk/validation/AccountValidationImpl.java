@@ -21,7 +21,7 @@ public class AccountValidationImpl implements AccountValidation {
     }
 
     @Override
-    public void validateAccount(Account account, Class groupClassValidation) throws AccountValidationException {
+    public void validate(Account account, Class groupClassValidation) throws AccountValidationException {
         Set<ConstraintViolation<Account>> constraintViolations = validator.validate(account, groupClassValidation);
 
         HashMap<String, String> errors = new HashMap<>();
