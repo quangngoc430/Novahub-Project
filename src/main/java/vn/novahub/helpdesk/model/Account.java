@@ -90,9 +90,6 @@ public class Account implements Serializable {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String newPassword;
 
-    @Transient
-    private boolean passwordNull;
-
     @ManyToOne(fetch = FetchType.EAGER, targetEntity = Role.class)
     @JoinColumn(name = "role_id", insertable = false, updatable = false)
     private Role role;
@@ -154,18 +151,11 @@ public class Account implements Serializable {
     }
 
     public String getPassword() {
-        if(password == null)
-            passwordNull = true;
-        passwordNull = false;
-
         return password;
     }
 
     public void setPassword(String password) {
         this.password = password;
-        if(password == null)
-            passwordNull = true;
-        passwordNull = false;
     }
 
     public String getNewPassword() {
@@ -244,14 +234,6 @@ public class Account implements Serializable {
         return vertificationToken;
     }
 
-    public boolean isPasswordNull() {
-        return passwordNull;
-    }
-
-    public void setPasswordNull(boolean passwordNull) {
-        this.passwordNull = passwordNull;
-    }
-
     public void setVertificationToken(String vertificationToken) {
         this.vertificationToken = vertificationToken;
     }
@@ -285,7 +267,6 @@ public class Account implements Serializable {
                 ", vertificationToken='" + vertificationToken + '\'' +
                 ", roleId=" + roleId +
                 ", newPassword='" + newPassword + '\'' +
-                ", passwordNull=" + passwordNull +
                 ", role=" + role +
                 '}';
     }
