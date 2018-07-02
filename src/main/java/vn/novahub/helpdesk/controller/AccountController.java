@@ -1,5 +1,8 @@
 package vn.novahub.helpdesk.controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,23 +59,39 @@ public class AccountController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping(path = "/users/me", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Account> getAccountLogin(HttpServletRequest request){
+    public ResponseEntity<JsonNode> getAccountLogin(@RequestParam(value = "checkPasswordNull", defaultValue = "false") String checkPasswordNull,
+                                                    HttpServletRequest request){
         logService.log(request, logger);
 
         Account account = accountService.getAccountLogin();
 
-        return new ResponseEntity<>(account, HttpStatus.OK);
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode root = mapper.valueToTree(account);
+
+        if(checkPasswordNull.equals("true")){
+            root.put("isPasswordNull", (account.getPassword() == null));
+        }
+
+        return new ResponseEntity<>(root, HttpStatus.OK);
     }
 
     @PreAuthorize("isAuthenticated()")
     @PutMapping(path = "/users/me", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Account> updateForAccountLogin(@RequestBody Account account,
+    public ResponseEntity<JsonNode> updateForAccountLogin(@RequestParam(value = "checkPasswordNull", defaultValue = "false") String checkPasswordNull,
+                                                         @RequestBody Account account,
                                                          HttpServletRequest request) throws AccountPasswordNotEqualException, AccountValidationException {
         logService.log(request, logger);
 
         Account accountUpdated = accountService.update(account);
 
-        return new ResponseEntity<>(accountUpdated, HttpStatus.OK);
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode root = mapper.valueToTree(accountUpdated);
+
+        if(checkPasswordNull.equals("true")){
+            root.put("isPasswordNull", (account.getPassword() == null));
+        }
+
+        return new ResponseEntity<>(root, HttpStatus.OK);
     }
 
     @PreAuthorize("isAuthenticated()")

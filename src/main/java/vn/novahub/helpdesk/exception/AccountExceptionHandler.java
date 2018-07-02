@@ -13,6 +13,8 @@ import java.util.HashMap;
 @ControllerAdvice
 public class AccountExceptionHandler {
 
+    private static final String MESSAGE = "message";
+
     @ExceptionHandler(value = AccountNotFoundException.class)
     public ResponseEntity<ApiError> handleAccountNotFoundException(HttpServletRequest request, Exception ex){
 
@@ -21,7 +23,7 @@ public class AccountExceptionHandler {
         apiError.setTimestamp(Instant.now());
         apiError.setStatus(HttpStatus.NOT_FOUND.value());
         HashMap<String, String> errors = new HashMap<>();
-        errors.put("message", "Account not found");
+        errors.put(MESSAGE, "Account not found");
         apiError.setErrors(errors);
         apiError.setPath(request.getRequestURI());
         apiError.setMessage(ex.getMessage());
@@ -36,7 +38,7 @@ public class AccountExceptionHandler {
         apiError.setTimestamp(Instant.now());
         apiError.setStatus(HttpStatus.CONFLICT.value());
         HashMap<String, String> errors = new HashMap<>();
-        errors.put("message", "Account is exist");
+        errors.put(MESSAGE, "Account is exist");
         apiError.setErrors(errors);
         apiError.setPath(request.getRequestURI());
         apiError.setMessage(ex.getMessage());
@@ -64,7 +66,7 @@ public class AccountExceptionHandler {
         apiError.setTimestamp(Instant.now());
         apiError.setStatus(HttpStatus.NOT_ACCEPTABLE.value());
         HashMap<String, String> errors = new HashMap<>();
-        errors.put("message", "Two passwords do not match");
+        errors.put(MESSAGE, "Two passwords do not match");
         apiError.setErrors(errors);
         apiError.setPath(request.getRequestURI());
         apiError.setMessage(ex.getMessage());
@@ -79,7 +81,7 @@ public class AccountExceptionHandler {
         apiError.setTimestamp(Instant.now());
         apiError.setStatus(HttpStatus.NOT_FOUND.value());
         HashMap<String, String> errors = new HashMap<>();
-        errors.put("message", "Invalid email or passowrd");
+        errors.put(MESSAGE, "Invalid email or passowrd");
         apiError.setErrors(errors);
         apiError.setPath(request.getRequestURI());
         apiError.setMessage(ex.getMessage());
@@ -94,7 +96,7 @@ public class AccountExceptionHandler {
         apiError.setTimestamp(Instant.now());
         apiError.setStatus(HttpStatus.FORBIDDEN.value());
         HashMap<String, String> errors = new HashMap<>();
-        errors.put("message", "Inactive email");
+        errors.put(MESSAGE, "Inactive email");
         apiError.setErrors(errors);
         apiError.setPath(request.getRequestURI());
         apiError.setMessage(ex.getMessage());
@@ -108,7 +110,7 @@ public class AccountExceptionHandler {
         apiError.setTimestamp(Instant.now());
         apiError.setStatus(HttpStatus.LOCKED.value());
         HashMap<String, String> errors = new HashMap<>();
-        errors.put("message", "User is locked");
+        errors.put(MESSAGE, "User is locked");
         apiError.setErrors(errors);
         apiError.setPath(request.getRequestURI());
         apiError.setMessage(ex.getMessage());

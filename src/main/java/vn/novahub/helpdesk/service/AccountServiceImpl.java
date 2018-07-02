@@ -15,6 +15,7 @@ import vn.novahub.helpdesk.constant.AccountConstant;
 import vn.novahub.helpdesk.constant.RoleConstant;
 import vn.novahub.helpdesk.exception.*;
 import vn.novahub.helpdesk.model.Account;
+import vn.novahub.helpdesk.model.GooglePojo;
 import vn.novahub.helpdesk.model.Mail;
 import vn.novahub.helpdesk.repository.AccountRepository;
 import vn.novahub.helpdesk.validation.*;
@@ -22,6 +23,7 @@ import vn.novahub.helpdesk.validation.*;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.util.Date;
 
 @Service
@@ -47,6 +49,9 @@ public class AccountServiceImpl implements AccountService {
 
     @Autowired
     private MailService mailService;
+
+    @Autowired
+    private GoogleService googleService;
 
     @Override
     public boolean isAccountLogin(long accountId) {
@@ -105,6 +110,46 @@ public class AccountServiceImpl implements AccountService {
         UserDetails userDetails = new User(account.getEmail(), account.getPassword(), account.getAuthorities());
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null,
                 userDetails.getAuthorities());
+        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        return account;
+    }
+
+    @Override
+    public Account loginWithGoogle(String code, HttpServletRequest request) throws EmailFormatException,
+            RoleNotFoundException, AccountIsExistException, AccountValidationException, IOException {
+        String accessToken = googleService.getToken(code);
+        GooglePojo googlePojo = googleService.getUserInfo(accessToken);
+
+        Account account = getByEmail(googlePojo.getEmail());
+
+        if(account == null) {
+            account = new Account();
+            account.setEmail(googlePojo.getEmail());
+
+            if(googlePojo.getName() == null || googlePojo.getName().equals(""))
+                account.setFirstName(account.getEmail().substring(0, account.getEmail().indexOf("@novahub.vn")));
+            else {
+                account.setFirstName(googlePojo.getGiven_name());
+                account.setLastName(googlePojo.getFamily_name());
+            }
+            account.setAvatarUrl(googlePojo.getPicture());
+            account.setToken(accessToken);
+            account.setRoleId(roleService.getByName(RoleConstant.ROLE_USER).getId());
+            account.setUpdatedAt(new Date());
+            account.setCreatedAt(new Date());
+            account = createWithGoogleAccount(account);
+
+            account.setRole(roleService.getById(account.getRoleId()));
+        } else {
+            account.setToken(accessToken);
+            account = updateToken(account, accessToken);
+        }
+
+        UserDetails userDetail = googleService.buildUser(googlePojo, RoleConstant.PREFIX_ROLE + account.getRole().getName());
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetail, null,
+                userDetail.getAuthorities());
         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         SecurityContextHolder.getContext().setAuthentication(authentication);
 

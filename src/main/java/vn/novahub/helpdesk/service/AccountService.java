@@ -7,6 +7,7 @@ import vn.novahub.helpdesk.model.Account;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 
 public interface AccountService {
 
@@ -21,6 +22,8 @@ public interface AccountService {
     Account updateToken(Account account, String token);
 
     Account login(Account account, HttpServletRequest request) throws AccountInvalidException, AccountInactiveException, AccountLockedException, AccountValidationException;
+
+    public Account loginWithGoogle(String code, HttpServletRequest request) throws IOException, EmailFormatException, RoleNotFoundException, AccountIsExistException, AccountValidationException;
 
     Page<Account> getAll(String keyword, Pageable pageable);
 

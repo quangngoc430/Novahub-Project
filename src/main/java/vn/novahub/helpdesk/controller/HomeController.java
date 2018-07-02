@@ -2,10 +2,7 @@ package vn.novahub.helpdesk.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import vn.novahub.helpdesk.constant.RoleConstant;
@@ -14,27 +11,17 @@ import vn.novahub.helpdesk.exception.AccountValidationException;
 import vn.novahub.helpdesk.exception.EmailFormatException;
 import vn.novahub.helpdesk.exception.RoleNotFoundException;
 import vn.novahub.helpdesk.model.Account;
-import vn.novahub.helpdesk.model.GooglePojo;
 import vn.novahub.helpdesk.service.AccountService;
-import vn.novahub.helpdesk.service.GoogleService;
-import vn.novahub.helpdesk.service.RoleService;
 
 import javax.annotation.security.PermitAll;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.Date;
 
 @Controller
 public class HomeController {
 
     @Autowired
     private AccountService accountService;
-
-    @Autowired
-    private GoogleService googleService;
-
-    @Autowired
-    private RoleService roleService;
 
     @PermitAll
     @RequestMapping("/login")
@@ -98,33 +85,7 @@ public class HomeController {
         if (code.isEmpty())
             return "redirect:/login?google=error";
 
-        String accessToken = googleService.getToken(code);
-        GooglePojo googlePojo = googleService.getUserInfo(accessToken);
-
-        Account account = accountService.getByEmail(googlePojo.getEmail());
-
-        if(account == null) {
-            account = new Account();
-            account.setEmail(googlePojo.getEmail());
-            account.setFirstName(googlePojo.getGiven_name());
-            account.setLastName(googlePojo.getFamily_name());
-            account.setAvatarUrl(googlePojo.getPicture());
-            account.setToken(accessToken);
-            account.setRoleId(roleService.getByName(RoleConstant.ROLE_USER).getId());
-            account.setUpdatedAt(new Date());
-            account.setCreatedAt(new Date());
-            account = accountService.createWithGoogleAccount(account);
-            account.setRole(roleService.getById(account.getRoleId()));
-        } else {
-            account.setToken(accessToken);
-            account = accountService.updateToken(account, accessToken);
-        }
-
-        UserDetails userDetail = googleService.buildUser(googlePojo, RoleConstant.PREFIX_ROLE + account.getRole().getName());
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetail, null,
-                userDetail.getAuthorities());
-        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        Account account = accountService.loginWithGoogle(code, request);
 
         if(account.getRole().getName().equals(RoleConstant.ROLE_ADMIN))
             return "redirect:/admin";
