@@ -1,6 +1,8 @@
 package vn.novahub.helpdesk.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,10 +30,14 @@ import java.io.IOException;
 import java.util.Date;
 
 @Service
+@PropertySource("classpath:email.properties")
 public class AccountServiceImpl implements AccountService {
 
-    @Autowired
-    private Environment env;
+    @Value("${subject_email_sign_up}")
+    private String subjectEmailSignUp;
+
+    @Value("${content_email_sign_up}")
+    private String contentEmailSignUp;
 
     @Autowired
     private AccountRepository accountRepository;
@@ -72,8 +78,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public boolean activateAccount(long accountId, String token) {
-        Account account = accountRepository.getByIdAndToken(accountId, token);
+    public boolean activateAccount(long accountId, String verificationToken) {
+        Account account = accountRepository.getByIdAndVertificationToken(accountId, verificationToken);
 
         if(account == null) {
             return false;
@@ -195,9 +201,8 @@ public class AccountServiceImpl implements AccountService {
 
         Mail mail = new Mail();
         mail.setEmailReceiving(account.getEmail());
-        mail.setSubject(env.getProperty("subject_email_sign_up"));
-        String urlAccountActive = "http://localhost:8080/api/users/" + account.getId() + "/active?token=" + account .getVertificationToken();
-        String contentEmailSignUp = env.getProperty("content_email_sign_up");
+        mail.setSubject(subjectEmailSignUp);
+        String urlAccountActive = "http://localhost:8080/api/users/" + account.getId() + "/active?token=" + account.getVertificationToken();
         contentEmailSignUp = contentEmailSignUp.replace("{url-activate-account}", urlAccountActive);
         mail.setContent(contentEmailSignUp);
         mailService.sendHTMLMail(mail);
@@ -236,6 +241,8 @@ public class AccountServiceImpl implements AccountService {
         // check changing password
         if(oldAccount.getPassword() != null){
             if(account.getNewPassword() != null || account.getPassword() != null){
+                accountValidation.validate(account, GroupUpdatePasswordAccount.class);
+
                 if(!bCryptPasswordEncoder.matches(account.getPassword(), oldAccount.getPassword()))
                     throw new AccountPasswordNotEqualException("Password do not match");
 
@@ -258,7 +265,7 @@ public class AccountServiceImpl implements AccountService {
             oldAccount.setAvatarUrl(account.getAvatarUrl());
         oldAccount.setUpdatedAt(new Date());
 
-        accountValidation.validate(account, Default.class);
+        accountValidation.validate(oldAccount, Default.class);
 
         return accountRepository.save(oldAccount);
     }
@@ -269,6 +276,7 @@ public class AccountServiceImpl implements AccountService {
 
         // check changing password
         if(account.getPassword() != null){
+            accountValidation.validate(account, GroupUpdatePasswordAccount.class);
             oldAccount.setPassword(bCryptPasswordEncoder.encode(account.getPassword()));
         }
 
@@ -286,7 +294,7 @@ public class AccountServiceImpl implements AccountService {
             oldAccount.setStatus(account.getStatus());
         oldAccount.setUpdatedAt(new Date());
 
-        accountValidation.validate(account, Default.class);
+        accountValidation.validate(oldAccount, Default.class);
 
         return accountRepository.save(oldAccount);
     }

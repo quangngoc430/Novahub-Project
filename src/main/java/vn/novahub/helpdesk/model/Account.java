@@ -6,9 +6,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import vn.novahub.helpdesk.validation.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -47,7 +45,7 @@ public class Account implements Serializable {
     private String avatarUrl;
 
     @NotEmpty(message = "Password is not empty"
-            , groups = {GroupCreateAccount.class, GroupUpdateAccount.class, GroupUpdatePasswordAccount.class, GroupLoginAccount.class})
+            , groups = {GroupCreateAccount.class, GroupLoginAccount.class})
     @Column(name = "password")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
@@ -86,7 +84,6 @@ public class Account implements Serializable {
     private long roleId;
 
     @Transient
-    @NotEmpty(message = "New password is not empty", groups = {GroupUpdatePasswordAccount.class})
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String newPassword;
 

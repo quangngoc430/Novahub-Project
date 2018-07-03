@@ -108,11 +108,11 @@ public class AccountController {
     @PermitAll
     @GetMapping(path = "/users/{id}/active", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Void> activate(@PathVariable(value = "id") long accountId,
-                                          @RequestParam(value = "token", defaultValue = "") String token,
+                                          @RequestParam(value = "token", defaultValue = "") String verficationToken,
                                           HttpServletRequest request){
         logService.log(request, logger);
 
-        boolean result = accountService.activateAccount(accountId, token);
+        boolean result = accountService.activateAccount(accountId, verficationToken);
 
         if(!result)
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);

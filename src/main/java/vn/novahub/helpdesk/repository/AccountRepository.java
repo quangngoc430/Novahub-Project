@@ -17,7 +17,7 @@ public interface AccountRepository extends PagingAndSortingRepository<Account, L
 
     Account getById(long accountId);
 
-    Account getByIdAndToken(long accountId, String token);
+    Account getByIdAndVertificationToken(long accountId, String verificationToken);
 
     Account getByEmailAndPassword(String email, String password);
 }
