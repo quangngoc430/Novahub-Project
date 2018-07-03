@@ -94,7 +94,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account login(Account accountInput, HttpServletRequest request) throws AccountInvalidException, AccountInactiveException, AccountLockedException, AccountValidationException {
 
-        accountValidation.validateAccount(accountInput, GroupLoginAccount.class);
+        accountValidation.validate(accountInput, GroupLoginAccount.class);
 
         Account account = accountRepository.getByEmail(accountInput.getEmail());
 
@@ -176,7 +176,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account create(Account account) throws AccountIsExistException, RoleNotFoundException, AccountValidationException, MessagingException {
 
-        accountValidation.validateAccount(account, GroupCreateAccount.class);
+        accountValidation.validate(account, GroupCreateAccount.class);
 
         if(accountRepository.getByEmail(account.getEmail()) != null)
             throw new AccountIsExistException(account.getEmail());
@@ -208,7 +208,7 @@ public class AccountServiceImpl implements AccountService {
     @Transactional
     public Account createWithGoogleAccount(Account account) throws AccountValidationException, AccountIsExistException, RoleNotFoundException {
 
-        accountValidation.validateAccount(account, GroupCreateWithAccountGoogle.class);
+        accountValidation.validate(account, GroupCreateWithAccountGoogle.class);
 
         if(accountRepository.getByEmail(account.getEmail()) != null)
             throw new AccountIsExistException(account.getEmail());
@@ -257,7 +257,7 @@ public class AccountServiceImpl implements AccountService {
             oldAccount.setAvatarUrl(account.getAvatarUrl());
         oldAccount.setUpdatedAt(new Date());
 
-        accountValidation.validateAccount(account, GroupUpdateAccount.class);
+        accountValidation.validate(account, GroupUpdateAccount.class);
 
         return accountRepository.save(oldAccount);
     }
@@ -285,7 +285,7 @@ public class AccountServiceImpl implements AccountService {
             oldAccount.setStatus(account.getStatus());
         oldAccount.setUpdatedAt(new Date());
 
-        accountValidation.validateAccount(account, GroupUpdateAccount.class);
+        accountValidation.validate(account, GroupUpdateAccount.class);
 
         return accountRepository.save(oldAccount);
     }
