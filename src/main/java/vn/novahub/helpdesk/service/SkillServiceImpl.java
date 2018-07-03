@@ -54,7 +54,7 @@ public class SkillServiceImpl implements SkillService {
     }
 
     @Override
-    public Skill createByCategoryId(Skill skill, long categoryId, HttpServletRequest request) {
+    public Skill createByCategoryId(Skill skill, long categoryId) {
         Skill oldSkill = skillRepository.findByName(skill.getName());
 
         if(oldSkill != null){
@@ -94,7 +94,7 @@ public class SkillServiceImpl implements SkillService {
     }
 
     @Override
-    public Skill updateByCategoryIdAndSkillId(Skill skill, long categoryId, long skillId, HttpServletRequest request) throws CategoryNotFoundException, SkillNotFoundException {
+    public Skill updateByCategoryIdAndSkillId(Skill skill, long categoryId, long skillId) throws CategoryNotFoundException, SkillNotFoundException {
         if(!categoryRepository.existsById(categoryId))
             throw new CategoryNotFoundException(categoryId);
 
@@ -110,7 +110,7 @@ public class SkillServiceImpl implements SkillService {
     }
 
     @Override
-    public Skill getBySkillId(long skillId, HttpServletRequest request) throws SkillNotFoundException {
+    public Skill getBySkillId(long skillId) throws SkillNotFoundException {
         Skill skill = skillRepository.findById(skillId).get();
 
         if(skill == null)
@@ -120,12 +120,12 @@ public class SkillServiceImpl implements SkillService {
     }
 
     @Override
-    public Skill getByCategoryIdAndSkillId(long categoryId, long skillId, HttpServletRequest request) {
+    public Skill getByCategoryIdAndSkillId(long categoryId, long skillId) {
         return skillRepository.findByIdAndCategoryId(skillId, categoryId);
     }
 
     @Override
-    public void deteleByCategoryIdAndSkillId(long categoryId, long skillId, HttpServletRequest request) throws CategoryNotFoundException, SkillNotFoundException {
+    public void deteleByCategoryIdAndSkillId(long categoryId, long skillId) throws CategoryNotFoundException, SkillNotFoundException {
 
         if(!categoryRepository.existsById(categoryId))
             throw new CategoryNotFoundException(categoryId);
@@ -137,7 +137,7 @@ public class SkillServiceImpl implements SkillService {
     }
 
     @Override
-    public Page<Skill> getAllByCategoryIdAndName(long categoryId, String name, Pageable pageable, HttpServletRequest request) throws CategoryNotFoundException {
+    public Page<Skill> getAllByCategoryIdAndName(long categoryId, String name, Pageable pageable) throws CategoryNotFoundException {
         if(!categoryRepository.existsById(categoryId))
             throw new CategoryNotFoundException(categoryId);
 

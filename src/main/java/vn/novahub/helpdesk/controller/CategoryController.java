@@ -39,7 +39,7 @@ public class CategoryController {
                                                  Pageable pageable,
                                                  HttpServletRequest request){
         logService.log(request, logger);
-        Page<Category> categoryPage = categoryService.getAllByName(keyword, pageable, request);
+        Page<Category> categoryPage = categoryService.getAllByName(keyword, pageable);
 
         return new ResponseEntity<>(categoryPage, HttpStatus.OK);
     }
@@ -48,7 +48,7 @@ public class CategoryController {
     public ResponseEntity<Category> get(@PathVariable("id") long categoryId,
                                         HttpServletRequest request) throws CategoryNotFoundException {
         logService.log(request, logger);
-        Category category = categoryService.get(categoryId, request);
+        Category category = categoryService.get(categoryId);
 
         return new ResponseEntity<>(category, HttpStatus.OK);
     }
@@ -88,7 +88,7 @@ public class CategoryController {
                                                                Pageable pageable,
                                                                HttpServletRequest request) throws CategoryNotFoundException {
         logService.log(request, logger);
-        Page<Skill> skillPage = skillService.getAllByCategoryIdAndName(categoryId, keyword, pageable, request);
+        Page<Skill> skillPage = skillService.getAllByCategoryIdAndName(categoryId, keyword, pageable);
 
         return new ResponseEntity<>(skillPage, HttpStatus.OK);
     }
@@ -98,7 +98,7 @@ public class CategoryController {
                                            @PathVariable("skill_id") long skillId,
                                            HttpServletRequest request){
         logService.log(request, logger);
-        Skill skill = skillService.getByCategoryIdAndSkillId(categoryId, skillId, request);
+        Skill skill = skillService.getByCategoryIdAndSkillId(categoryId, skillId);
 
         return  new ResponseEntity<>(skill, HttpStatus.OK);
     }
@@ -108,7 +108,7 @@ public class CategoryController {
                                               @RequestBody Skill skill,
                                               HttpServletRequest request){
         logService.log(request, logger);
-        Skill newSkill = skillService.createByCategoryId(skill, categoryId, request);
+        Skill newSkill = skillService.createByCategoryId(skill, categoryId);
 
         return new ResponseEntity<>(newSkill, HttpStatus.OK);
     }
@@ -119,7 +119,7 @@ public class CategoryController {
                                               @RequestBody Skill skill,
                                               HttpServletRequest request) throws CategoryNotFoundException, SkillNotFoundException {
         logService.log(request, logger);
-        Skill skillUpdated = skillService.updateByCategoryIdAndSkillId(skill, categoryId, skillId, request);
+        Skill skillUpdated = skillService.updateByCategoryIdAndSkillId(skill, categoryId, skillId);
 
         return new ResponseEntity<>(skillUpdated, HttpStatus.OK);
     }
@@ -129,7 +129,7 @@ public class CategoryController {
                                              @PathVariable("skill_id") long skillId,
                                              HttpServletRequest request) throws CategoryNotFoundException, SkillNotFoundException {
         logService.log(request, logger);
-        skillService.deteleByCategoryIdAndSkillId(categoryId, skillId, request);
+        skillService.deteleByCategoryIdAndSkillId(categoryId, skillId);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
