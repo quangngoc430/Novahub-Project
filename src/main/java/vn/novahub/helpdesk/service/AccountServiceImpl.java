@@ -23,6 +23,7 @@ import vn.novahub.helpdesk.validation.*;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
+import javax.validation.groups.Default;
 import java.io.IOException;
 import java.util.Date;
 
@@ -257,7 +258,7 @@ public class AccountServiceImpl implements AccountService {
             oldAccount.setAvatarUrl(account.getAvatarUrl());
         oldAccount.setUpdatedAt(new Date());
 
-        accountValidation.validate(account, GroupUpdateAccount.class);
+        accountValidation.validate(account, Default.class);
 
         return accountRepository.save(oldAccount);
     }
@@ -285,7 +286,7 @@ public class AccountServiceImpl implements AccountService {
             oldAccount.setStatus(account.getStatus());
         oldAccount.setUpdatedAt(new Date());
 
-        accountValidation.validate(account, GroupUpdateAccount.class);
+        accountValidation.validate(account, Default.class);
 
         return accountRepository.save(oldAccount);
     }
