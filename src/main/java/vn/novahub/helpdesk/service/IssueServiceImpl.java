@@ -38,7 +38,7 @@ public class IssueServiceImpl implements IssueService {
 
     @Override
     public Issue getOfAccountByIssueIdAndAccountId(long issueId, HttpServletRequest request) throws IssueNotFoundException {
-        Account accountLogin = accountService.getAccountLogin(request);
+        Account accountLogin = accountService.getAccountLogin();
 
         Issue issue = issueRepository.getAnIssueByIssueIdAndAccountId(issueId, accountLogin.getId());
 
@@ -68,7 +68,7 @@ public class IssueServiceImpl implements IssueService {
     @Override
     public Page<Issue> getAllOfAccountByKeyword(String keyword, String status, Pageable pageable, HttpServletRequest request) {
 
-        Account accountLogin = accountService.getAccountLogin(request);
+        Account accountLogin = accountService.getAccountLogin();
 
         if(keyword == null)
             keyword = "";
@@ -87,7 +87,7 @@ public class IssueServiceImpl implements IssueService {
 
     @Override
     public Issue create(Issue issue, HttpServletRequest request) {
-        Account accountLogin = accountService.getAccountLogin(request);
+        Account accountLogin = accountService.getAccountLogin();
 
         issue.setCreatedAt(new Date());
         issue.setUpdatedAt(new Date());

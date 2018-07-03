@@ -4,10 +4,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import vn.novahub.helpdesk.exception.CategoryNotFoundException;
 import vn.novahub.helpdesk.model.Category;
-import vn.novahub.helpdesk.model.Skill;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 
 public interface CategoryService {
 

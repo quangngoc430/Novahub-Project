@@ -1,6 +1,8 @@
 package vn.novahub.helpdesk.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -16,37 +18,38 @@ public class Issue implements Serializable {
     @Column(name = "id")
     private long id;
 
-    @NotEmpty
+    @NotEmpty(message = "Title is not empty")
     @Column(name = "title")
     private String title;
 
-    @NotEmpty
+    @NotEmpty(message = "Content is not empty")
     @Column(name = "content")
     private String content;
 
-    @NotEmpty
+    @NotEmpty(message = "Status is not empty")
     @Column(name = "status")
     private String status;
 
-    @NotNull
+    @NotNull(message = "CreateAt is not null")
     @Column(name = "created_at")
     private Date createdAt;
 
-    @NotNull
+    @NotNull(message = "UpdateAt is not null")
     @Column(name = "updated_at")
     private Date updatedAt;
 
     @Column(name = "reply_message")
     private String replyMessage;
 
-    @NotNull
+    @NotNull(message = "AccountId is not null")
     @Column(name = "account_id")
     private long accountId;
 
+    @JsonIgnore
     @Column(name = "token")
     private String token;
 
-    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Account.class)
+    @ManyToOne(targetEntity = Account.class)
     @JoinColumn(name = "account_id", insertable = false, updatable = false)
     private Account account;
 

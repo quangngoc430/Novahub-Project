@@ -1,10 +1,16 @@
 package vn.novahub.helpdesk.model;
 
+import com.fasterxml.jackson.annotation.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import vn.novahub.helpdesk.validation.*;
+
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "account")
@@ -15,8 +21,10 @@ public class Account implements Serializable {
     @Column(name = "id")
     private long id;
 
-    @NotEmpty
+    @NotEmpty(message = "Email is not empty", groups = {GroupCreateAccount.class, GroupLoginAccount.class, GroupCreateWithAccountGoogle.class})
     @Column(name = "email")
+    @Email(regexp = "^[a-zA-Z0-9]+\\@novahub.vn", message = "Email must be end with @novahub.vn"
+            , groups = {GroupCreateAccount.class, GroupLoginAccount.class})
     private String email;
 
     @Column(name = "first_name")
@@ -25,8 +33,10 @@ public class Account implements Serializable {
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "birth_date")
-    private Date dateOfBirth;
+    @Column(name = "birth_day")
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(pattern = "dd-MM-yyyy")
+    private Date dayOfBirth;
 
     @Column(name = "address")
     private String address;
@@ -34,38 +44,52 @@ public class Account implements Serializable {
     @Column(name = "avatar_url")
     private String avatarUrl;
 
-    @NotEmpty
+    @NotEmpty(message = "Password is not empty"
+            , groups = {GroupCreateAccount.class, GroupLoginAccount.class})
     @Column(name = "password")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-    @NotEmpty
+    @NotNull(message = "Total number of hours is not empty")
     @Column(name = "total_number_of_hours")
-    private int totalNumberOfHours;
+    private long totalNumberOfHours;
 
-    @NotEmpty
+    @NotNull(message = "Remain number of hours is not empty")
     @Column(name = "remain_number_of_hours")
-    private int remainNumberOfHours;
+    private long remainNumberOfHours;
 
-    @NotEmpty
+    @NotEmpty(message = "Status is not empty")
     @Column(name = "status")
     private String status;
 
-    @NotNull
+    @NotNull(message = "Create At is not null")
     @Column(name = "created_at")
     private Date createdAt;
 
-    @NotNull
+    @NotNull(message = "Update At is not null")
     @Column(name = "updated_at")
     private Date updatedAt;
 
-    @NotEmpty
     @Column(name = "token")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @NotEmpty(message = "Token is not empty", groups = GroupCreateWithAccountGoogle.class)
     private String token;
 
-    @NotEmpty
+    @Column(name = "vertification_token")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private String vertificationToken;
+
+    @NotNull(message = "Role id is not empty")
     @Column(name = "role_id")
     private long roleId;
 
+    @Transient
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private String newPassword;
+
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Role.class)
+    @JoinColumn(name = "role_id", insertable = false, updatable = false)
+    private Role role;
 
     public long getId() {
         return id;
@@ -99,12 +123,12 @@ public class Account implements Serializable {
         this.lastName = lastName;
     }
 
-    public Date getDateOfBirth() {
-        return dateOfBirth;
+    public Date getDayOfBirth() {
+        return dayOfBirth;
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
+    public void setDayOfBirth(Date dayOfBirth) {
+        this.dayOfBirth = dayOfBirth;
     }
 
     public String getAddress() {
@@ -131,19 +155,27 @@ public class Account implements Serializable {
         this.password = password;
     }
 
-    public int getTotalNumberOfHours() {
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
+    }
+
+    public long getTotalNumberOfHours() {
         return totalNumberOfHours;
     }
 
-    public void setTotalNumberOfHours(int totalNumberOfHours) {
+    public void setTotalNumberOfHours(long totalNumberOfHours) {
         this.totalNumberOfHours = totalNumberOfHours;
     }
 
-    public int getRemainNumberOfHours() {
+    public long getRemainNumberOfHours() {
         return remainNumberOfHours;
     }
 
-    public void setRemainNumberOfHours(int remainNumberOfHours) {
+    public void setRemainNumberOfHours(long remainNumberOfHours) {
         this.remainNumberOfHours = remainNumberOfHours;
     }
 
@@ -171,6 +203,22 @@ public class Account implements Serializable {
         this.updatedAt = updatedAt;
     }
 
+    public long getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(long roleId) {
+        this.roleId = roleId;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
     public String getToken() {
         return token;
     }
@@ -179,12 +227,21 @@ public class Account implements Serializable {
         this.token = token;
     }
 
-    public long getRoleId() {
-        return roleId;
+    public String getVertificationToken() {
+        return vertificationToken;
     }
 
-    public void setRoleId(long roleId) {
-        this.roleId = roleId;
+    public void setVertificationToken(String vertificationToken) {
+        this.vertificationToken = vertificationToken;
+    }
+
+    @Transient
+    @JsonIgnore
+    public List<GrantedAuthority> getAuthorities() {
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + this.getRole().getName()));
+
+        return authorities;
     }
 
     @Override
@@ -194,7 +251,7 @@ public class Account implements Serializable {
                 ", email='" + email + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", dateOfBirth=" + dateOfBirth +
+                ", dayOfBirth=" + dayOfBirth +
                 ", address='" + address + '\'' +
                 ", avatarUrl='" + avatarUrl + '\'' +
                 ", password='" + password + '\'' +
@@ -204,7 +261,10 @@ public class Account implements Serializable {
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 ", token='" + token + '\'' +
+                ", vertificationToken='" + vertificationToken + '\'' +
                 ", roleId=" + roleId +
+                ", newPassword='" + newPassword + '\'' +
+                ", role=" + role +
                 '}';
     }
 }

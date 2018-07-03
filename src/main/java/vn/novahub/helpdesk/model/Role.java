@@ -1,11 +1,13 @@
 package vn.novahub.helpdesk.model;
 
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "role")
-public class Role {
+public class Role implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,7 +17,6 @@ public class Role {
     @NotEmpty
     @Column(name = "name")
     private String name;
-
 
     public long getId() {
         return id;
@@ -32,7 +33,6 @@ public class Role {
     public void setName(String name) {
         this.name = name;
     }
-
 
     @Override
     public String toString() {

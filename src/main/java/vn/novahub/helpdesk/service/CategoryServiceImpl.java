@@ -7,11 +7,6 @@ import org.springframework.stereotype.Service;
 import vn.novahub.helpdesk.exception.CategoryNotFoundException;
 import vn.novahub.helpdesk.model.Category;
 import vn.novahub.helpdesk.repository.CategoryRepository;
-import vn.novahub.helpdesk.repository.SkillRepository;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-
 @Service
 public class CategoryServiceImpl implements CategoryService{
 
@@ -49,9 +44,7 @@ public class CategoryServiceImpl implements CategoryService{
             throw new CategoryNotFoundException(categoryId);
 
         oldCategory.setName(category.getName());
-        Category newCategory = categoryRepository.save(oldCategory);
-
-        return newCategory;
+        return categoryRepository.save(oldCategory);
     }
 
     @Override
