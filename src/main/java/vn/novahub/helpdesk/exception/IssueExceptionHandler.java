@@ -28,4 +28,17 @@ public class IssueExceptionHandler {
         return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(value = IssueValidationException.class)
+    public ResponseEntity<ApiError> handleIssueValidationException(HttpServletRequest request, Exception ex){
+        ApiError apiError = new ApiError();
+
+        apiError.setTimestamp(Instant.now());
+        apiError.setStatus(HttpStatus.NOT_ACCEPTABLE.value());
+        apiError.setErrors(((IssueValidationException) ex).getErrors());
+        apiError.setPath(request.getRequestURI());
+        apiError.setMessage(ex.getMessage());
+
+        return new ResponseEntity<>(apiError, HttpStatus.NOT_ACCEPTABLE);
+    }
+
 }

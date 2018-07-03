@@ -9,4 +9,8 @@ public class IssueNotFoundException extends Exception{
     public IssueNotFoundException(long issueId){
         super("IssueNotFoundException with id = " + issueId);
     }
+
+    public IssueNotFoundException(long issueId, long accountId){
+        super("IssueNotFoundException with issueId = " + issueId + ", accountId = " + accountId);
+    }
 }
