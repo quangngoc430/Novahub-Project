@@ -8,8 +8,6 @@ import vn.novahub.helpdesk.exception.RoleNotFoundException;
 import vn.novahub.helpdesk.model.Role;
 import vn.novahub.helpdesk.repository.RoleRepository;
 
-import javax.servlet.http.HttpServletRequest;
-
 @Service
 public class RoleServiceImpl implements RoleService {
 

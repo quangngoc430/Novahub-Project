@@ -4,13 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import vn.novahub.helpdesk.exception.CategoryIsExistException;
 import vn.novahub.helpdesk.exception.CategoryNotFoundException;
+import vn.novahub.helpdesk.exception.CategoryValidationException;
 import vn.novahub.helpdesk.model.Category;
 import vn.novahub.helpdesk.repository.CategoryRepository;
-import vn.novahub.helpdesk.repository.SkillRepository;
+import vn.novahub.helpdesk.validation.CategoryValidation;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
+import javax.validation.groups.Default;
 
 @Service
 public class CategoryServiceImpl implements CategoryService{
@@ -18,11 +19,13 @@ public class CategoryServiceImpl implements CategoryService{
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @Autowired
+    private CategoryValidation categoryValidation;
+
     @Override
     public Page<Category> getAllByName(String name,
                                        Pageable pageable) {
-        name = "%" + name + "%";
-        return categoryRepository.getAllByNameLike(name, pageable);
+        return categoryRepository.getAllByNameLike("%" + name + "%", pageable);
     }
 
     @Override
@@ -36,22 +39,28 @@ public class CategoryServiceImpl implements CategoryService{
     }
 
     @Override
-    public Category create(Category category) {
+    public Category create(Category category) throws CategoryIsExistException, CategoryValidationException {
+        categoryValidation.validate(category, Default.class);
+
+        if(categoryRepository.existsByName(category.getName()))
+            throw new CategoryIsExistException(category.getName());
+
         return categoryRepository.save(category);
     }
 
     @Override
     public Category update(Category category,
-                           long categoryId) throws CategoryNotFoundException {
+                           long categoryId) throws CategoryValidationException, CategoryIsExistException {
+        categoryValidation.validate(category, Default.class);
+
         Category oldCategory = categoryRepository.getById(categoryId);
 
-        if(oldCategory == null)
-            throw new CategoryNotFoundException(categoryId);
+        if(!oldCategory.getName().equals(category.getName()) && categoryRepository.existsByName(category.getName()))
+            throw new CategoryIsExistException(category.getName());
 
         oldCategory.setName(category.getName());
-        Category newCategory = categoryRepository.save(oldCategory);
 
-        return newCategory;
+        return categoryRepository.save(oldCategory);
     }
 
     @Override

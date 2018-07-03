@@ -1,6 +1,9 @@
 package vn.novahub.helpdesk.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.util.List;
 
@@ -13,9 +16,11 @@ public class Category implements Serializable {
     @Column(name = "id")
     private long id;
 
+    @NotEmpty(message = "Name is not empty")
     @Column(name = "name")
     private String name;
 
+    @JsonIgnore
     @OneToMany
     private List<Skill> skillList;
 
