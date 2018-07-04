@@ -27,11 +27,10 @@ CREATE TABLE `account` (
   `address` varchar(250),
   `avatar_url` varchar(500) DEFAULT NULL,
   `password` varchar(200),
-  `total_number_of_hours` INT NOT NULL,
-  `remain_number_of_hours` INT NOT NULL,
   `status` varchar(100) NOT NULL,
   `created_at` datetime NOT NULL DEFAULT NOW(),
   `updated_at` datetime NOT NULL DEFAULT NOW(),
+  `joiningDate` datetime DEFAULT NOW(),
   `vertification_token` char(255),
   `token` char(255),
   `role_id` int NOT NULL,
@@ -108,14 +107,14 @@ INSERT INTO `role`(name) VALUES ("ADMIN");
 INSERT INTO `role`(name) VALUES ("CLERK");
 INSERT INTO `role`(name) VALUES ("USER");
 
-INSERT INTO `account`(email, first_name, last_name, password, total_number_of_hours, remain_number_of_hours, status, token, role_id)
-VALUES("helpdesk@novahub.vn", "desk", "help", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", 336, 336, "ACTIVE", "abcdefghijk123456789", 1);
-INSERT INTO `account`(email, first_name, last_name, password, total_number_of_hours, remain_number_of_hours, status, token, role_id)
-VALUES("huong@novahub.vn", "mai", "huong", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", 336, 336, "ACTIVE", "abcdefghijk123456789", 2);
-INSERT INTO `account`(email, first_name, last_name, password, total_number_of_hours, remain_number_of_hours, status, token, role_id)
-VALUES("ngoc@novahub.vn", "bui lam", "quang ngoc", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", 336, 336, "ACTIVE", "abcdefghijk123456789", 3);
-INSERT INTO `account`(email, first_name, last_name, password, total_number_of_hours, remain_number_of_hours, status, token, role_id)
-VALUES("hai@novahub.vn", "bui lam", "thanh hai", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", 336, 336, "ACTIVE", "abcdefghijk123456789", 3);
+INSERT INTO `account`(email, first_name, last_name, password, status, token, role_id)
+VALUES("helpdesk@novahub.vn", "desk", "help", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", "ACTIVE", "abcdefghijk123456789", 1);
+INSERT INTO `account`(email, first_name, last_name, password, status, token, role_id)
+VALUES("huong@novahub.vn", "mai", "huong", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", "ACTIVE", "abcdefghijk123456789", 2);
+INSERT INTO `account`(email, first_name, last_name, password, status, token, role_id)
+VALUES("ngoc@novahub.vn", "bui lam", "quang ngoc", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", "ACTIVE", "abcdefghijk123456789", 3);
+INSERT INTO `account`(email, first_name, last_name, password, status, token, role_id)
+VALUES("hai@novahub.vn", "bui lam", "thanh hai", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", "ACTIVE", "abcdefghijk123456789", 3);
 
 INSERT INTO `category`(name) VALUES
 ("Programming Language"),

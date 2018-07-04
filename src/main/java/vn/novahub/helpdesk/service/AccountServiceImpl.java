@@ -3,7 +3,6 @@ package vn.novahub.helpdesk.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,7 +23,6 @@ import vn.novahub.helpdesk.validation.*;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
-import javax.transaction.Transactional;
 import javax.validation.groups.Default;
 import java.io.IOException;
 import java.util.Date;
@@ -189,8 +187,6 @@ public class AccountServiceImpl implements AccountService {
             throw new AccountIsExistException(account.getEmail());
 
         account.setPassword(bCryptPasswordEncoder.encode(account.getPassword()));
-        account.setTotalNumberOfHours(AccountConstant.TOTAL_NUMBER_OF_HOURS_DEFAULT);
-        account.setRemainNumberOfHours(AccountConstant.REMAIN_NUMBER_OF_HOURS_DEFAULT);
         account.setStatus(AccountConstant.STATUS_INACTIVE);
         account.setVertificationToken(tokenService.generateToken(account.getEmail() + account.getEmail()));
         account.setRoleId(roleService.getByName(RoleConstant.ROLE_USER).getId());
@@ -211,7 +207,6 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    @Transactional
     public Account createWithGoogleAccount(Account account) throws AccountValidationException, AccountIsExistException, RoleNotFoundException {
 
         accountValidation.validate(account, GroupCreateWithAccountGoogle.class);
@@ -219,8 +214,6 @@ public class AccountServiceImpl implements AccountService {
         if(accountRepository.getByEmail(account.getEmail()) != null)
             throw new AccountIsExistException(account.getEmail());
 
-        account.setTotalNumberOfHours(AccountConstant.TOTAL_NUMBER_OF_HOURS_DEFAULT);
-        account.setRemainNumberOfHours(AccountConstant.REMAIN_NUMBER_OF_HOURS_DEFAULT);
         account.setStatus(AccountConstant.STATUS_ACTIVE);
         account.setRoleId(roleService.getByName(RoleConstant.ROLE_USER).getId());
         account.setPassword(null);
@@ -290,8 +283,15 @@ public class AccountServiceImpl implements AccountService {
             oldAccount.setAddress(account.getAddress());
         if(account.getAvatarUrl() != null)
             oldAccount.setAvatarUrl(account.getAvatarUrl());
-        if(account.getStatus() != null)
+        if(account.getStatus() != null) {
+            if(oldAccount.getStatus().equals(AccountConstant.STATUS_INACTIVE)
+               && account.getStatus().equals(AccountConstant.STATUS_ACTIVE))
+                oldAccount.setToken(null);
+
             oldAccount.setStatus(account.getStatus());
+        }
+        if(account.getJoiningDate() != null)
+            oldAccount.setJoiningDate(account.getJoiningDate());
         oldAccount.setUpdatedAt(new Date());
 
         accountValidation.validate(oldAccount, Default.class);
