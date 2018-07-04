@@ -11,48 +11,21 @@ import vn.novahub.helpdesk.model.Issue;
 @Repository
 public interface IssueRepository extends PagingAndSortingRepository<Issue, Long> {
 
-    @Query("FROM Issue issue WHERE issue.id = :issueId AND issue.accountId = :accountId")
-    Issue getByIssueIdAndAccountId(@Param("issueId") long issueId,
-                                          @Param("accountId") long accountId);
-
     Issue getByIdAndAccountId(long issueId, long accountId);
-
-    @Query("SELECT issue, account FROM Issue issue JOIN Account account ON issue.accountId = account.id WHERE issue.id = :issueId")
-    Issue getWithAccountById(long issueId);
 
     @Query("SELECT issue FROM Issue issue WHERE issue.title LIKE :keyword OR issue.content LIKE :keyword")
     Page<Issue> getAllByTitleLikeOrContentLike(@Param("keyword") String keyword, Pageable pageable);
 
-    @Query("SELECT issue, account FROM Issue issue JOIN Account account On issue.accountId = account.id WHERE issue.title LIKE :keyword OR issue.content LIKE :keyword")
-    Page<Issue> getWithAccountByKeyWord(@Param("keyword") String keyword,
-                                                Pageable pageable);
-
     @Query("SELECT issue FROM Issue issue WHERE (issue.title LIKE :keyword OR issue.content LIKE :keyword) AND issue.status = :status ")
     Page<Issue> getAllByTitleLikeOrContentLikeAndStatus(@Param("keyword") String keyword, @Param("status") String status, Pageable pageable);
-
-    @Query("SELECT issue, account FROM Issue issue JOIN Account account On issue.accountId = account.id WHERE issue.status = :status AND (issue.title LIKE :keyword OR issue.content LIKE :keyword)")
-    Page<Issue> getWithAccountByKeyWordAndStatus(@Param("keyword") String keyword,
-                                         @Param("status") String status,
-                                         Pageable pageable);
 
     @Query("FROM Issue issue WHERE issue.accountId = :accountId AND (issue.title LIKE :keyword OR issue.content LIKE :keyword)")
     Page<Issue> getAllByAccountIdAndContentLikeOrTitleLike(@Param("accountId") long accountId,
                                             @Param("keyword") String keyword,
                                             Pageable pageable);
 
-    @Query("SELECT issue, account FROM Issue issue JOIN Account account On issue.accountId = account.id WHERE issue.accountId = :accountId AND (issue.title LIKE :keyword OR issue.content LIKE :keyword)")
-    Page<Issue> getAllWithAccountByAccountIdAndKeyWord(@Param("accountId") long accountId,
-                                            @Param("keyword") String keyword,
-                                            Pageable pageable);
-
     @Query("FROM Issue issue WHERE issue.status = :status AND issue.accountId = :accountId AND (issue.title LIKE :keyword OR issue.content LIKE :keyword)")
     Page<Issue> getAllByAccountIdAndTitleLikeOrContentLikeAndStatus(@Param("accountId") long accountId,
-                                            @Param("keyword") String keyword,
-                                            @Param("status") String status,
-                                            Pageable pageable);
-
-    @Query("SELECT issue, account FROM Issue issue JOIN Account account On issue.accountId = account.id WHERE issue.status = :status AND issue.accountId = :accountId AND (issue.title LIKE :keyword OR issue.content LIKE :keyword)")
-    Page<Issue> getAllWithAccountByAccountIdAndKeyWordAndStatus(@Param("accountId") long accountId,
                                             @Param("keyword") String keyword,
                                             @Param("status") String status,
                                             Pageable pageable);
