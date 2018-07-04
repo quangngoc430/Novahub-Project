@@ -31,55 +31,98 @@ public class IssueServiceImpl implements IssueService {
     @Autowired
     private IssueValidation issueValidation;
 
+    @Autowired
+    private MailService mailService;
+
     @Override
     public boolean isIssueOfAccountLogin(long issueId) {
         Account account = accountService.getAccountLogin();
 
         return issueRepository.existsByIdAndAccountId(issueId, account.getId());
-
     }
 
     @Override
-    public Issue getByIssueId(long issueId) throws IssueNotFoundException {
+    public Page<Issue> getAllByKeywordAndStatusForAdmin(String keyword, String status, Pageable pageable) {
+        if (status.equals(""))
+            return issueRepository.getAllByTitleLikeOrContentLike("%" + keyword + "%", pageable);
+
+        return issueRepository.getAllByTitleLikeOrContentLikeAndStatus("%" + keyword + "%", status, pageable);
+    }
+
+    @Override
+    public Issue getByIdForAdmin(long issueId) throws IssueNotFoundException {
         Issue issue = issueRepository.getById(issueId);
 
-        if(issue == null)
+        if (issue == null)
             throw new IssueNotFoundException(issueId);
 
         return issue;
     }
 
     @Override
-    public Issue getOfAccountLoginByIssueId(long issueId) throws IssueNotFoundException {
+    public Issue updateForAdmin(long issueId, Issue issue) throws IssueNotFoundException, IssueValidationException {
+        Issue oldIssue = issueRepository.getById(issueId);
+
+        if (oldIssue == null)
+            throw new IssueNotFoundException(issueId);
+
+        oldIssue.setUpdatedAt(new Date());
+
+        if (issue.getTitle() != null)
+            oldIssue.setTitle(issue.getTitle());
+        if (issue.getContent() != null)
+            oldIssue.setContent(issue.getContent());
+        if (issue.getReplyMessage() != null)
+            oldIssue.setReplyMessage(issue.getReplyMessage());
+        if (issue.getStatus() != null) {
+            if (oldIssue.getStatus().equals(IssueConstant.STATUS_PENDING) &&
+                    issue.getStatus().equals(IssueConstant.STATUS_DENY)) {
+                //TODO: send mail deny
+                oldIssue.setToken(null);
+            }
+
+            if (oldIssue.getStatus().equals(IssueConstant.STATUS_PENDING) &&
+                    issue.getStatus().equals(IssueConstant.STATUS_APPROVE)) {
+                //TODO: send mail approve
+                oldIssue.setToken(null);
+            }
+
+            oldIssue.setStatus(issue.getStatus());
+        }
+        issueValidation.validate(oldIssue, Default.class);
+
+        return issueRepository.save(oldIssue);
+    }
+
+    @Override
+    public void deleteForAdmin(long issueId) throws IssueNotFoundException {
+        if (!issueRepository.existsById(issueId))
+            throw new IssueNotFoundException(issueId);
+
+        issueRepository.deleteById(issueId);
+    }
+
+    @Override
+    public Page<Issue> getAllByKeywordAndStatus(String keyword, String status, Pageable pageable) {
+
+        Account accountLogin = accountService.getAccountLogin();
+
+        if (status.equals(""))
+            return issueRepository.getAllByAccountIdAndContentLikeOrTitleLike(accountLogin.getId(), "%" + keyword + "%", pageable);
+
+        return issueRepository.getAllByAccountIdAndTitleLikeOrContentLikeAndStatus(accountLogin.getId(), "%" + keyword + "%", status, pageable);
+    }
+
+    @Override
+    public Issue getById(long issueId) throws IssueNotFoundException {
         Account accountLogin = accountService.getAccountLogin();
 
         Issue issue = issueRepository.getByIdAndAccountId(issueId, accountLogin.getId());
 
-        if(issue == null)
+        if (issue == null)
             throw new IssueNotFoundException(issueId, accountLogin.getId());
 
         return issue;
-    }
-
-    @Override
-    public Page<Issue> getAllByKeyword(String keyword, String status, Pageable pageable) {
-        if(status.equals("")){
-            return issueRepository.getAllByTitleLikeOrContentLike("%" + keyword + "%", "%" + keyword + "%", pageable);
-        }
-
-        return issueRepository.getAllByTitleLikeAndContentLikeAndStatus("%" + keyword + "%", "%" + keyword + "%", status, pageable);
-    }
-
-    @Override
-    public Page<Issue> getAllOfAccountLoginByKeyword(String keyword, String status, Pageable pageable) {
-
-        Account accountLogin = accountService.getAccountLogin();
-
-        if(status.equals("")){
-            return issueRepository.getAllByAccountIdAndKeyWord(accountLogin.getId(), "%" + keyword + "%", pageable);
-        }
-
-        return issueRepository.getAllByAccountIdAndKeyWordAndStatus(accountLogin.getId(), "%" + keyword + "%", status, pageable);
     }
 
     @Override
@@ -88,10 +131,13 @@ public class IssueServiceImpl implements IssueService {
 
         issue.setCreatedAt(new Date());
         issue.setUpdatedAt(new Date());
+        issue.setStatus(IssueConstant.STATUS_PENDING);
         issue.setToken(tokenService.generateToken(accountLogin.getId() + issue.getTitle()));
         issue.setAccountId(accountLogin.getId());
 
         issueValidation.validate(issue, Default.class);
+
+        // TODO: send email
 
         return issueRepository.save(issue);
     }
@@ -102,40 +148,17 @@ public class IssueServiceImpl implements IssueService {
 
         Issue oldIssue = issueRepository.getByIdAndAccountId(issueId, account.getId());
 
-        if(oldIssue == null)
+        if (oldIssue == null)
             throw new IssueNotFoundException(issueId, account.getId());
 
         oldIssue.setUpdatedAt(new Date());
 
-        if(issue.getTitle() != null)
+        if (issue.getTitle() != null)
             oldIssue.setTitle(issue.getTitle());
-        if(issue.getContent() != null)
+        if (issue.getContent() != null)
             oldIssue.setContent(issue.getContent());
-        if(issue.getReplyMessage() != null)
+        if (issue.getReplyMessage() != null)
             oldIssue.setReplyMessage(issue.getReplyMessage());
-
-        issueValidation.validate(oldIssue, Default.class);
-
-        return issueRepository.save(oldIssue);
-    }
-
-    @Override
-    public Issue updateForAdmin(long issueId, Issue issue) throws IssueNotFoundException, IssueValidationException {
-        Issue oldIssue = issueRepository.getById(issueId);
-
-        if(oldIssue == null)
-            throw new IssueNotFoundException(issueId);
-
-        oldIssue.setUpdatedAt(new Date());
-
-        if(issue.getTitle() != null)
-            oldIssue.setTitle(issue.getTitle());
-        if(issue.getContent() != null)
-            oldIssue.setContent(issue.getContent());
-        if(issue.getReplyMessage() != null)
-            oldIssue.setReplyMessage(issue.getReplyMessage());
-        if(issue.getStatus() != null)
-            oldIssue.setStatus(issue.getStatus());
 
         issueValidation.validate(oldIssue, Default.class);
 
@@ -146,28 +169,20 @@ public class IssueServiceImpl implements IssueService {
     public void delete(long issueId) throws IssueNotFoundException {
         Account accountLogin = accountService.getAccountLogin();
 
-        if(!issueRepository.existsByIdAndAccountId(issueId, accountLogin.getId()))
+        if (!issueRepository.existsByIdAndAccountId(issueId, accountLogin.getId()))
             throw new IssueNotFoundException(issueId, accountLogin.getId());
 
         issueRepository.deleteByIdAndAccountId(issueId, accountLogin.getId());
     }
 
     @Override
-    public void deleteForAdmin(long issueId) throws IssueNotFoundException {
-        if(!issueRepository.existsById(issueId))
-            throw new IssueNotFoundException(issueId);
-
-        issueRepository.deleteById(issueId);
-    }
-
-    @Override
     public void approve(long issueId, String token) throws IssueNotFoundException, IssueIsClosedException {
         Issue issue = issueRepository.findByIdAndToken(issueId, token);
 
-        if(issue == null)
+        if (issue == null)
             throw new IssueNotFoundException(issueId);
 
-        if(issue.getToken() == null)
+        if (issue.getToken() == null)
             throw new IssueIsClosedException(issueId);
 
         issue.setToken(null);
@@ -179,10 +194,10 @@ public class IssueServiceImpl implements IssueService {
     public void deny(long issueId, String token) throws IssueNotFoundException, IssueIsClosedException {
         Issue issue = issueRepository.findByIdAndToken(issueId, token);
 
-        if(issue == null)
+        if (issue == null)
             throw new IssueNotFoundException(issueId);
 
-        if(issue.getToken() == null)
+        if (issue.getToken() == null)
             throw new IssueIsClosedException(issueId);
 
         issue.setToken(null);
@@ -190,5 +205,5 @@ public class IssueServiceImpl implements IssueService {
         issueRepository.save(issue);
 
     }
-
 }
+

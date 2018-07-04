@@ -20,13 +20,15 @@ public interface IssueRepository extends PagingAndSortingRepository<Issue, Long>
     @Query("SELECT issue, account FROM Issue issue JOIN Account account ON issue.accountId = account.id WHERE issue.id = :issueId")
     Issue getWithAccountById(long issueId);
 
-    Page<Issue> getAllByTitleLikeOrContentLike(String title, String content, Pageable pageable);
+    @Query("SELECT issue FROM Issue issue WHERE issue.title LIKE :keyword OR issue.content LIKE :keyword")
+    Page<Issue> getAllByTitleLikeOrContentLike(@Param("keyword") String keyword, Pageable pageable);
 
     @Query("SELECT issue, account FROM Issue issue JOIN Account account On issue.accountId = account.id WHERE issue.title LIKE :keyword OR issue.content LIKE :keyword")
     Page<Issue> getWithAccountByKeyWord(@Param("keyword") String keyword,
                                                 Pageable pageable);
 
-    Page<Issue> getAllByTitleLikeAndContentLikeAndStatus(String title, String content, String status, Pageable pageable);
+    @Query("SELECT issue FROM Issue issue WHERE (issue.title LIKE :keyword OR issue.content LIKE :keyword) AND issue.status = :status ")
+    Page<Issue> getAllByTitleLikeOrContentLikeAndStatus(@Param("keyword") String keyword, @Param("status") String status, Pageable pageable);
 
     @Query("SELECT issue, account FROM Issue issue JOIN Account account On issue.accountId = account.id WHERE issue.status = :status AND (issue.title LIKE :keyword OR issue.content LIKE :keyword)")
     Page<Issue> getWithAccountByKeyWordAndStatus(@Param("keyword") String keyword,
@@ -34,7 +36,7 @@ public interface IssueRepository extends PagingAndSortingRepository<Issue, Long>
                                          Pageable pageable);
 
     @Query("FROM Issue issue WHERE issue.accountId = :accountId AND (issue.title LIKE :keyword OR issue.content LIKE :keyword)")
-    Page<Issue> getAllByAccountIdAndKeyWord(@Param("accountId") long accountId,
+    Page<Issue> getAllByAccountIdAndContentLikeOrTitleLike(@Param("accountId") long accountId,
                                             @Param("keyword") String keyword,
                                             Pageable pageable);
 
@@ -44,7 +46,7 @@ public interface IssueRepository extends PagingAndSortingRepository<Issue, Long>
                                             Pageable pageable);
 
     @Query("FROM Issue issue WHERE issue.status = :status AND issue.accountId = :accountId AND (issue.title LIKE :keyword OR issue.content LIKE :keyword)")
-    Page<Issue> getAllByAccountIdAndKeyWordAndStatus(@Param("accountId") long accountId,
+    Page<Issue> getAllByAccountIdAndTitleLikeOrContentLikeAndStatus(@Param("accountId") long accountId,
                                             @Param("keyword") String keyword,
                                             @Param("status") String status,
                                             Pageable pageable);

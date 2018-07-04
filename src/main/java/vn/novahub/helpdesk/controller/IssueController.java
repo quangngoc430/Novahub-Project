@@ -34,44 +34,66 @@ public class IssueController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping(path = "/issues", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Page<Issue>> getAllIssues(@RequestParam(name = "keyword", required = false, defaultValue = "") String keyword,
+    public ResponseEntity<Page<Issue>> getAllForAdmin(@RequestParam(name = "keyword", required = false, defaultValue = "") String keyword,
                                                        @RequestParam(name = "status", required = false, defaultValue = "") String status,
                                                        Pageable pageable,
                                                        HttpServletRequest request){
         logService.log(request, logger);
-        Page<Issue> issuePage = issueService.getAllByKeyword(keyword, status, pageable);
+
+        Page<Issue> issuePage = issueService.getAllByKeywordAndStatusForAdmin(keyword, status, pageable);
 
         return new ResponseEntity<>(issuePage, HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping(path = "/issues/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Issue> get(@PathVariable(name = "issueId") long issueId,
+    public ResponseEntity<Issue> getForAdmin(@PathVariable(name = "issueId") long issueId,
                                               HttpServletRequest request) throws IssueNotFoundException {
         logService.log(request, logger);
-        Issue issue = issueService.getByIssueId(issueId);
+        Issue issue = issueService.getByIdForAdmin(issueId);
 
         return new ResponseEntity<>(issue, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping(path = "/issues/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Issue> updateForAdmin(@PathVariable(name = "issueId") long issueId,
+                                                @RequestBody Issue issue,
+                                                HttpServletRequest request) throws IssueValidationException, IssueNotFoundException {
+        logService.log(request, logger);
+        Issue issueUpdated = issueService.updateForAdmin(issueId, issue);
+
+        return new ResponseEntity<>(issueUpdated, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping(path = "issues/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Void> deleteForAdmin(@PathVariable(name = "issueId") long issueId,
+                                               HttpServletRequest request) throws IssueNotFoundException {
+        logService.log(request, logger);
+        issueService.deleteForAdmin(issueId);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @PreAuthorize("isAuthenticated()")
     @GetMapping(path = "/users/me/issues", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Page<Issue>> getAllOfAccountLogin(@RequestParam(name = "keyword", required = false, defaultValue = "") String keyword,
+    public ResponseEntity<Page<Issue>> getAll(@RequestParam(name = "keyword", required = false, defaultValue = "") String keyword,
                                                             @RequestParam(name = "status", required = false, defaultValue = "") String status,
                                                             HttpServletRequest request,
                                                             Pageable pageable){
         logService.log(request, logger);
-        Page<Issue> issuePage = issueService.getAllOfAccountLoginByKeyword(keyword, status, pageable);
+        Page<Issue> issuePage = issueService.getAllByKeywordAndStatus(keyword, status, pageable);
 
         return new ResponseEntity<>(issuePage, HttpStatus.OK);
     }
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping(path = "/users/me/issues/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Issue> getOfAccountLogin(@PathVariable("issueId") long issueId,
+    public ResponseEntity<Issue> get(@PathVariable("issueId") long issueId,
                                                 HttpServletRequest request) throws IssueNotFoundException {
         logService.log(request, logger);
-        Issue issue = issueService.getOfAccountLoginByIssueId(issueId);
+        Issue issue = issueService.getById(issueId);
 
         return new ResponseEntity<>(issue, HttpStatus.OK);
     }
@@ -107,19 +129,9 @@ public class IssueController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @DeleteMapping(path = "issues/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Void> deleteForAdmin(@PathVariable(name = "issueId") long issueId,
-                                                HttpServletRequest request) throws IssueNotFoundException {
-        logService.log(request, logger);
-        issueService.deleteForAdmin(issueId);
-
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
     @PermitAll
     @GetMapping(path = "/issues/{issueId}/approve", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Void> approve(@RequestParam(name = "token") String token,
+    public ResponseEntity<Void> approve(@RequestParam(name = "token", required = false, defaultValue = "") String token,
                                         @PathVariable(name = "issueId") long issueId,
                                         HttpServletRequest request) throws IssueNotFoundException, IssueIsClosedException {
         logService.log(request, logger);
@@ -130,7 +142,7 @@ public class IssueController {
 
     @PermitAll
     @GetMapping(path = "/issues/{issueId}/deny", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Void> deny(@RequestParam(name = "token") String token,
+    public ResponseEntity<Void> deny(@RequestParam(name = "token", required = false, defaultValue = "") String token,
                                      @PathVariable(name = "issueId") long issueId,
                                      HttpServletRequest request) throws IssueNotFoundException, IssueIsClosedException {
         logService.log(request, logger);

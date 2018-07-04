@@ -13,23 +13,24 @@ public interface IssueService {
 
     boolean isIssueOfAccountLogin(long issueId);
 
-    Issue getByIssueId(long issueId) throws IssueNotFoundException;
+    Page<Issue> getAllByKeywordAndStatusForAdmin(String keyword, String status, Pageable pageable);
 
-    Issue getOfAccountLoginByIssueId(long issueId) throws IssueNotFoundException;
+    Issue getByIdForAdmin(long issueId) throws IssueNotFoundException;
 
-    Page<Issue> getAllByKeyword(String keyword, String status, Pageable pageable);
+    Issue updateForAdmin(long issuetId, Issue issue) throws IssueNotFoundException, IssueValidationException;
 
-    Page<Issue> getAllOfAccountLoginByKeyword(String keyword, String status, Pageable pageable);
+    void deleteForAdmin(long issueId) throws IssueNotFoundException;
+
+    Page<Issue> getAllByKeywordAndStatus(String keyword, String status, Pageable pageable);
+
+    Issue getById(long issueId) throws IssueNotFoundException;
 
     Issue create(Issue issue) throws IssueValidationException;
 
     Issue update(long issueId, Issue issue) throws IssueNotFoundException, IssueValidationException;
 
-    Issue updateForAdmin(long issuetId, Issue issue) throws IssueNotFoundException, IssueValidationException;
-
     void delete(long issueId) throws IssueNotFoundException;
 
-    void deleteForAdmin(long issueId) throws IssueNotFoundException;
 
     void approve(long issueId, String token) throws IssueNotFoundException, IssueIsClosedException;
 
