@@ -1,5 +1,6 @@
 package vn.novahub.helpdesk.service;
 
+import org.springframework.data.domain.Page;
 import vn.novahub.helpdesk.model.DayOffType;
 
 public interface DayOffTypeService {
@@ -11,4 +12,6 @@ public interface DayOffTypeService {
     void deleteDayOffType(DayOffType dayOffType);
 
     DayOffType findByAccountIdAndType(long accountId, String type);
+
+    Page<DayOffType> findByAccountId(long accountId);
 }

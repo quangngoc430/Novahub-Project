@@ -1,6 +1,7 @@
 package vn.novahub.helpdesk.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import vn.novahub.helpdesk.model.DayOffType;
 import vn.novahub.helpdesk.repository.DayOffTypeRepository;
@@ -30,5 +31,10 @@ public class DayOffTypeServiceImpl implements DayOffTypeService {
     @Override
     public DayOffType findByAccountIdAndType(long accountId, String type) {
         return dayOffTypeRepository.findByAccountIdAndType(accountId, type);
+    }
+
+    @Override
+    public Page<DayOffType> findByAccountId(long accountId) {
+        return dayOffTypeRepository.findByAccountId(accountId);
     }
 }

@@ -1,0 +1,66 @@
+package vn.novahub.helpdesk.controller;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import vn.novahub.helpdesk.exception.DayOffTypeIsExistException;
+import vn.novahub.helpdesk.exception.DayOffTypeNotFoundException;
+import vn.novahub.helpdesk.model.DayOffType;
+import vn.novahub.helpdesk.service.DayOffTypeService;
+import vn.novahub.helpdesk.service.LogService;
+import javax.servlet.http.HttpServletRequest;
+
+@RestController
+@RequestMapping(path = "/api", produces = {MediaType.APPLICATION_JSON_VALUE})
+public class DayOffTypeController {
+
+    private static final Logger logger = LoggerFactory.getLogger(DayOffTypeController.class);
+
+    @Autowired
+    private LogService logService;
+
+    @Autowired
+    private DayOffTypeService dayOffTypeService;
+
+    @GetMapping(path = "/day-off-types/{account-id}/{type}")
+    public ResponseEntity<DayOffType> getByAccountIdAndType(@PathVariable("account-id") long accountId,
+                                          @PathVariable("type") String type,
+                                          HttpServletRequest request)
+                                                            throws DayOffTypeNotFoundException {
+        logService.log(request, logger);
+
+        DayOffType dayOffType = dayOffTypeService.findByAccountIdAndType(accountId, type);
+
+        return new ResponseEntity<>(dayOffType, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/day-off-types/{account-id}")
+    public ResponseEntity<Page<DayOffType>> getByAccountId(@PathVariable("account-id") long accountId,
+                                                           HttpServletRequest request)
+                                                                  throws DayOffTypeNotFoundException {
+        logService.log(request, logger);
+
+        Page<DayOffType> dayOffTypes = dayOffTypeService.findByAccountId(accountId);
+
+        return new ResponseEntity<>(dayOffTypes, HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/day-off-types")
+    public ResponseEntity<String> create(@RequestBody DayOffType dayOffType,
+                                                           HttpServletRequest request)
+                                                                         throws DayOffTypeIsExistException {
+        logService.log(request, logger);
+
+        dayOffTypeService.addNewDayOffType(dayOffType);
+
+        return new ResponseEntity<>("Adding new Day off type successful", HttpStatus.OK);
+
+    }
+
+
+}
