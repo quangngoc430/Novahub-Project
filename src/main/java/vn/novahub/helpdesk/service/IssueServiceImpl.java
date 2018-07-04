@@ -89,6 +89,7 @@ public class IssueServiceImpl implements IssueService {
 
             oldIssue.setStatus(issue.getStatus());
         }
+
         issueValidation.validate(oldIssue, Default.class);
 
         return issueRepository.save(oldIssue);
@@ -188,6 +189,8 @@ public class IssueServiceImpl implements IssueService {
         issue.setToken(null);
         issue.setStatus(IssueConstant.STATUS_APPROVE);
         issueRepository.save(issue);
+
+        // TODO: send email approve
     }
 
     @Override
@@ -204,6 +207,7 @@ public class IssueServiceImpl implements IssueService {
         issue.setStatus(IssueConstant.STATUS_DENY);
         issueRepository.save(issue);
 
+        // TODO: send email deny
     }
 }
 

@@ -2,6 +2,8 @@ package vn.novahub.helpdesk.model;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import vn.novahub.helpdesk.annotation.IssueStatus;
+import vn.novahub.helpdesk.constant.IssueConstant;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -26,6 +28,8 @@ public class Issue implements Serializable {
     @Column(name = "content")
     private String content;
 
+    @IssueStatus(message = "Status does not match any statuses",
+                 statuses = {IssueConstant.STATUS_PENDING, IssueConstant.STATUS_APPROVE, IssueConstant.STATUS_APPROVE})
     @NotEmpty(message = "Status is not empty")
     @Column(name = "status")
     private String status;
