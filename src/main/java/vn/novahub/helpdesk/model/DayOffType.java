@@ -14,6 +14,16 @@ public class DayOffType {
     @Column(name = "type")
     private String type;
 
+    @Column(name = "quota")
+    private int quota;
+
+    @Column(name = "account_id")
+    private long accountId;
+
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Account.class)
+    @JoinColumn(name = "account_id", insertable = false, updatable = false)
+    private Account account;
+
     public long getId() {
         return id;
     }
@@ -28,6 +38,30 @@ public class DayOffType {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public int getQuota() {
+        return quota;
+    }
+
+    public void setQuota(int quota) {
+        this.quota = quota;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
+    public long getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(long accountId) {
+        this.accountId = accountId;
     }
 
     @Override
