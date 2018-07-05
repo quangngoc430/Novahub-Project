@@ -1,6 +1,7 @@
 package vn.novahub.helpdesk.repository;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 import vn.novahub.helpdesk.model.DayOffType;
@@ -8,7 +9,9 @@ import vn.novahub.helpdesk.model.DayOffType;
 @Repository
 public interface DayOffTypeRepository extends PagingAndSortingRepository <DayOffType, Long>{
 
-    DayOffType findByAccountIdAndType(long accountId, String type);
+    DayOffType findByIdAndAccountId(long id, long accountId);
 
-    Page<DayOffType> findByAccountId(long accountId);
+    DayOffType findByTypeAndAccountId(String type, long accountId);
+
+    Page<DayOffType> findByAccountId(long accountId, Pageable pageable);
 }

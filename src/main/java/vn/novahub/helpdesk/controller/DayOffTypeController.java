@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,31 +28,32 @@ public class DayOffTypeController {
     @Autowired
     private DayOffTypeService dayOffTypeService;
 
-    @GetMapping(path = "/day-off-types/{account-id}/{type}")
+    @GetMapping(path = "/day-off-types/{account-id}/{type-id}")
     public ResponseEntity<DayOffType> getByAccountIdAndType(@PathVariable("account-id") long accountId,
-                                          @PathVariable("type") String type,
+                                          @PathVariable("type-id") long typeId,
                                           HttpServletRequest request)
                                                             throws DayOffTypeNotFoundException {
         logService.log(request, logger);
 
-        DayOffType dayOffType = dayOffTypeService.findByAccountIdAndType(accountId, type);
+        DayOffType dayOffType = dayOffTypeService.findByIdAndAccountId(typeId, accountId);
 
         return new ResponseEntity<>(dayOffType, HttpStatus.OK);
     }
 
     @GetMapping(path = "/day-off-types/{account-id}")
     public ResponseEntity<Page<DayOffType>> getByAccountId(@PathVariable("account-id") long accountId,
-                                                           HttpServletRequest request)
+                                                           HttpServletRequest request,
+                                                           Pageable pageable)
                                                                   throws DayOffTypeNotFoundException {
         logService.log(request, logger);
 
-        Page<DayOffType> dayOffTypes = dayOffTypeService.findByAccountId(accountId);
+        Page<DayOffType> dayOffTypes = dayOffTypeService.findByAccountId(accountId, pageable);
 
         return new ResponseEntity<>(dayOffTypes, HttpStatus.OK);
     }
 
     @PostMapping(path = "/day-off-types")
-    public ResponseEntity<String> create(@RequestBody DayOffType dayOffType,
+    public ResponseEntity<String> createDayOffType(@RequestBody DayOffType dayOffType,
                                                            HttpServletRequest request)
                                                                          throws DayOffTypeIsExistException {
         logService.log(request, logger);
@@ -60,6 +62,18 @@ public class DayOffTypeController {
 
         return new ResponseEntity<>("Adding new Day off type successful", HttpStatus.OK);
 
+    }
+
+    @PutMapping(path = "/day-off-types")
+    public ResponseEntity<String> updateDayOffType(@RequestBody DayOffType dayOffType,
+                                                   HttpServletRequest request)
+                                                   throws DayOffTypeNotFoundException {
+
+        logService.log(request, logger);
+
+        dayOffTypeService.modifyQuota(dayOffType);
+
+        return new ResponseEntity<>("Updating day off type successful", HttpStatus.OK);
     }
 
 
