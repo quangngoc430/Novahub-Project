@@ -76,8 +76,8 @@ public class DayOffTypeController {
         return new ResponseEntity<>("Updating day off type successful", HttpStatus.OK);
     }
 
-    @DeleteMapping(path = "/day-off-types/{id}")
-    public ResponseEntity<String> delete(@PathVariable("id") long typeId,
+    @DeleteMapping(path = "/day-off-types/{type-id}")
+    public ResponseEntity<String> delete(@PathVariable("type-id") long typeId,
                                          HttpServletRequest request) throws DayOffTypeNotFoundException {
 
         logService.log(request, logger);
