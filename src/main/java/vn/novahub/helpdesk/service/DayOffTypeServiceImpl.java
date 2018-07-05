@@ -15,29 +15,42 @@ public class DayOffTypeServiceImpl implements DayOffTypeService {
     private DayOffTypeRepository dayOffTypeRepository;
 
     @Override
-    public void addNewDayOffType(DayOffType dayOffType) {
+    public void add(DayOffType dayOffType) {
         dayOffTypeRepository.save(dayOffType);
     }
 
     @Override
-    public void modifyQuota(DayOffType dayOffType) throws DayOffTypeNotFoundException{
-        String type = dayOffType.getType();
-        dayOffType = dayOffTypeRepository.findByTypeAndAccountId(dayOffType.getType(), dayOffType.getAccountId());
-        if (dayOffType != null) {
-            dayOffTypeRepository.save(dayOffType);
+    public void update(DayOffType dayOffType) throws DayOffTypeNotFoundException{
+        DayOffType existDayOffType = dayOffTypeRepository
+                                     .findByTypeAndAccountId(dayOffType.getType(), dayOffType.getAccountId());
+
+        if (existDayOffType != null) {
+            existDayOffType.setQuota(dayOffType.getQuota());
+            dayOffTypeRepository.save(existDayOffType);
         } else {
-            throw new DayOffTypeNotFoundException(type);
+            throw new DayOffTypeNotFoundException(dayOffType.getType());
         }
     }
 
     @Override
-    public void deleteDayOffType(DayOffType dayOffType) {
+    public void delete(DayOffType dayOffType) {
         dayOffTypeRepository.delete(dayOffType);
     }
 
     @Override
     public DayOffType findByIdAndAccountId(long typeId, long accountId) {
         return dayOffTypeRepository.findByIdAndAccountId(typeId, accountId);
+    }
+
+    @Override
+    public DayOffType findById(long typeId) throws DayOffTypeNotFoundException {
+        DayOffType dayOffType = dayOffTypeRepository.getById(typeId);
+
+        if (dayOffType != null) {
+            return dayOffType;
+        } else {
+            throw new DayOffTypeNotFoundException(typeId);
+        }
     }
 
     @Override

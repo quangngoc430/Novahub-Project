@@ -53,27 +53,40 @@ public class DayOffTypeController {
     }
 
     @PostMapping(path = "/day-off-types")
-    public ResponseEntity<String> createDayOffType(@RequestBody DayOffType dayOffType,
+    public ResponseEntity<String> create(@RequestBody DayOffType dayOffType,
                                                            HttpServletRequest request)
                                                                          throws DayOffTypeIsExistException {
         logService.log(request, logger);
 
-        dayOffTypeService.addNewDayOffType(dayOffType);
+        dayOffTypeService.add(dayOffType);
 
         return new ResponseEntity<>("Adding new Day off type successful", HttpStatus.OK);
 
     }
 
     @PutMapping(path = "/day-off-types")
-    public ResponseEntity<String> updateDayOffType(@RequestBody DayOffType dayOffType,
+    public ResponseEntity<String> update(@RequestBody DayOffType dayOffType,
                                                    HttpServletRequest request)
                                                    throws DayOffTypeNotFoundException {
 
         logService.log(request, logger);
 
-        dayOffTypeService.modifyQuota(dayOffType);
+        dayOffTypeService.update(dayOffType);
 
         return new ResponseEntity<>("Updating day off type successful", HttpStatus.OK);
+    }
+
+    @DeleteMapping(path = "/day-off-types/{id}")
+    public ResponseEntity<String> delete(@PathVariable("id") long typeId,
+                                         HttpServletRequest request) throws DayOffTypeNotFoundException {
+
+        logService.log(request, logger);
+
+        DayOffType dayOffType = dayOffTypeService.findById(typeId);
+
+        dayOffTypeService.delete(dayOffType);
+
+        return new ResponseEntity<>("Deleting day off type successful", HttpStatus.OK);
     }
 
 

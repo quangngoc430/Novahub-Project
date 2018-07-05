@@ -9,4 +9,6 @@ public class DayOffTypeNotFoundException extends Exception{
     public DayOffTypeNotFoundException(String type){
         super("DayOffTypeNotFoundException with type = " + type);
     }
+
+    public DayOffTypeNotFoundException(long id) { super("DayOffTypeNotFoundException with id = "+id); }
 }

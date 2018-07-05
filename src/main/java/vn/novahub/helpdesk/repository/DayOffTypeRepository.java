@@ -13,5 +13,7 @@ public interface DayOffTypeRepository extends PagingAndSortingRepository <DayOff
 
     DayOffType findByTypeAndAccountId(String type, long accountId);
 
+    DayOffType getById(long id);
+
     Page<DayOffType> findByAccountId(long accountId, Pageable pageable);
 }
