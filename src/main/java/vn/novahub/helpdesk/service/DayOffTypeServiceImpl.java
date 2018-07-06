@@ -21,6 +21,7 @@ public class DayOffTypeServiceImpl implements DayOffTypeService {
                                      .findByTypeAndAccountId(dayOffType.getType(), dayOffType.getAccountId());
 
         if (existDayOffType == null) {
+            dayOffType.setRemainingTime(dayOffType.getQuota());
             dayOffTypeRepository.save(dayOffType);
         } else {
             throw new DayOffTypeIsExistException(dayOffType.getType());

@@ -17,12 +17,19 @@ public class DayOffType {
     @Column(name = "quota")
     private int quota;
 
+    @Column(name = "remaining_time")
+    private int remainingTime;
+
     @Column(name = "account_id")
     private long accountId;
 
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = Account.class)
     @JoinColumn(name = "account_id", insertable = false, updatable = false)
     private Account account;
+
+    public void subtractRemainingTime(int numberOfDayOff) {
+        this.remainingTime = this.quota = numberOfDayOff;
+    }
 
     public long getId() {
         return id;
@@ -46,6 +53,14 @@ public class DayOffType {
 
     public void setQuota(int quota) {
         this.quota = quota;
+    }
+
+    public int getRemainingTime() {
+        return remainingTime;
+    }
+
+    public void setRemainingTime(int remainingTime) {
+        this.remainingTime = remainingTime;
     }
 
     public Account getAccount() {

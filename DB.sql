@@ -66,6 +66,7 @@ CREATE TABLE `day_off_type` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `type` varchar(20) NOT NULL,
    `quota` int(11) NOT NULL,
+   `remaining_time` int(11) NOT NULL,
   `account_id` int(11) NOT NULL,
   PRIMARY KEY (`id`), 
   CONSTRAINT `fk_day_off_type_account` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`) ON DELETE CASCADE

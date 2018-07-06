@@ -42,6 +42,13 @@ public class DayOff {
     @Column(name = "type_id")
     private long typeId;
 
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = DayOffType.class)
+    @JoinColumn(name = "type_id", insertable = false, updatable = false)
+    private DayOffType dayOffType;
+
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Account.class)
+    @JoinColumn(name = "account_id", insertable = false, updatable = false)
+    private Account account;
 
     public long getId() {
         return id;
@@ -129,5 +136,13 @@ public class DayOff {
 
     public void setTypeId(long typeId) {
         this.typeId = typeId;
+    }
+
+    public DayOffType getDayOffType() {
+        return dayOffType;
+    }
+
+    public void setDayOffType(DayOffType dayOffType) {
+        this.dayOffType = dayOffType;
     }
 }
