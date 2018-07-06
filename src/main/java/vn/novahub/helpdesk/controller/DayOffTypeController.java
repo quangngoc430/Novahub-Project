@@ -28,18 +28,6 @@ public class DayOffTypeController {
     @Autowired
     private DayOffTypeService dayOffTypeService;
 
-    @GetMapping(path = "/day-off-types/{account-id}/{type-id}")
-    public ResponseEntity<DayOffType> getByAccountIdAndType(@PathVariable("account-id") long accountId,
-                                          @PathVariable("type-id") long typeId,
-                                          HttpServletRequest request)
-                                                            throws DayOffTypeNotFoundException {
-        logService.log(request, logger);
-
-        DayOffType dayOffType = dayOffTypeService.findByIdAndAccountId(typeId, accountId);
-
-        return new ResponseEntity<>(dayOffType, HttpStatus.OK);
-    }
-
     @GetMapping(path = "/day-off-types/{account-id}")
     public ResponseEntity<Page<DayOffType>> getByAccountId(@PathVariable("account-id") long accountId,
                                                            HttpServletRequest request,
@@ -54,8 +42,7 @@ public class DayOffTypeController {
 
     @PostMapping(path = "/day-off-types")
     public ResponseEntity<String> create(@RequestBody DayOffType dayOffType,
-                                                           HttpServletRequest request)
-                                                                         throws DayOffTypeIsExistException {
+                                         HttpServletRequest request)  throws DayOffTypeIsExistException {
         logService.log(request, logger);
 
         dayOffTypeService.add(dayOffType);

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import vn.novahub.helpdesk.exception.DayOffTypeIsExistException;
 import vn.novahub.helpdesk.exception.DayOffTypeNotFoundException;
 import vn.novahub.helpdesk.model.DayOffType;
 import vn.novahub.helpdesk.repository.DayOffTypeRepository;
@@ -15,8 +16,16 @@ public class DayOffTypeServiceImpl implements DayOffTypeService {
     private DayOffTypeRepository dayOffTypeRepository;
 
     @Override
-    public void add(DayOffType dayOffType) {
-        dayOffTypeRepository.save(dayOffType);
+    public void add(DayOffType dayOffType) throws DayOffTypeIsExistException {
+        DayOffType existDayOffType = dayOffTypeRepository
+                                     .findByTypeAndAccountId(dayOffType.getType(), dayOffType.getAccountId());
+
+        if (existDayOffType == null) {
+            dayOffTypeRepository.save(dayOffType);
+        } else {
+            throw new DayOffTypeIsExistException(dayOffType.getType());
+        }
+
     }
 
     @Override
@@ -35,11 +44,6 @@ public class DayOffTypeServiceImpl implements DayOffTypeService {
     @Override
     public void delete(DayOffType dayOffType) {
         dayOffTypeRepository.delete(dayOffType);
-    }
-
-    @Override
-    public DayOffType findByIdAndAccountId(long typeId, long accountId) {
-        return dayOffTypeRepository.findByIdAndAccountId(typeId, accountId);
     }
 
     @Override

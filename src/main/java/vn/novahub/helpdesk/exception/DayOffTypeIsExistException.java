@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class DayOffTypeIsExistException extends Exception{
 
     public DayOffTypeIsExistException(String type){
-        super("DayOffTypeNotFoundException with type = " + type);
+        super("DayOffTypeIsExistException with type = " + type);
     }
 }
