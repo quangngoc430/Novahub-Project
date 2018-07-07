@@ -167,15 +167,10 @@ public class IssueServiceImpl implements IssueService {
 
         issue = issueRepository.save(issue);
 
-        // TODO: send email
         sendMailCreateIssue(issue, accountLogin);
 
         return issue;
     }
-
-    @Autowired
-    private JavaMailSender mailSender;
-
     private void sendMailCreateIssue(Issue issue, Account accountLogin) throws MessagingException {
         Mail mail = new Mail();
         String subject = env.getProperty("subject_email_create_issue");
@@ -193,38 +188,19 @@ public class IssueServiceImpl implements IssueService {
         ArrayList<Account> adminList = (ArrayList<Account>) (accountRepository.getAllByRoleName(RoleConstant.ROLE_ADMIN));
         ArrayList<Account> clerkList = (ArrayList<Account>) (accountRepository.getAllByRoleName(RoleConstant.ROLE_CLERK));
 
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, false, "utf-8");
-
         ArrayList<String> emails = new ArrayList<>();
-        emails.add("helpdesk@novahub.vn");
-        emails.add("ngocbui@novahub.vn");
-        emails.add("builamquangngoc91@gmail.com");
-        emails.add("ngoc.bui150019@vnuk.edu.vn");
 
+        if(adminList != null)
+            for (Account account : adminList)
+                emails.add(account.getEmail());
 
-        helper.setTo(emails.toArray(new String[0]));
-        helper.setSubject(mail.getSubject());
-        message.setContent(mail.getContent(), "text/html");
+        if(clerkList != null)
+            for (Account account : clerkList)
+                emails.add(account.getEmail());
 
-        mailSender.send(message);
-//        if(clerkList != null)
-//        for(Account clerkAccount : clerkList){
-//            mail.setEmailReceiving(clerkAccount.getEmail());
-//            MailThread mailThread = new MailThread();
-//            applicationContext.getAutowireCapableBeanFactory().autowireBean(mailThread);
-//            mailThread.setMail(mail);
-//            mailThread.run();
-//        }
-//
-//        if(adminList != null)
-//        for(Account adminAccount : adminList){
-//            mail.setEmailReceiving(adminAccount.getEmail());
-//            MailThread mailThread = new MailThread();
-//            applicationContext.getAutowireCapableBeanFactory().autowireBean(mailThread);
-//            mailThread.setMail(mail);
-//            mailThread.run();
-//        }
+        mail.setEmailReceiving(emails.toArray(new String[0]));
+
+        mailService.sendHTMLMail(mail);
     }
 
     @Override
