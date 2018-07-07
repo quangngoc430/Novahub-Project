@@ -48,11 +48,13 @@ public class AccountController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping(path = "/users", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Page<Account>> getAll(@RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
+                                                @RequestParam(value = "status", required = false, defaultValue = "") String status,
+                                                @RequestParam(value = "role", required = false, defaultValue = "") String role,
                                                 HttpServletRequest request,
                                                 Pageable pageable){
         logService.log(request, logger);
 
-        Page<Account> accounts = accountService.getAll(keyword, pageable);
+        Page<Account> accounts = accountService.getAll(keyword, status, role, pageable);
 
         return new ResponseEntity<>(accounts, HttpStatus.OK);
     }
