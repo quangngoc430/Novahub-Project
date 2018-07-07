@@ -103,7 +103,7 @@ public class AccountServiceImpl implements AccountService {
 
         Account account = accountRepository.getByEmail(accountInput.getEmail());
 
-        if(account.getPassword() == null || !bCryptPasswordEncoder.matches(accountInput.getPassword(), account.getPassword()))
+        if(account == null || account.getPassword() == null || !bCryptPasswordEncoder.matches(accountInput.getPassword(), account.getPassword()))
             throw new AccountInvalidException();
 
         if(account.getStatus().equals(AccountConstant.STATUS_INACTIVE))

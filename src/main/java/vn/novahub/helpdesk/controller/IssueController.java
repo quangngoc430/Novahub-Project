@@ -18,6 +18,7 @@ import vn.novahub.helpdesk.service.IssueService;
 import vn.novahub.helpdesk.service.LogService;
 
 import javax.annotation.security.PermitAll;
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
@@ -101,7 +102,7 @@ public class IssueController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping(path = "/users/me/issues", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Issue> create(HttpServletRequest request,
-                                                 @RequestBody Issue issue) throws IssueValidationException {
+                                                 @RequestBody Issue issue) throws IssueValidationException, MessagingException {
         logService.log(request, logger);
         issue = issueService.create(issue);
 

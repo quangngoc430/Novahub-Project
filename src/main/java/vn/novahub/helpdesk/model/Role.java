@@ -4,6 +4,7 @@ package vn.novahub.helpdesk.model;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "role")

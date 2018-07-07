@@ -7,6 +7,7 @@ import vn.novahub.helpdesk.exception.IssueNotFoundException;
 import vn.novahub.helpdesk.exception.IssueValidationException;
 import vn.novahub.helpdesk.model.Issue;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 
 public interface IssueService {
@@ -25,7 +26,7 @@ public interface IssueService {
 
     Issue getById(long issueId) throws IssueNotFoundException;
 
-    Issue create(Issue issue) throws IssueValidationException;
+    Issue create(Issue issue) throws IssueValidationException, MessagingException;
 
     Issue update(long issueId, Issue issue) throws IssueNotFoundException, IssueValidationException;
 

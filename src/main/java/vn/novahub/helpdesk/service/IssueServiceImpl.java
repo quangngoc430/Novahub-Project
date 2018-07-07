@@ -1,23 +1,44 @@
 package vn.novahub.helpdesk.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import vn.novahub.helpdesk.constant.IssueConstant;
+import vn.novahub.helpdesk.constant.RoleConstant;
 import vn.novahub.helpdesk.exception.IssueIsClosedException;
 import vn.novahub.helpdesk.exception.IssueNotFoundException;
 import vn.novahub.helpdesk.exception.IssueValidationException;
 import vn.novahub.helpdesk.model.Account;
 import vn.novahub.helpdesk.model.Issue;
+import vn.novahub.helpdesk.model.Mail;
+import vn.novahub.helpdesk.repository.AccountRepository;
 import vn.novahub.helpdesk.repository.IssueRepository;
+import vn.novahub.helpdesk.repository.RoleRepository;
+import vn.novahub.helpdesk.thread.MailThread;
 import vn.novahub.helpdesk.validation.IssueValidation;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import javax.validation.groups.Default;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Service
+@PropertySource("classpath:email.properties")
 public class IssueServiceImpl implements IssueService {
+
+    @Autowired
+    private ApplicationContext applicationContext;
+
+    @Autowired
+    private Environment env;
 
     @Autowired
     private IssueRepository issueRepository;
@@ -32,7 +53,13 @@ public class IssueServiceImpl implements IssueService {
     private IssueValidation issueValidation;
 
     @Autowired
+    private AccountRepository accountRepository;
+
+    @Autowired
     private MailService mailService;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Override
     public boolean isIssueOfAccountLogin(long issueId) {
@@ -127,7 +154,7 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public Issue create(Issue issue) throws IssueValidationException {
+    public Issue create(Issue issue) throws IssueValidationException, MessagingException {
         Account accountLogin = accountService.getAccountLogin();
 
         issue.setCreatedAt(new Date());
@@ -138,9 +165,66 @@ public class IssueServiceImpl implements IssueService {
 
         issueValidation.validate(issue, Default.class);
 
-        // TODO: send email
+        issue = issueRepository.save(issue);
 
-        return issueRepository.save(issue);
+        // TODO: send email
+        sendMailCreateIssue(issue, accountLogin);
+
+        return issue;
+    }
+
+    @Autowired
+    private JavaMailSender mailSender;
+
+    private void sendMailCreateIssue(Issue issue, Account accountLogin) throws MessagingException {
+        Mail mail = new Mail();
+        String subject = env.getProperty("subject_email_create_issue");
+        subject = subject.replace("{issue-id}", String.valueOf(issue.getId()));
+        mail.setSubject(subject);
+        String content = env.getProperty("content_email_create_issue");
+        content = content.replace("{issue-id}", String.valueOf(issue.getId()));
+        content = content.replace("{email}", accountLogin.getEmail());
+        content = content.replace("{title}", issue.getTitle());
+        content = content.replace("{content}", issue.getContent());
+        content = content.replace("{status}", issue.getStatus());
+        content = content.replace("{reply-message}", (issue.getReplyMessage() == null) ? "NONE" : issue.getReplyMessage());
+        mail.setContent(content);
+
+        ArrayList<Account> adminList = (ArrayList<Account>) (accountRepository.getAllByRoleName(RoleConstant.ROLE_ADMIN));
+        ArrayList<Account> clerkList = (ArrayList<Account>) (accountRepository.getAllByRoleName(RoleConstant.ROLE_CLERK));
+
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, false, "utf-8");
+
+        ArrayList<String> emails = new ArrayList<>();
+        emails.add("helpdesk@novahub.vn");
+        emails.add("ngocbui@novahub.vn");
+        emails.add("builamquangngoc91@gmail.com");
+        emails.add("ngoc.bui150019@vnuk.edu.vn");
+
+
+        helper.setTo(emails.toArray(new String[0]));
+        helper.setSubject(mail.getSubject());
+        message.setContent(mail.getContent(), "text/html");
+
+        mailSender.send(message);
+//        if(clerkList != null)
+//        for(Account clerkAccount : clerkList){
+//            mail.setEmailReceiving(clerkAccount.getEmail());
+//            MailThread mailThread = new MailThread();
+//            applicationContext.getAutowireCapableBeanFactory().autowireBean(mailThread);
+//            mailThread.setMail(mail);
+//            mailThread.run();
+//        }
+//
+//        if(adminList != null)
+//        for(Account adminAccount : adminList){
+//            mail.setEmailReceiving(adminAccount.getEmail());
+//            MailThread mailThread = new MailThread();
+//            applicationContext.getAutowireCapableBeanFactory().autowireBean(mailThread);
+//            mailThread.setMail(mail);
+//            mailThread.run();
+//        }
     }
 
     @Override
