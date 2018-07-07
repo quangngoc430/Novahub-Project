@@ -18,7 +18,7 @@ public interface IssueService {
 
     Issue getByIdForAdmin(long issueId) throws IssueNotFoundException;
 
-    Issue updateForAdmin(long issuetId, Issue issue) throws IssueNotFoundException, IssueValidationException;
+    Issue updateForAdmin(long issuetId, Issue issue) throws IssueNotFoundException, IssueValidationException, MessagingException;
 
     void deleteForAdmin(long issueId) throws IssueNotFoundException;
 
@@ -28,12 +28,12 @@ public interface IssueService {
 
     Issue create(Issue issue) throws IssueValidationException, MessagingException;
 
-    Issue update(long issueId, Issue issue) throws IssueNotFoundException, IssueValidationException;
+    Issue update(long issueId, Issue issue) throws IssueNotFoundException, IssueValidationException, MessagingException;
 
     void delete(long issueId) throws IssueNotFoundException;
 
 
-    void approve(long issueId, String token) throws IssueNotFoundException, IssueIsClosedException;
+    void approve(long issueId, String token) throws IssueNotFoundException, IssueIsClosedException, MessagingException;
 
-    void deny(long issueId, String token) throws IssueNotFoundException, IssueIsClosedException;
+    void deny(long issueId, String token) throws IssueNotFoundException, IssueIsClosedException, MessagingException;
 }

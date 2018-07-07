@@ -60,7 +60,7 @@ public class IssueController {
     @PutMapping(path = "/issues/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Issue> updateForAdmin(@PathVariable(name = "issueId") long issueId,
                                                 @RequestBody Issue issue,
-                                                HttpServletRequest request) throws IssueValidationException, IssueNotFoundException {
+                                                HttpServletRequest request) throws IssueValidationException, IssueNotFoundException, MessagingException {
         logService.log(request, logger);
         Issue issueUpdated = issueService.updateForAdmin(issueId, issue);
 
@@ -113,7 +113,7 @@ public class IssueController {
     @PutMapping(path = "/users/me/issues/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Issue> update(HttpServletRequest request,
                                                  @RequestBody Issue issue,
-                                                 @PathVariable(name = "issueId") long issueId) throws IssueNotFoundException, IssueValidationException {
+                                                 @PathVariable(name = "issueId") long issueId) throws IssueNotFoundException, IssueValidationException, MessagingException {
         logService.log(request, logger);
         issue = issueService.update(issueId, issue);
 
@@ -134,7 +134,7 @@ public class IssueController {
     @GetMapping(path = "/issues/{issueId}/approve", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Void> approve(@RequestParam(name = "token", required = false, defaultValue = "") String token,
                                         @PathVariable(name = "issueId") long issueId,
-                                        HttpServletRequest request) throws IssueNotFoundException, IssueIsClosedException {
+                                        HttpServletRequest request) throws IssueNotFoundException, IssueIsClosedException, MessagingException {
         logService.log(request, logger);
         issueService.approve(issueId, token);
 
@@ -145,7 +145,7 @@ public class IssueController {
     @GetMapping(path = "/issues/{issueId}/deny", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Void> deny(@RequestParam(name = "token", required = false, defaultValue = "") String token,
                                      @PathVariable(name = "issueId") long issueId,
-                                     HttpServletRequest request) throws IssueNotFoundException, IssueIsClosedException {
+                                     HttpServletRequest request) throws IssueNotFoundException, IssueIsClosedException, MessagingException {
         logService.log(request, logger);
         issueService.deny(issueId, token);
 

@@ -196,7 +196,7 @@ public class AccountServiceImpl implements AccountService {
         account = accountRepository.save(account);
 
         Mail mail = new Mail();
-        mail.setEmailReceiving(account.getEmail());
+        mail.setEmailReceiving(new String[]{account.getEmail()});
         mail.setSubject(subjectEmailSignUp);
         String urlAccountActive = "http://localhost:8080/api/users/" + account.getId() + "/active?token=" + account.getVertificationToken();
         contentEmailSignUp = contentEmailSignUp.replace("{url-activate-account}", urlAccountActive);
