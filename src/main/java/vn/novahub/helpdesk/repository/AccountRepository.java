@@ -52,4 +52,18 @@ public interface AccountRepository extends PagingAndSortingRepository<Account, L
     Account getByIdAndVertificationToken(long accountId, String verificationToken);
 
     Account getByEmailAndPassword(String email, String password);
+
+    @Query("SELECT account " +
+           "FROM Account account " +
+           "JOIN AccountHasSkill accountHasSkill " +
+           "ON account.id = accountHasSkill.accountId " +
+           "WHERE accountHasSkill.skillId = :skillId")
+    Page<Account> getAllBySkillId(@Param("skillId") long skillId, Pageable pageable);
+
+    @Query("SELECT account " +
+           "FROM Account account " +
+           "JOIN AccountHasSkill accountHasSkill " +
+           "ON account.id = accountHasSkill.accountId " +
+           "WHERE account.id = :id AND accountHasSkill.skillId = :skillId")
+    Account getByIdAndSkillId(@Param("id") long accountId, @Param("skillId") long skillId);
 }

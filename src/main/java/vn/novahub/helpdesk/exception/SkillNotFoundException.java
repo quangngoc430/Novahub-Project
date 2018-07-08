@@ -9,4 +9,8 @@ public class SkillNotFoundException extends Exception{
     public SkillNotFoundException(long skillId){
         super("SkillNotFoundException with id = " + skillId);
     }
+
+    public SkillNotFoundException(long accountId, long skillId){
+        super("SkillNotFoundException with accountId = " + accountId + ", skillId = " + skillId);
+    }
 }

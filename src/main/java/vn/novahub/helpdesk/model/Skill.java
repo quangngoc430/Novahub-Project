@@ -1,11 +1,17 @@
 package vn.novahub.helpdesk.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
 
 @Entity
 @Table(name = "skill")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Skill implements Serializable {
 
     @Id
@@ -13,16 +19,19 @@ public class Skill implements Serializable {
     @Column(name = "id")
     private long id;
 
+    @NotEmpty(message = "Name is not empty")
     @Column(name = "name")
     private String name;
 
+    @NotNull(message = "CategoryId is not null")
     @Column(name = "category_id")
     private long categoryId;
 
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY )
     private List<AccountHasSkill> accountHasSkillList;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = Category.class)
     @JoinColumn(name = "category_id", insertable = false, updatable = false)
     private Category category;
 

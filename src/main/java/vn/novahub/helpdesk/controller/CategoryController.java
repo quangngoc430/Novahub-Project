@@ -100,7 +100,7 @@ public class CategoryController {
                                              @PathVariable("skill_id") long skillId,
                                              HttpServletRequest request) throws CategoryNotFoundException, SkillNotFoundException {
         logService.log(request, logger);
-        skillService.deteleByCategoryIdAndSkillId(categoryId, skillId);
+        skillService.deleteByCategoryIdAndSkillId(categoryId, skillId);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
