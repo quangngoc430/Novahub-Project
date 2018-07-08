@@ -1,8 +1,8 @@
 package vn.novahub.helpdesk.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,7 +23,6 @@ import vn.novahub.helpdesk.validation.*;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
-import javax.transaction.Transactional;
 import javax.validation.groups.Default;
 import java.io.IOException;
 import java.util.Date;
@@ -32,11 +31,8 @@ import java.util.Date;
 @PropertySource("classpath:email.properties")
 public class AccountServiceImpl implements AccountService {
 
-    @Value("${subject_email_sign_up}")
-    private String subjectEmailSignUp;
-
-    @Value("${content_email_sign_up}")
-    private String contentEmailSignUp;
+    @Autowired
+    private Environment env;
 
     @Autowired
     private AccountRepository accountRepository;
@@ -104,7 +100,7 @@ public class AccountServiceImpl implements AccountService {
 
         Account account = accountRepository.getByEmail(accountInput.getEmail());
 
-        if(account.getPassword() == null || !bCryptPasswordEncoder.matches(accountInput.getPassword(), account.getPassword()))
+        if(account == null || account.getPassword() == null || !bCryptPasswordEncoder.matches(accountInput.getPassword(), account.getPassword()))
             throw new AccountInvalidException();
 
         if(account.getStatus().equals(AccountConstant.STATUS_INACTIVE))
@@ -163,9 +159,20 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Page<Account> getAll(String keyword, Pageable pageable) {
+    public Page<Account> getAll(String keyword, String status, String role, Pageable pageable) {
         keyword = "%" + keyword + "%";
-        return accountRepository.getAllByEmailLikeAndFirstNameLikeAndLastNameLike(keyword, keyword, keyword, pageable);
+
+        if(status.equals("") && role.equals(""))
+            return accountRepository.getAllByEmailLikeOrFirstNameLikeOrLastNameLike(keyword, pageable);
+
+        if(!status.equals("") && role.equals(""))
+            return accountRepository.getAllByEmailLikeOrFirstNameLikeOrLastNameLikeAndStatus(keyword, status, pageable);
+
+        if(status.equals("") && !role.equals(""))
+            return accountRepository.getAllByEmailLikeOrFirstNameLikeOrLastNameLikeAndRole(keyword, role, pageable);
+
+        //if status != "" and role != ""
+        return accountRepository.getAllByEmailLikeOrFirstNameLikeOrLastNameLikeAndStatusAndRole(keyword, status, role, pageable);
     }
 
     @Override
@@ -188,8 +195,6 @@ public class AccountServiceImpl implements AccountService {
             throw new AccountIsExistException(account.getEmail());
 
         account.setPassword(bCryptPasswordEncoder.encode(account.getPassword()));
-        account.setTotalNumberOfHours(AccountConstant.TOTAL_NUMBER_OF_HOURS_DEFAULT);
-        account.setRemainNumberOfHours(AccountConstant.REMAIN_NUMBER_OF_HOURS_DEFAULT);
         account.setStatus(AccountConstant.STATUS_INACTIVE);
         account.setVertificationToken(tokenService.generateToken(account.getEmail() + account.getEmail()));
         account.setRoleId(roleService.getByName(RoleConstant.ROLE_USER).getId());
@@ -199,9 +204,10 @@ public class AccountServiceImpl implements AccountService {
         account = accountRepository.save(account);
 
         Mail mail = new Mail();
-        mail.setEmailReceiving(account.getEmail());
-        mail.setSubject(subjectEmailSignUp);
+        mail.setEmailReceiving(new String[]{account.getEmail()});
+        mail.setSubject(env.getProperty("subject_email_sign_up"));
         String urlAccountActive = "http://localhost:8080/api/users/" + account.getId() + "/active?token=" + account.getVertificationToken();
+        String contentEmailSignUp = env.getProperty("content_email_sign_up");
         contentEmailSignUp = contentEmailSignUp.replace("{url-activate-account}", urlAccountActive);
         mail.setContent(contentEmailSignUp);
         mailService.sendHTMLMail(mail);
@@ -210,7 +216,6 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    @Transactional
     public Account createWithGoogleAccount(Account account) throws AccountValidationException, AccountIsExistException, RoleNotFoundException {
 
         accountValidation.validate(account, GroupCreateWithAccountGoogle.class);
@@ -218,8 +223,6 @@ public class AccountServiceImpl implements AccountService {
         if(accountRepository.getByEmail(account.getEmail()) != null)
             throw new AccountIsExistException(account.getEmail());
 
-        account.setTotalNumberOfHours(AccountConstant.TOTAL_NUMBER_OF_HOURS_DEFAULT);
-        account.setRemainNumberOfHours(AccountConstant.REMAIN_NUMBER_OF_HOURS_DEFAULT);
         account.setStatus(AccountConstant.STATUS_ACTIVE);
         account.setRoleId(roleService.getByName(RoleConstant.ROLE_USER).getId());
         account.setPassword(null);
@@ -289,8 +292,15 @@ public class AccountServiceImpl implements AccountService {
             oldAccount.setAddress(account.getAddress());
         if(account.getAvatarUrl() != null)
             oldAccount.setAvatarUrl(account.getAvatarUrl());
-        if(account.getStatus() != null)
+        if(account.getStatus() != null) {
+            if(oldAccount.getStatus().equals(AccountConstant.STATUS_INACTIVE)
+                    && account.getStatus().equals(AccountConstant.STATUS_ACTIVE))
+                oldAccount.setToken(null);
+
             oldAccount.setStatus(account.getStatus());
+        }
+        if(account.getJoiningDate() != null)
+            oldAccount.setJoiningDate(account.getJoiningDate());
         oldAccount.setUpdatedAt(new Date());
 
         accountValidation.validate(oldAccount, Default.class);

@@ -2,28 +2,28 @@ package vn.novahub.helpdesk.model;
 
 public class Mail {
 
-    private String emailReceiving;
+    private String[] emailReceiving;
     private String subject;
     private String content;
 
     public Mail() {
     }
 
-    public Mail(String emailReceiving) {
+    public Mail(String[] emailReceiving) {
         this.emailReceiving = emailReceiving;
     }
 
-    public Mail(String emailReceiving, String subject, String content) {
+    public Mail(String[] emailReceiving, String subject, String content) {
         this.emailReceiving = emailReceiving;
         this.subject = subject;
         this.content = content;
     }
 
-    public String getEmailReceiving() {
+    public String[] getEmailReceiving() {
         return emailReceiving;
     }
 
-    public void setEmailReceiving(String emailReceiving) {
+    public void setEmailReceiving(String[] emailReceiving) {
         this.emailReceiving = emailReceiving;
     }
 
