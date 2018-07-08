@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 import vn.novahub.helpdesk.model.Skill;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 
 @Repository
 @Transactional
@@ -42,5 +41,7 @@ public interface SkillRepository extends PagingAndSortingRepository<Skill, Long>
     void deleteByIdAndCategoryId(long skillId, long categoryId);
 
     boolean existsByIdAndCategoryId(long skillId, long categoryId);
+
+    Skill getById(long skillId);
 
 }

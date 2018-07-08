@@ -3,7 +3,6 @@ package vn.novahub.helpdesk.model;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 @Table(name = "skill")
@@ -65,12 +64,6 @@ public class Skill implements Serializable {
 
     public void setCategory(Category category) {
         this.category = category;
-    }
-
-    @Override
-    public int hashCode() {
-
-        return Objects.hash(name);
     }
 
     @Override
