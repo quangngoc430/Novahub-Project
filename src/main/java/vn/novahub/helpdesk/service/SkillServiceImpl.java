@@ -62,10 +62,16 @@ public class SkillServiceImpl implements SkillService {
 
         skillValidation.validate(skill, Default.class);
 
-        if(skillRepository.existsByNameAndCategoryId(skill.getName(), skill.getCategoryId()))
-            throw new SkillIsExistException(skill.getName(), skill.getCategoryId());
+        Skill oldSkill = skillRepository.getByNameAndCategoryId(skill.getName(), skill.getCategoryId());
 
-        return skillRepository.save(skill);
+        if(oldSkill != null) {
+            return oldSkill;
+        }
+
+        skill = skillRepository.save(skill);
+        skill.setCategory(categoryRepository.getById(skill.getCategoryId()));
+
+        return skill;
     }
 
     @Override
@@ -74,16 +80,21 @@ public class SkillServiceImpl implements SkillService {
 
         Skill oldSkill = skillRepository.getById(skillId);
 
-        if(skillRepository.existsByNameAndCategoryId(skill.getName(), skill.getCategoryId()))
-            throw new SkillIsExistException(skill.getName(), skill.getCategoryId());
-
-        if(oldSkill == null)
+        if (oldSkill == null) {
             throw new SkillNotFoundException(skillId);
+        }
+
+        if ((oldSkill.getName().equals(skill.getName())) && (oldSkill.getCategoryId() == skill.getCategoryId())){
+            return oldSkill;
+        }
 
         oldSkill.setName(skill.getName());
         oldSkill.setCategoryId(skill.getCategoryId());
 
-        return skillRepository.save(oldSkill);
+        oldSkill = skillRepository.save(oldSkill);
+        oldSkill.setCategory(categoryRepository.getById(oldSkill.getCategoryId()));
+
+        return oldSkill;
     }
 
     @Override
@@ -126,13 +137,14 @@ public class SkillServiceImpl implements SkillService {
         if(oldSkill != null){
 
             // check account has skill
-            if(accountRepository.getByIdAndSkillId(accountLogin.getId(), oldSkill.getId()) != null)
-                throw new SkillIsExistException(oldSkill.getId());
+            if(!accountHasSkillRepository.existsByAccountIdAndSkillId(accountLogin.getId(), oldSkill.getId())) {
+                AccountHasSkill accountHasSkill = new AccountHasSkill();
+                accountHasSkill.setAccountId(accountLogin.getId());
+                accountHasSkill.setSkillId(oldSkill.getId());
+                accountHasSkillRepository.save(accountHasSkill);
+            }
 
-            AccountHasSkill accountHasSkill = new AccountHasSkill();
-            accountHasSkill.setAccountId(accountLogin.getId());
-            accountHasSkill.setSkillId(oldSkill.getId());
-            accountHasSkillRepository.save(accountHasSkill);
+            return oldSkill;
         }
 
         skill = skillRepository.save(skill);
@@ -140,6 +152,8 @@ public class SkillServiceImpl implements SkillService {
         accountHasSkill.setAccountId(accountLogin.getId());
         accountHasSkill.setSkillId(skill.getId());
         accountHasSkillRepository.save(accountHasSkill);
+
+        skill.setCategory(categoryRepository.getById(skill.getCategoryId()));
 
         return skill;
     }
@@ -187,6 +201,8 @@ public class SkillServiceImpl implements SkillService {
         newAccountHasSkill.setSkillId(skill.getId());
         newAccountHasSkill.setAccountId(accountLogin.getId());
         accountHasSkillRepository.save(newAccountHasSkill);
+
+        skill.setCategory(categoryRepository.getById(skill.getCategoryId()));
 
         return skill;
     }
