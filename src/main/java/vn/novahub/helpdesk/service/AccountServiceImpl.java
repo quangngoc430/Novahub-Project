@@ -294,7 +294,7 @@ public class AccountServiceImpl implements AccountService {
             oldAccount.setAvatarUrl(account.getAvatarUrl());
         if(account.getStatus() != null) {
             if(oldAccount.getStatus().equals(AccountConstant.STATUS_INACTIVE)
-                    && account.getStatus().equals(AccountConstant.STATUS_ACTIVE))
+               && account.getStatus().equals(AccountConstant.STATUS_ACTIVE))
                 oldAccount.setToken(null);
 
             oldAccount.setStatus(account.getStatus());

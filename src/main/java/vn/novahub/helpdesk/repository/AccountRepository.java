@@ -26,11 +26,11 @@ public interface AccountRepository extends PagingAndSortingRepository<Account, L
                                                                           @Param("status") String status, Pageable pageable);
 
     @Query("SELECT account " +
-            "FROM Account account " +
-            "JOIN Role role " +
-            "ON account.roleId = role.id " +
-            "WHERE (account.email LIKE :keyword or account.firstName LIKE :keyword or account.lastName LIKE :keyword) " +
-            "AND role.name = :name")
+           "FROM Account account " +
+           "JOIN Role role " +
+           "ON account.roleId = role.id " +
+           "WHERE (account.email LIKE :keyword or account.firstName LIKE :keyword or account.lastName LIKE :keyword) " +
+           "AND role.name = :name")
     Page<Account> getAllByEmailLikeOrFirstNameLikeOrLastNameLikeAndRole(@Param("keyword") String keyword,
                                                                         @Param("name") String name,
                                                                         Pageable pageable);
