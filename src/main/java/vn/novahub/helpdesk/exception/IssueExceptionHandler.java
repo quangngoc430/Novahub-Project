@@ -8,17 +8,24 @@ import vn.novahub.helpdesk.model.ApiError;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.Instant;
+import java.util.HashMap;
 
 @ControllerAdvice
 public class IssueExceptionHandler {
 
     @ExceptionHandler(value = IssueNotFoundException.class)
     public ResponseEntity<ApiError> handleIssueNotFoundException(HttpServletRequest request, Exception ex){
-        ApiError apiError = new ApiError(HttpStatus.NOT_FOUND.value(),
-                                        HttpStatus.NOT_FOUND.name(),
-                                        request.getRequestURI(),
-                                        ex.getMessage());
-        return new ResponseEntity<ApiError>(apiError, HttpStatus.NOT_FOUND);
+        ApiError apiError = new ApiError();
+
+        apiError.setTimestamp(Instant.now());
+        apiError.setStatus(HttpStatus.NOT_FOUND.value());
+        HashMap<String, String> errors = new HashMap<>();
+        errors.put("message", "Issue not found");
+        apiError.setErrors(errors);
+        apiError.setPath(request.getRequestURI());
+        apiError.setMessage(ex.getMessage());
+
+        return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
     }
 
 }

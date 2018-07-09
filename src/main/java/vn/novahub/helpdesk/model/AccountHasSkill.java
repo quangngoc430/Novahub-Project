@@ -33,7 +33,7 @@ public class AccountHasSkill {
         this.id = id;
     }
 
-    public long getAccwountId() {
+    public long getAccountId() {
         return accountId;
     }
 
@@ -47,10 +47,6 @@ public class AccountHasSkill {
 
     public void setSkillId(long skillId) {
         this.skillId = skillId;
-    }
-
-    public long getAccountId() {
-        return accountId;
     }
 
     public Account getAccount() {
