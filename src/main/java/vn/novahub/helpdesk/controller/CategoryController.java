@@ -69,7 +69,7 @@ public class CategoryController {
     @PutMapping(path = "/categories/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Category> update(@PathVariable("id") long categoryId,
                                            @RequestBody Category category,
-                                           HttpServletRequest request) throws CategoryValidationException, CategoryIsExistException {
+                                           HttpServletRequest request) throws CategoryValidationException, CategoryIsExistException, CategoryNotFoundException {
         logService.log(request, logger);
         Category categoryUpdated = categoryService.update(category, categoryId);
 
@@ -113,7 +113,7 @@ public class CategoryController {
     @PostMapping(path = "/categories/{id}/skills", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Skill> createASkill(@PathVariable("id") long categoryId,
                                               @RequestBody Skill skill,
-                                              HttpServletRequest request) throws SkillIsExistException, SkillValidationException {
+                                              HttpServletRequest request) throws SkillIsExistException, SkillValidationException, CategoryNotFoundException {
         logService.log(request, logger);
         Skill newSkill = skillService.createByCategoryId(skill, categoryId);
 

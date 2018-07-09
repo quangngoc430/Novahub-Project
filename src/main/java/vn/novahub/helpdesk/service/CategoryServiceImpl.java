@@ -12,6 +12,8 @@ import vn.novahub.helpdesk.repository.CategoryRepository;
 import vn.novahub.helpdesk.validation.CategoryValidation;
 
 import javax.validation.groups.Default;
+import java.util.Date;
+
 @Service
 public class CategoryServiceImpl implements CategoryService{
 
@@ -39,25 +41,34 @@ public class CategoryServiceImpl implements CategoryService{
 
     @Override
     public Category create(Category category) throws CategoryIsExistException, CategoryValidationException {
-        categoryValidation.validate(category, Default.class);
 
         if(categoryRepository.existsByName(category.getName()))
             throw new CategoryIsExistException(category.getName());
+
+        category.setCreatedAt(new Date());
+        category.setUpdatedAt(new Date());
+
+        categoryValidation.validate(category, Default.class);
 
         return categoryRepository.save(category);
     }
 
     @Override
     public Category update(Category category,
-                           long categoryId) throws CategoryValidationException, CategoryIsExistException {
-        categoryValidation.validate(category, Default.class);
+                           long categoryId) throws CategoryValidationException, CategoryIsExistException, CategoryNotFoundException {
 
         Category oldCategory = categoryRepository.getById(categoryId);
 
-        if(!oldCategory.getName().equals(category.getName()) && categoryRepository.existsByName(category.getName()))
+        if(oldCategory == null)
+            throw new CategoryNotFoundException(categoryId);
+
+        if(!oldCategory.equals(category) && categoryRepository.existsByName(category.getName()))
             throw new CategoryIsExistException(category.getName());
 
         oldCategory.setName(category.getName());
+        oldCategory.setUpdatedAt(new Date());
+
+        categoryValidation.validate(oldCategory, Default.class);
 
         return categoryRepository.save(oldCategory);
     }

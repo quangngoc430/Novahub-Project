@@ -11,7 +11,7 @@ public interface CategoryService {
 
     Category create(Category category) throws CategoryIsExistException, CategoryValidationException;
 
-    Category update(Category category, long categoryId) throws CategoryValidationException, CategoryIsExistException;
+    Category update(Category category, long categoryId) throws CategoryValidationException, CategoryIsExistException, CategoryNotFoundException;
 
     Category get(long categoryId) throws CategoryNotFoundException;
 

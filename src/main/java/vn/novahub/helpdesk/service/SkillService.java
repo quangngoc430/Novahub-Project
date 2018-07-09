@@ -12,17 +12,17 @@ import javax.servlet.http.HttpServletRequest;
 
 public interface SkillService {
 
-    Skill create(Skill skill, HttpServletRequest request) throws SkillValidationException;
+    Skill create(Skill skill) throws SkillValidationException;
 
-    Skill createByCategoryId(Skill skill, long categoryId) throws SkillValidationException, SkillIsExistException;
+    Skill createByCategoryId(Skill skill, long categoryId) throws SkillValidationException, SkillIsExistException, CategoryNotFoundException;
 
-    Skill updateBySkillId(Skill skill, long skillId, HttpServletRequest request);
+    Skill updateBySkillId(Skill skill, long skillId);
 
     Skill updateByCategoryIdAndSkillId(Skill skill, long categoryId, long skillId) throws CategoryNotFoundException, SkillNotFoundException, SkillValidationException, SkillIsExistException;
 
     Page<Skill> getAllByCategoryIdAndName(long categoryId, String name, Pageable pageable) throws CategoryNotFoundException;
 
-    Page<Skill> getAllByName(String name, Pageable pageable, HttpServletRequest request);
+    Page<Skill> getAllByName(String name, Pageable pageable);
 
     Skill getBySkillId(long skillId) throws SkillNotFoundException;
 
