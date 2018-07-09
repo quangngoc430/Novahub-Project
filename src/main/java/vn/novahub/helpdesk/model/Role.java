@@ -1,6 +1,8 @@
 package vn.novahub.helpdesk.model;
 
 
+import io.swagger.annotations.ApiModelProperty;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
@@ -12,10 +14,12 @@ public class Role implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
+    @ApiModelProperty(notes = "Id auto increase upon create new")
     private long id;
 
     @NotEmpty
     @Column(name = "name")
+    @ApiModelProperty(notes = "Name of role")
     private String name;
 
     public long getId() {
