@@ -15,10 +15,10 @@ public class DayOffType {
     private String type;
 
     @Column(name = "quota")
-    private int quota;
+    private long quota;
 
     @Column(name = "remaining_time")
-    private int remainingTime;
+    private long remainingTime;
 
     @Column(name = "account_id")
     private long accountId;
@@ -27,7 +27,7 @@ public class DayOffType {
     @JoinColumn(name = "account_id", insertable = false, updatable = false)
     private Account account;
 
-    public void subtractRemainingTime(int numberOfDayOff) {
+    public void subtractRemainingTime(long numberOfDayOff) {
         this.remainingTime = this.quota = numberOfDayOff;
     }
 
@@ -47,19 +47,19 @@ public class DayOffType {
         this.type = type;
     }
 
-    public int getQuota() {
+    public long getQuota() {
         return quota;
     }
 
-    public void setQuota(int quota) {
+    public void setQuota(long quota) {
         this.quota = quota;
     }
 
-    public int getRemainingTime() {
+    public long getRemainingTime() {
         return remainingTime;
     }
 
-    public void setRemainingTime(int remainingTime) {
+    public void setRemainingTime(long remainingTime) {
         this.remainingTime = remainingTime;
     }
 
