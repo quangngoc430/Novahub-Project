@@ -28,7 +28,7 @@ public class DayOffType {
     private Account account;
 
     public void subtractRemainingTime(long numberOfDayOff) {
-        this.remainingTime = this.quota = numberOfDayOff;
+        this.remainingTime = this.remainingTime - numberOfDayOff;
     }
 
     public long getId() {

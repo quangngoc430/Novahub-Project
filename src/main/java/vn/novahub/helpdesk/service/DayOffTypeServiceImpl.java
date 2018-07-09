@@ -18,7 +18,7 @@ public class DayOffTypeServiceImpl implements DayOffTypeService {
     @Override
     public void add(DayOffType dayOffType) throws DayOffTypeIsExistException {
         DayOffType existDayOffType = dayOffTypeRepository
-                                     .findByTypeAndAccountId(dayOffType.getType(), dayOffType.getAccountId());
+                                     .findByAccountIdAndType(dayOffType.getAccountId(), dayOffType.getType());
 
         if (existDayOffType == null) {
             dayOffType.setRemainingTime(dayOffType.getQuota());
@@ -32,7 +32,7 @@ public class DayOffTypeServiceImpl implements DayOffTypeService {
     @Override
     public void update(DayOffType dayOffType) throws DayOffTypeNotFoundException{
         DayOffType existDayOffType = dayOffTypeRepository
-                                     .findByTypeAndAccountId(dayOffType.getType(), dayOffType.getAccountId());
+                                     .findByAccountIdAndType(dayOffType.getAccountId(), dayOffType.getType());
 
         if (existDayOffType != null) {
             existDayOffType.setQuota(dayOffType.getQuota());

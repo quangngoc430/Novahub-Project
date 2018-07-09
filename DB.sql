@@ -85,7 +85,8 @@ CREATE TABLE `day_off` (
   `status` varchar(45) NOT NULL,
   `token` char(255) NOT NULL,
   `account_id` int(11) NOT NULL,
-  `type_id` int(11) NOT NULL,
+  `type` varchar(100) NOT NULL,
+  `type_id` int(11),
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_day_off_account` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`) ON DELETE CASCADE ,
   CONSTRAINT `fk_day_off_type` FOREIGN KEY (`type_id`) REFERENCES `day_off_type` (`id`) ON DELETE CASCADE
