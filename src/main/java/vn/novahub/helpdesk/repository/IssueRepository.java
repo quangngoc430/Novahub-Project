@@ -21,14 +21,15 @@ public interface IssueRepository extends PagingAndSortingRepository<Issue, Long>
 
     @Query("FROM Issue issue WHERE issue.accountId = :accountId AND (issue.title LIKE :keyword OR issue.content LIKE :keyword)")
     Page<Issue> getAllByAccountIdAndContentLikeOrTitleLike(@Param("accountId") long accountId,
-                                                           @Param("keyword") String keyword,
-                                                           Pageable pageable);
+
+                                            @Param("keyword") String keyword,
+                                            Pageable pageable);
 
     @Query("FROM Issue issue WHERE issue.status = :status AND issue.accountId = :accountId AND (issue.title LIKE :keyword OR issue.content LIKE :keyword)")
     Page<Issue> getAllByAccountIdAndTitleLikeOrContentLikeAndStatus(@Param("accountId") long accountId,
-                                                                    @Param("keyword") String keyword,
-                                                                    @Param("status") String status,
-                                                                    Pageable pageable);
+                                            @Param("keyword") String keyword,
+                                            @Param("status") String status,
+                                            Pageable pageable);
 
     Issue findByIdAndToken(long id, String token);
 

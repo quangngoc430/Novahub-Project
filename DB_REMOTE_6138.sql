@@ -65,11 +65,7 @@ CREATE TABLE `account_has_skill` (
 CREATE TABLE `day_off_type` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `type` varchar(20) NOT NULL,
-   `quota` int(11) NOT NULL,
-   `remaining_time` int(11) NOT NULL,
-  `account_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`), 
-  CONSTRAINT `fk_day_off_type_account` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`) ON DELETE CASCADE
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -85,8 +81,7 @@ CREATE TABLE `day_off` (
   `status` varchar(45) NOT NULL,
   `token` char(255) NOT NULL,
   `account_id` int(11) NOT NULL,
-  `type` varchar(100) NOT NULL,
-  `type_id` int(11),
+  `type_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_day_off_account` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`) ON DELETE CASCADE ,
   CONSTRAINT `fk_day_off_type` FOREIGN KEY (`type_id`) REFERENCES `day_off_type` (`id`) ON DELETE CASCADE
@@ -115,15 +110,9 @@ INSERT INTO `role`(name) VALUES ("USER");
 INSERT INTO `account`(email, first_name, last_name, password, status, token, role_id)
 VALUES("helpdesk@novahub.vn", "desk", "help", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", "ACTIVE", "abcdefghijk123456789", 1);
 INSERT INTO `account`(email, first_name, last_name, password, status, token, role_id)
-<<<<<<< HEAD
-VALUES("huong@novahub.vn", "mai", "huong", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", "ACTIVE", "abcdefghijk123456789", 2);
-INSERT INTO `account`(email, first_name, last_name, password, status, token, role_id)
-VALUES("ngoc@novahub.vn", "bui lam", "quang ngoc", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", "ACTIVE", "abcdefghijk123456789", 3);
-=======
 VALUES("ngocbui@novahub.vn", "mai", "huong", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", "ACTIVE", "abcdefghijk123456789", 2);
 INSERT INTO `account`(email, first_name, last_name, password, status, token, role_id)
 VALUES("huong@novahub.vn", "bui lam", "quang ngoc", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", "ACTIVE", "abcdefghijk123456789", 3);
->>>>>>> HD-25-ngoc
 INSERT INTO `account`(email, first_name, last_name, password, status, token, role_id)
 VALUES("hai@novahub.vn", "bui lam", "thanh hai", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", "ACTIVE", "abcdefghijk123456789", 3);
 

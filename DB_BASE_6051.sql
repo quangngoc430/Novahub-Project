@@ -23,16 +23,16 @@ CREATE TABLE `account` (
   `email` varchar(45) NOT NULL,
   `first_name` varchar(45) DEFAULT NULL,
   `last_name` varchar(45) DEFAULT NULL,
-  `birth_day` datetime,
+  `birth_date` int(11),
   `address` varchar(250),
-  `avatar_url` varchar(500) DEFAULT NULL,
-  `password` varchar(200),
+  `avatar_url` varchar(300) DEFAULT NULL,
+  `password` varchar(200) NOT NULL,
+  `total_number_of_hours` INT NOT NULL,
+  `remain_number_of_hours` INT NOT NULL,
   `status` varchar(100) NOT NULL,
   `created_at` datetime NOT NULL DEFAULT NOW(),
   `updated_at` datetime NOT NULL DEFAULT NOW(),
-  `joiningDate` datetime DEFAULT NOW(),
-  `vertification_token` char(255),
-  `token` char(255),
+  `token` char(255) NOT NULL,
   `role_id` int NOT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_user_role` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`)
@@ -49,27 +49,23 @@ CREATE TABLE `skill` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) DEFAULT NULL,
   `category_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
+  PRIMARY KEY (`id`),  
   CONSTRAINT `fk_skill_category` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;	
 
 CREATE TABLE `account_has_skill` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `account_id` int(11) NOT NULL,
   `skill_id` int(11) NOT NULL,
-  PRIMARY KEY(`id`),
+  PRIMARY KEY(`id`), 
   CONSTRAINT `fk_account_has_skill_account` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`) ON DELETE CASCADE ,
   CONSTRAINT `fk_account_has_skill_skill` FOREIGN KEY (`skill_id`) REFERENCES `skill` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `day_off_type` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT, 
   `type` varchar(20) NOT NULL,
-   `quota` int(11) NOT NULL,
-   `remaining_time` int(11) NOT NULL,
-  `account_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`), 
-  CONSTRAINT `fk_day_off_type_account` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`) ON DELETE CASCADE
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -82,11 +78,10 @@ CREATE TABLE `day_off` (
   `created_at` datetime NOT NULL DEFAULT NOW(),
   `updated_at` datetime NOT NULL DEFAULT NOW(),
   `number_of_hours` int(11) NOT NULL,
-  `status` varchar(45) NOT NULL,
+  `status` varchar(45) NOT NULL,  
   `token` char(255) NOT NULL,
   `account_id` int(11) NOT NULL,
-  `type` varchar(100) NOT NULL,
-  `type_id` int(11),
+  `type_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_day_off_account` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`) ON DELETE CASCADE ,
   CONSTRAINT `fk_day_off_type` FOREIGN KEY (`type_id`) REFERENCES `day_off_type` (`id`) ON DELETE CASCADE
@@ -112,20 +107,14 @@ INSERT INTO `role`(name) VALUES ("ADMIN");
 INSERT INTO `role`(name) VALUES ("CLERK");
 INSERT INTO `role`(name) VALUES ("USER");
 
-INSERT INTO `account`(email, first_name, last_name, password, status, token, role_id)
-VALUES("helpdesk@novahub.vn", "desk", "help", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", "ACTIVE", "abcdefghijk123456789", 1);
-INSERT INTO `account`(email, first_name, last_name, password, status, token, role_id)
-<<<<<<< HEAD
-VALUES("huong@novahub.vn", "mai", "huong", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", "ACTIVE", "abcdefghijk123456789", 2);
-INSERT INTO `account`(email, first_name, last_name, password, status, token, role_id)
-VALUES("ngoc@novahub.vn", "bui lam", "quang ngoc", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", "ACTIVE", "abcdefghijk123456789", 3);
-=======
-VALUES("ngocbui@novahub.vn", "mai", "huong", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", "ACTIVE", "abcdefghijk123456789", 2);
-INSERT INTO `account`(email, first_name, last_name, password, status, token, role_id)
-VALUES("huong@novahub.vn", "bui lam", "quang ngoc", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", "ACTIVE", "abcdefghijk123456789", 3);
->>>>>>> HD-25-ngoc
-INSERT INTO `account`(email, first_name, last_name, password, status, token, role_id)
-VALUES("hai@novahub.vn", "bui lam", "thanh hai", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", "ACTIVE", "abcdefghijk123456789", 3);
+INSERT INTO `account`(email, first_name, last_name, password, total_number_of_hours, remain_number_of_hours, status, token, role_id) 
+VALUES("admin@gmail.com", "ngoc", "bui", "password", 14, 14, "NONE", "abcdefghijk123456789", 1);
+INSERT INTO `account`(email, first_name, last_name, password, total_number_of_hours, remain_number_of_hours, status, token, role_id) 
+VALUES("huong@gmail.com", "mai", "huong", "password", 14, 14, "NONE", "abcdefghijk123456789", 1);
+INSERT INTO `account`(email, first_name, last_name, password, total_number_of_hours, remain_number_of_hours, status, token, role_id) 
+VALUES("ngoc@gmail.com", "bui lam", "quang ngoc", "password", 14, 14, "NONE", "abcdefghijk123456789", 3);
+INSERT INTO `account`(email, first_name, last_name, password, total_number_of_hours, remain_number_of_hours, status, token, role_id) 
+VALUES("hai@gmail.com", "bui lam", "thanh hai", "password", 14, 14, "NONE", "abcdefghijk123456789", 3); 
 
 INSERT INTO `category`(name) VALUES
 ("Programming Language"),
