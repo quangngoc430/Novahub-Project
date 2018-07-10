@@ -1,6 +1,8 @@
 package vn.novahub.helpdesk.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import vn.novahub.helpdesk.validation.GroupCreateSkill;
+import vn.novahub.helpdesk.validation.GroupUpdateSkill;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -21,13 +23,13 @@ public class Skill implements Serializable {
     @Column(name = "id")
     private long id;
 
-    @NotEmpty(message = "Name is not empty")
+    @NotEmpty(message = "Name is not empty", groups = {GroupCreateSkill.class, GroupUpdateSkill.class})
     @Column(name = "name")
     private String name;
 
-    @NotNull(message = "Level is not null")
-    @Min(value = 1, message = "Level must be greater than or equal to 1")
-    @Max(value = 10, message = "Level must be less than or equal to 10")
+    @NotNull(message = "Level is not null", groups = {GroupCreateSkill.class, GroupUpdateSkill.class})
+    @Min(value = 1, message = "Level must be greater than or equal to 1", groups = {GroupCreateSkill.class, GroupUpdateSkill.class})
+    @Max(value = 10, message = "Level must be less than or equal to 10", groups = {GroupCreateSkill.class, GroupUpdateSkill.class})
     @Column(name = "level")
     private long level;
 
@@ -43,10 +45,12 @@ public class Skill implements Serializable {
     @Column(name = "category_id")
     private long categoryId;
 
+    @Transient
     @JsonIgnore
     @OneToMany
     private List<AccountHasSkill> accountHasSkillList;
 
+    @Transient
     @ManyToOne
     @JoinColumn(name = "category_id", insertable = false, updatable = false)
     private Category category;

@@ -14,6 +14,8 @@ import vn.novahub.helpdesk.model.Skill;
 import vn.novahub.helpdesk.repository.AccountHasSkillRepository;
 import vn.novahub.helpdesk.repository.CategoryRepository;
 import vn.novahub.helpdesk.repository.SkillRepository;
+import vn.novahub.helpdesk.validation.GroupCreateSkill;
+import vn.novahub.helpdesk.validation.GroupUpdateSkill;
 import vn.novahub.helpdesk.validation.SkillValidation;
 
 import javax.validation.groups.Default;
@@ -65,14 +67,15 @@ public class SkillServiceImpl implements SkillService {
         if(!categoryRepository.existsById(categoryId))
             throw new CategoryNotFoundException(categoryId);
 
-        if(skillRepository.existsByName(skill.getName()))
+        skill.setCategoryId(categoryId);
+        skillValidation.validate(skill, GroupCreateSkill.class);
+
+        if(skillRepository.existsByNameAndLevel(skill.getName(), skill.getLevel()))
             throw new SkillIsExistException(skill.getName());
 
         skill.setCategoryId(categoryId);
         skill.setCreatedAt(new Date());
         skill.setUpdatedAt(new Date());
-
-        skillValidation.validate(skill, Default.class);
 
         skill = skillRepository.save(skill);
         skill.setCategory(categoryRepository.getById(categoryId));
@@ -109,21 +112,20 @@ public class SkillServiceImpl implements SkillService {
     @Override
     public Skill updateByCategoryIdAndSkillId(Skill skill, long categoryId, long skillId) throws SkillNotFoundException, SkillValidationException, SkillIsExistException {
 
-        skill.setCategoryId(categoryId);
-
         Skill oldSkill = skillRepository.getByIdAndCategoryId(skillId, categoryId);
 
         if(oldSkill == null)
             throw new SkillNotFoundException(skillId, categoryId);
 
-        if(!oldSkill.equals(skill) && skillRepository.existsByName(skill.getName()))
+        skill.setCategoryId(categoryId);
+        skillValidation.validate(skill, GroupUpdateSkill.class);
+
+        if(!oldSkill.equals(skill) && skillRepository.existsByNameAndLevel(skill.getName(), skill.getLevel()))
             throw new SkillIsExistException(skill.getName());
 
         oldSkill.setName(skill.getName());
         oldSkill.setLevel(skill.getLevel());
         oldSkill.setUpdatedAt(new Date());
-
-        skillValidation.validate(skill, Default.class);
 
         return skillRepository.save(oldSkill);
     }

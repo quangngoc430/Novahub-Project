@@ -8,8 +8,6 @@ import vn.novahub.helpdesk.exception.SkillNotFoundException;
 import vn.novahub.helpdesk.exception.SkillValidationException;
 import vn.novahub.helpdesk.model.Skill;
 
-import javax.servlet.http.HttpServletRequest;
-
 public interface SkillService {
 
     Skill create(Skill skill) throws SkillValidationException;

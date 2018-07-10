@@ -31,6 +31,7 @@ public class Category implements Serializable {
     @Column(name = "updated_at")
     private Date updatedAt;
 
+    @Transient
     @JsonIgnore
     @OneToMany
     private List<Skill> skillList;
