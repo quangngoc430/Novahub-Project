@@ -5,15 +5,21 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import vn.novahub.helpdesk.exception.CategoryNotFoundException;
+import vn.novahub.helpdesk.exception.SkillIsExistException;
 import vn.novahub.helpdesk.exception.SkillNotFoundException;
+import vn.novahub.helpdesk.exception.SkillValidationException;
 import vn.novahub.helpdesk.model.Account;
 import vn.novahub.helpdesk.model.AccountHasSkill;
 import vn.novahub.helpdesk.model.Skill;
 import vn.novahub.helpdesk.repository.AccountHasSkillRepository;
 import vn.novahub.helpdesk.repository.CategoryRepository;
 import vn.novahub.helpdesk.repository.SkillRepository;
+import vn.novahub.helpdesk.validation.GroupCreateSkill;
+import vn.novahub.helpdesk.validation.GroupUpdateSkill;
+import vn.novahub.helpdesk.validation.SkillValidation;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.validation.groups.Default;
+import java.util.Date;
 
 @Service
 public class SkillServiceImpl implements SkillService {
@@ -30,12 +36,17 @@ public class SkillServiceImpl implements SkillService {
     @Autowired
     private AccountService accountService;
 
+    @Autowired
+    private SkillValidation skillValidation;
+
     @Override
-    public Skill create(Skill skill, HttpServletRequest request) {
+    public Skill create(Skill skill) throws SkillValidationException {
+
+        skillValidation.validate(skill, Default.class);
 
         Account accountLogin = accountService.getAccountLogin();
 
-        Skill oldSkill = skillRepository.findByName(skill.getName().toLowerCase());
+        Skill oldSkill = skillRepository.getByName(skill.getName());
 
         if(oldSkill == null) {
             skill.setName(skill.getName().toLowerCase());
@@ -51,27 +62,35 @@ public class SkillServiceImpl implements SkillService {
     }
 
     @Override
-    public Skill createByCategoryId(Skill skill, long categoryId) {
-        Skill oldSkill = skillRepository.findByName(skill.getName());
+    public Skill createByCategoryId(Skill skill, long categoryId) throws SkillValidationException, SkillIsExistException, CategoryNotFoundException {
 
-        if(oldSkill != null){
-            return oldSkill;
-        }
+        if(!categoryRepository.existsById(categoryId))
+            throw new CategoryNotFoundException(categoryId);
 
-        skill.setName(skill.getName().toLowerCase());
         skill.setCategoryId(categoryId);
+        skillValidation.validate(skill, GroupCreateSkill.class);
 
-        return skillRepository.save(skill);
+        if(skillRepository.existsByNameAndLevel(skill.getName(), skill.getLevel()))
+            throw new SkillIsExistException(skill.getName());
+
+        skill.setCategoryId(categoryId);
+        skill.setCreatedAt(new Date());
+        skill.setUpdatedAt(new Date());
+
+        skill = skillRepository.save(skill);
+        skill.setCategory(categoryRepository.getById(categoryId));
+
+        return skill;
     }
 
     @Override
-    public Skill updateBySkillId(Skill skill, long skillId, HttpServletRequest request) {
+    public Skill updateBySkillId(Skill skill, long skillId) {
         Account accountLogin = accountService.getAccountLogin();
 
-        Skill oldSkill = skillRepository.findByName(skill.getName().toLowerCase());
+        Skill oldSkill = skillRepository.getByName(skill.getName());
 
         if(oldSkill == null){
-            skill.setName(skill.getName().toLowerCase());
+            skill.setName(skill.getName());
             Skill newSkill = skillRepository.save(skill);
 
             AccountHasSkill accountHasSkill = accountHasSkillRepository.findByAccountIdAndSkillId(accountLogin.getId(), skillId);
@@ -91,16 +110,22 @@ public class SkillServiceImpl implements SkillService {
     }
 
     @Override
-    public Skill updateByCategoryIdAndSkillId(Skill skill, long categoryId, long skillId) throws CategoryNotFoundException, SkillNotFoundException {
-        if(!categoryRepository.existsById(categoryId))
-            throw new CategoryNotFoundException(categoryId);
+    public Skill updateByCategoryIdAndSkillId(Skill skill, long categoryId, long skillId) throws SkillNotFoundException, SkillValidationException, SkillIsExistException {
 
-        Skill oldSkill = skillRepository.findByIdAndCategoryId(skillId, categoryId);
+        Skill oldSkill = skillRepository.getByIdAndCategoryId(skillId, categoryId);
 
         if(oldSkill == null)
-            throw new SkillNotFoundException(skillId);
+            throw new SkillNotFoundException(skillId, categoryId);
+
+        skill.setCategoryId(categoryId);
+        skillValidation.validate(skill, GroupUpdateSkill.class);
+
+        if(!oldSkill.equals(skill) && skillRepository.existsByNameAndLevel(skill.getName(), skill.getLevel()))
+            throw new SkillIsExistException(skill.getName());
 
         oldSkill.setName(skill.getName());
+        oldSkill.setLevel(skill.getLevel());
+        oldSkill.setUpdatedAt(new Date());
 
         return skillRepository.save(oldSkill);
     }
@@ -116,20 +141,22 @@ public class SkillServiceImpl implements SkillService {
     }
 
     @Override
-    public Skill getByCategoryIdAndSkillId(long categoryId, long skillId) {
-        return skillRepository.findByIdAndCategoryId(skillId, categoryId);
+    public Skill getByCategoryIdAndSkillId(long categoryId, long skillId) throws SkillNotFoundException {
+        Skill skill = skillRepository.getByIdAndCategoryId(skillId, categoryId);
+
+        if(skill == null)
+            throw new SkillNotFoundException(skillId, categoryId);
+
+        return skill;
     }
 
     @Override
-    public void deteleByCategoryIdAndSkillId(long categoryId, long skillId) throws CategoryNotFoundException, SkillNotFoundException {
-
-        if(!categoryRepository.existsById(categoryId))
-            throw new CategoryNotFoundException(categoryId);
+    public void deleteByCategoryIdAndSkillId(long categoryId, long skillId) throws SkillNotFoundException {
 
         if(!skillRepository.existsByIdAndCategoryId(skillId, categoryId))
-            throw new SkillNotFoundException(skillId);
+            throw new SkillNotFoundException(skillId, categoryId);
 
-        skillRepository.deleteById(skillId);
+        skillRepository.deleteByIdAndCategoryId(skillId, categoryId);
     }
 
     @Override
@@ -141,14 +168,11 @@ public class SkillServiceImpl implements SkillService {
     }
 
     @Override
-    public Page<Skill> getAllByName(String nameSkill, Pageable pageable, HttpServletRequest request) {
+    public Page<Skill> getAllByName(String nameSkill, Pageable pageable) {
         nameSkill = "%" + nameSkill + "%";
 
         Account accountLogin = accountService.getAccountLogin();
 
         return skillRepository.getAllSkillsByAccountIdAndNameLike(accountLogin.getId(), nameSkill, pageable);
     }
-
-
-
 }
