@@ -11,6 +11,8 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import java.util.Arrays;
+
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
@@ -22,7 +24,8 @@ public class SwaggerConfig {
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("vn.novahub.helpdesk.controller"))
                 .paths(PathSelectors.any())
-                .build();
+                .build()
+                .securitySchemes(Arrays.asList());
     }
 
     private ApiInfo getApiInfo() {

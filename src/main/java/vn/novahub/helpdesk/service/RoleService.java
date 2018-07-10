@@ -11,5 +11,5 @@ public interface RoleService {
 
     Role getByName(String roleName) throws RoleNotFoundException;
 
-    Page<Role> getAll(Pageable pageable);
+    Page<Role> getAll(String roleName, Pageable pageable);
 }
