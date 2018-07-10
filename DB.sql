@@ -50,6 +50,7 @@ DROP TABLE IF EXISTS `skill`;
 CREATE TABLE `skill` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) DEFAULT NULL,
+  `level` int NOT NULL,
   `category_id` int(11) NOT NULL,
   `level` int NOT NULL,
   `created_at` datetime NOT NULL DEFAULT NOW(),
