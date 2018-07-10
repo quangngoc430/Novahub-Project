@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import vn.novahub.helpdesk.exception.CategoryNotFoundException;
 import vn.novahub.helpdesk.exception.SkillIsExistException;
 import vn.novahub.helpdesk.exception.SkillNotFoundException;
 import vn.novahub.helpdesk.exception.SkillValidationException;
@@ -65,7 +66,7 @@ public class SkillController {
     @PutMapping(path = "/skills/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Skill> updateByAdmin(@PathVariable("id") long skillId,
                                                @RequestBody Skill skill,
-                                               HttpServletRequest request) throws SkillIsExistException, SkillValidationException, SkillNotFoundException {
+                                               HttpServletRequest request) throws SkillIsExistException, SkillValidationException, SkillNotFoundException, CategoryNotFoundException {
         logService.log(request, logger);
 
         return new ResponseEntity<>(skillService.updateByAdmin(skillId, skill), HttpStatus.OK);

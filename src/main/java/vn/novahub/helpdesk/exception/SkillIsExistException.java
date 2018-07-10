@@ -13,4 +13,9 @@ public class SkillIsExistException extends Exception {
     public SkillIsExistException(String name, long categoryId){
         super("SkillIsExistException with name = " + name + " , categoryId = " + categoryId);
     }
+
+    public SkillIsExistException(String name, long level, long categoryId){
+        super("SkillIsExistException with name = " + name + " , level = " + level + " , categoryId = " + categoryId);
+    }
+
 }

@@ -6,11 +6,8 @@ import vn.novahub.helpdesk.exception.CategoryNotFoundException;
 import vn.novahub.helpdesk.exception.SkillIsExistException;
 import vn.novahub.helpdesk.exception.SkillNotFoundException;
 import vn.novahub.helpdesk.exception.SkillValidationException;
-<<<<<<< HEAD
 import vn.novahub.helpdesk.model.Account;
 import vn.novahub.helpdesk.model.Skill;
-
-import javax.servlet.http.HttpServletRequest;
 
 public interface SkillService {
 
@@ -20,20 +17,9 @@ public interface SkillService {
 
     Skill createByAdmin(Skill skill) throws SkillValidationException, SkillIsExistException;
 
-    Skill updateByAdmin(long skillId, Skill skill) throws SkillValidationException, SkillIsExistException, SkillNotFoundException;
-=======
-import vn.novahub.helpdesk.model.Skill;
+    Skill updateByAdmin(long skillId, Skill skill) throws SkillValidationException, SkillIsExistException, SkillNotFoundException, CategoryNotFoundException;
 
-public interface SkillService {
-
-    Skill create(Skill skill) throws SkillValidationException;
-
-    Skill createByCategoryId(Skill skill, long categoryId) throws SkillValidationException, SkillIsExistException, CategoryNotFoundException;
-
-    Skill updateBySkillId(Skill skill, long skillId);
-
-    Skill updateByCategoryIdAndSkillId(Skill skill, long categoryId, long skillId) throws CategoryNotFoundException, SkillNotFoundException, SkillValidationException, SkillIsExistException;
->>>>>>> develop
+    //Skill create(Skill skill) throws SkillValidationException;
 
     void deleteByAdmin(long skillId) throws SkillNotFoundException;
 
@@ -43,15 +29,11 @@ public interface SkillService {
 
     Skill createForAccountLogin(Skill skill) throws SkillValidationException, SkillIsExistException;
 
-<<<<<<< HEAD
     Skill updateForAccountLogin(long skillId, Skill skill) throws SkillValidationException, SkillNotFoundException;
-=======
-    Page<Skill> getAllByName(String name, Pageable pageable);
->>>>>>> develop
 
     void deleteForAccountLogin(long skillId) throws SkillNotFoundException;
 
-    Skill createByCategoryId(Skill skill, long categoryId);
+    Skill createByCategoryId(Skill skill, long categoryId) throws CategoryNotFoundException, SkillValidationException, SkillIsExistException;
 
     Skill updateByCategoryIdAndSkillId(Skill skill, long categoryId, long skillId) throws CategoryNotFoundException, SkillNotFoundException;
 
@@ -59,10 +41,6 @@ public interface SkillService {
 
     Skill getByCategoryIdAndSkillId(long categoryId, long skillId) throws SkillNotFoundException;
 
-<<<<<<< HEAD
-    void deleteByCategoryIdAndSkillId(long categoryId, long skillId) throws CategoryNotFoundException, SkillNotFoundException;
-=======
     void deleteByCategoryIdAndSkillId(long categoryId, long skillId) throws SkillNotFoundException;
->>>>>>> develop
 
 }

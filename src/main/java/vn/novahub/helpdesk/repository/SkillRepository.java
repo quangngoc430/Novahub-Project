@@ -66,4 +66,11 @@ public interface SkillRepository extends PagingAndSortingRepository<Skill, Long>
     boolean existsByName(String email);
 
     boolean existsByNameAndLevel(String name, long level);
+
+    boolean existsByNameAndLevelAndCategoryId(String name, long level, long categoryId);
+
+    Skill getByNameAndLevelAndCategoryId(String name, long level, long categoryId);
+
+    boolean deleteByIdAndCategoryId(long skillId, long categoryId);
+
 }
