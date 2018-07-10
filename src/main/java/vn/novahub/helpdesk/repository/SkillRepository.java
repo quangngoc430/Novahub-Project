@@ -17,16 +17,16 @@ public interface SkillRepository extends PagingAndSortingRepository<Skill, Long>
     Page<Skill> getAllByCategoryId(long categoryId, Pageable pageable);
 
     @Query("FROM Skill skill " +
-           "JOIN AccountHasSkill accountHasSkill ON skill.id = accountHasSkill.skillId " +
-           "WHERE accountHasSkill.accountId = :accountId AND skill.name LIKE :nameSkill")
+            "JOIN AccountHasSkill accountHasSkill ON skill.id = accountHasSkill.skillId " +
+            "WHERE accountHasSkill.accountId = :accountId AND skill.name LIKE :nameSkill")
     Page<Skill> getAllSkillsByAccountIdAndNameLike(@Param("accountId") long accountId,
                                                    @Param("name") String nameSkill,
                                                    Pageable pageable);
 
     @Query("FROM Skill skill JOIN AccountHasSkill accountHasSkill ON skill.id = accountHasSkill.skillId WHERE accountHasSkill.accountId = :accountId AND skill.categoryId = :categoryId")
     Page<Skill> getAllByAccountId(@Param("accountId") long accountId,
-                                                          @Param("categoryId") long categoryId,
-                                                          Pageable pageable);
+                                  @Param("categoryId") long categoryId,
+                                  Pageable pageable);
 
     Page<Skill> getAllByNameLike(String name, Pageable pageable);
 
@@ -62,4 +62,8 @@ public interface SkillRepository extends PagingAndSortingRepository<Skill, Long>
            "WHERE account.id = :accountId AND accountHasSkill.skillId = :skillId")
     Skill getByAccountIdAndSkillId(@Param("accountId") long accountId,
                                    @Param("skillId") long skillId);
+
+    boolean existsByName(String email);
+
+    boolean existsByNameAndLevel(String name, long level);
 }

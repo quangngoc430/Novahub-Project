@@ -12,4 +12,8 @@ public interface CategoryRepository extends PagingAndSortingRepository<Category,
     Page<Category> getAllByNameLike(String name, Pageable pageable);
 
     Category getById(long id);
+
+    boolean existsByName(String name);
+
+    Category getByName(String name);
 }

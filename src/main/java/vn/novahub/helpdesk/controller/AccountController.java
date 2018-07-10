@@ -37,7 +37,7 @@ public class AccountController {
     @PreAuthorize("hasRole('ROLE_ANONYMOUS')")
     @PostMapping(path = "/login", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Account> login(@RequestBody Account account,
-                                      HttpServletRequest request) throws AccountInvalidException, AccountLockedException, AccountValidationException, AccountInactiveException {
+                                         HttpServletRequest request) throws AccountInvalidException, AccountLockedException, AccountValidationException, AccountInactiveException {
         logService.log(request, logger);
 
         Account accountLogin = accountService.login(account, request);
@@ -80,8 +80,8 @@ public class AccountController {
     @PreAuthorize("isAuthenticated()")
     @PutMapping(path = "/users/me", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<JsonNode> updateForAccountLogin(@RequestParam(value = "checkPasswordNull", defaultValue = "false") String checkPasswordNull,
-                                                         @RequestBody Account account,
-                                                         HttpServletRequest request) throws AccountPasswordNotEqualException, AccountValidationException {
+                                                          @RequestBody Account account,
+                                                          HttpServletRequest request) throws AccountPasswordNotEqualException, AccountValidationException {
         logService.log(request, logger);
 
         Account accountUpdated = accountService.update(account);
@@ -110,8 +110,9 @@ public class AccountController {
     @PermitAll
     @GetMapping(path = "/users/{id}/active", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Void> activate(@PathVariable(value = "id") long accountId,
-                                          @RequestParam(value = "token", defaultValue = "") String verficationToken,
-                                          HttpServletRequest request){
+                                         @RequestParam(value = "token", defaultValue = "") String verficationToken,
+                                         HttpServletRequest request){
+
         logService.log(request, logger);
 
         boolean result = accountService.activateAccount(accountId, verficationToken);

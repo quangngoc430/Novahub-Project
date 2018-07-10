@@ -1,9 +1,7 @@
 package vn.novahub.helpdesk.validation;
 
 import org.springframework.stereotype.Component;
-import vn.novahub.helpdesk.exception.AccountValidationException;
 import vn.novahub.helpdesk.exception.CategoryValidationException;
-import vn.novahub.helpdesk.model.Account;
 import vn.novahub.helpdesk.model.Category;
 
 import javax.validation.*;
