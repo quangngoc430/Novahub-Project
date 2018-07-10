@@ -81,7 +81,7 @@ public class AccountExceptionHandler {
         apiError.setTimestamp(Instant.now());
         apiError.setStatus(HttpStatus.NOT_FOUND.value());
         HashMap<String, String> errors = new HashMap<>();
-        errors.put(MESSAGE, "Invalid email or passowrd");
+        errors.put(MESSAGE, "Invalid email or password");
         apiError.setErrors(errors);
         apiError.setPath(request.getRequestURI());
         apiError.setMessage(ex.getMessage());

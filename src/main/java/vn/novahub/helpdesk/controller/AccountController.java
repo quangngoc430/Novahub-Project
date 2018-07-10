@@ -36,10 +36,14 @@ public class AccountController {
     @Autowired
     private LogService logService;
 
-    @PreAuthorize("hasRole('ROLE_ANONYMOUS')")
-    @PostMapping(path = "/login", produces = {MediaType.APPLICATION_JSON_VALUE})
+
     @ApiOperation(value = "Login user", tags = "Users Rest Controller")
-    @ApiResponses(value = { @ApiResponse(code = 200, message = "Success")})
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
+                            @ApiResponse(code = 403, message = "Inactive user"),
+                            @ApiResponse(code = 404, message = "Invalid email or password"),
+                            @ApiResponse(code = 423, message = "User is locked")})
+    @PermitAll
+    @PostMapping(path = "/login", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Account> login(@RequestBody Account account,
                                          HttpServletRequest request) throws AccountInvalidException, AccountLockedException, AccountValidationException, AccountInactiveException {
         logService.log(request, logger);

@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.novahub.helpdesk.exception.RoleNotFoundException;
+import vn.novahub.helpdesk.model.ApiError;
 import vn.novahub.helpdesk.model.Role;
 import vn.novahub.helpdesk.service.LogService;
 import vn.novahub.helpdesk.service.RoleService;
@@ -35,7 +36,8 @@ public class RoleController {
     @GetMapping(path = "/roles/{id}")
     @ApiOperation(value = "Get role by Id", tags = "Roles Rest Controller")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
-                            @ApiResponse(code = 404, message = "Role not found")})
+                            @ApiResponse(code = 404, message = "Role not found"),
+                            @ApiResponse(code = 403, message = "Access denied")})
     public ResponseEntity<Role> get(@PathVariable("id") long roleId,
                                     HttpServletRequest request) throws RoleNotFoundException {
         logService.log(request, logger);
@@ -48,7 +50,8 @@ public class RoleController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping(path = "/roles")
     @ApiOperation(value = "Get all roles", tags = "Role Rest Controller")
-    @ApiResponses(value = { @ApiResponse(code = 200, message = "Success")})
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
+                            @ApiResponse(code = 403, message = "Access denied")})
     @ApiImplicitParams(
             value = {
                     @ApiImplicitParam(name = "page", value = "page number start from 0", dataType = "integer",
