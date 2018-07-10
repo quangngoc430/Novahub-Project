@@ -1,6 +1,7 @@
 package vn.novahub.helpdesk.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -8,14 +9,12 @@ import vn.novahub.helpdesk.exception.CategoryNotFoundException;
 import vn.novahub.helpdesk.exception.SkillNotFoundException;
 import vn.novahub.helpdesk.model.Account;
 import vn.novahub.helpdesk.model.AccountHasSkill;
-import vn.novahub.helpdesk.model.Category;
 import vn.novahub.helpdesk.model.Skill;
 import vn.novahub.helpdesk.repository.AccountHasSkillRepository;
 import vn.novahub.helpdesk.repository.CategoryRepository;
 import vn.novahub.helpdesk.repository.SkillRepository;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 
 @Service
 public class SkillServiceImpl implements SkillService {
@@ -35,14 +34,13 @@ public class SkillServiceImpl implements SkillService {
     @Override
     public Skill create(Skill skill, HttpServletRequest request) {
 
-        Account accountLogin = accountService.getAccountLogin(request);
+        Account accountLogin = accountService.getAccountLogin();
 
         Skill oldSkill = skillRepository.findByName(skill.getName().toLowerCase());
 
         if(oldSkill == null) {
             skill.setName(skill.getName().toLowerCase());
-            Skill newSkill = skillRepository.save(skill);
-            return newSkill;
+            return skillRepository.save(skill);
         } else {
             AccountHasSkill accountHasSkill = new AccountHasSkill();
             accountHasSkill.setAccountId(accountLogin.getId());
@@ -69,7 +67,7 @@ public class SkillServiceImpl implements SkillService {
 
     @Override
     public Skill updateBySkillId(Skill skill, long skillId, HttpServletRequest request) {
-        Account accountLogin = accountService.getAccountLogin(request);
+        Account accountLogin = accountService.getAccountLogin();
 
         Skill oldSkill = skillRepository.findByName(skill.getName().toLowerCase());
 
@@ -104,14 +102,13 @@ public class SkillServiceImpl implements SkillService {
             throw new SkillNotFoundException(skillId);
 
         oldSkill.setName(skill.getName());
-        Skill skillUpdated = skillRepository.save(oldSkill);
 
-        return skillUpdated;
+        return skillRepository.save(oldSkill);
     }
 
     @Override
     public Skill getBySkillId(long skillId) throws SkillNotFoundException {
-        Skill skill = skillRepository.findById(skillId).get();
+        Skill skill = skillRepository.getById(skillId);
 
         if(skill == null)
             throw new SkillNotFoundException(skillId);
@@ -148,11 +145,9 @@ public class SkillServiceImpl implements SkillService {
     public Page<Skill> getAllByName(String nameSkill, Pageable pageable, HttpServletRequest request) {
         nameSkill = "%" + nameSkill + "%";
 
-        Account accountLogin = accountService.getAccountLogin(request);
+        Account accountLogin = accountService.getAccountLogin();
 
-        Page<Skill> skillPage = skillRepository.getAllSkillsByAccountIdAndNameLike(accountLogin.getId(), nameSkill, pageable);
-
-        return skillPage;
+        return skillRepository.getAllSkillsByAccountIdAndNameLike(accountLogin.getId(), nameSkill, pageable);
     }
 
 

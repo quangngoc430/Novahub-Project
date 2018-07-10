@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 import vn.novahub.helpdesk.model.Skill;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 
 @Repository
 @Transactional
@@ -26,8 +25,8 @@ public interface SkillRepository extends PagingAndSortingRepository<Skill, Long>
 
     @Query("FROM Skill skill JOIN AccountHasSkill accountHasSkill ON skill.id = accountHasSkill.skillId WHERE accountHasSkill.accountId = :accountId AND skill.categoryId = :categoryId")
     Page<Skill> getAllByAccountId(@Param("accountId") long accountId,
-                                                          @Param("categoryId") long categoryId,
-                                                          Pageable pageable);
+                                  @Param("categoryId") long categoryId,
+                                  Pageable pageable);
 
     @Query("FROM Skill skill WHERE skill.name LIKE :name")
     Page<Skill> getAllSkillsByNameLike(@Param("name") String name,
@@ -42,5 +41,7 @@ public interface SkillRepository extends PagingAndSortingRepository<Skill, Long>
     void deleteByIdAndCategoryId(long skillId, long categoryId);
 
     boolean existsByIdAndCategoryId(long skillId, long categoryId);
+
+    Skill getById(long skillId);
 
 }
