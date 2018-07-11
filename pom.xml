@@ -80,17 +80,12 @@
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>
 		</dependency>
-<<<<<<< HEAD
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-mail</artifactId>
-        </dependency>
-=======
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
->>>>>>> HD-25-ngoc
+
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpcore</artifactId>
@@ -104,15 +99,9 @@
 			<artifactId>fluent-hc</artifactId>
 		</dependency>
 		<dependency>
-<<<<<<< HEAD
-		<groupId>com.sendgrid</groupId>
-		<artifactId>sendgrid-java</artifactId>
-		<version>4.1.2</version>
-=======
 			<groupId>com.sendgrid</groupId>
 			<artifactId>sendgrid-java</artifactId>
 			<version>4.1.2</version>
->>>>>>> HD-25-ngoc
 		</dependency>
 	</dependencies>
 

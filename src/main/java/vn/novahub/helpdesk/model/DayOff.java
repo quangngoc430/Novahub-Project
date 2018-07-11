@@ -42,6 +42,9 @@ public class DayOff {
     @Column(name = "type")
     private String type;
 
+    @Column(name = "type_id")
+    private long typeId;
+
     @ManyToOne(fetch = FetchType.EAGER, targetEntity = DayOffType.class)
     @JoinColumn(name = "type_id", insertable = false, updatable = false)
     private DayOffType dayOffType;
@@ -141,6 +144,14 @@ public class DayOff {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public long getTypeId() {
+        return typeId;
+    }
+
+    public void setTypeId(long typeId) {
+        this.typeId = typeId;
     }
 
     public DayOffType getDayOffType() {

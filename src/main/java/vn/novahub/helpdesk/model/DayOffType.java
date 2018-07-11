@@ -14,6 +14,9 @@ public class DayOffType {
     @Column(name = "type")
     private String type;
 
+    @Column(name = "year")
+    private int year;
+
     @Column(name = "quota")
     private long quota;
 
@@ -45,6 +48,14 @@ public class DayOffType {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
     }
 
     public long getQuota() {
