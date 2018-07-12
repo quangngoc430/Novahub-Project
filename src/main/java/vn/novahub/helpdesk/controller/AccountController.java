@@ -3,8 +3,6 @@ package vn.novahub.helpdesk.controller;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import vn.novahub.helpdesk.exception.*;
 import vn.novahub.helpdesk.model.Account;
 import vn.novahub.helpdesk.service.AccountService;
-import vn.novahub.helpdesk.service.LogService;
 
 import javax.annotation.security.PermitAll;
 import javax.mail.MessagingException;
@@ -26,20 +23,13 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping(path = "/api")
 public class AccountController {
 
-    private static final Logger logger = LoggerFactory.getLogger(AccountController.class);
-
     @Autowired
     private AccountService accountService;
-
-    @Autowired
-    private LogService logService;
 
     @PreAuthorize("hasRole('ROLE_ANONYMOUS')")
     @PostMapping(path = "/login", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Account> login(@RequestBody Account account,
-                                      HttpServletRequest request) throws AccountInvalidException, AccountLockedException, AccountValidationException, AccountInactiveException {
-        logService.log(request, logger);
-
+                                         HttpServletRequest request) throws AccountInvalidException, AccountLockedException, AccountValidationException, AccountInactiveException {
         Account accountLogin = accountService.login(account, request);
 
         return new ResponseEntity<>(accountLogin, HttpStatus.OK);
@@ -48,10 +38,7 @@ public class AccountController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping(path = "/users", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Page<Account>> getAll(@RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
-                                                HttpServletRequest request,
                                                 Pageable pageable){
-        logService.log(request, logger);
-
         Page<Account> accounts = accountService.getAll(keyword, pageable);
 
         return new ResponseEntity<>(accounts, HttpStatus.OK);
@@ -59,10 +46,7 @@ public class AccountController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping(path = "/users/me", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<JsonNode> getAccountLogin(@RequestParam(value = "checkPasswordNull", defaultValue = "false") String checkPasswordNull,
-                                                    HttpServletRequest request){
-        logService.log(request, logger);
-
+    public ResponseEntity<JsonNode> getAccountLogin(@RequestParam(value = "checkPasswordNull", defaultValue = "false") String checkPasswordNull){
         Account account = accountService.getAccountLogin();
 
         ObjectMapper mapper = new ObjectMapper();
@@ -78,10 +62,7 @@ public class AccountController {
     @PreAuthorize("isAuthenticated()")
     @PutMapping(path = "/users/me", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<JsonNode> updateForAccountLogin(@RequestParam(value = "checkPasswordNull", defaultValue = "false") String checkPasswordNull,
-                                                         @RequestBody Account account,
-                                                         HttpServletRequest request) throws AccountPasswordNotEqualException, AccountValidationException {
-        logService.log(request, logger);
-
+                                                          @RequestBody Account account) throws AccountPasswordNotEqualException, AccountValidationException {
         Account accountUpdated = accountService.update(account);
 
         ObjectMapper mapper = new ObjectMapper();
@@ -96,10 +77,7 @@ public class AccountController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping(path = "/users/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Account> get(@PathVariable(value = "id") long accountId,
-                                       HttpServletRequest request) throws AccountNotFoundException {
-        logService.log(request, logger);
-
+    public ResponseEntity<Account> get(@PathVariable(value = "id") long accountId) throws AccountNotFoundException {
         Account account = accountService.get(accountId);
 
         return new ResponseEntity<>(account, HttpStatus.OK);
@@ -108,10 +86,7 @@ public class AccountController {
     @PermitAll
     @GetMapping(path = "/users/{id}/active", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Void> activate(@PathVariable(value = "id") long accountId,
-                                          @RequestParam(value = "token", defaultValue = "") String verficationToken,
-                                          HttpServletRequest request){
-        logService.log(request, logger);
-
+                                         @RequestParam(value = "token", defaultValue = "") String verficationToken){
         boolean result = accountService.activateAccount(accountId, verficationToken);
 
         if(!result)
@@ -122,10 +97,7 @@ public class AccountController {
 
     @PermitAll
     @PostMapping(path = "/users", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Account> create(@RequestBody Account account,
-                                          HttpServletRequest request) throws AccountIsExistException, RoleNotFoundException, AccountValidationException, MessagingException {
-        logService.log(request, logger);
-
+    public ResponseEntity<Account> create(@RequestBody Account account) throws AccountIsExistException, RoleNotFoundException, AccountValidationException, MessagingException {
         Account newAccount = accountService.create(account);
 
         return new ResponseEntity<>(newAccount, HttpStatus.OK);
@@ -134,10 +106,7 @@ public class AccountController {
     @PreAuthorize("(hasRole('ROLE_ADMIN') and (@accountServiceImpl.isAccountLogin(#accountId) == false))")
     @PutMapping(path = "/users/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Account> updateForAdmin(@PathVariable("id") long accountId,
-                                                  @RequestBody Account account,
-                                                  HttpServletRequest request) throws AccountValidationException {
-        logService.log(request, logger);
-
+                                                  @RequestBody Account account) throws AccountValidationException {
         Account accountUpdated = accountService.updatedForAdmin(accountId, account);
 
         return new ResponseEntity<>(accountUpdated, HttpStatus.OK);
@@ -145,10 +114,7 @@ public class AccountController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping(path = "/users/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Void> delete(@PathVariable(value = "id") long accountId,
-                                       HttpServletRequest request) throws AccountNotFoundException {
-        logService.log(request, logger);
-
+    public ResponseEntity<Void> delete(@PathVariable(value = "id") long accountId) throws AccountNotFoundException {
         accountService.delete(accountId);
 
         return new ResponseEntity<>(HttpStatus.OK);

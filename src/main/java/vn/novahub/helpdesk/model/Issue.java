@@ -1,9 +1,12 @@
 package vn.novahub.helpdesk.model;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import vn.novahub.helpdesk.annotation.IssueStatus;
 import vn.novahub.helpdesk.constant.IssueConstant;
+import vn.novahub.helpdesk.validation.GroupCreateIssue;
+import vn.novahub.helpdesk.validation.GroupUpdateIssue;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -20,24 +23,26 @@ public class Issue implements Serializable {
     @Column(name = "id")
     private long id;
 
-    @NotEmpty(message = "Title is not empty")
+    @NotEmpty(message = "Title is not empty", groups = {GroupCreateIssue.class, GroupUpdateIssue.class})
     @Column(name = "title")
     private String title;
 
-    @NotEmpty(message = "Content is not empty")
+    @NotEmpty(message = "Content is not empty", groups = {GroupCreateIssue.class, GroupUpdateIssue.class})
     @Column(name = "content")
     private String content;
 
     @IssueStatus(message = "Status does not match any statuses",
-                 statuses = {IssueConstant.STATUS_PENDING, IssueConstant.STATUS_APPROVE, IssueConstant.STATUS_APPROVE})
+            statuses = {IssueConstant.STATUS_PENDING, IssueConstant.STATUS_APPROVE, IssueConstant.STATUS_APPROVE})
     @NotEmpty(message = "Status is not empty")
     @Column(name = "status")
     private String status;
 
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss tt")
     @NotNull(message = "CreateAt is not null")
     @Column(name = "created_at")
     private Date createdAt;
 
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss tt")
     @NotNull(message = "UpdateAt is not null")
     @Column(name = "updated_at")
     private Date updatedAt;
