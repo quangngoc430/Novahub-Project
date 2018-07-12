@@ -36,7 +36,7 @@ public class SkillController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping(path = "/skills/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Skill> findOne(@PathVariable("id") long skillId) throws SkillNotFoundException {
+    public ResponseEntity<Skill> get(@PathVariable("id") long skillId) throws SkillNotFoundException {
         return new ResponseEntity<>(accountSkillService.findOne(skillId), HttpStatus.OK);
     }
 
@@ -70,7 +70,7 @@ public class SkillController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping(path = "/users/me/skills", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Page<Skill>> getAllForAccountLogin(@RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
+    public ResponseEntity<Page<Skill>> getAllByAccountLogin(@RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
                                                              Pageable pageable){
         return new ResponseEntity<>(accountSkillService.getAllByKeywordForAccountLogin(keyword, pageable), HttpStatus.OK);
     }
