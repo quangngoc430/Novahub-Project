@@ -52,11 +52,8 @@ CREATE TABLE `skill` (
   `name` varchar(45) DEFAULT NULL,
   `level` int NOT NULL,
   `category_id` int(11) NOT NULL,
-<<<<<<< HEAD
-=======
   `created_at` datetime NOT NULL DEFAULT NOW(),
   `updated_at` datetime NOT NULL DEFAULT NOW(),
->>>>>>> develop
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_skill_category` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -65,11 +62,8 @@ CREATE TABLE `account_has_skill` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `account_id` int(11) NOT NULL,
   `skill_id` int(11) NOT NULL,
-<<<<<<< HEAD
-=======
   `created_at` datetime NOT NULL DEFAULT NOW(),
   `updated_at` datetime NOT NULL DEFAULT NOW(),
->>>>>>> develop
   PRIMARY KEY(`id`),
   CONSTRAINT `fk_account_has_skill_account` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`) ON DELETE CASCADE ,
   CONSTRAINT `fk_account_has_skill_skill` FOREIGN KEY (`skill_id`) REFERENCES `skill` (`id`) ON DELETE CASCADE
@@ -123,15 +117,9 @@ INSERT INTO `role`(name) VALUES ("USER");
 INSERT INTO `account`(email, first_name, last_name, password, status, token, role_id)
 VALUES("helpdesk@novahub.vn", "desk", "help", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", "ACTIVE", "abcdefghijk123456789", 1);
 INSERT INTO `account`(email, first_name, last_name, password, status, token, role_id)
-<<<<<<< HEAD
 VALUES("ngocbui@novahub.vn", "mai", "huong", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", "ACTIVE", "abcdefghijk123456789", 2);
 INSERT INTO `account`(email, first_name, last_name, password, status, token, role_id)
 VALUES("huong@novahub.vn", "bui lam", "quang ngoc", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", "ACTIVE", "abcdefghijk123456789", 3);
-=======
-VALUES("huong@novahub.vn", "mai", "huong", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", "ACTIVE", "abcdefghijk123456789", 2);
-INSERT INTO `account`(email, first_name, last_name, password, status, token, role_id)
-VALUES("ngoc@novahub.vn", "bui lam", "quang ngoc", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", "ACTIVE", "abcdefghijk123456789", 3);
->>>>>>> develop
 INSERT INTO `account`(email, first_name, last_name, password, status, token, role_id)
 VALUES("hai@novahub.vn", "bui lam", "thanh hai", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", "ACTIVE", "abcdefghijk123456789", 3);
 
