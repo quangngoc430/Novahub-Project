@@ -13,9 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import vn.novahub.helpdesk.exception.*;
 import vn.novahub.helpdesk.model.Category;
 import vn.novahub.helpdesk.model.Skill;
-import vn.novahub.helpdesk.service.CategoryService;
-import vn.novahub.helpdesk.service.LogService;
-import vn.novahub.helpdesk.service.SkillService;
+import vn.novahub.helpdesk.service.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -29,7 +27,10 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @Autowired
-    private SkillService skillService;
+    private AccountSkillService accountSkillService;
+
+    @Autowired
+    private AdminSkillService adminSkillService;
 
     @Autowired
     private LogService logService;
@@ -88,12 +89,12 @@ public class CategoryController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping(path = "/categories/{id}/skills", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Page<Skill>> getAllSkillsOfACategory(@PathVariable("id") long categoryId,
-                                                               @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
-                                                               Pageable pageable,
-                                                               HttpServletRequest request) throws CategoryNotFoundException {
+    public ResponseEntity<Page<Skill>> getAllSkillsByCategoryId(@PathVariable("id") long categoryId,
+                                                                @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
+                                                                Pageable pageable,
+                                                                HttpServletRequest request) throws CategoryNotFoundException {
         logService.log(request, logger);
-        Page<Skill> skillPage = skillService.getAllByCategoryIdAndName(categoryId, keyword, pageable);
+        Page<Skill> skillPage = accountSkillService.getAllByCategoryIdAndName(categoryId, keyword, pageable);
 
         return new ResponseEntity<>(skillPage, HttpStatus.OK);
     }
@@ -104,18 +105,18 @@ public class CategoryController {
                                            @PathVariable("skill_id") long skillId,
                                            HttpServletRequest request) throws SkillNotFoundException {
         logService.log(request, logger);
-        Skill skill = skillService.getByCategoryIdAndSkillId(categoryId, skillId);
+        Skill skill = accountSkillService.getByCategoryIdAndSkillId(categoryId, skillId);
 
         return  new ResponseEntity<>(skill, HttpStatus.OK);
     }
 
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping(path = "/categories/{id}/skills", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Skill> createASkill(@PathVariable("id") long categoryId,
                                               @RequestBody Skill skill,
                                               HttpServletRequest request) throws SkillIsExistException, SkillValidationException, CategoryNotFoundException {
         logService.log(request, logger);
-        Skill newSkill = skillService.createByCategoryId(skill, categoryId);
+        Skill newSkill = adminSkillService.createByCategoryId(skill, categoryId);
 
         return new ResponseEntity<>(newSkill, HttpStatus.OK);
     }
@@ -127,7 +128,7 @@ public class CategoryController {
                                               @RequestBody Skill skill,
                                               HttpServletRequest request) throws CategoryNotFoundException, SkillNotFoundException, SkillValidationException, SkillIsExistException {
         logService.log(request, logger);
-        Skill skillUpdated = skillService.updateByCategoryIdAndSkillId(skill, categoryId, skillId);
+        Skill skillUpdated = adminSkillService.updateByCategoryIdAndSkillId(skill, categoryId, skillId);
 
         return new ResponseEntity<>(skillUpdated, HttpStatus.OK);
     }
@@ -138,7 +139,7 @@ public class CategoryController {
                                              @PathVariable("skill_id") long skillId,
                                              HttpServletRequest request) throws SkillNotFoundException {
         logService.log(request, logger);
-        skillService.deleteByCategoryIdAndSkillId(categoryId, skillId);
+        adminSkillService.deleteByCategoryIdAndSkillId(categoryId, skillId);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
