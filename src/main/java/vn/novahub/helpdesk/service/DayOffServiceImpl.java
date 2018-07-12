@@ -7,6 +7,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import vn.novahub.helpdesk.constant.DayOffConstant;
 import vn.novahub.helpdesk.constant.RoleConstant;
+import vn.novahub.helpdesk.exception.DayOffIsAnsweredException;
+import vn.novahub.helpdesk.exception.DayOffTokenIsNotMatchException;
 import vn.novahub.helpdesk.exception.DayOffTypeIsNotValidException;
 import vn.novahub.helpdesk.model.*;
 import vn.novahub.helpdesk.repository.AccountRepository;
@@ -62,8 +64,44 @@ public class DayOffServiceImpl implements DayOffService{
     }
 
     @Override
-    public void approve(DayOff dayOff) {
-//        dayOff.getDayOffType().subtractRemainingTime(dayOff.getNumberOfHours());
+    public void approve(long dayOffId, String token)
+            throws DayOffIsAnsweredException, DayOffTokenIsNotMatchException{
+
+        DayOff dayOff = checkIfRequestIsAnswered(dayOffId, token);
+
+        if (dayOff.getToken().equals(token)) {
+            dayOff.getDayOffType().subtractRemainingTime(dayOff.getNumberOfHours());
+            answerDayOffRequest(dayOff, DayOffConstant.STATUS_APPROVE);
+        } else {
+            throw new DayOffTokenIsNotMatchException();
+        }
+    }
+
+    @Override
+    public void deny(long dayOffId, String token)
+            throws DayOffIsAnsweredException, DayOffTokenIsNotMatchException {
+        DayOff dayOff = checkIfRequestIsAnswered(dayOffId, token);
+
+        if (dayOff.getToken().equals(token)) {
+            answerDayOffRequest(dayOff, DayOffConstant.STATUS_DENY);
+        } else {
+            throw new DayOffTokenIsNotMatchException();
+        }
+    }
+
+    private void answerDayOffRequest(DayOff dayOff, String status) {
+        dayOff.setToken("");
+        dayOff.setStatus(status);
+        dayOffRepository.save(dayOff);
+    }
+
+    private DayOff checkIfRequestIsAnswered(long dayOffId, String token) throws DayOffIsAnsweredException{
+        DayOff dayOff = dayOffRepository.getById(dayOffId);
+
+        if (dayOff.getToken().trim().isEmpty()) {
+            throw new DayOffIsAnsweredException(dayOffId);
+        }
+        return dayOff;
     }
 
     private void validateDayOffType(DayOff dayOff) throws DayOffTypeIsNotValidException{

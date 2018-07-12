@@ -1,5 +1,7 @@
 package vn.novahub.helpdesk.service;
 
+import vn.novahub.helpdesk.exception.DayOffIsAnsweredException;
+import vn.novahub.helpdesk.exception.DayOffTokenIsNotMatchException;
 import vn.novahub.helpdesk.exception.DayOffTypeIsNotValidException;
 import vn.novahub.helpdesk.model.DayOff;
 
@@ -9,5 +11,7 @@ public interface DayOffService {
 
     void add(DayOff dayOff) throws MessagingException, DayOffTypeIsNotValidException;
 
-    void approve(DayOff dayOff);
+    void approve(long dayOffId, String token) throws DayOffIsAnsweredException, DayOffTokenIsNotMatchException;
+
+    void deny(long dayOffId, String token) throws DayOffIsAnsweredException, DayOffTokenIsNotMatchException;
 }

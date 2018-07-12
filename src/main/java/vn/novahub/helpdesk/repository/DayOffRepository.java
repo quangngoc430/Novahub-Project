@@ -8,4 +8,5 @@ import vn.novahub.helpdesk.model.DayOff;
 @Repository
 public interface DayOffRepository extends PagingAndSortingRepository<DayOff, Long>{
 
+    DayOff getById(long id);
 }
