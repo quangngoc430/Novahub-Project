@@ -7,6 +7,7 @@ import vn.novahub.helpdesk.exception.IssueValidationException;
 import vn.novahub.helpdesk.model.Issue;
 
 import javax.mail.MessagingException;
+import java.io.IOException;
 
 public interface AccountIssueService {
 
@@ -14,9 +15,9 @@ public interface AccountIssueService {
 
     Issue findOne(long issueId) throws IssueNotFoundException;
 
-    Issue create(Issue issue) throws IssueValidationException, MessagingException;
+    Issue create(Issue issue) throws IssueValidationException, MessagingException, IOException;
 
-    Issue update(long issueId, Issue issue) throws IssueNotFoundException, IssueValidationException, MessagingException;
+    Issue update(long issueId, Issue issue) throws IssueNotFoundException, IssueValidationException, MessagingException, IOException;
 
     void delete(long issueId) throws IssueNotFoundException;
 }

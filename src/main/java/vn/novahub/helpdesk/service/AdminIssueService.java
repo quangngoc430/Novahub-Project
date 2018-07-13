@@ -8,6 +8,7 @@ import vn.novahub.helpdesk.exception.IssueValidationException;
 import vn.novahub.helpdesk.model.Issue;
 
 import javax.mail.MessagingException;
+import java.io.IOException;
 
 public interface AdminIssueService{
 
@@ -15,11 +16,11 @@ public interface AdminIssueService{
 
     Page<Issue> getAllByKeywordAndStatus(String keyword, String status, Pageable pageable);
 
-    Issue update(long issuetId, Issue issue) throws IssueNotFoundException, IssueValidationException, MessagingException;
+    Issue update(long issuetId, Issue issue) throws IssueNotFoundException, IssueValidationException, MessagingException, IOException;
 
     void delete(long issueId) throws IssueNotFoundException;
 
-    void approve(long issueId, String token) throws IssueNotFoundException, IssueIsClosedException, MessagingException;
+    void approve(long issueId, String token) throws IssueNotFoundException, IssueIsClosedException, MessagingException, IOException;
 
-    void deny(long issueId, String token) throws IssueNotFoundException, IssueIsClosedException, MessagingException;
+    void deny(long issueId, String token) throws IssueNotFoundException, IssueIsClosedException, MessagingException, IOException;
 }

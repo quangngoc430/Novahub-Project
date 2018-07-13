@@ -37,12 +37,12 @@ public class Issue implements Serializable {
     @Column(name = "status")
     private String status;
 
-    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss tt")
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     @NotNull(message = "CreateAt is not null")
     @Column(name = "created_at")
     private Date createdAt;
 
-    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss tt")
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     @NotNull(message = "UpdateAt is not null")
     @Column(name = "updated_at")
     private Date updatedAt;

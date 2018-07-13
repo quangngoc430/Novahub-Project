@@ -29,7 +29,7 @@ public interface AccountService {
 
     Account get(long accountId) throws AccountNotFoundException;
 
-    Account create(Account account) throws AccountIsExistException, RoleNotFoundException, AccountValidationException, MessagingException;
+    Account create(Account account) throws AccountIsExistException, RoleNotFoundException, AccountValidationException, MessagingException, IOException;
 
     Account createWithGoogleAccount(Account account) throws AccountValidationException, AccountIsExistException, RoleNotFoundException;
 

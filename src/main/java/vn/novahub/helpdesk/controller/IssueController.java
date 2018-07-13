@@ -17,6 +17,7 @@ import vn.novahub.helpdesk.service.*;
 import javax.annotation.security.PermitAll;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 
 @RestController
 @RequestMapping(path = "/api")
@@ -47,7 +48,7 @@ public class IssueController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping(path = "/issues/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Issue> updateForAdmin(@PathVariable(name = "issueId") long issueId,
-                                                @RequestBody Issue issue) throws IssueValidationException, IssueNotFoundException, MessagingException {
+                                                @RequestBody Issue issue) throws IssueValidationException, IssueNotFoundException, MessagingException, IOException {
         Issue issueUpdated = adminIssueService.update(issueId, issue);
 
         return new ResponseEntity<>(issueUpdated, HttpStatus.OK);
@@ -79,7 +80,7 @@ public class IssueController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping(path = "/users/me/issues", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Issue> create(@RequestBody Issue issue) throws IssueValidationException, MessagingException {
+    public ResponseEntity<Issue> create(@RequestBody Issue issue) throws IssueValidationException, MessagingException, IOException {
         issue = accountIssueService.create(issue);
 
         return new ResponseEntity<>(issue, HttpStatus.OK);
@@ -89,7 +90,7 @@ public class IssueController {
     @PutMapping(path = "/users/me/issues/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Issue> update(HttpServletRequest request,
                                         @RequestBody Issue issue,
-                                        @PathVariable(name = "issueId") long issueId) throws IssueNotFoundException, IssueValidationException, MessagingException {
+                                        @PathVariable(name = "issueId") long issueId) throws IssueNotFoundException, IssueValidationException, MessagingException, IOException {
         issue = accountIssueService.update(issueId, issue);
 
         return new ResponseEntity<>(issue, HttpStatus.OK);
@@ -106,7 +107,7 @@ public class IssueController {
     @PermitAll
     @GetMapping(path = "/issues/{issueId}/approve", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Void> approve(@RequestParam(name = "token", required = false, defaultValue = "") String token,
-                                        @PathVariable(name = "issueId") long issueId) throws IssueNotFoundException, IssueIsClosedException, MessagingException {
+                                        @PathVariable(name = "issueId") long issueId) throws IssueNotFoundException, IssueIsClosedException, MessagingException, IOException {
         adminIssueService.approve(issueId, token);
 
         return new ResponseEntity<>(HttpStatus.OK);
@@ -115,7 +116,7 @@ public class IssueController {
     @PermitAll
     @GetMapping(path = "/issues/{issueId}/deny", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Void> deny(@RequestParam(name = "token", required = false, defaultValue = "") String token,
-                                     @PathVariable(name = "issueId") long issueId) throws IssueNotFoundException, IssueIsClosedException, MessagingException {
+                                     @PathVariable(name = "issueId") long issueId) throws IssueNotFoundException, IssueIsClosedException, MessagingException, IOException {
         adminIssueService.deny(issueId, token);
 
         return new ResponseEntity<>(HttpStatus.OK);

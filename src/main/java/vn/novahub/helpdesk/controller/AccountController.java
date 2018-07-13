@@ -18,6 +18,7 @@ import vn.novahub.helpdesk.service.AccountService;
 import javax.annotation.security.PermitAll;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 
 @RestController
 @RequestMapping(path = "/api")
@@ -99,7 +100,7 @@ public class AccountController {
 
     @PermitAll
     @PostMapping(path = "/users", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Account> create(@RequestBody Account account) throws AccountIsExistException, RoleNotFoundException, AccountValidationException, MessagingException {
+    public ResponseEntity<Account> create(@RequestBody Account account) throws AccountIsExistException, RoleNotFoundException, AccountValidationException, MessagingException, IOException {
         Account newAccount = accountService.create(account);
 
         return new ResponseEntity<>(newAccount, HttpStatus.OK);

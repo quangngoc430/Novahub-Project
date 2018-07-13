@@ -194,7 +194,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account create(Account account) throws AccountIsExistException, RoleNotFoundException, AccountValidationException, MessagingException {
+    public Account create(Account account) throws AccountIsExistException, RoleNotFoundException, AccountValidationException, MessagingException, IOException {
 
         accountValidation.validate(account, GroupCreateAccount.class);
 
@@ -214,7 +214,7 @@ public class AccountServiceImpl implements AccountService {
         mail.setEmailReceiving(new String[]{account.getEmail()});
         mail.setSubject(env.getProperty("subject_email_sign_up"));
         String urlAccountActive = "http://localhost:8080/api/users/" + account.getId() + "/active?token=" + account.getVertificationToken();
-        String contentEmailSignUp = env.getProperty("content_email_sign_up");
+        String contentEmailSignUp = mailService.getContentMail("sign_up.html");
         contentEmailSignUp = contentEmailSignUp.replace("{url-activate-account}", urlAccountActive);
         mail.setContent(contentEmailSignUp);
         mailService.sendHTMLMail(mail);

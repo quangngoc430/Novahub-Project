@@ -20,6 +20,7 @@ import vn.novahub.helpdesk.validation.GroupUpdateIssue;
 import vn.novahub.helpdesk.validation.IssueValidation;
 
 import javax.mail.MessagingException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -71,7 +72,7 @@ public class AccountIssueServiceImpl implements AccountIssueService {
     }
 
     @Override
-    public Issue create(Issue issue) throws IssueValidationException, MessagingException {
+    public Issue create(Issue issue) throws IssueValidationException, MessagingException, IOException {
 
         issueValidation.validate(issue, GroupCreateIssue.class);
 
@@ -91,7 +92,7 @@ public class AccountIssueServiceImpl implements AccountIssueService {
     }
 
     @Override
-    public Issue update(long issueId, Issue issue) throws IssueNotFoundException, IssueValidationException, MessagingException {
+    public Issue update(long issueId, Issue issue) throws IssueNotFoundException, IssueValidationException, MessagingException, IOException {
 
         issueValidation.validate(issue, GroupUpdateIssue.class);
 
@@ -126,12 +127,12 @@ public class AccountIssueServiceImpl implements AccountIssueService {
         issueRepository.deleteByIdAndAccountId(issueId, accountLogin.getId());
     }
 
-    private void sendMailCreateIssueForAdmin(Issue issue, Account accountLogin) throws MessagingException {
+    private void sendMailCreateIssueForAdmin(Issue issue, Account accountLogin) throws MessagingException, IOException {
         Mail mail = new Mail();
         String subject = env.getProperty("subject_email_create_issue");
         subject = subject.replace("{issue-id}", String.valueOf(issue.getId()));
         mail.setSubject(subject);
-        String content = env.getProperty("content_email_create_issue");
+        String content = mailService.getContentMail("create_issue.html");
         content = content.replace("{issue-id}", String.valueOf(issue.getId()));
         content = content.replace("{email}", accountLogin.getEmail());
         content = content.replace("{title}", issue.getTitle());
@@ -147,14 +148,14 @@ public class AccountIssueServiceImpl implements AccountIssueService {
         mailService.sendHTMLMail(mail);
     }
 
-    private void sendMailUpdateIssueForAdmin(Issue issue) throws MessagingException {
+    private void sendMailUpdateIssueForAdmin(Issue issue) throws MessagingException, IOException {
         Account accountLogin = accountRepository.getById(issue.getAccountId());
 
         Mail mail = new Mail();
         String subject = env.getProperty("subject_email_update_issue_admin");
         subject = subject.replace("{issue-id}", String.valueOf(issue.getId()));
         mail.setSubject(subject);
-        String content = env.getProperty("content_email_update_issue_admin");
+        String content = mailService.getContentMail("update_issue_admin.html");
         content = content.replace("{issue-id}", String.valueOf(issue.getId()));
         content = content.replace("{email}", accountLogin.getEmail());
         content = content.replace("{title}", issue.getTitle());

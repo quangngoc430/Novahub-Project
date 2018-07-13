@@ -19,7 +19,7 @@ import vn.novahub.helpdesk.validation.GroupUpdateIssue;
 import vn.novahub.helpdesk.validation.IssueValidation;
 
 import javax.mail.MessagingException;
-import javax.validation.groups.Default;
+import java.io.IOException;
 import java.util.Date;
 
 @Service
@@ -60,7 +60,7 @@ public class AdminIssueServiceImpl implements AdminIssueService{
     }
 
     @Override
-    public Issue update(long issueId, Issue issue) throws IssueNotFoundException, IssueValidationException, MessagingException {
+    public Issue update(long issueId, Issue issue) throws IssueNotFoundException, IssueValidationException, MessagingException, IOException {
         issueValidation.validate(issue, GroupUpdateIssue.class);
 
         boolean isSendMailUpdateIssue = false;
@@ -108,7 +108,7 @@ public class AdminIssueServiceImpl implements AdminIssueService{
     }
 
     @Override
-    public void approve(long issueId, String token) throws IssueNotFoundException, IssueIsClosedException, MessagingException {
+    public void approve(long issueId, String token) throws IssueNotFoundException, IssueIsClosedException, MessagingException, IOException {
         Issue issue = issueRepository.findByIdAndToken(issueId, token);
 
         if (issue == null)
@@ -125,7 +125,7 @@ public class AdminIssueServiceImpl implements AdminIssueService{
     }
 
     @Override
-    public void deny(long issueId, String token) throws IssueNotFoundException, IssueIsClosedException, MessagingException {
+    public void deny(long issueId, String token) throws IssueNotFoundException, IssueIsClosedException, MessagingException, IOException {
         Issue issue = issueRepository.findByIdAndToken(issueId, token);
 
         if (issue == null)
@@ -141,14 +141,14 @@ public class AdminIssueServiceImpl implements AdminIssueService{
         sendMailUpdateIssueForUser(issue);
     }
 
-    private void sendMailUpdateIssueForUser(Issue issue) throws MessagingException {
+    private void sendMailUpdateIssueForUser(Issue issue) throws MessagingException, IOException {
         Account account = accountRepository.getById(issue.getAccountId());
 
         Mail mail = new Mail();
         String subject = env.getProperty("subject_email_update_issue_account");
         subject = subject.replace("{issue-id}", String.valueOf(issue.getId()));
         mail.setSubject(subject);
-        String content = env.getProperty("content_email_update_issue_account");
+        String content = mailService.getContentMail("update_issue_account.html");
         content = content.replace("{issue-id}", String.valueOf(issue.getId()));
         content = content.replace("{email}", account.getEmail());
         content = content.replace("{title}", issue.getTitle());
