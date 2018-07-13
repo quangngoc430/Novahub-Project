@@ -13,7 +13,15 @@ public interface AccountHasSkillRepository extends PagingAndSortingRepository<Ac
 
     AccountHasSkill findByAccountIdAndSkillId(long accountId, long skillId);
 
+    AccountHasSkill getByAccountIdAndSkillId(long accountId, long skillId);
+
     ArrayList<AccountHasSkill> findBySkillId(long skillId);
 
     void deleteByAccountIdAndSkillId(long accountId, long skillId);
+
+    long countBySkillId(long skillId);
+
+    void deleteBySkillId(long skillId);
+
+    boolean existsByAccountIdAndSkillId(long accountId, long skillId);
 }

@@ -112,6 +112,7 @@ public class AccountController {
     public ResponseEntity<Void> activate(@PathVariable(value = "id") long accountId,
                                          @RequestParam(value = "token", defaultValue = "") String verficationToken,
                                          HttpServletRequest request){
+
         logService.log(request, logger);
 
         boolean result = accountService.activateAccount(accountId, verficationToken);

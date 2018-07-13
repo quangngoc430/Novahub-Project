@@ -16,12 +16,12 @@ public interface AccountRepository extends PagingAndSortingRepository<Account, L
     Account getByEmail(String email);
 
     @Query("FROM Account account " +
-            "WHERE account.email LIKE :keyword or account.firstName LIKE :keyword or account.lastName LIKE :keyword")
+           "WHERE account.email LIKE :keyword or account.firstName LIKE :keyword or account.lastName LIKE :keyword")
     Page<Account> getAllByEmailLikeOrFirstNameLikeOrLastNameLike(@Param("keyword") String keyword, Pageable pageable);
 
     @Query("FROM Account account " +
-            "WHERE (account.email LIKE :keyword or account.firstName LIKE :keyword or account.lastName LIKE :keyword) " +
-            "AND account.status = :status")
+           "WHERE (account.email LIKE :keyword or account.firstName LIKE :keyword or account.lastName LIKE :keyword) " +
+           "AND account.status = :status")
     Page<Account> getAllByEmailLikeOrFirstNameLikeOrLastNameLikeAndStatus(@Param("keyword") String keyword,
                                                                           @Param("status") String status, Pageable pageable);
 
@@ -52,4 +52,11 @@ public interface AccountRepository extends PagingAndSortingRepository<Account, L
     Account getByIdAndVertificationToken(long accountId, String verificationToken);
 
     Account getByEmailAndPassword(String email, String password);
+
+    @Query("SELECT account " +
+           "FROM Account account " +
+           "JOIN AccountHasSkill accountHasSkill " +
+           "ON account.id = accountHasSkill.accountId " +
+           "WHERE accountHasSkill.skillId = :skillId")
+    Page<Account> getAllBySkillId(@Param("skillId") long skillId, Pageable pageable);
 }

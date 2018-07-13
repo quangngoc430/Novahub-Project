@@ -28,9 +28,20 @@ public interface SkillRepository extends PagingAndSortingRepository<Skill, Long>
                                   @Param("categoryId") long categoryId,
                                   Pageable pageable);
 
-    @Query("FROM Skill skill WHERE skill.name LIKE :name")
-    Page<Skill> getAllSkillsByNameLike(@Param("name") String name,
-                                       Pageable pageable);
+    Page<Skill> getAllByNameLike(String name, Pageable pageable);
+
+    @Query("SELECT skill " +
+           "FROM Skill skill " +
+           "JOIN AccountHasSkill accountHasSkill " +
+           "ON skill.id = accountHasSkill.skillId " +
+           "JOIN Account account " +
+           "ON account.id = accountHasSkill.accountId " +
+           "WHERE skill.name LIKE :name AND account.id = :accountId")
+    Page<Skill> getAllByNameLikeAndAccountId(@Param("name") String name,
+                                             @Param("accountId") long accountId,
+                                             Pageable pageable);
+
+    Skill getByNameAndCategoryId(String name, long categoryId);
 
     Page<Skill> getAllByCategoryIdAndNameLike(long categoryId, String name, Pageable pageable);
 
@@ -38,14 +49,28 @@ public interface SkillRepository extends PagingAndSortingRepository<Skill, Long>
 
     Skill getByIdAndCategoryId(long skillId, long categoryId);
 
-    void deleteByIdAndCategoryId(long skillId, long categoryId);
-
     boolean existsByIdAndCategoryId(long skillId, long categoryId);
 
     Skill getById(long skillId);
 
+    boolean existsByNameAndCategoryId(String name, long categoryId);
+
+    @Query("SELECT account " +
+           "FROM Account account " +
+           "JOIN AccountHasSkill accountHasSkill " +
+           "ON account.id = accountHasSkill.accountId " +
+           "WHERE account.id = :accountId AND accountHasSkill.skillId = :skillId")
+    Skill getByAccountIdAndSkillId(@Param("accountId") long accountId,
+                                   @Param("skillId") long skillId);
+
     boolean existsByName(String email);
 
     boolean existsByNameAndLevel(String name, long level);
+
+    boolean existsByNameAndLevelAndCategoryId(String name, long level, long categoryId);
+
+    Skill getByNameAndLevelAndCategoryId(String name, long level, long categoryId);
+
+    boolean deleteByIdAndCategoryId(long skillId, long categoryId);
 
 }
