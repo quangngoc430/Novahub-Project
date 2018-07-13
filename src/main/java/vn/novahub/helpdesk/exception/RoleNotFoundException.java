@@ -13,4 +13,5 @@ public class RoleNotFoundException extends Exception{
     public RoleNotFoundException(String roleName){
         super("RoleNotFoundException with role name = " + roleName);
     }
+
 }
