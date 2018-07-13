@@ -55,10 +55,12 @@ public interface SkillRepository extends PagingAndSortingRepository<Skill, Long>
 
     boolean existsByNameAndCategoryId(String name, long categoryId);
 
-    @Query("SELECT account " +
+    @Query("SELECT skill " +
            "FROM Account account " +
            "JOIN AccountHasSkill accountHasSkill " +
            "ON account.id = accountHasSkill.accountId " +
+           "JOIN Skill skill " +
+           "ON accountHasSkill.skillId = skill.id " +
            "WHERE account.id = :accountId AND accountHasSkill.skillId = :skillId")
     Skill getByAccountIdAndSkillId(@Param("accountId") long accountId,
                                    @Param("skillId") long skillId);

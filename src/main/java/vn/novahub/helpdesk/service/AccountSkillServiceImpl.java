@@ -63,7 +63,7 @@ public class AccountSkillServiceImpl implements AccountSkillService {
 
     @Override
     public Page<Skill> getAllByKeyword(String keyword, Pageable pageable) {
-        return skillRepository.getAllByNameLike("%" + keyword + "&", pageable);
+        return skillRepository.getAllByNameLike("%" + keyword + "%", pageable);
     }
 
 
@@ -112,7 +112,7 @@ public class AccountSkillServiceImpl implements AccountSkillService {
     }
 
     @Override
-    public Skill update(long skillId, Skill skill) throws SkillValidationException, SkillNotFoundException {
+    public Skill update(long skillId, Skill skill) throws SkillValidationException, SkillNotFoundException, SkillIsExistException {
 
         Account accountLogin = accountService.getAccountLogin();
 
@@ -127,15 +127,19 @@ public class AccountSkillServiceImpl implements AccountSkillService {
         if(skill.equals(oldSkill))
             return oldSkill;
 
-        accountHasSkillRepository.deleteByAccountIdAndSkillId(accountLogin.getId(), skillId);
+        // get skill that have same data with input skill
+        Skill skillSameInput = skillRepository.getByNameAndLevelAndCategoryId(skill.getName(), skill.getLevel(), skill.getCategoryId());
+
+        // check this account has this skill
+        if(skillSameInput != null && accountHasSkillRepository.existsByAccountIdAndSkillId(accountLogin.getId(), skillSameInput.getId()))
+            throw new SkillIsExistException(skillSameInput.getId(), accountLogin.getId());
 
         // check count of oldSkill, if it equals 1 then delete its
         if(accountHasSkillRepository.countBySkillId(oldSkill.getId()) == 1) {
             skillRepository.deleteById(oldSkill.getId());
         }
 
-        // get skill that have same data with input skill
-        Skill skillSameInput = skillRepository.getByNameAndLevelAndCategoryId(skill.getName(), skill.getLevel(), skill.getCategoryId());
+        accountHasSkillRepository.deleteByAccountIdAndSkillId(accountLogin.getId(), skillId);
 
         // skill have same data that found
         if(skillSameInput != null) {
@@ -167,15 +171,15 @@ public class AccountSkillServiceImpl implements AccountSkillService {
     public void delete(long skillId) throws SkillNotFoundException {
         Account accountLogin = accountService.getAccountLogin();
 
-        if(skillRepository.getByAccountIdAndSkillId(accountLogin.getId(), skillId) == null)
+        if(!accountHasSkillRepository.existsByAccountIdAndSkillId(accountLogin.getId(), skillId))
             throw new SkillNotFoundException(skillId);
-
-        accountHasSkillRepository.deleteByAccountIdAndSkillId(accountLogin.getId(), skillId);
 
         // check count of skill has skillId, if it equals 1 then delete its
         if(accountHasSkillRepository.countBySkillId(skillId) == 1) {
             skillRepository.deleteById(skillId);
         }
+
+        accountHasSkillRepository.deleteByAccountIdAndSkillId(accountLogin.getId(), skillId);
 
     }
 

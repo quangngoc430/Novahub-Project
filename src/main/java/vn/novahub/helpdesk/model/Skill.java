@@ -46,13 +46,11 @@ public class Skill implements Serializable {
     @Column(name = "category_id")
     private long categoryId;
 
-    @Transient
     @JsonIgnore
     @OneToMany
     private List<AccountHasSkill> accountHasSkillList;
 
-    @Transient
-    @ManyToOne
+    @ManyToOne(targetEntity = Category.class)
     @JoinColumn(name = "category_id", insertable = false, updatable = false)
     private Category category;
 

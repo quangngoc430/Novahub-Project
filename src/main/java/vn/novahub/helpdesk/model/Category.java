@@ -20,7 +20,7 @@ public class Category implements Serializable {
     private long id;
 
     @NotEmpty(message = "Name is not empty")
-    @Column(name = "name")
+    @Column(name = "name", unique = true)
     private String name;
 
     @NotNull(message = "Create At is not null")

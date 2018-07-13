@@ -18,4 +18,8 @@ public class SkillIsExistException extends Exception {
         super("SkillIsExistException with name = " + name + " , level = " + level + " , categoryId = " + categoryId);
     }
 
+    public SkillIsExistException(long skillId, long accountId){
+        super("SkillIsExistException with skillId = " + skillId + ", accountId = " + accountId);
+    }
+
 }

@@ -20,7 +20,6 @@ import vn.novahub.helpdesk.validation.GroupUpdateIssue;
 import vn.novahub.helpdesk.validation.IssueValidation;
 
 import javax.mail.MessagingException;
-import javax.validation.groups.Default;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -86,7 +85,7 @@ public class AccountIssueServiceImpl implements AccountIssueService {
 
         issue = issueRepository.save(issue);
 
-        sendMailCreateIssue(issue, accountLogin);
+        sendMailCreateIssueForAdmin(issue, accountLogin);
 
         return issue;
     }
@@ -127,7 +126,7 @@ public class AccountIssueServiceImpl implements AccountIssueService {
         issueRepository.deleteByIdAndAccountId(issueId, accountLogin.getId());
     }
 
-    private void sendMailCreateIssue(Issue issue, Account accountLogin) throws MessagingException {
+    private void sendMailCreateIssueForAdmin(Issue issue, Account accountLogin) throws MessagingException {
         Mail mail = new Mail();
         String subject = env.getProperty("subject_email_create_issue");
         subject = subject.replace("{issue-id}", String.valueOf(issue.getId()));
@@ -143,20 +142,7 @@ public class AccountIssueServiceImpl implements AccountIssueService {
         content = content.replace("{url-deny-issue}", "http://localhost:8080/api/issues/" + issue.getId() + "/deny?token=" + issue.getToken());
         mail.setContent(content);
 
-        ArrayList<Account> adminList = (ArrayList<Account>) (accountRepository.getAllByRoleName(RoleConstant.ROLE_ADMIN));
-        ArrayList<Account> clerkList = (ArrayList<Account>) (accountRepository.getAllByRoleName(RoleConstant.ROLE_CLERK));
-
-        ArrayList<String> emails = new ArrayList<>();
-
-        if(adminList != null)
-            for (Account account : adminList)
-                emails.add(account.getEmail());
-
-        if(clerkList != null)
-            for (Account account : clerkList)
-                emails.add(account.getEmail());
-
-        mail.setEmailReceiving(emails.toArray(new String[0]));
+        mail.setEmailReceiving(getEmailsOfAdminAndClerk().toArray(new String[0]));
 
         mailService.sendHTMLMail(mail);
     }
@@ -177,6 +163,12 @@ public class AccountIssueServiceImpl implements AccountIssueService {
         content = content.replace("{reply-message}", (issue.getReplyMessage() == null) ? "NONE" : issue.getReplyMessage());
         mail.setContent(content);
 
+        mail.setEmailReceiving(getEmailsOfAdminAndClerk().toArray(new String[0]));
+
+        mailService.sendHTMLMail(mail);
+    }
+
+    private ArrayList<String> getEmailsOfAdminAndClerk(){
         ArrayList<Account> adminList = (ArrayList<Account>) (accountRepository.getAllByRoleName(RoleConstant.ROLE_ADMIN));
         ArrayList<Account> clerkList = (ArrayList<Account>) (accountRepository.getAllByRoleName(RoleConstant.ROLE_CLERK));
 
@@ -190,8 +182,6 @@ public class AccountIssueServiceImpl implements AccountIssueService {
             for (Account account : clerkList)
                 emails.add(account.getEmail());
 
-        mail.setEmailReceiving(emails.toArray(new String[0]));
-
-        mailService.sendHTMLMail(mail);
+        return emails;
     }
 }

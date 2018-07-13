@@ -25,7 +25,7 @@ public class Account implements Serializable {
     private long id;
 
     @NotEmpty(message = "Email is not empty", groups = {GroupCreateAccount.class, GroupLoginAccount.class, GroupCreateWithAccountGoogle.class})
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     @Email(regexp = "^[a-zA-Z0-9]+\\@novahub.vn", message = "Email must be end with @novahub.vn"
             , groups = {GroupCreateAccount.class, GroupLoginAccount.class})
     private String email;

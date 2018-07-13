@@ -15,6 +15,7 @@ import vn.novahub.helpdesk.model.Issue;
 import vn.novahub.helpdesk.model.Mail;
 import vn.novahub.helpdesk.repository.AccountRepository;
 import vn.novahub.helpdesk.repository.IssueRepository;
+import vn.novahub.helpdesk.validation.GroupUpdateIssue;
 import vn.novahub.helpdesk.validation.IssueValidation;
 
 import javax.mail.MessagingException;
@@ -52,15 +53,16 @@ public class AdminIssueServiceImpl implements AdminIssueService{
 
     @Override
     public Page<Issue> getAllByKeywordAndStatus(String keyword, String status, Pageable pageable) {
-        keyword = "%" + keyword + "%";
         if (status.equals(""))
-            return issueRepository.getAllByTitleLikeOrContentLike(keyword, pageable);
+            return issueRepository.getAllByTitleLikeOrContentLike("%" + keyword + "%", pageable);
 
-        return issueRepository.getAllByTitleLikeOrContentLikeAndStatus(keyword, status, pageable);
+        return issueRepository.getAllByTitleLikeOrContentLikeAndStatus("%" + keyword + "%", status, pageable);
     }
 
     @Override
     public Issue update(long issueId, Issue issue) throws IssueNotFoundException, IssueValidationException, MessagingException {
+        issueValidation.validate(issue, GroupUpdateIssue.class);
+
         boolean isSendMailUpdateIssue = false;
 
         Issue oldIssue = issueRepository.getById(issueId);
@@ -70,13 +72,11 @@ public class AdminIssueServiceImpl implements AdminIssueService{
 
         oldIssue.setUpdatedAt(new Date());
 
-        if (issue.getTitle() != null)
-            oldIssue.setTitle(issue.getTitle());
-        if (issue.getContent() != null)
-            oldIssue.setContent(issue.getContent());
-        if (issue.getReplyMessage() != null)
+        oldIssue.setTitle(issue.getTitle());
+        oldIssue.setContent(issue.getContent());
+        if (!issue.getReplyMessage().equals(""))
             oldIssue.setReplyMessage(issue.getReplyMessage());
-        if (issue.getStatus() != null) {
+        if (!issue.getStatus().equals("")) {
             if (oldIssue.getStatus().equals(IssueConstant.STATUS_PENDING) &&
                     issue.getStatus().equals(IssueConstant.STATUS_DENY)) {
                 oldIssue.setToken(null);
@@ -91,8 +91,6 @@ public class AdminIssueServiceImpl implements AdminIssueService{
 
             oldIssue.setStatus(issue.getStatus());
         }
-
-        issueValidation.validate(oldIssue, Default.class);
 
         oldIssue = issueRepository.save(oldIssue);
 

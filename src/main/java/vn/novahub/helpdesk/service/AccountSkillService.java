@@ -21,7 +21,7 @@ public interface AccountSkillService {
 
     Skill create(Skill skill) throws SkillValidationException, SkillIsExistException;
 
-    Skill update(long skillId, Skill skill) throws SkillValidationException, SkillNotFoundException;
+    Skill update(long skillId, Skill skill) throws SkillValidationException, SkillNotFoundException, SkillIsExistException;
 
     void delete(long skillId) throws SkillNotFoundException;
 
