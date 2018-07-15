@@ -9,9 +9,20 @@ import javax.mail.MessagingException;
 
 public interface DayOffService {
 
-    void add(DayOff dayOff) throws MessagingException, DayOffTypeIsNotValidException;
+    void add(DayOff dayOff)
+            throws MessagingException,
+            DayOffTypeIsNotValidException;
 
-    void approve(long dayOffId, String token) throws DayOffIsAnsweredException, DayOffTokenIsNotMatchException;
+    void update(DayOff dayOff)
+            throws MessagingException;
 
-    void deny(long dayOffId, String token) throws DayOffIsAnsweredException, DayOffTokenIsNotMatchException;
+    void approve(long dayOffId, String token)
+            throws DayOffIsAnsweredException,
+            DayOffTokenIsNotMatchException,
+            MessagingException;
+
+    void deny(long dayOffId, String token)
+            throws DayOffIsAnsweredException,
+            DayOffTokenIsNotMatchException,
+            MessagingException;
 }

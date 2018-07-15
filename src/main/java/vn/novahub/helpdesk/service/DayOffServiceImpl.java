@@ -64,8 +64,13 @@ public class DayOffServiceImpl implements DayOffService{
     }
 
     @Override
+    public void update(DayOff dayOff) throws MessagingException {
+
+    }
+
+    @Override
     public void approve(long dayOffId, String token)
-            throws DayOffIsAnsweredException, DayOffTokenIsNotMatchException{
+            throws DayOffIsAnsweredException, DayOffTokenIsNotMatchException, MessagingException{
 
         DayOff dayOff = checkIfRequestIsAnswered(dayOffId, token);
 
@@ -79,7 +84,7 @@ public class DayOffServiceImpl implements DayOffService{
 
     @Override
     public void deny(long dayOffId, String token)
-            throws DayOffIsAnsweredException, DayOffTokenIsNotMatchException {
+            throws DayOffIsAnsweredException, DayOffTokenIsNotMatchException, MessagingException {
         DayOff dayOff = checkIfRequestIsAnswered(dayOffId, token);
 
         if (dayOff.getToken().equals(token)) {
@@ -89,10 +94,12 @@ public class DayOffServiceImpl implements DayOffService{
         }
     }
 
-    private void answerDayOffRequest(DayOff dayOff, String status) {
+    private void answerDayOffRequest(DayOff dayOff, String status) throws MessagingException{
         dayOff.setToken("");
         dayOff.setStatus(status);
         dayOffRepository.save(dayOff);
+
+        senMailUpdateForUser(dayOff);
     }
 
     private DayOff checkIfRequestIsAnswered(long dayOffId, String token) throws DayOffIsAnsweredException{
@@ -136,9 +143,6 @@ public class DayOffServiceImpl implements DayOffService{
         dayOff.setAccountId(accountLogin.getId());
     }
 
-    private void subtractRemainingTime(DayOff dayOff) {
-        dayOff.getDayOffType().subtractRemainingTime(dayOff.getNumberOfHours());
-    }
 
     private void sendMailCreateDayOff(DayOff dayOff, Account accountLogin) throws MessagingException {
         Mail mail = new Mail();
@@ -170,6 +174,25 @@ public class DayOffServiceImpl implements DayOffService{
         mail.setEmailReceiving(emails.toArray(new String[0]));
 
         mailService.sendHTMLMail(mail);
+    }
+
+    private void senMailUpdateForUser(DayOff dayOff) throws MessagingException{
+        Account account = accountRepository.getById(dayOff.getAccountId());
+        Mail mail = new Mail();
+        String subject = env.getProperty("subject_email_update_day_off_account");
+        subject = subject.replace("{day-off-id}", String.valueOf(dayOff.getId()));
+        mail.setSubject(subject);
+
+        String content = env.getProperty("content_email_update_day_off_account");
+        content = content.replace("{day-off-id}", String.valueOf(dayOff.getId()));
+        content = content.replace("{email}", account.getEmail());
+        content = content.replace("{title}", dayOff.getTitle());
+        content = content.replace("{status}", dayOff.getStatus());
+        mail.setContent(content);
+        mail.setEmailReceiving(new String[]{account.getEmail()});
+
+        mailService.sendHTMLMail(mail);
+
     }
 
     private int getCreatedYear(Date createdDate) {

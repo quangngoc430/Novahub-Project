@@ -32,21 +32,29 @@ public class DayOffController {
     private DayOffService dayOffService;
 
     @PostMapping(path = "/day-offs")
-    public ResponseEntity<String> create(@RequestBody DayOff dayOff,
-                                         HttpServletRequest request)
+    public ResponseEntity<String> create(@RequestBody DayOff dayOff)
             throws MessagingException, DayOffTypeIsNotValidException{
-        logService.log(request, logger);
 
         dayOffService.add(dayOff);
 
         return new ResponseEntity<>("Creating new day off request successful", HttpStatus.OK);
     }
 
+    @PutMapping(path = "/day-offs")
+    public ResponseEntity<String> update(@RequestBody DayOff dayOff)
+            throws MessagingException {
+
+        dayOffService.update(dayOff);
+
+        return new ResponseEntity<>("Updating day off request successful", HttpStatus.OK);
+    }
+
     @GetMapping(path = "/day-offs/{id}/approve")
     public ResponseEntity<String> approve(@PathVariable("id") long dayOffId,
                                           @RequestParam("token") String token)
                                              throws DayOffIsAnsweredException,
-                                                    DayOffTokenIsNotMatchException {
+                                                    DayOffTokenIsNotMatchException,
+                                                    MessagingException{
         dayOffService.approve(dayOffId, token);
 
         return new ResponseEntity<>("The day off request with id = " + dayOffId + " has been approved",
@@ -57,10 +65,13 @@ public class DayOffController {
     public ResponseEntity<String> deny(@PathVariable("id") long dayOffId,
                                        @RequestParam("token") String token)
                                             throws DayOffIsAnsweredException,
-                                                   DayOffTokenIsNotMatchException {
+                                                   DayOffTokenIsNotMatchException,
+                                                   MessagingException {
         dayOffService.deny(dayOffId, token);
 
         return new ResponseEntity<>("The day off request with id = " + dayOffId + " has been denied",
                 HttpStatus.OK);
     }
+
+
 }
