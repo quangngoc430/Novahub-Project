@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import vn.novahub.helpdesk.constant.DayOffConstant;
 import vn.novahub.helpdesk.constant.RoleConstant;
 import vn.novahub.helpdesk.exception.DayOffIsAnsweredException;
+import vn.novahub.helpdesk.exception.DayOffOverdueException;
 import vn.novahub.helpdesk.exception.DayOffTokenIsNotMatchException;
 import vn.novahub.helpdesk.exception.DayOffTypeIsNotValidException;
 import vn.novahub.helpdesk.model.*;
@@ -51,7 +52,7 @@ public class DayOffServiceImpl implements DayOffService{
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
-    public void add(DayOff dayOff) throws MessagingException, DayOffTypeIsNotValidException{
+    public DayOff add(DayOff dayOff) throws MessagingException, DayOffTypeIsNotValidException{
         Account accountLogin = accountService.getAccountLogin();
 
         validateDayOffType(dayOff);
@@ -61,11 +62,23 @@ public class DayOffServiceImpl implements DayOffService{
         DayOff newDayOff = dayOffRepository.save(dayOff);
 
         sendMailCreateDayOff(newDayOff, accountLogin);
+
+        return newDayOff;
     }
 
     @Override
-    public void update(DayOff dayOff) throws MessagingException {
+    public void delete(DayOff dayOff)
+            throws MessagingException,
+                    DayOffOverdueException {
+        Date currentDate = new Date();
+        dayOff = dayOffRepository.getById(dayOff.getId());
 
+        if (currentDate.before(dayOff.getStartDate())) {
+            dayOffRepository.delete(dayOff);
+        } else {
+            throw new DayOffOverdueException(dayOff.getId());
+        }
+        sendMailDeleteForAdmin(dayOff);
     }
 
     @Override
@@ -99,7 +112,7 @@ public class DayOffServiceImpl implements DayOffService{
         dayOff.setStatus(status);
         dayOffRepository.save(dayOff);
 
-        senMailUpdateForUser(dayOff);
+        sendMailUpdateForUser(dayOff);
     }
 
     private DayOff checkIfRequestIsAnswered(long dayOffId, String token) throws DayOffIsAnsweredException{
@@ -158,25 +171,12 @@ public class DayOffServiceImpl implements DayOffService{
         content = content.replace("{url-deny-day-off}", "http://localhost:8080/api/day-offs/" + dayOff.getId() + "/deny?token=" + dayOff.getToken());
         mail.setContent(content);
 
-        ArrayList<Account> adminList = (ArrayList<Account>) (accountRepository.getAllByRoleName(RoleConstant.ROLE_ADMIN));
-        ArrayList<Account> clerkList = (ArrayList<Account>) (accountRepository.getAllByRoleName(RoleConstant.ROLE_CLERK));
-
-        ArrayList<String> emails = new ArrayList<>();
-
-        if(adminList != null)
-            for (Account account : adminList)
-                emails.add(account.getEmail());
-
-        if(clerkList != null)
-            for (Account account : clerkList)
-                emails.add(account.getEmail());
-
-        mail.setEmailReceiving(emails.toArray(new String[0]));
+        mail.setEmailReceiving(getEmailListOfAdmin().toArray(new String[0]));
 
         mailService.sendHTMLMail(mail);
     }
 
-    private void senMailUpdateForUser(DayOff dayOff) throws MessagingException{
+    private void sendMailUpdateForUser(DayOff dayOff) throws MessagingException{
         Account account = accountRepository.getById(dayOff.getAccountId());
         Mail mail = new Mail();
         String subject = env.getProperty("subject_email_update_day_off_account");
@@ -193,6 +193,43 @@ public class DayOffServiceImpl implements DayOffService{
 
         mailService.sendHTMLMail(mail);
 
+    }
+
+    private void sendMailDeleteForAdmin(DayOff dayOff) throws MessagingException{
+        Account account = accountRepository.getById(dayOff.getAccountId());
+        Mail mail = new Mail();
+        String subject = env.getProperty("subject_email_delete_day_off");
+        subject = subject.replace("{day-off-id}", String.valueOf(dayOff.getId()));
+        mail.setSubject(subject);
+
+        String content = env.getProperty("content_email_delete_day_off");
+        content = content.replace("{day-off-id}", String.valueOf(dayOff.getId()));
+        content = content.replace("{email}", account.getEmail());
+        content = content.replace("{title}", dayOff.getTitle());
+        content = content.replace("{status}", dayOff.getStatus());
+        mail.setContent(content);
+
+        mail.setEmailReceiving(getEmailListOfAdmin().toArray(new String[0]));
+
+        mailService.sendHTMLMail(mail);
+    }
+
+    private ArrayList<String> getEmailListOfAdmin() {
+        ArrayList<Account> adminList = (ArrayList<Account>)
+                (accountRepository.getAllByRoleName(RoleConstant.ROLE_ADMIN));
+        ArrayList<Account> clerkList = (ArrayList<Account>)
+                (accountRepository.getAllByRoleName(RoleConstant.ROLE_CLERK));
+
+        ArrayList<String> emails = new ArrayList<>();
+
+        if(adminList != null)
+            for (Account account : adminList)
+                emails.add(account.getEmail());
+
+        if(clerkList != null)
+            for (Account account : clerkList)
+                emails.add(account.getEmail());
+        return emails;
     }
 
     private int getCreatedYear(Date createdDate) {

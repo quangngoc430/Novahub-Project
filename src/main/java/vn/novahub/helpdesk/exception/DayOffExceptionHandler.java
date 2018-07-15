@@ -47,6 +47,22 @@ public class DayOffExceptionHandler {
         return new ResponseEntity<>(this.apiError, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(value = DayOffOverdueException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<ApiError> handleDayOffOverdueException(HttpServletRequest request, Exception ex){
+        String message = "Day off is overdue exception";
+
+        HashMap<String, String> errors = new HashMap<>();
+        errors.put("message", message);
+
+        this.apiError = new ApiError(HttpStatus.NOT_FOUND.value(),
+                errors,
+                ex.getMessage(),
+                request.getRequestURI());
+
+        return new ResponseEntity<>(this.apiError, HttpStatus.NOT_FOUND);
+    }
+
 
 
 }
