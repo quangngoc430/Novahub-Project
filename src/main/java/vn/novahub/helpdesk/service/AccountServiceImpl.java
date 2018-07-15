@@ -35,9 +35,6 @@ public class AccountServiceImpl implements AccountService {
     @Value("${subject_email_sign_up}")
     private String subjectEmailSignUp;
 
-    @Value("${content_email_sign_up}")
-    private String contentEmailSignUp;
-
     @Autowired
     private Environment env;
 

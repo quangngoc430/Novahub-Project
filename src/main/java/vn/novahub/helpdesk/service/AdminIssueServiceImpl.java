@@ -74,9 +74,9 @@ public class AdminIssueServiceImpl implements AdminIssueService{
 
         oldIssue.setTitle(issue.getTitle());
         oldIssue.setContent(issue.getContent());
-        if (!issue.getReplyMessage().equals(""))
+        if (issue.getReplyMessage() != null)
             oldIssue.setReplyMessage(issue.getReplyMessage());
-        if (!issue.getStatus().equals("")) {
+        if (issue.getStatus() != null) {
             if (oldIssue.getStatus().equals(IssueConstant.STATUS_PENDING) &&
                     issue.getStatus().equals(IssueConstant.STATUS_DENY)) {
                 oldIssue.setToken(null);
