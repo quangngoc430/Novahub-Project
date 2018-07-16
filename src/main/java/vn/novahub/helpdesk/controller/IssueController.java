@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import vn.novahub.helpdesk.enums.IssueStatus;
 import vn.novahub.helpdesk.exception.IssueIsClosedException;
 import vn.novahub.helpdesk.exception.IssueNotFoundException;
 import vn.novahub.helpdesk.exception.IssueValidationException;
@@ -16,7 +17,6 @@ import vn.novahub.helpdesk.service.*;
 
 import javax.annotation.security.PermitAll;
 import javax.mail.MessagingException;
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 @RestController
@@ -55,7 +55,7 @@ public class IssueController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @DeleteMapping(path = "issues/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @DeleteMapping(path = "/issues/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Void> deleteByAdmin(@PathVariable(name = "issueId") long issueId) throws IssueNotFoundException {
         adminIssueService.delete(issueId);
 
@@ -88,8 +88,7 @@ public class IssueController {
 
     @PreAuthorize("isAuthenticated()")
     @PutMapping(path = "/users/me/issues/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Issue> update(HttpServletRequest request,
-                                        @RequestBody Issue issue,
+    public ResponseEntity<Issue> update(@RequestBody Issue issue,
                                         @PathVariable(name = "issueId") long issueId) throws IssueNotFoundException, IssueValidationException, MessagingException, IOException {
         issue = accountIssueService.update(issueId, issue);
 
@@ -114,10 +113,17 @@ public class IssueController {
     }
 
     @PermitAll
-    @GetMapping(path = "/issues/{issueId}/deny", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Void> deny(@RequestParam(name = "token", required = false, defaultValue = "") String token,
-                                     @PathVariable(name = "issueId") long issueId) throws IssueNotFoundException, IssueIsClosedException, MessagingException, IOException {
-        adminIssueService.deny(issueId, token);
+    @GetMapping(path = "/issues/{issueId}/action", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Void> action(@RequestParam(name = "status", required = false, defaultValue = "") String status,
+                                       @RequestParam(name = "token", required = false, defaultValue = "") String token,
+                                       @PathVariable(name = "issueId") long issueId) throws IssueNotFoundException, IssueIsClosedException, MessagingException, IOException {
+        if(status.equals(IssueStatus.APPROVE.name())) {
+            adminIssueService.approve(issueId, token);
+        } else if(status.equals(IssueStatus.DENY.name())){
+            adminIssueService.deny(issueId, token);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        }
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

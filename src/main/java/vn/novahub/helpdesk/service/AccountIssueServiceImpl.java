@@ -6,8 +6,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import vn.novahub.helpdesk.constant.IssueConstant;
-import vn.novahub.helpdesk.constant.RoleConstant;
+import vn.novahub.helpdesk.enums.IssueStatus;
+import vn.novahub.helpdesk.enums.RoleLevel;
 import vn.novahub.helpdesk.exception.IssueNotFoundException;
 import vn.novahub.helpdesk.exception.IssueValidationException;
 import vn.novahub.helpdesk.model.Account;
@@ -16,10 +16,10 @@ import vn.novahub.helpdesk.model.Mail;
 import vn.novahub.helpdesk.repository.AccountRepository;
 import vn.novahub.helpdesk.repository.IssueRepository;
 import vn.novahub.helpdesk.validation.GroupCreateIssue;
-import vn.novahub.helpdesk.validation.GroupUpdateIssue;
 import vn.novahub.helpdesk.validation.IssueValidation;
 
 import javax.mail.MessagingException;
+import javax.validation.groups.Default;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -80,7 +80,7 @@ public class AccountIssueServiceImpl implements AccountIssueService {
 
         issue.setCreatedAt(new Date());
         issue.setUpdatedAt(new Date());
-        issue.setStatus(IssueConstant.STATUS_PENDING);
+        issue.setStatus(IssueStatus.PENDING.value());
         issue.setToken(tokenService.generateToken(accountLogin.getId() + issue.getTitle()));
         issue.setAccountId(accountLogin.getId());
 
@@ -94,8 +94,6 @@ public class AccountIssueServiceImpl implements AccountIssueService {
     @Override
     public Issue update(long issueId, Issue issue) throws IssueNotFoundException, IssueValidationException, MessagingException, IOException {
 
-        issueValidation.validate(issue, GroupUpdateIssue.class);
-
         Account account = accountService.getAccountLogin();
 
         Issue oldIssue = issueRepository.getByIdAndAccountId(issueId, account.getId());
@@ -103,16 +101,25 @@ public class AccountIssueServiceImpl implements AccountIssueService {
         if (oldIssue == null)
             throw new IssueNotFoundException(issueId, account.getId());
 
-        oldIssue.setUpdatedAt(new Date());
+        boolean isSendMail = false;
 
-        oldIssue.setTitle(issue.getTitle());
-        oldIssue.setContent(issue.getContent());
-        if (issue.getReplyMessage() != null)
-            oldIssue.setReplyMessage(issue.getReplyMessage());
+        if(issue.getTitle() != null) {
+            oldIssue.setTitle(issue.getTitle());
+            isSendMail = true;
+        }
+        if(issue.getContent() != null) {
+            oldIssue.setContent(issue.getContent());
+            isSendMail = true;
+        }
 
-        oldIssue = issueRepository.save(oldIssue);
+        issueValidation.validate(oldIssue, Default.class);
 
-        sendMailUpdateIssueForAdmin(oldIssue);
+        if(isSendMail) {
+
+            oldIssue.setUpdatedAt(new Date());
+            oldIssue = issueRepository.save(oldIssue);
+            sendMailUpdateIssueForAdmin(oldIssue);
+        }
 
         return oldIssue;
     }
@@ -138,9 +145,9 @@ public class AccountIssueServiceImpl implements AccountIssueService {
         content = content.replace("{title}", issue.getTitle());
         content = content.replace("{content}", issue.getContent());
         content = content.replace("{status}", issue.getStatus());
-        content = content.replace("{reply-message}", (issue.getReplyMessage() == null) ? "NONE" : issue.getReplyMessage());
-        content = content.replace("{url-approve-issue}", "http://localhost:8080/api/issues/" + issue.getId() + "/approve?token=" + issue.getToken());
-        content = content.replace("{url-deny-issue}", "http://localhost:8080/api/issues/" + issue.getId() + "/deny?token=" + issue.getToken());
+        content = content.replace("{reply-message}", (issue.getReplyMessage() == null) ? IssueStatus.NONE.value() : issue.getReplyMessage());
+        content = content.replace("{url-approve-issue}", "http://localhost:8080/api/issues/" + issue.getId() + "/action?status=APPROVE&token=" + issue.getToken());
+        content = content.replace("{url-deny-issue}", "http://localhost:8080/api/issues/" + issue.getId() + "/action?status=DENY&token=" + issue.getToken());
         mail.setContent(content);
 
         mail.setEmailReceiving(getEmailsOfAdminAndClerk().toArray(new String[0]));
@@ -161,7 +168,7 @@ public class AccountIssueServiceImpl implements AccountIssueService {
         content = content.replace("{title}", issue.getTitle());
         content = content.replace("{content}", issue.getContent());
         content = content.replace("{status}", issue.getStatus());
-        content = content.replace("{reply-message}", (issue.getReplyMessage() == null) ? "NONE" : issue.getReplyMessage());
+        content = content.replace("{reply-message}", (issue.getReplyMessage() == null) ? IssueStatus.NONE.value() : issue.getReplyMessage());
         mail.setContent(content);
 
         mail.setEmailReceiving(getEmailsOfAdminAndClerk().toArray(new String[0]));
@@ -170,8 +177,8 @@ public class AccountIssueServiceImpl implements AccountIssueService {
     }
 
     private ArrayList<String> getEmailsOfAdminAndClerk(){
-        ArrayList<Account> adminList = (ArrayList<Account>) (accountRepository.getAllByRoleName(RoleConstant.ROLE_ADMIN));
-        ArrayList<Account> clerkList = (ArrayList<Account>) (accountRepository.getAllByRoleName(RoleConstant.ROLE_CLERK));
+        ArrayList<Account> adminList = (ArrayList<Account>) (accountRepository.getAllByRoleName(RoleLevel.ADMIN.value()));
+        ArrayList<Account> clerkList = (ArrayList<Account>) (accountRepository.getAllByRoleName(RoleLevel.CLERK.value()));
 
         ArrayList<String> emails = new ArrayList<>();
 

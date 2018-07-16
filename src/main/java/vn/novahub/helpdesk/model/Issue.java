@@ -3,10 +3,8 @@ package vn.novahub.helpdesk.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import vn.novahub.helpdesk.annotation.IssueStatus;
-import vn.novahub.helpdesk.constant.IssueConstant;
+import vn.novahub.helpdesk.annotation.Status;
 import vn.novahub.helpdesk.validation.GroupCreateIssue;
-import vn.novahub.helpdesk.validation.GroupUpdateIssue;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -23,16 +21,15 @@ public class Issue implements Serializable {
     @Column(name = "id")
     private long id;
 
-    @NotEmpty(message = "Title is not empty", groups = {GroupCreateIssue.class, GroupUpdateIssue.class})
+    @NotEmpty(message = "Title is not empty", groups = {GroupCreateIssue.class})
     @Column(name = "title")
     private String title;
 
-    @NotEmpty(message = "Content is not empty", groups = {GroupCreateIssue.class, GroupUpdateIssue.class})
+    @NotEmpty(message = "Content is not empty", groups = {GroupCreateIssue.class})
     @Column(name = "content")
     private String content;
 
-    @IssueStatus(message = "Status does not match any statuses",
-            statuses = {IssueConstant.STATUS_PENDING, IssueConstant.STATUS_APPROVE, IssueConstant.STATUS_APPROVE})
+    @Status(message = "Status does not match any statuses", targetClass = Issue.class)
     @NotEmpty(message = "Status is not empty")
     @Column(name = "status")
     private String status;

@@ -1,13 +1,11 @@
 package vn.novahub.helpdesk.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import vn.novahub.helpdesk.constant.RoleConstant;
+import vn.novahub.helpdesk.enums.RoleLevel;
 import vn.novahub.helpdesk.exception.AccountIsExistException;
 import vn.novahub.helpdesk.exception.AccountValidationException;
 import vn.novahub.helpdesk.exception.EmailFormatException;
@@ -17,12 +15,7 @@ import vn.novahub.helpdesk.service.AccountService;
 
 import javax.annotation.security.PermitAll;
 import javax.servlet.http.HttpServletRequest;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Controller
 public class HomeController {
@@ -36,11 +29,11 @@ public class HomeController {
 
         String roleName = (SecurityContextHolder.getContext().getAuthentication().getAuthorities().toArray())[0].toString();
 
-        if(roleName.equals(RoleConstant.PREFIX_ROLE + RoleConstant.ROLE_ADMIN))
+        if(roleName.equals("ROLE_" + RoleLevel.ADMIN.value()))
             return "redirect:/admin";
-        else if(roleName.equals(RoleConstant.PREFIX_ROLE + RoleConstant.ROLE_CLERK))
+        else if(roleName.equals("ROLE_" + RoleLevel.CLERK.value()))
             return "redirect:/clerk";
-        else if(roleName.equals(RoleConstant.PREFIX_ROLE + RoleConstant.ROLE_USER))
+        else if(roleName.equals("ROLE_" + RoleLevel.USER.value()))
             return "redirect:/user";
 
         return "login";
@@ -94,9 +87,9 @@ public class HomeController {
 
         Account account = accountService.loginWithGoogle(code, request);
 
-        if(account.getRole().getName().equals(RoleConstant.ROLE_ADMIN))
+        if(account.getRole().getName().equals(RoleLevel.ADMIN.value()))
             return "redirect:/admin";
-        else if(account.getRole().getName().equals(RoleConstant.ROLE_CLERK))
+        else if(account.getRole().getName().equals(RoleLevel.CLERK.value()))
             return "redirect:/clerk";
 
         return "redirect:/user";

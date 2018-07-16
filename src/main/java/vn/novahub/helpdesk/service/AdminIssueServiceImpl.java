@@ -6,7 +6,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import vn.novahub.helpdesk.constant.IssueConstant;
+import vn.novahub.helpdesk.enums.IssueStatus;
 import vn.novahub.helpdesk.exception.IssueIsClosedException;
 import vn.novahub.helpdesk.exception.IssueNotFoundException;
 import vn.novahub.helpdesk.exception.IssueValidationException;
@@ -15,10 +15,10 @@ import vn.novahub.helpdesk.model.Issue;
 import vn.novahub.helpdesk.model.Mail;
 import vn.novahub.helpdesk.repository.AccountRepository;
 import vn.novahub.helpdesk.repository.IssueRepository;
-import vn.novahub.helpdesk.validation.GroupUpdateIssue;
 import vn.novahub.helpdesk.validation.IssueValidation;
 
 import javax.mail.MessagingException;
+import javax.validation.groups.Default;
 import java.io.IOException;
 import java.util.Date;
 
@@ -61,40 +61,43 @@ public class AdminIssueServiceImpl implements AdminIssueService{
 
     @Override
     public Issue update(long issueId, Issue issue) throws IssueNotFoundException, IssueValidationException, MessagingException, IOException {
-        issueValidation.validate(issue, GroupUpdateIssue.class);
-
-        boolean isSendMailUpdateIssue = false;
-
         Issue oldIssue = issueRepository.getById(issueId);
 
         if (oldIssue == null)
             throw new IssueNotFoundException(issueId);
 
-        oldIssue.setUpdatedAt(new Date());
+        boolean isSendMail = false;
 
-        oldIssue.setTitle(issue.getTitle());
-        oldIssue.setContent(issue.getContent());
-        if (issue.getReplyMessage() != null)
+        if(issue.getTitle() != null) {
+            oldIssue.setTitle(issue.getTitle());
+        }
+        if(issue.getContent() != null) {
+            oldIssue.setContent(issue.getContent());
+        }
+        if (issue.getReplyMessage() != null) {
             oldIssue.setReplyMessage(issue.getReplyMessage());
+        }
         if (issue.getStatus() != null) {
-            if (oldIssue.getStatus().equals(IssueConstant.STATUS_PENDING) &&
-                    issue.getStatus().equals(IssueConstant.STATUS_DENY)) {
+            if (oldIssue.getStatus().equals(IssueStatus.PENDING.name()) &&
+                    issue.getStatus().equals(IssueStatus.DENY.name())) {
                 oldIssue.setToken(null);
-                isSendMailUpdateIssue = true;
+                isSendMail = true;
             }
 
-            if (oldIssue.getStatus().equals(IssueConstant.STATUS_PENDING) &&
-                    issue.getStatus().equals(IssueConstant.STATUS_APPROVE)) {
+            if (oldIssue.getStatus().equals(IssueStatus.PENDING.name()) &&
+                    issue.getStatus().equals(IssueStatus.APPROVE.name())) {
                 oldIssue.setToken(null);
-                isSendMailUpdateIssue = true;
+                isSendMail = true;
             }
 
             oldIssue.setStatus(issue.getStatus());
         }
 
+        issueValidation.validate(oldIssue, Default.class);
+        oldIssue.setUpdatedAt(new Date());
         oldIssue = issueRepository.save(oldIssue);
 
-        if(isSendMailUpdateIssue)
+        if(isSendMail)
             sendMailUpdateIssueForUser(oldIssue);
 
         return oldIssue;
@@ -118,7 +121,7 @@ public class AdminIssueServiceImpl implements AdminIssueService{
             throw new IssueIsClosedException(issueId);
 
         issue.setToken(null);
-        issue.setStatus(IssueConstant.STATUS_APPROVE);
+        issue.setStatus(IssueStatus.APPROVE.name());
         issue = issueRepository.save(issue);
 
         sendMailUpdateIssueForUser(issue);
@@ -135,7 +138,7 @@ public class AdminIssueServiceImpl implements AdminIssueService{
             throw new IssueIsClosedException(issueId);
 
         issue.setToken(null);
-        issue.setStatus(IssueConstant.STATUS_DENY);
+        issue.setStatus(IssueStatus.DENY.name());
         issue = issueRepository.save(issue);
 
         sendMailUpdateIssueForUser(issue);

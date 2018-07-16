@@ -13,8 +13,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
-import vn.novahub.helpdesk.constant.AccountConstant;
-import vn.novahub.helpdesk.constant.RoleConstant;
+import vn.novahub.helpdesk.enums.AccountStatus;
+import vn.novahub.helpdesk.enums.RoleLevel;
 import vn.novahub.helpdesk.exception.*;
 import vn.novahub.helpdesk.model.Account;
 import vn.novahub.helpdesk.model.GooglePojo;
@@ -84,7 +84,7 @@ public class AccountServiceImpl implements AccountService {
             return false;
         }
 
-        account.setStatus(AccountConstant.STATUS_ACTIVE);
+        account.setStatus(AccountStatus.ACTIVE.value());
         account.setVertificationToken(null);
         accountRepository.save(account);
 
@@ -107,10 +107,10 @@ public class AccountServiceImpl implements AccountService {
         if(account == null || account.getPassword() == null || !bCryptPasswordEncoder.matches(accountInput.getPassword(), account.getPassword()))
             throw new AccountInvalidException();
 
-        if(account.getStatus().equals(AccountConstant.STATUS_INACTIVE))
+        if(account.getStatus().equals(AccountStatus.ACTIVE.value()))
             throw new AccountInactiveException(account.getEmail());
 
-        if(account.getStatus().equals(AccountConstant.STATUS_LOCKED))
+        if(account.getStatus().equals(AccountStatus.LOCKED.value()))
             throw new AccountLockedException(account.getEmail());
 
         UserDetails userDetails = new User(account.getEmail(), account.getPassword(), account.getAuthorities());
@@ -142,7 +142,7 @@ public class AccountServiceImpl implements AccountService {
             }
             account.setAvatarUrl(googlePojo.getPicture());
             account.setToken(accessToken);
-            account.setRoleId(roleService.getByName(RoleConstant.ROLE_USER).getId());
+            account.setRoleId(roleService.getByName(RoleLevel.USER.value()).getId());
             account.setUpdatedAt(new Date());
             account.setCreatedAt(new Date());
             account = createWithGoogleAccount(account);
@@ -153,7 +153,7 @@ public class AccountServiceImpl implements AccountService {
             account = updateToken(account, accessToken);
         }
 
-        UserDetails userDetail = googleService.buildUser(googlePojo, RoleConstant.PREFIX_ROLE + account.getRole().getName());
+        UserDetails userDetail = googleService.buildUser(googlePojo, "ROLE_" + account.getRole().getName());
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetail, null,
                 userDetail.getAuthorities());
         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
@@ -199,9 +199,9 @@ public class AccountServiceImpl implements AccountService {
             throw new AccountIsExistException(account.getEmail());
 
         account.setPassword(bCryptPasswordEncoder.encode(account.getPassword()));
-        account.setStatus(AccountConstant.STATUS_INACTIVE);
+        account.setStatus(AccountStatus.INACTIVE.value());
         account.setVertificationToken(tokenService.generateToken(account.getEmail() + account.getEmail()));
-        account.setRoleId(roleService.getByName(RoleConstant.ROLE_USER).getId());
+        account.setRoleId(roleService.getByName(RoleLevel.USER.value()).getId());
         account.setCreatedAt(new Date());
         account.setUpdatedAt(new Date());
 
@@ -227,10 +227,10 @@ public class AccountServiceImpl implements AccountService {
         if(accountRepository.getByEmail(account.getEmail()) != null)
             throw new AccountIsExistException(account.getEmail());
 
-        account.setStatus(AccountConstant.STATUS_ACTIVE);
-        account.setRoleId(roleService.getByName(RoleConstant.ROLE_USER).getId());
+        account.setStatus(AccountStatus.ACTIVE.value());
+        account.setRoleId(roleService.getByName(RoleLevel.USER.value()).getId());
         account.setPassword(null);
-        account.setToken(null);
+        account.setVertificationToken(null);
         account.setCreatedAt(new Date());
         account.setUpdatedAt(new Date());
 
@@ -297,18 +297,18 @@ public class AccountServiceImpl implements AccountService {
         if(account.getAvatarUrl() != null)
             oldAccount.setAvatarUrl(account.getAvatarUrl());
         if(account.getStatus() != null) {
-            if(oldAccount.getStatus().equals(AccountConstant.STATUS_INACTIVE)
-               && account.getStatus().equals(AccountConstant.STATUS_ACTIVE))
-                oldAccount.setToken(null);
+            if(oldAccount.getStatus().equals(AccountStatus.ACTIVE.value())
+                    && account.getStatus().equals(AccountStatus.INACTIVE.value()))
+                oldAccount.setVertificationToken(null);
 
             oldAccount.setStatus(account.getStatus());
         }
         if(account.getJoiningDate() != null)
             oldAccount.setJoiningDate(account.getJoiningDate());
-        oldAccount.setUpdatedAt(new Date());
 
         accountValidation.validate(oldAccount, Default.class);
 
+        oldAccount.setUpdatedAt(new Date());
         return accountRepository.save(oldAccount);
     }
 

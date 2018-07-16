@@ -3,8 +3,7 @@ package vn.novahub.helpdesk.model;
 import com.fasterxml.jackson.annotation.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import vn.novahub.helpdesk.annotation.AccountStatus;
-import vn.novahub.helpdesk.constant.AccountConstant;
+import vn.novahub.helpdesk.annotation.Status;
 import vn.novahub.helpdesk.validation.*;
 
 import javax.persistence.*;
@@ -53,8 +52,7 @@ public class Account implements Serializable {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-    @AccountStatus(message = "Status does not match any statuses",
-            statuses = {AccountConstant.STATUS_LOCKED, AccountConstant.STATUS_ACTIVE, AccountConstant.STATUS_INACTIVE})
+    @Status(message = "Status does not match any statuses", targetClass = Account.class)
     @NotEmpty(message = "Status is not empty")
     @Column(name = "status")
     private String status;
