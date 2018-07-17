@@ -70,12 +70,15 @@ public class AdminIssueServiceImpl implements AdminIssueService{
 
         if(issue.getTitle() != null) {
             oldIssue.setTitle(issue.getTitle());
+            isSendMail = true;
         }
         if(issue.getContent() != null) {
             oldIssue.setContent(issue.getContent());
+            isSendMail = true;
         }
         if (issue.getReplyMessage() != null) {
             oldIssue.setReplyMessage(issue.getReplyMessage());
+            isSendMail = true;
         }
         if (issue.getStatus() != null) {
             if (oldIssue.getStatus().equals(IssueStatus.PENDING.name()) &&

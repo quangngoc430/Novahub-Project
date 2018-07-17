@@ -148,14 +148,14 @@ INSERT INTO `account_has_skill`(account_id, skill_id) VALUES
 (2, 6);
 
 INSERT INTO `issue`(title, content, status, account_id)
-VALUES("title", "content", "pending", 1);
+VALUES("title", "content", "PENDING", 1);
 INSERT INTO `issue`(title, content, status, account_id)
-VALUES("title1", "content1", "pending", 1);
+VALUES("title1", "content1", "PENDING", 1);
 INSERT INTO `issue`(title, content, status, account_id)
-VALUES("title", "content", "pending", 2);
+VALUES("title", "content", "PENDING", 2);
 INSERT INTO `issue`(title, content, status, account_id)
-VALUES("title1", "content1", "pending", 2);
+VALUES("title1", "content1", "PENDING", 2);
 INSERT INTO `issue`(title, content, status, account_id)
-VALUES("title", "content", "pending", 3);
+VALUES("title", "content", "PENDING", 3);
 INSERT INTO `issue`(title, content, status, account_id)
-VALUES("title1", "content1", "pending", 3);
+VALUES("title1", "content1", "PENDING", 3);
