@@ -30,6 +30,10 @@ public class DayOffController {
     @Autowired
     private DayOffService dayOffService;
 
+    @GetMapping(path = "day-offs")
+    public ResponseEntity<Page<DayOff>> getAll(Pageable pageable) {
+        return new ResponseEntity<>(dayOffService.getAll(pageable), HttpStatus.OK);
+    }
 
     @PostMapping(path = "/day-offs")
     public ResponseEntity<DayOff> create(@RequestBody DayOff dayOff)

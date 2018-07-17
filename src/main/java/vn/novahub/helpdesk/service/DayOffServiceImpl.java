@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import vn.novahub.helpdesk.constant.DayOffConstant;
 import vn.novahub.helpdesk.constant.RoleConstant;
@@ -50,6 +52,11 @@ public class DayOffServiceImpl implements DayOffService{
     private DayOffTypeFactory dayOffTypeFactory;
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    @Override
+    public Page<DayOff> getAll(Pageable pageable) {
+        return dayOffRepository.findAll(pageable);
+    }
 
     @Override
     public DayOff add(DayOff dayOff) throws MessagingException, DayOffTypeIsNotValidException{

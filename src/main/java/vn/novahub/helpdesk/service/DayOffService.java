@@ -1,5 +1,7 @@
 package vn.novahub.helpdesk.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import vn.novahub.helpdesk.exception.DayOffIsAnsweredException;
 import vn.novahub.helpdesk.exception.DayOffOverdueException;
 import vn.novahub.helpdesk.exception.DayOffTokenIsNotMatchException;
@@ -13,6 +15,8 @@ public interface DayOffService {
     DayOff add(DayOff dayOff)
             throws MessagingException,
             DayOffTypeIsNotValidException;
+
+    Page<DayOff> getAll(Pageable pageable);
 
     void delete(DayOff dayOff)
             throws MessagingException,
