@@ -107,7 +107,7 @@ public class AccountServiceImpl implements AccountService {
         if(account == null || account.getPassword() == null || !bCryptPasswordEncoder.matches(accountInput.getPassword(), account.getPassword()))
             throw new AccountInvalidException();
 
-        if(account.getStatus().equals(AccountStatus.ACTIVE.value()))
+        if(account.getStatus().equals(AccountStatus.INACTIVE.value()))
             throw new AccountInactiveException(account.getEmail());
 
         if(account.getStatus().equals(AccountStatus.LOCKED.value()))
@@ -297,8 +297,8 @@ public class AccountServiceImpl implements AccountService {
         if(account.getAvatarUrl() != null)
             oldAccount.setAvatarUrl(account.getAvatarUrl());
         if(account.getStatus() != null) {
-            if(oldAccount.getStatus().equals(AccountStatus.ACTIVE.value())
-                    && account.getStatus().equals(AccountStatus.INACTIVE.value()))
+            if(oldAccount.getStatus().equals(AccountStatus.INACTIVE.value())
+                    && account.getStatus().equals(AccountStatus.ACTIVE.value()))
                 oldAccount.setVertificationToken(null);
 
             oldAccount.setStatus(account.getStatus());

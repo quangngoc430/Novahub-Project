@@ -10,7 +10,7 @@ public enum AccountStatus {
     INACTIVE{
         @Override
         public String value(){
-            return "ACTIVE";
+            return "INACTIVE";
         }
     },
     LOCKED{
