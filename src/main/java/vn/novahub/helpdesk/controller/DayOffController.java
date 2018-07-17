@@ -8,15 +8,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.novahub.helpdesk.exception.*;
 import vn.novahub.helpdesk.model.DayOff;
-import vn.novahub.helpdesk.repository.DayOffRepository;
 import vn.novahub.helpdesk.service.DayOffService;
 import vn.novahub.helpdesk.service.LogService;
 
 import javax.mail.MessagingException;
-import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping(path = "/api", produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -30,10 +29,19 @@ public class DayOffController {
     @Autowired
     private DayOffService dayOffService;
 
-    @GetMapping(path = "day-offs")
-    public ResponseEntity<Page<DayOff>> getAll(Pageable pageable) {
-        return new ResponseEntity<>(dayOffService.getAll(pageable), HttpStatus.OK);
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping(path = "/day-offs", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Page<DayOff>> getAllAccountIdAndTypeAndStatus(
+            @RequestParam(name = "account-id", required = false, defaultValue = "") String accountIdString,
+            @RequestParam(name = "type", required = false, defaultValue = "") String type,
+            @RequestParam(name = "status", required = false, defaultValue = "") String status,
+            Pageable pageable) {
+
+        Page<DayOff> dayOffPage = dayOffService.getAllByAccountIdAndTypeAndStatus(accountIdString, type, status, pageable);
+
+        return new ResponseEntity<>(dayOffPage, HttpStatus.OK);
     }
+
 
     @PostMapping(path = "/day-offs")
     public ResponseEntity<DayOff> create(@RequestBody DayOff dayOff)

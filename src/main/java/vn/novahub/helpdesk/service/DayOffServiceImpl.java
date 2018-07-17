@@ -54,8 +54,24 @@ public class DayOffServiceImpl implements DayOffService{
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
-    public Page<DayOff> getAll(Pageable pageable) {
-        return dayOffRepository.findAll(pageable);
+    public Page<DayOff> getAllByAccountIdAndTypeAndStatus(
+            String accountIdString,
+            String typeKeyword,
+            String statusKeyword,
+            Pageable pageable) {
+
+        if (accountIdString.equals("")) {
+            return dayOffRepository.getAllByTypeLikeAndStatusLike(
+                    typeKeyword,
+                    statusKeyword,
+                    pageable);
+        }
+
+        return dayOffRepository.getAllByAccountIdAndTypeLikeAndStatusLike(
+                Long.parseLong(accountIdString),
+                typeKeyword,
+                statusKeyword,
+                pageable);
     }
 
     @Override
