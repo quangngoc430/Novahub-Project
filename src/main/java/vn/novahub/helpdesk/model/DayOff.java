@@ -1,5 +1,7 @@
 package vn.novahub.helpdesk.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -33,6 +35,7 @@ public class DayOff {
     @Column(name = "status")
     private String status;
 
+    @JsonIgnore
     @Column(name = "token")
     private String token;
 
@@ -161,4 +164,5 @@ public class DayOff {
     public void setDayOffType(DayOffType dayOffType) {
         this.dayOffType = dayOffType;
     }
+
 }

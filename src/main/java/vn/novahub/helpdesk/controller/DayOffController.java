@@ -3,6 +3,8 @@ package vn.novahub.helpdesk.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -28,13 +30,12 @@ public class DayOffController {
     @Autowired
     private DayOffService dayOffService;
 
+
     @PostMapping(path = "/day-offs")
     public ResponseEntity<DayOff> create(@RequestBody DayOff dayOff)
             throws MessagingException, DayOffTypeIsNotValidException {
 
         dayOff = dayOffService.add(dayOff);
-
-        logger.info(dayOff.getCreatedAt().toGMTString());
 
         return new ResponseEntity<>(dayOff, HttpStatus.OK);
     }
