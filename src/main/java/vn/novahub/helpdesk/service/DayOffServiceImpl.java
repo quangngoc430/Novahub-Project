@@ -55,12 +55,15 @@ public class DayOffServiceImpl implements DayOffService{
 
     @Override
     public Page<DayOff> getAllByAccountIdAndTypeAndStatus(
-            String accountIdString,
+            long accountId,
             String typeKeyword,
             String statusKeyword,
             Pageable pageable) {
 
-        if (accountIdString.equals("")) {
+        typeKeyword = "%" + typeKeyword + "%";
+        statusKeyword = "%" + statusKeyword + "%";
+
+        if (accountId == 0) {
             return dayOffRepository.getAllByTypeLikeAndStatusLike(
                     typeKeyword,
                     statusKeyword,
@@ -68,7 +71,7 @@ public class DayOffServiceImpl implements DayOffService{
         }
 
         return dayOffRepository.getAllByAccountIdAndTypeLikeAndStatusLike(
-                Long.parseLong(accountIdString),
+                accountId,
                 typeKeyword,
                 statusKeyword,
                 pageable);

@@ -16,7 +16,11 @@ public interface DayOffService {
             throws MessagingException,
             DayOffTypeIsNotValidException;
 
-    Page<DayOff> getAllByAccountIdAndTypeAndStatus(String accountId, String type, String status, Pageable pageable);
+    Page<DayOff> getAllByAccountIdAndTypeAndStatus(
+            long accountId,
+            String type,
+            String status,
+            Pageable pageable);
 
     void delete(DayOff dayOff)
             throws MessagingException,

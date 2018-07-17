@@ -14,7 +14,7 @@ public interface DayOffRepository extends PagingAndSortingRepository<DayOff, Lon
 
     DayOff getById(long id);
 
-    @Query("FROM DayOff dayOff WHERE " +
+    @Query("SELECT dayOff FROM DayOff dayOff WHERE " +
             "dayOff.accountId = :accountid AND " +
             "dayOff.type LIKE :typekeyword AND dayOff.status LIKE :statuskeyword")
     Page<DayOff> getAllByAccountIdAndTypeLikeAndStatusLike(

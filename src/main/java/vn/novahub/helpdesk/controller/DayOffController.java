@@ -37,7 +37,15 @@ public class DayOffController {
             @RequestParam(name = "status", required = false, defaultValue = "") String status,
             Pageable pageable) {
 
-        Page<DayOff> dayOffPage = dayOffService.getAllByAccountIdAndTypeAndStatus(accountIdString, type, status, pageable);
+        long accountId;
+
+        if (accountIdString.equals("")) {
+            accountId = 0;
+        } else {
+            accountId = Long.parseLong(accountIdString);
+        }
+
+        Page<DayOff> dayOffPage = dayOffService.getAllByAccountIdAndTypeAndStatus(accountId, type, status, pageable);
 
         return new ResponseEntity<>(dayOffPage, HttpStatus.OK);
     }
