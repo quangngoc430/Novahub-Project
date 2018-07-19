@@ -31,10 +31,8 @@ public class DayOffTypeController {
 
     @GetMapping(path = "/day-off-types/{account-id}")
     public ResponseEntity<Page<DayOffType>> getByAccountId(@PathVariable("account-id") long accountId,
-                                                           HttpServletRequest request,
                                                            Pageable pageable)
                                                                   throws DayOffTypeNotFoundException {
-        logService.log(request, logger);
 
         Page<DayOffType> dayOffTypes = dayOffTypeService.findByAccountId(accountId, pageable);
 
@@ -42,9 +40,8 @@ public class DayOffTypeController {
     }
 
     @PostMapping(path = "/day-off-types")
-    public ResponseEntity<String> create(@RequestBody DayOffType dayOffType,
-                                         HttpServletRequest request)  throws DayOffTypeIsExistException, DayOffTypeIsNotValidException {
-        logService.log(request, logger);
+    public ResponseEntity<String> create(@RequestBody DayOffType dayOffType)
+            throws DayOffTypeIsExistException, DayOffTypeIsNotValidException {
 
         dayOffTypeService.add(dayOffType);
 
@@ -65,10 +62,7 @@ public class DayOffTypeController {
     }
 
     @DeleteMapping(path = "/day-off-types/{type-id}")
-    public ResponseEntity<String> delete(@PathVariable("type-id") long typeId,
-                                         HttpServletRequest request) throws DayOffTypeNotFoundException {
-
-        logService.log(request, logger);
+    public ResponseEntity<String> delete(@PathVariable("type-id") long typeId) throws DayOffTypeNotFoundException {
 
         DayOffType dayOffType = dayOffTypeService.findById(typeId);
 

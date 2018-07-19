@@ -97,7 +97,7 @@ public class DayOffServiceImpl implements DayOffService{
             throws MessagingException,
                     DayOffOverdueException {
         Date currentDate = new Date();
-        dayOff = dayOffRepository.getById(dayOff.getId());
+        dayOff = dayOffRepository.findOne(dayOff.getId());
 
         if (currentDate.before(dayOff.getStartDate())) {
             dayOffRepository.delete(dayOff);
@@ -142,7 +142,7 @@ public class DayOffServiceImpl implements DayOffService{
     }
 
     private DayOff checkIfRequestIsAnswered(long dayOffId, String token) throws DayOffIsAnsweredException{
-        DayOff dayOff = dayOffRepository.getById(dayOffId);
+        DayOff dayOff = dayOffRepository.findOne(dayOffId);
 
         if (dayOff.getToken().trim().isEmpty()) {
             throw new DayOffIsAnsweredException(dayOffId);

@@ -1,13 +1,8 @@
 package vn.novahub.helpdesk.validation;
 
 import org.springframework.stereotype.Component;
-<<<<<<< HEAD
-import vn.novahub.helpdesk.exception.CategoryValidationException;
+
 import vn.novahub.helpdesk.exception.SkillValidationException;
-import vn.novahub.helpdesk.model.Category;
-=======
-import vn.novahub.helpdesk.exception.SkillValidationException;
->>>>>>> develop
 import vn.novahub.helpdesk.model.Skill;
 
 import javax.validation.*;
