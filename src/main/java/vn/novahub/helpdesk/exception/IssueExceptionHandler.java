@@ -27,6 +27,7 @@ public class IssueExceptionHandler {
 
         return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
 
+
     }
 
     @ExceptionHandler(value = IssueValidationException.class)
@@ -40,6 +41,7 @@ public class IssueExceptionHandler {
         apiError.setMessage(ex.getMessage());
 
         return new ResponseEntity<>(apiError, HttpStatus.NOT_ACCEPTABLE);
+
     }
 
 }

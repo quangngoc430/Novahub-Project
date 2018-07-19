@@ -133,6 +133,7 @@ public class IssueServiceImpl implements IssueService {
         issueRepository.deleteById(issueId);
     }
 
+
     @Override
     public Page<Issue> getAllByKeywordAndStatus(String keyword, String status, Pageable pageable) {
 
@@ -158,6 +159,7 @@ public class IssueServiceImpl implements IssueService {
 
     @Override
     public Issue create(Issue issue) throws IssueValidationException, MessagingException {
+
         Account accountLogin = accountService.getAccountLogin();
 
         issue.setCreatedAt(new Date());

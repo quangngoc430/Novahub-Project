@@ -26,6 +26,36 @@ public class CategoryExceptionHandler {
         apiError.setMessage(ex.getMessage());
 
         return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
+
+    }
+
+    @ExceptionHandler(value = CategoryIsExistException.class)
+    public ResponseEntity<ApiError> handleCategoryIsExistException(HttpServletRequest request, Exception ex){
+        ApiError apiError = new ApiError();
+
+        apiError.setTimestamp(Instant.now());
+        apiError.setStatus(HttpStatus.CONFLICT.value());
+        HashMap<String, String> errors = new HashMap<>();
+        errors.put("message", "Category is exist");
+        apiError.setErrors(errors);
+        apiError.setPath(request.getRequestURI());
+        apiError.setMessage(ex.getMessage());
+
+        return new ResponseEntity<>(apiError, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(value = CategoryValidationException.class)
+    public ResponseEntity<ApiError> handleCategoryValidationException(HttpServletRequest request, Exception ex){
+        ApiError apiError = new ApiError();
+
+        apiError.setTimestamp(Instant.now());
+        apiError.setStatus(HttpStatus.NOT_ACCEPTABLE.value());
+        apiError.setErrors(((CategoryValidationException) ex).getErrors());
+        apiError.setPath(request.getRequestURI());
+        apiError.setMessage(ex.getMessage());
+
+        return new ResponseEntity<>(apiError, HttpStatus.NOT_ACCEPTABLE);
+
     }
 
 }

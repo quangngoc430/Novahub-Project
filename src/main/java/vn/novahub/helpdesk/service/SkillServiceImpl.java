@@ -36,7 +36,7 @@ public class SkillServiceImpl implements SkillService {
 
         Account accountLogin = accountService.getAccountLogin();
 
-        Skill oldSkill = skillRepository.findByName(skill.getName().toLowerCase());
+        Skill oldSkill = skillRepository.getByName(skill.getName().toLowerCase());
 
         if(oldSkill == null) {
             skill.setName(skill.getName().toLowerCase());
@@ -53,7 +53,7 @@ public class SkillServiceImpl implements SkillService {
 
     @Override
     public Skill createByCategoryId(Skill skill, long categoryId) {
-        Skill oldSkill = skillRepository.findByName(skill.getName());
+        Skill oldSkill = skillRepository.getByName(skill.getName());
 
         if(oldSkill != null){
             return oldSkill;
@@ -69,7 +69,7 @@ public class SkillServiceImpl implements SkillService {
     public Skill updateBySkillId(Skill skill, long skillId, HttpServletRequest request) {
         Account accountLogin = accountService.getAccountLogin();
 
-        Skill oldSkill = skillRepository.findByName(skill.getName().toLowerCase());
+        Skill oldSkill = skillRepository.getByName(skill.getName().toLowerCase());
 
         if(oldSkill == null){
             skill.setName(skill.getName().toLowerCase());
@@ -96,7 +96,7 @@ public class SkillServiceImpl implements SkillService {
         if(!categoryRepository.existsById(categoryId))
             throw new CategoryNotFoundException(categoryId);
 
-        Skill oldSkill = skillRepository.findByIdAndCategoryId(skillId, categoryId);
+        Skill oldSkill = skillRepository.getByIdAndCategoryId(skillId, categoryId);
 
         if(oldSkill == null)
             throw new SkillNotFoundException(skillId);
@@ -118,7 +118,7 @@ public class SkillServiceImpl implements SkillService {
 
     @Override
     public Skill getByCategoryIdAndSkillId(long categoryId, long skillId) {
-        return skillRepository.findByIdAndCategoryId(skillId, categoryId);
+        return skillRepository.getByIdAndCategoryId(skillId, categoryId);
     }
 
     @Override

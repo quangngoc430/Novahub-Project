@@ -25,7 +25,8 @@ public interface AccountService {
 
     public Account loginWithGoogle(String code, HttpServletRequest request) throws IOException, EmailFormatException, RoleNotFoundException, AccountIsExistException, AccountValidationException;
 
-    Page<Account> getAll(String keyword, Pageable pageable);
+
+    Page<Account> getAll(String keyword, String status, String role, Pageable pageable);
 
     Account get(long accountId) throws AccountNotFoundException;
 
