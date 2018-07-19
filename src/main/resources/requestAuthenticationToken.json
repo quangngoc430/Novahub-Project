@@ -1,0 +1,10 @@
+[
+  {
+    "path": "/api/user",
+    "method": "GET"
+  },
+  {
+    "path" : "/api/user",
+    "method" : ["GET", "POST", "PUT"]
+  }
+]

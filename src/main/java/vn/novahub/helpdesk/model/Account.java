@@ -93,6 +93,9 @@ public class Account implements Serializable {
     @JoinColumn(name = "role_id", insertable = false, updatable = false)
     private Role role;
 
+    @Transient
+    private Token access_token;
+
     public long getId() {
         return id;
     }
@@ -227,6 +230,14 @@ public class Account implements Serializable {
 
     public void setJoiningDate(Date joiningDate) {
         this.joiningDate = joiningDate;
+    }
+
+    public Token getAccess_token() {
+        return access_token;
+    }
+
+    public void setAccess_token(Token access_token) {
+        this.access_token = access_token;
     }
 
     @Transient

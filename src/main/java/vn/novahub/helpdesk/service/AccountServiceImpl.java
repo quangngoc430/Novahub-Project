@@ -18,7 +18,9 @@ import vn.novahub.helpdesk.exception.*;
 import vn.novahub.helpdesk.model.Account;
 import vn.novahub.helpdesk.model.GooglePojo;
 import vn.novahub.helpdesk.model.Mail;
+import vn.novahub.helpdesk.model.Token;
 import vn.novahub.helpdesk.repository.AccountRepository;
+import vn.novahub.helpdesk.repository.TokenRepository;
 import vn.novahub.helpdesk.validation.*;
 
 import javax.mail.MessagingException;
@@ -44,6 +46,9 @@ public class AccountServiceImpl implements AccountService {
     private TokenService tokenService;
 
     @Autowired
+    private TokenRepository tokenRepository;
+
+    @Autowired
     private RoleService roleService;
 
     @Autowired
@@ -62,8 +67,26 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public void authenticationToken(String authenticationToken, HttpServletRequest request) throws TokenNotFoundException, TokenIsExpiredException {
+        Token token = tokenRepository.getByAccessToken(authenticationToken);
+
+        if(token == null) {
+            throw new TokenNotFoundException(authenticationToken);
+        }
+
+        if(tokenService.isTokenExpired(token))
+            throw new TokenIsExpiredException(token.getAccessToken());
+
+        Account accountLogin = token.getAccount();
+        UserDetails userDetails = new User(accountLogin.getEmail(), "", accountLogin.getAuthorities());
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+    }
+
+    @Override
     public Account getAccountLogin() {
-        String email = ((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        String email = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         return accountRepository.getByEmail(email);
     }
 
@@ -109,11 +132,14 @@ public class AccountServiceImpl implements AccountService {
         if(account.getStatus().equals(AccountConstant.STATUS_LOCKED))
             throw new AccountLockedException(account.getEmail());
 
-        UserDetails userDetails = new User(account.getEmail(), account.getPassword(), account.getAuthorities());
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null,
-                userDetails.getAuthorities());
-        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        Token accessToken = new Token();
+        accessToken.setAccessToken(tokenService.generateToken(account.getId() + account.getEmail() + (new Date()).getTime()));
+        accessToken.setTime(3600); // 1 hour
+        accessToken.setAccountId(account.getId());
+        accessToken.setCreatedAt(new Date());
+        accessToken.setUpdatedAt(new Date());
+
+        account.setAccess_token(tokenRepository.save(accessToken));
 
         return account;
     }

@@ -13,6 +13,8 @@ public interface AccountService {
 
     boolean isAccountLogin(long accountId);
 
+    void authenticationToken(String token, HttpServletRequest request) throws TokenNotFoundException, TokenIsExpiredException;
+
     Account getAccountLogin();
 
     Account getByEmail(String email);

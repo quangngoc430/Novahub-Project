@@ -18,9 +18,14 @@ import vn.novahub.helpdesk.model.Account;
 import vn.novahub.helpdesk.service.AccountService;
 import vn.novahub.helpdesk.service.LogService;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.security.PermitAll;
 import javax.mail.MessagingException;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @RestController
 @RequestMapping(path = "/api")
@@ -33,6 +38,19 @@ public class AccountController {
 
     @Autowired
     private LogService logService;
+
+    @GetMapping(path = "/authentication-token")
+    public void authenticationToken(HttpServletRequest request,
+                                                       HttpServletResponse response) throws TokenNotFoundException, ServletException, IOException, TokenIsExpiredException {
+        String accessToken = request.getHeader("access_token");
+        String urlRequest = (String) request.getAttribute("url_request");
+        request.removeAttribute("url_request");
+        accountService.authenticationToken(accessToken, request);
+
+        RequestDispatcher requestDispatcher = request.getServletContext().getRequestDispatcher(urlRequest);
+        requestDispatcher.forward(request, response);
+    }
+
 
     @PreAuthorize("hasRole('ROLE_ANONYMOUS')")
     @PostMapping(path = "/login", produces = {MediaType.APPLICATION_JSON_VALUE})

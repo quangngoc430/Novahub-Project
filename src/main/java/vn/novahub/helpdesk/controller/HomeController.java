@@ -58,24 +58,24 @@ public class HomeController {
 
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @RequestMapping("/user")
-    public String user(){
+    public String user() {
         return "user";
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @RequestMapping("/admin")
-    public String admin(){
+    public String admin() {
         return "admin";
     }
 
     @PreAuthorize("hasRole('ROLE_CLERK')")
     @RequestMapping("/clerk")
-    public String clerk(){
+    public String clerk() {
         return "clerk";
     }
 
     @RequestMapping("/403")
-    public String er(){
+    public String error403() {
         return "403";
     }
 

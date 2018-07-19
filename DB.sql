@@ -3,21 +3,14 @@ CREATE DATABASE `helpdesk`;
 
 USE `helpdesk`;
 
-DROP TABLE IF EXISTS `day_off`;
-DROP TABLE IF EXISTS `day_off_type`;
-DROP TABLE IF EXISTS `issue`;
-DROP TABLE IF EXISTS `account_has_skill`;
-DROP TABLE IF EXISTS `skill`;
-DROP TABLE IF EXISTS `category`;
-DROP TABLE IF EXISTS `account`;
 DROP TABLE IF EXISTS `role`;
-
 CREATE TABLE `role` (
   id int NOT NULL AUTO_INCREMENT,
   name char(80) NOT NULL,
   PRIMARY KEY (id)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `account`;
 CREATE TABLE `account` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `email` varchar(45) NOT NULL,
@@ -38,6 +31,19 @@ CREATE TABLE `account` (
   CONSTRAINT `fk_user_role` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `token`;
+CREATE TABLE `token` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `access_token` varchar(256) NOT NULL,
+  `time` int NOT NULL,
+  `account_id` int NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `fk_token_account` FOREIGN KEY (`account_id`) REFERENCES `account`(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `category`;
 CREATE TABLE `category` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) DEFAULT NULL,
@@ -58,6 +64,7 @@ CREATE TABLE `skill` (
   CONSTRAINT `fk_skill_category` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `account_has_skill`;
 CREATE TABLE `account_has_skill` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `account_id` int(11) NOT NULL,
@@ -69,13 +76,14 @@ CREATE TABLE `account_has_skill` (
   CONSTRAINT `fk_account_has_skill_skill` FOREIGN KEY (`skill_id`) REFERENCES `skill` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `day_off_type`;
 CREATE TABLE `day_off_type` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `type` varchar(20) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
+DROP TABLE IF EXISTS `day_off`;
 CREATE TABLE `day_off` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(200) DEFAULT NULL,
@@ -94,6 +102,7 @@ CREATE TABLE `day_off` (
   CONSTRAINT `fk_day_off_type` FOREIGN KEY (`type_id`) REFERENCES `day_off_type` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `issue`;
 CREATE TABLE `issue` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(200) NOT NULL,
@@ -107,8 +116,6 @@ CREATE TABLE `issue` (
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_issue_account` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
 
 INSERT INTO `role`(name) VALUES ("ADMIN");
 INSERT INTO `role`(name) VALUES ("CLERK");

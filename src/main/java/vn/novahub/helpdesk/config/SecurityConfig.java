@@ -8,6 +8,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import vn.novahub.helpdesk.filter.TokenAuthenticationFilterAfter;
+import vn.novahub.helpdesk.filter.TokenAuthenticationFilterBefore;
 import vn.novahub.helpdesk.service.MyUserDetailService;
 
 @EnableWebSecurity
@@ -32,8 +35,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
 
+        TokenAuthenticationFilterBefore tokenAuthenticationFilterBefore = new TokenAuthenticationFilterBefore();
+        TokenAuthenticationFilterAfter tokenAuthenticationFilterAfter = new TokenAuthenticationFilterAfter();
+
+        httpSecurity.addFilterBefore(tokenAuthenticationFilterBefore, BasicAuthenticationFilter.class);
+        httpSecurity.addFilterAfter(tokenAuthenticationFilterAfter, BasicAuthenticationFilter.class);
+
+        httpSecurity.sessionManagement().disable();
+
         httpSecurity.authorizeRequests()
-                        .antMatchers("/api/**", "/login", "/api/login", "/login-google", "/register", "/user/update").permitAll()
+                        .antMatchers("/api**", "/login", "/api/login", "/login-google", "/register", "/user/update").permitAll()
                     .and()
                         .exceptionHandling().accessDeniedPage("/403")
                     .and()
