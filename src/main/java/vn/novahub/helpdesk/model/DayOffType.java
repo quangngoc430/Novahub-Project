@@ -1,5 +1,7 @@
 package vn.novahub.helpdesk.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -14,15 +16,26 @@ public class DayOffType {
     @Column(name = "type")
     private String type;
 
+    @Column(name = "year")
+    private int year;
+
     @Column(name = "quota")
-    private int quota;
+    private long quota;
+
+    @Column(name = "remaining_time")
+    private long remainingTime;
 
     @Column(name = "account_id")
     private long accountId;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = Account.class)
     @JoinColumn(name = "account_id", insertable = false, updatable = false)
     private Account account;
+
+    public void subtractRemainingTime(long numberOfDayOff) {
+        this.remainingTime = this.remainingTime - numberOfDayOff;
+    }
 
     public long getId() {
         return id;
@@ -40,12 +53,28 @@ public class DayOffType {
         this.type = type;
     }
 
-    public int getQuota() {
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public long getQuota() {
         return quota;
     }
 
-    public void setQuota(int quota) {
+    public void setQuota(long quota) {
         this.quota = quota;
+    }
+
+    public long getRemainingTime() {
+        return remainingTime;
+    }
+
+    public void setRemainingTime(long remainingTime) {
+        this.remainingTime = remainingTime;
     }
 
     public Account getAccount() {

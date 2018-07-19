@@ -3,6 +3,8 @@ package vn.novahub.helpdesk.model;
 import com.fasterxml.jackson.annotation.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import vn.novahub.helpdesk.annotation.AccountStatus;
+import vn.novahub.helpdesk.constant.AccountConstant;
 import vn.novahub.helpdesk.validation.*;
 
 import javax.persistence.*;
@@ -14,6 +16,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "account")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Account implements Serializable {
 
     @Id
@@ -50,14 +53,8 @@ public class Account implements Serializable {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-    @NotNull(message = "Total number of hours is not empty")
-    @Column(name = "total_number_of_hours")
-    private long totalNumberOfHours;
-
-    @NotNull(message = "Remain number of hours is not empty")
-    @Column(name = "remain_number_of_hours")
-    private long remainNumberOfHours;
-
+    @AccountStatus(message = "Status does not match any statuses",
+            statuses = {AccountConstant.STATUS_LOCKED, AccountConstant.STATUS_ACTIVE, AccountConstant.STATUS_INACTIVE})
     @NotEmpty(message = "Status is not empty")
     @Column(name = "status")
     private String status;
@@ -69,6 +66,11 @@ public class Account implements Serializable {
     @NotNull(message = "Update At is not null")
     @Column(name = "updated_at")
     private Date updatedAt;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(pattern = "dd-MM-yyyy")
+    @Column(name = "joiningDate")
+    private Date joiningDate;
 
     @Column(name = "token")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
@@ -163,22 +165,6 @@ public class Account implements Serializable {
         this.newPassword = newPassword;
     }
 
-    public long getTotalNumberOfHours() {
-        return totalNumberOfHours;
-    }
-
-    public void setTotalNumberOfHours(long totalNumberOfHours) {
-        this.totalNumberOfHours = totalNumberOfHours;
-    }
-
-    public long getRemainNumberOfHours() {
-        return remainNumberOfHours;
-    }
-
-    public void setRemainNumberOfHours(long remainNumberOfHours) {
-        this.remainNumberOfHours = remainNumberOfHours;
-    }
-
     public String getStatus() {
         return status;
     }
@@ -235,6 +221,14 @@ public class Account implements Serializable {
         this.vertificationToken = vertificationToken;
     }
 
+    public Date getJoiningDate() {
+        return joiningDate;
+    }
+
+    public void setJoiningDate(Date joiningDate) {
+        this.joiningDate = joiningDate;
+    }
+
     @Transient
     @JsonIgnore
     public List<GrantedAuthority> getAuthorities() {
@@ -255,11 +249,10 @@ public class Account implements Serializable {
                 ", address='" + address + '\'' +
                 ", avatarUrl='" + avatarUrl + '\'' +
                 ", password='" + password + '\'' +
-                ", totalNumberOfHours=" + totalNumberOfHours +
-                ", remainNumberOfHours=" + remainNumberOfHours +
                 ", status='" + status + '\'' +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
+                ", joiningDate=" + joiningDate +
                 ", token='" + token + '\'' +
                 ", vertificationToken='" + vertificationToken + '\'' +
                 ", roleId=" + roleId +

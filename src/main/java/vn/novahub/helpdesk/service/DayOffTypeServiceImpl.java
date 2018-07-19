@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import vn.novahub.helpdesk.exception.DayOffTypeIsExistException;
+import vn.novahub.helpdesk.exception.DayOffTypeIsNotValidException;
 import vn.novahub.helpdesk.exception.DayOffTypeNotFoundException;
 import vn.novahub.helpdesk.model.DayOffType;
 import vn.novahub.helpdesk.repository.DayOffTypeRepository;
@@ -15,13 +16,21 @@ public class DayOffTypeServiceImpl implements DayOffTypeService {
     @Autowired
     private DayOffTypeRepository dayOffTypeRepository;
 
+    @Autowired
+    private DayOffTypeFactory dayOffTypeFactory;
+
     @Override
-    public void add(DayOffType dayOffType) throws DayOffTypeIsExistException {
+    public DayOffType add(DayOffType dayOffType) throws DayOffTypeIsExistException, DayOffTypeIsNotValidException {
+
         DayOffType existDayOffType = dayOffTypeRepository
-                                     .findByTypeAndAccountId(dayOffType.getType(), dayOffType.getAccountId());
+                                     .findByAccountIdAndTypeAndYear(
+                                             dayOffType.getAccountId(),
+                                             dayOffType.getType(),
+                                             dayOffType.getYear());
 
         if (existDayOffType == null) {
-            dayOffTypeRepository.save(dayOffType);
+            DayOffType newDayOffType = dayOffTypeFactory.create(dayOffType.getType());
+            return dayOffTypeRepository.save(newDayOffType);
         } else {
             throw new DayOffTypeIsExistException(dayOffType.getType());
         }
@@ -31,7 +40,10 @@ public class DayOffTypeServiceImpl implements DayOffTypeService {
     @Override
     public void update(DayOffType dayOffType) throws DayOffTypeNotFoundException{
         DayOffType existDayOffType = dayOffTypeRepository
-                                     .findByTypeAndAccountId(dayOffType.getType(), dayOffType.getAccountId());
+                                     .findByAccountIdAndTypeAndYear(
+                                             dayOffType.getAccountId(),
+                                             dayOffType.getType(),
+                                             dayOffType.getYear());
 
         if (existDayOffType != null) {
             existDayOffType.setQuota(dayOffType.getQuota());

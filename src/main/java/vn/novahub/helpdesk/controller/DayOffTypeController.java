@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.novahub.helpdesk.exception.DayOffTypeIsExistException;
+import vn.novahub.helpdesk.exception.DayOffTypeIsNotValidException;
 import vn.novahub.helpdesk.exception.DayOffTypeNotFoundException;
 import vn.novahub.helpdesk.model.DayOffType;
 import vn.novahub.helpdesk.service.DayOffTypeService;
@@ -42,7 +43,7 @@ public class DayOffTypeController {
 
     @PostMapping(path = "/day-off-types")
     public ResponseEntity<String> create(@RequestBody DayOffType dayOffType,
-                                         HttpServletRequest request)  throws DayOffTypeIsExistException {
+                                         HttpServletRequest request)  throws DayOffTypeIsExistException, DayOffTypeIsNotValidException {
         logService.log(request, logger);
 
         dayOffTypeService.add(dayOffType);

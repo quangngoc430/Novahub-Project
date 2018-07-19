@@ -20,9 +20,13 @@ public class DayOffTypeExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<ApiError> handleDayOffTypeNotFoundException(HttpServletRequest request, Exception ex){
         String message = "Day off type not found";
+        HashMap<String, String> errors = new HashMap<>();
+        errors.put("message", message);
 
-        setValueForApiError(message, request, ex);
-        this.apiError.setStatus(HttpStatus.NOT_FOUND.value());
+        this.apiError = new ApiError(HttpStatus.NOT_FOUND.value(),
+                                     errors,
+                                     ex.getMessage(),
+                                     request.getRequestURI());
 
         return new ResponseEntity<>(this.apiError, HttpStatus.NOT_FOUND);
     }
@@ -31,21 +35,16 @@ public class DayOffTypeExceptionHandler {
     @ResponseStatus(HttpStatus.CONFLICT)
     public ResponseEntity<ApiError> handleDayOffTypeIsExistException(HttpServletRequest request, Exception ex){
         String message = "Day off type is already exist";
+        HashMap<String, String> errors = new HashMap<>();
+        errors.put("message", message);
 
-        setValueForApiError(message, request, ex);
-        this.apiError.setStatus(HttpStatus.CONFLICT.value());
+        this.apiError = new ApiError(HttpStatus.CONFLICT.value(),
+                                     errors,
+                                     ex.getMessage(),
+                                     request.getRequestURI());
 
         return new ResponseEntity<>(this.apiError, HttpStatus.CONFLICT);
     }
 
-    private void setValueForApiError(String message, HttpServletRequest request, Exception ex) {
-        this.apiError = new ApiError();
-        apiError.setTimestamp(Instant.now());
-        HashMap<String, String> errors = new HashMap<>();
-        errors.put("message", message);
-        apiError.setErrors(errors);
-        apiError.setPath(request.getRequestURI());
-        apiError.setMessage(ex.getMessage());
-    }
 
 }

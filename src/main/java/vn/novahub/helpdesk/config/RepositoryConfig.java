@@ -1,12 +1,9 @@
-package vn.novahub.helpdesk;
+package vn.novahub.helpdesk.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapter;
-import vn.novahub.helpdesk.model.Category;
-import vn.novahub.helpdesk.model.Issue;
-import vn.novahub.helpdesk.model.Role;
-import vn.novahub.helpdesk.model.Skill;
+import vn.novahub.helpdesk.model.*;
 
 @Configuration
 public class RepositoryConfig extends RepositoryRestConfigurerAdapter {
@@ -17,5 +14,6 @@ public class RepositoryConfig extends RepositoryRestConfigurerAdapter {
         configuration.exposeIdsFor(Issue.class);
         configuration.exposeIdsFor(Skill.class);
         configuration.exposeIdsFor(Category.class);
+        configuration.exposeIdsFor(Account.class);
     }
 }
