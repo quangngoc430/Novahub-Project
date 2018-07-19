@@ -25,6 +25,8 @@ public interface AccountService {
 
     Account login(Account account, HttpServletRequest request) throws AccountInvalidException, AccountInactiveException, AccountLockedException, AccountValidationException;
 
+    void logout(String token) throws TokenNotFoundException;
+
     public Account loginWithGoogle(String code, HttpServletRequest request) throws IOException, EmailFormatException, RoleNotFoundException, AccountIsExistException, AccountValidationException;
 
     Page<Account> getAll(String keyword, String status, String role, Pageable pageable);

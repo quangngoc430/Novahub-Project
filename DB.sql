@@ -36,6 +36,7 @@ CREATE TABLE `token` (
   `id` int NOT NULL AUTO_INCREMENT,
   `access_token` varchar(256) NOT NULL,
   `time` int NOT NULL,
+  `status` varchar(50) NOT NULL,
   `account_id` int NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,

@@ -14,6 +14,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Service;
 import vn.novahub.helpdesk.constant.AccountConstant;
 import vn.novahub.helpdesk.constant.RoleConstant;
+import vn.novahub.helpdesk.enums.TokenEnum;
 import vn.novahub.helpdesk.exception.*;
 import vn.novahub.helpdesk.model.Account;
 import vn.novahub.helpdesk.model.GooglePojo;
@@ -68,14 +69,17 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void authenticationToken(String authenticationToken, HttpServletRequest request) throws TokenIsExpiredException, UnauthorizedException {
-        Token token = tokenRepository.getByAccessToken(authenticationToken);
+        Token token = tokenRepository.getByAccessTokenAndStatus(authenticationToken, TokenEnum.OPEN.name());
 
         if(token == null) {
             throw new UnauthorizedException("Invalid token");
         }
 
-        if(tokenService.isTokenExpired(token))
+        if(tokenService.isTokenExpired(token)) {
+            token.setStatus(TokenEnum.CLOSE.name());
+            tokenRepository.save(token);
             throw new TokenIsExpiredException(token.getAccessToken());
+        }
 
         Account accountLogin = token.getAccount();
         UserDetails userDetails = new User(accountLogin.getEmail(), "", accountLogin.getAuthorities());
@@ -134,14 +138,27 @@ public class AccountServiceImpl implements AccountService {
 
         Token accessToken = new Token();
         accessToken.setAccessToken(tokenService.generateToken(account.getId() + account.getEmail() + (new Date()).getTime()));
-        accessToken.setTime(3600); // 1 hour
+        accessToken.setTime(TokenEnum.TIME_OF_TOKEN.value()); // 1 hour
         accessToken.setAccountId(account.getId());
+        accessToken.setStatus(TokenEnum.OPEN.name());
         accessToken.setCreatedAt(new Date());
         accessToken.setUpdatedAt(new Date());
 
         account.setAccess_token(tokenRepository.save(accessToken));
 
         return account;
+    }
+
+    @Override
+    public void logout(String accessToken) throws TokenNotFoundException {
+        Token token = tokenRepository.getByAccessToken(accessToken);
+
+        if(token == null)
+            throw new TokenNotFoundException(accessToken);
+
+        token.setStatus(TokenEnum.CLOSE.name());
+
+        tokenRepository.save(token);
     }
 
     @Override
@@ -253,6 +270,7 @@ public class AccountServiceImpl implements AccountService {
         account.setRoleId(roleService.getByName(RoleConstant.ROLE_USER).getId());
         account.setPassword(null);
         account.setToken(null);
+        account.setVertificationToken(null);
         account.setCreatedAt(new Date());
         account.setUpdatedAt(new Date());
 
@@ -324,7 +342,7 @@ public class AccountServiceImpl implements AccountService {
         if(account.getStatus() != null) {
             if(oldAccount.getStatus().equals(AccountConstant.STATUS_INACTIVE)
                && account.getStatus().equals(AccountConstant.STATUS_ACTIVE))
-                oldAccount.setToken(null);
+                oldAccount.setVertificationToken(null);
 
             oldAccount.setStatus(account.getStatus());
         }

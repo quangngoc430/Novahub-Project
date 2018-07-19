@@ -64,6 +64,15 @@ public class AccountController {
         return new ResponseEntity<>(accountLogin, HttpStatus.OK);
     }
 
+    @PermitAll
+    @GetMapping(path = "/logout", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Void> logout(@RequestHeader(value = "access_token", defaultValue = "") String accessToken) throws TokenNotFoundException {
+
+        accountService.logout(accessToken);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping(path = "/users", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Page<Account>> getAll(@RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,

@@ -1,5 +1,7 @@
 package vn.novahub.helpdesk.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -7,6 +9,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "token")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Token {
 
     @Id
@@ -21,6 +24,10 @@ public class Token {
     @NotNull
     @Column(name = "time")
     private long time;
+
+    @NotEmpty
+    @Column(name = "status")
+    private String status;
 
     @Temporal(TemporalType.TIMESTAMP)
     @NotNull
@@ -64,6 +71,14 @@ public class Token {
         this.time = time;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public Date getCreatedAt() {
         return createdAt;
     }
@@ -102,6 +117,7 @@ public class Token {
                 "id=" + id +
                 ", accessToken='" + accessToken + '\'' +
                 ", time=" + time +
+                ", status='" + status + '\'' +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 ", accountId=" + accountId +
