@@ -13,7 +13,7 @@ public interface AccountService {
 
     boolean isAccountLogin(long accountId);
 
-    void authenticationToken(String token, HttpServletRequest request) throws TokenNotFoundException, TokenIsExpiredException;
+    void authenticationToken(String token, HttpServletRequest request) throws TokenIsExpiredException, UnauthorizedException;
 
     Account getAccountLogin();
 
@@ -37,7 +37,7 @@ public interface AccountService {
 
     Account update(Account account) throws AccountValidationException, AccountPasswordNotEqualException;
 
-    Account updatedForAdmin(long accountId, Account account) throws AccountValidationException;
+    Account updatedForAdmin(long accountId, Account account) throws AccountValidationException, AccountNotFoundException;
 
     void delete(long accountId) throws AccountNotFoundException;
 }

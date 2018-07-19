@@ -21,7 +21,7 @@ public class SkillExceptionHandler {
         apiError.setStatus(HttpStatus.NOT_FOUND.value());
         HashMap<String, String> errors = new HashMap<>();
         errors.put("message", "Skill not found");
-        apiError.setErrors(errors);
+        apiError.setError(errors);
         apiError.setPath(request.getRequestURI());
         apiError.setMessage(ex.getMessage());
 
@@ -36,7 +36,7 @@ public class SkillExceptionHandler {
         apiError.setStatus(HttpStatus.CONFLICT.value());
         HashMap<String, String> errors = new HashMap<>();
         errors.put("message", "Skill is exist");
-        apiError.setErrors(errors);
+        apiError.setError(errors);
         apiError.setPath(request.getRequestURI());
         apiError.setMessage(ex.getMessage());
 
@@ -49,7 +49,7 @@ public class SkillExceptionHandler {
 
         apiError.setTimestamp(Instant.now());
         apiError.setStatus(HttpStatus.NOT_ACCEPTABLE.value());
-        apiError.setErrors(((SkillValidationException) ex).getErrors());
+        apiError.setError(((SkillValidationException) ex).getErrors());
         apiError.setPath(request.getRequestURI());
         apiError.setMessage(ex.getMessage());
 

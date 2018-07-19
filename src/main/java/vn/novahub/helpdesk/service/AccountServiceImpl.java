@@ -67,11 +67,11 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void authenticationToken(String authenticationToken, HttpServletRequest request) throws TokenNotFoundException, TokenIsExpiredException {
+    public void authenticationToken(String authenticationToken, HttpServletRequest request) throws TokenIsExpiredException, UnauthorizedException {
         Token token = tokenRepository.getByAccessToken(authenticationToken);
 
         if(token == null) {
-            throw new TokenNotFoundException(authenticationToken);
+            throw new UnauthorizedException("Invalid token");
         }
 
         if(tokenService.isTokenExpired(token))
@@ -299,8 +299,11 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account updatedForAdmin(long accountId, Account account) throws AccountValidationException {
+    public Account updatedForAdmin(long accountId, Account account) throws AccountValidationException, AccountNotFoundException {
         Account oldAccount = accountRepository.getById(accountId);
+
+        if(oldAccount == null)
+            throw new AccountNotFoundException(accountId);
 
         // check changing password
         if(account.getPassword() != null){
@@ -344,3 +347,6 @@ public class AccountServiceImpl implements AccountService {
     }
 
 }
+
+
+// fix conflict between token and verificationToken

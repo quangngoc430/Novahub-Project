@@ -8,7 +8,7 @@ public class ApiError {
 
     private Instant timestamp;
     private int status;
-    private Map<String, String> errors;
+    private Map<String, String> error;
     private String message;
     private String path;
 
@@ -16,10 +16,10 @@ public class ApiError {
         super();
     }
 
-    public ApiError(int status, Map<String, String> errors, String message, String path) {
+    public ApiError(int status, Map<String, String> error, String message, String path) {
         super();
         this.status = status;
-        this.errors = errors;
+        this.error = error;
         this.message = message;
         this.path = path;
         this.timestamp = Instant.now();
@@ -41,12 +41,12 @@ public class ApiError {
         this.status = status;
     }
 
-    public Map<String, String> getErrors() {
-        return errors;
+    public Map<String, String> getError() {
+        return error;
     }
 
-    public void setErrors(Map<String, String> errors) {
-        this.errors = errors;
+    public void setError(Map<String, String> error) {
+        this.error = error;
     }
 
     public String getMessage() {
@@ -70,7 +70,7 @@ public class ApiError {
         return "ApiError{" +
                 "timestamp=" + timestamp +
                 ", status=" + status +
-                ", errors=" + errors +
+                ", errors=" + error +
                 ", message='" + message + '\'' +
                 ", path='" + path + '\'' +
                 '}';

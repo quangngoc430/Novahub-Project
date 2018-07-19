@@ -41,10 +41,11 @@ public class AccountController {
 
     @GetMapping(path = "/authentication-token")
     public void authenticationToken(HttpServletRequest request,
-                                                       HttpServletResponse response) throws TokenNotFoundException, ServletException, IOException, TokenIsExpiredException {
+                                                       HttpServletResponse response) throws ServletException, IOException, TokenIsExpiredException, UnauthorizedException {
         String accessToken = request.getHeader("access_token");
         String urlRequest = (String) request.getAttribute("url_request");
         request.removeAttribute("url_request");
+
         accountService.authenticationToken(accessToken, request);
 
         RequestDispatcher requestDispatcher = request.getServletContext().getRequestDispatcher(urlRequest);
@@ -52,7 +53,7 @@ public class AccountController {
     }
 
 
-    @PreAuthorize("hasRole('ROLE_ANONYMOUS')")
+    @PermitAll
     @PostMapping(path = "/login", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Account> login(@RequestBody Account account,
                                          HttpServletRequest request) throws AccountInvalidException, AccountLockedException, AccountValidationException, AccountInactiveException {
@@ -63,7 +64,7 @@ public class AccountController {
         return new ResponseEntity<>(accountLogin, HttpStatus.OK);
     }
 
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping(path = "/users", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Page<Account>> getAll(@RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
                                                 @RequestParam(value = "status", required = false, defaultValue = "") String status,
@@ -156,7 +157,7 @@ public class AccountController {
     @PutMapping(path = "/users/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Account> updateForAdmin(@PathVariable("id") long accountId,
                                                   @RequestBody Account account,
-                                                  HttpServletRequest request) throws AccountValidationException {
+                                                  HttpServletRequest request) throws AccountValidationException, AccountNotFoundException {
         logService.log(request, logger);
 
         Account accountUpdated = accountService.updatedForAdmin(accountId, account);

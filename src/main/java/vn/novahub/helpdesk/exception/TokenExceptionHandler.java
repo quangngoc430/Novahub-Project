@@ -23,7 +23,7 @@ public class TokenExceptionHandler {
         apiError.setStatus(HttpStatus.NOT_FOUND.value());
         HashMap<String, String> errors = new HashMap<>();
         errors.put(MESSAGE, "Token not found");
-        apiError.setErrors(errors);
+        apiError.setError(errors);
         apiError.setMessage(exception.getMessage());
         apiError.setPath(request.getRequestURI());
 
@@ -38,11 +38,26 @@ public class TokenExceptionHandler {
         apiError.setStatus(HttpStatus.BAD_REQUEST.value());
         HashMap<String, String> errors = new HashMap<>();
         errors.put(MESSAGE, "Token is expired");
-        apiError.setErrors(errors);
+        apiError.setError(errors);
         apiError.setMessage(exception.getMessage());
         apiError.setPath(request.getRequestURI());
 
         return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = UnauthorizedException.class)
+    public ResponseEntity<ApiError> handleUnauthorizedException(HttpServletRequest request, Exception exception) {
+        ApiError apiError = new ApiError();
+
+        apiError.setTimestamp(Instant.now());
+        apiError.setStatus(HttpStatus.UNAUTHORIZED.value());
+        HashMap<String, String> errors = new HashMap<>();
+        errors.put(MESSAGE, "Unauthorized");
+        apiError.setError(errors);
+        apiError.setMessage(exception.getMessage());
+        apiError.setPath(request.getRequestURI());
+
+        return new ResponseEntity<>(apiError, HttpStatus.UNAUTHORIZED);
     }
 
 }
