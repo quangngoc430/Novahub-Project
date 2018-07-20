@@ -23,4 +23,12 @@ public class TokenServiceImpl implements TokenService {
         return (now - createdAt) > time;
     }
 
+    @Override
+    public long countTimeExpired(Token token) {
+        long now = (new Date()).getTime();
+        long updatedAt = token.getUpdatedAt().getTime();
+
+        return ((now - updatedAt) >= (token.getTime() * 1000)) ? 0 : ((now - updatedAt) / 1000);
+    }
+
 }

@@ -116,7 +116,7 @@ public class AccountServiceImpl implements AccountService {
 
 
     @Override
-    public Account login(Account accountInput, HttpServletRequest request) throws AccountInvalidException, AccountInactiveException, AccountLockedException, AccountValidationException {
+    public Token login(Account accountInput, HttpServletRequest request) throws AccountInvalidException, AccountInactiveException, AccountLockedException, AccountValidationException {
 
         accountValidation.validate(accountInput, GroupLoginAccount.class);
 
@@ -138,10 +138,12 @@ public class AccountServiceImpl implements AccountService {
         accessToken.setStatus(TokenEnum.OPEN.name());
         accessToken.setCreatedAt(new Date());
         accessToken.setUpdatedAt(new Date());
+        accessToken.setTimeExpired(TokenEnum.TIME_OF_TOKEN.value());
 
-        account.setAccess_token(tokenRepository.save(accessToken));
+        accessToken = tokenRepository.save(accessToken);
+        accessToken.setAccount(account);
 
-        return account;
+        return accessToken;
     }
 
     @Override

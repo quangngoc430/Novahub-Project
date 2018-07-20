@@ -25,9 +25,9 @@ public class Account implements Serializable {
     private long id;
 
     @NotEmpty(message = "Email is not empty", groups = {GroupCreateAccount.class, GroupLoginAccount.class, GroupCreateWithAccountGoogle.class})
-    @Column(name = "email")
     @Email(regexp = "^[a-zA-Z0-9]+\\@novahub.vn", message = "Email must be end with @novahub.vn"
             , groups = {GroupCreateAccount.class, GroupLoginAccount.class})
+    @Column(name = "email")
     private String email;
 
     @Column(name = "first_name")
@@ -36,9 +36,10 @@ public class Account implements Serializable {
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "birth_day")
+    @JsonProperty(value = "birth_day")
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(pattern = "dd-MM-yyyy")
+    @Column(name = "birth_day")
     private Date dayOfBirth;
 
     @Column(name = "address")
@@ -47,10 +48,10 @@ public class Account implements Serializable {
     @Column(name = "avatar_url")
     private String avatarUrl;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NotEmpty(message = "Password is not empty"
             , groups = {GroupCreateAccount.class, GroupLoginAccount.class})
     @Column(name = "password")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @AccountStatus(message = "Status does not match any statuses",
@@ -59,10 +60,12 @@ public class Account implements Serializable {
     @Column(name = "status")
     private String status;
 
+    @JsonProperty(value = "created_at")
     @NotNull(message = "Create At is not null")
     @Column(name = "created_at")
     private Date createdAt;
 
+    @JsonProperty(value = "updated_at")
     @NotNull(message = "Update At is not null")
     @Column(name = "updated_at")
     private Date updatedAt;
@@ -72,16 +75,17 @@ public class Account implements Serializable {
     @Column(name = "joiningDate")
     private Date joiningDate;
 
+    @JsonIgnore
     @Column(name = "vertification_token")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String vertificationToken;
 
+    @JsonProperty("role_id")
     @NotNull(message = "Role id is not empty")
     @Column(name = "role_id")
     private long roleId;
 
     @Transient
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonIgnore
     private String newPassword;
 
     @ManyToOne(fetch = FetchType.EAGER, targetEntity = Role.class)
@@ -89,7 +93,7 @@ public class Account implements Serializable {
     private Role role;
 
     @Transient
-    private Token access_token;
+    private Token accessToken;
 
     public long getId() {
         return id;
@@ -219,12 +223,12 @@ public class Account implements Serializable {
         this.joiningDate = joiningDate;
     }
 
-    public Token getAccess_token() {
-        return access_token;
+    public Token getAccessToken() {
+        return accessToken;
     }
 
-    public void setAccess_token(Token access_token) {
-        this.access_token = access_token;
+    public void setAccessToken(Token accessToken) {
+        this.accessToken = accessToken;
     }
 
     @Transient
@@ -255,6 +259,7 @@ public class Account implements Serializable {
                 ", roleId=" + roleId +
                 ", newPassword='" + newPassword + '\'' +
                 ", role=" + role +
+                ", accessToken=" + accessToken +
                 '}';
     }
 }

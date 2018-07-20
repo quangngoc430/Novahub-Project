@@ -15,6 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.novahub.helpdesk.exception.*;
 import vn.novahub.helpdesk.model.Account;
+import vn.novahub.helpdesk.model.Token;
 import vn.novahub.helpdesk.service.AccountService;
 import vn.novahub.helpdesk.service.LogService;
 
@@ -54,13 +55,13 @@ public class AccountController {
 
     @PermitAll
     @PostMapping(path = "/login", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Account> login(@RequestBody Account account,
+    public ResponseEntity<Token> login(@RequestBody Account account,
                                          HttpServletRequest request) throws AccountInvalidException, AccountLockedException, AccountValidationException, AccountInactiveException {
         logService.log(request, logger);
 
-        Account accountLogin = accountService.login(account, request);
+        Token accessToken = accountService.login(account, request);
 
-        return new ResponseEntity<>(accountLogin, HttpStatus.OK);
+        return new ResponseEntity<>(accessToken, HttpStatus.OK);
     }
 
     @PermitAll

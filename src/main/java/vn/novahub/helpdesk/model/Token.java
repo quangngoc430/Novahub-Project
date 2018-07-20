@@ -1,6 +1,8 @@
 package vn.novahub.helpdesk.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -17,28 +19,38 @@ public class Token {
     @Column(name = "id")
     private long id;
 
+    @JsonProperty(value = "access_token")
     @NotEmpty
     @Column(name = "access_token")
     private String accessToken;
 
+    @JsonIgnore
     @NotNull
     @Column(name = "time")
     private long time;
 
+    @JsonProperty(value = "expired_in")
+    @Transient
+    private long timeExpired;
+
+    @JsonIgnore
     @NotEmpty
     @Column(name = "status")
     private String status;
 
+    @JsonIgnore
     @Temporal(TemporalType.TIMESTAMP)
     @NotNull
     @Column(name = "created_at")
     private Date createdAt;
 
+    @JsonIgnore
     @Temporal(TemporalType.TIMESTAMP)
     @NotNull
     @Column(name = "updated_at")
     private Date updatedAt;
 
+    @JsonProperty(value = "account_id")
     @NotNull
     @Column(name = "account_id")
     private long accountId;
@@ -69,6 +81,14 @@ public class Token {
 
     public void setTime(long time) {
         this.time = time;
+    }
+
+    public long getTimeExpired() {
+        return timeExpired;
+    }
+
+    public void setTimeExpired(long timeExpired) {
+        this.timeExpired = timeExpired;
     }
 
     public String getStatus() {

@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import vn.novahub.helpdesk.exception.*;
 import vn.novahub.helpdesk.model.Account;
+import vn.novahub.helpdesk.model.Token;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
@@ -21,7 +22,7 @@ public interface AccountService {
 
     boolean activateAccount(long accountId, String token);
 
-    Account login(Account account, HttpServletRequest request) throws AccountInvalidException, AccountInactiveException, AccountLockedException, AccountValidationException;
+    Token login(Account account, HttpServletRequest request) throws AccountInvalidException, AccountInactiveException, AccountLockedException, AccountValidationException;
 
     void logout(String token) throws TokenNotFoundException;
 
