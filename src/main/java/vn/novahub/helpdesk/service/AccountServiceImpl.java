@@ -13,8 +13,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
-import vn.novahub.helpdesk.enums.AccountStatus;
-import vn.novahub.helpdesk.enums.RoleLevel;
+import vn.novahub.helpdesk.enums.AccountEnum;
+import vn.novahub.helpdesk.enums.RoleEnum;
 import vn.novahub.helpdesk.exception.*;
 import vn.novahub.helpdesk.model.Account;
 import vn.novahub.helpdesk.model.GooglePojo;
@@ -84,7 +84,7 @@ public class AccountServiceImpl implements AccountService {
             return false;
         }
 
-        account.setStatus(AccountStatus.ACTIVE.value());
+        account.setStatus(AccountEnum.ACTIVE.name());
         account.setVertificationToken(null);
         accountRepository.save(account);
 
@@ -107,10 +107,10 @@ public class AccountServiceImpl implements AccountService {
         if(account == null || account.getPassword() == null || !bCryptPasswordEncoder.matches(accountInput.getPassword(), account.getPassword()))
             throw new AccountInvalidException();
 
-        if(account.getStatus().equals(AccountStatus.INACTIVE.value()))
+        if(account.getStatus().equals(AccountEnum.INACTIVE.name()))
             throw new AccountInactiveException(account.getEmail());
 
-        if(account.getStatus().equals(AccountStatus.LOCKED.value()))
+        if(account.getStatus().equals(AccountEnum.LOCKED.name()))
             throw new AccountLockedException(account.getEmail());
 
         UserDetails userDetails = new User(account.getEmail(), account.getPassword(), account.getAuthorities());
@@ -142,7 +142,7 @@ public class AccountServiceImpl implements AccountService {
             }
             account.setAvatarUrl(googlePojo.getPicture());
             account.setToken(accessToken);
-            account.setRoleId(roleService.getByName(RoleLevel.USER.value()).getId());
+            account.setRoleId(roleService.getByName(RoleEnum.USER.name()).getId());
             account.setUpdatedAt(new Date());
             account.setCreatedAt(new Date());
             account = createWithGoogleAccount(account);
@@ -199,9 +199,9 @@ public class AccountServiceImpl implements AccountService {
             throw new AccountIsExistException(account.getEmail());
 
         account.setPassword(bCryptPasswordEncoder.encode(account.getPassword()));
-        account.setStatus(AccountStatus.INACTIVE.value());
+        account.setStatus(AccountEnum.INACTIVE.name());
         account.setVertificationToken(tokenService.generateToken(account.getEmail() + account.getEmail()));
-        account.setRoleId(roleService.getByName(RoleLevel.USER.value()).getId());
+        account.setRoleId(roleService.getByName(RoleEnum.USER.name()).getId());
         account.setCreatedAt(new Date());
         account.setUpdatedAt(new Date());
 
@@ -227,8 +227,8 @@ public class AccountServiceImpl implements AccountService {
         if(accountRepository.getByEmail(account.getEmail()) != null)
             throw new AccountIsExistException(account.getEmail());
 
-        account.setStatus(AccountStatus.ACTIVE.value());
-        account.setRoleId(roleService.getByName(RoleLevel.USER.value()).getId());
+        account.setStatus(AccountEnum.ACTIVE.name());
+        account.setRoleId(roleService.getByName(RoleEnum.USER.name()).getId());
         account.setPassword(null);
         account.setVertificationToken(null);
         account.setCreatedAt(new Date());
@@ -297,8 +297,8 @@ public class AccountServiceImpl implements AccountService {
         if(account.getAvatarUrl() != null)
             oldAccount.setAvatarUrl(account.getAvatarUrl());
         if(account.getStatus() != null) {
-            if(oldAccount.getStatus().equals(AccountStatus.INACTIVE.value())
-                    && account.getStatus().equals(AccountStatus.ACTIVE.value()))
+            if(oldAccount.getStatus().equals(AccountEnum.INACTIVE.name())
+                    && account.getStatus().equals(AccountEnum.ACTIVE.name()))
                 oldAccount.setVertificationToken(null);
 
             oldAccount.setStatus(account.getStatus());

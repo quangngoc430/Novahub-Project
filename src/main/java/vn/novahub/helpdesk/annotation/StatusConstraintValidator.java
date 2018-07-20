@@ -1,13 +1,12 @@
 package vn.novahub.helpdesk.annotation;
 
-import vn.novahub.helpdesk.enums.AccountStatus;
-import vn.novahub.helpdesk.enums.IssueStatus;
+import vn.novahub.helpdesk.enums.AccountEnum;
+import vn.novahub.helpdesk.enums.IssueEnum;
 import vn.novahub.helpdesk.model.Account;
 import vn.novahub.helpdesk.model.Issue;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import javax.validation.groups.Default;
 
 public class StatusConstraintValidator implements ConstraintValidator<Status, String> {
 
@@ -21,34 +20,34 @@ public class StatusConstraintValidator implements ConstraintValidator<Status, St
     @Override
     public boolean isValid(String status, ConstraintValidatorContext constraintValidatorContext) {
 
-        if(targetClass == Issue.class){
+        if(targetClass == Issue.class) {
             return checkIssueStatus(status);
         }
 
-        if(targetClass == Account.class){
+        if(targetClass == Account.class) {
             return checkAccountStatus(status);
         }
 
         return false;
     }
 
-    private boolean checkIssueStatus(String status){
-        if(IssueStatus.APPROVE.name().equals(status))
+    private boolean checkIssueStatus(String status) {
+        if(IssueEnum.APPROVE.name().equals(status))
             return true;
-        if(IssueStatus.DENY.name().equals(status))
+        if(IssueEnum.DENY.name().equals(status))
             return true;
-        if(IssueStatus.PENDING.name().equals(status))
+        if(IssueEnum.PENDING.name().equals(status))
             return true;
 
         return false;
     }
 
-    private boolean checkAccountStatus(String status){
-        if(AccountStatus.ACTIVE.name().equals(status))
+    private boolean checkAccountStatus(String status) {
+        if(AccountEnum.ACTIVE.name().equals(status))
             return true;
-        if(AccountStatus.INACTIVE.name().equals(status))
+        if(AccountEnum.INACTIVE.name().equals(status))
             return true;
-        if(AccountStatus.LOCKED.name().equals(status))
+        if(AccountEnum.LOCKED.name().equals(status))
             return true;
 
         return false;

@@ -5,7 +5,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import vn.novahub.helpdesk.enums.RoleLevel;
+import vn.novahub.helpdesk.enums.RoleEnum;
 import vn.novahub.helpdesk.exception.AccountIsExistException;
 import vn.novahub.helpdesk.exception.AccountValidationException;
 import vn.novahub.helpdesk.exception.EmailFormatException;
@@ -29,11 +29,11 @@ public class HomeController {
 
         String roleName = (SecurityContextHolder.getContext().getAuthentication().getAuthorities().toArray())[0].toString();
 
-        if(roleName.equals("ROLE_" + RoleLevel.ADMIN.value()))
+        if(roleName.equals("ROLE_" + RoleEnum.ADMIN.name()))
             return "redirect:/admin";
-        else if(roleName.equals("ROLE_" + RoleLevel.CLERK.value()))
+        else if(roleName.equals("ROLE_" + RoleEnum.CLERK.name()))
             return "redirect:/clerk";
-        else if(roleName.equals("ROLE_" + RoleLevel.USER.value()))
+        else if(roleName.equals("ROLE_" + RoleEnum.USER.name()))
             return "redirect:/user";
 
         return "login";
@@ -87,9 +87,9 @@ public class HomeController {
 
         Account account = accountService.loginWithGoogle(code, request);
 
-        if(account.getRole().getName().equals(RoleLevel.ADMIN.value()))
+        if(account.getRole().getName().equals(RoleEnum.ADMIN.name()))
             return "redirect:/admin";
-        else if(account.getRole().getName().equals(RoleLevel.CLERK.value()))
+        else if(account.getRole().getName().equals(RoleEnum.CLERK.name()))
             return "redirect:/clerk";
 
         return "redirect:/user";

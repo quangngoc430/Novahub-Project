@@ -6,7 +6,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import vn.novahub.helpdesk.enums.IssueStatus;
+import vn.novahub.helpdesk.enums.IssueEnum;
 import vn.novahub.helpdesk.exception.IssueIsClosedException;
 import vn.novahub.helpdesk.exception.IssueNotFoundException;
 import vn.novahub.helpdesk.exception.IssueValidationException;
@@ -81,14 +81,14 @@ public class AdminIssueServiceImpl implements AdminIssueService{
             isSendMail = true;
         }
         if (issue.getStatus() != null) {
-            if (oldIssue.getStatus().equals(IssueStatus.PENDING.name()) &&
-                    issue.getStatus().equals(IssueStatus.DENY.name())) {
+            if (oldIssue.getStatus().equals(IssueEnum.PENDING.name()) &&
+                    issue.getStatus().equals(IssueEnum.DENY.name())) {
                 oldIssue.setToken(null);
                 isSendMail = true;
             }
 
-            if (oldIssue.getStatus().equals(IssueStatus.PENDING.name()) &&
-                    issue.getStatus().equals(IssueStatus.APPROVE.name())) {
+            if (oldIssue.getStatus().equals(IssueEnum.PENDING.name()) &&
+                    issue.getStatus().equals(IssueEnum.APPROVE.name())) {
                 oldIssue.setToken(null);
                 isSendMail = true;
             }
@@ -124,7 +124,7 @@ public class AdminIssueServiceImpl implements AdminIssueService{
             throw new IssueIsClosedException(issueId);
 
         issue.setToken(null);
-        issue.setStatus(IssueStatus.APPROVE.name());
+        issue.setStatus(IssueEnum.APPROVE.name());
         issue = issueRepository.save(issue);
 
         sendMailUpdateIssueForUser(issue);
@@ -141,7 +141,7 @@ public class AdminIssueServiceImpl implements AdminIssueService{
             throw new IssueIsClosedException(issueId);
 
         issue.setToken(null);
-        issue.setStatus(IssueStatus.DENY.name());
+        issue.setStatus(IssueEnum.DENY.name());
         issue = issueRepository.save(issue);
 
         sendMailUpdateIssueForUser(issue);

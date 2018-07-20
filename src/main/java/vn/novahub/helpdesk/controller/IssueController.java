@@ -8,7 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import vn.novahub.helpdesk.enums.IssueStatus;
+import vn.novahub.helpdesk.enums.IssueEnum;
 import vn.novahub.helpdesk.exception.IssueIsClosedException;
 import vn.novahub.helpdesk.exception.IssueNotFoundException;
 import vn.novahub.helpdesk.exception.IssueValidationException;
@@ -117,9 +117,9 @@ public class IssueController {
     public ResponseEntity<Void> action(@RequestParam(name = "status", required = false, defaultValue = "") String status,
                                        @RequestParam(name = "token", required = false, defaultValue = "") String token,
                                        @PathVariable(name = "issueId") long issueId) throws IssueNotFoundException, IssueIsClosedException, MessagingException, IOException {
-        if(status.equals(IssueStatus.APPROVE.name())) {
+        if(status.equals(IssueEnum.APPROVE.name())) {
             adminIssueService.approve(issueId, token);
-        } else if(status.equals(IssueStatus.DENY.name())){
+        } else if(status.equals(IssueEnum.DENY.name())){
             adminIssueService.deny(issueId, token);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);

@@ -6,8 +6,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import vn.novahub.helpdesk.enums.IssueStatus;
-import vn.novahub.helpdesk.enums.RoleLevel;
+import vn.novahub.helpdesk.enums.IssueEnum;
+import vn.novahub.helpdesk.enums.RoleEnum;
 import vn.novahub.helpdesk.exception.IssueNotFoundException;
 import vn.novahub.helpdesk.exception.IssueValidationException;
 import vn.novahub.helpdesk.model.Account;
@@ -80,7 +80,7 @@ public class AccountIssueServiceImpl implements AccountIssueService {
 
         issue.setCreatedAt(new Date());
         issue.setUpdatedAt(new Date());
-        issue.setStatus(IssueStatus.PENDING.value());
+        issue.setStatus(IssueEnum.PENDING.name());
         issue.setToken(tokenService.generateToken(accountLogin.getId() + issue.getTitle()));
         issue.setAccountId(accountLogin.getId());
 
@@ -145,7 +145,7 @@ public class AccountIssueServiceImpl implements AccountIssueService {
         content = content.replace("{title}", issue.getTitle());
         content = content.replace("{content}", issue.getContent());
         content = content.replace("{status}", issue.getStatus());
-        content = content.replace("{reply-message}", (issue.getReplyMessage() == null) ? IssueStatus.NONE.value() : issue.getReplyMessage());
+        content = content.replace("{reply-message}", (issue.getReplyMessage() == null) ? IssueEnum.NONE.name() : issue.getReplyMessage());
         content = content.replace("{url-approve-issue}", "http://localhost:8080/api/issues/" + issue.getId() + "/action?status=APPROVE&token=" + issue.getToken());
         content = content.replace("{url-deny-issue}", "http://localhost:8080/api/issues/" + issue.getId() + "/action?status=DENY&token=" + issue.getToken());
         mail.setContent(content);
@@ -168,7 +168,7 @@ public class AccountIssueServiceImpl implements AccountIssueService {
         content = content.replace("{title}", issue.getTitle());
         content = content.replace("{content}", issue.getContent());
         content = content.replace("{status}", issue.getStatus());
-        content = content.replace("{reply-message}", (issue.getReplyMessage() == null) ? IssueStatus.NONE.value() : issue.getReplyMessage());
+        content = content.replace("{reply-message}", (issue.getReplyMessage() == null) ? IssueEnum.NONE.name() : issue.getReplyMessage());
         mail.setContent(content);
 
         mail.setEmailReceiving(getEmailsOfAdminAndClerk().toArray(new String[0]));
@@ -177,8 +177,8 @@ public class AccountIssueServiceImpl implements AccountIssueService {
     }
 
     private ArrayList<String> getEmailsOfAdminAndClerk(){
-        ArrayList<Account> adminList = (ArrayList<Account>) (accountRepository.getAllByRoleName(RoleLevel.ADMIN.value()));
-        ArrayList<Account> clerkList = (ArrayList<Account>) (accountRepository.getAllByRoleName(RoleLevel.CLERK.value()));
+        ArrayList<Account> adminList = (ArrayList<Account>) (accountRepository.getAllByRoleName(RoleEnum.ADMIN.name()));
+        ArrayList<Account> clerkList = (ArrayList<Account>) (accountRepository.getAllByRoleName(RoleEnum.CLERK.name()));
 
         ArrayList<String> emails = new ArrayList<>();
 
