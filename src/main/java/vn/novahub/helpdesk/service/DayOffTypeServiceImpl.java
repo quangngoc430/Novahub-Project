@@ -59,7 +59,7 @@ public class DayOffTypeServiceImpl implements DayOffTypeService {
     }
 
     @Override
-    public DayOffType findById(long typeId) throws DayOffTypeNotFoundException {
+    public DayOffType getById(long typeId) throws DayOffTypeNotFoundException {
         DayOffType dayOffType = dayOffTypeRepository.getById(typeId);
 
         if (dayOffType != null) {

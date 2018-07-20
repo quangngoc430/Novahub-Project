@@ -64,7 +64,7 @@ public class DayOffTypeController {
     @DeleteMapping(path = "/day-off-types/{type-id}")
     public ResponseEntity<String> delete(@PathVariable("type-id") long typeId) throws DayOffTypeNotFoundException {
 
-        DayOffType dayOffType = dayOffTypeService.findById(typeId);
+        DayOffType dayOffType = dayOffTypeService.getById(typeId);
 
         dayOffTypeService.delete(dayOffType);
 

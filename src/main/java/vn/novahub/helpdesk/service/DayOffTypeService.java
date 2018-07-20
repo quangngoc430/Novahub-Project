@@ -15,7 +15,7 @@ public interface DayOffTypeService {
 
     void delete(DayOffType dayOffType);
 
-    DayOffType findById(long typeId) throws DayOffTypeNotFoundException;
+    DayOffType getById(long typeId) throws DayOffTypeNotFoundException;
 
     Page<DayOffType> findByAccountId(long accountId, Pageable pageable);
 }
