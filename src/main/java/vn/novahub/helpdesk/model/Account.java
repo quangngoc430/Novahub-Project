@@ -72,11 +72,6 @@ public class Account implements Serializable {
     @Column(name = "joiningDate")
     private Date joiningDate;
 
-    @Column(name = "token")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @NotEmpty(message = "Token is not empty", groups = GroupCreateWithAccountGoogle.class)
-    private String token;
-
     @Column(name = "vertification_token")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String vertificationToken;
@@ -208,14 +203,6 @@ public class Account implements Serializable {
         this.role = role;
     }
 
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
     public String getVertificationToken() {
         return vertificationToken;
     }
@@ -264,7 +251,6 @@ public class Account implements Serializable {
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 ", joiningDate=" + joiningDate +
-                ", token='" + token + '\'' +
                 ", vertificationToken='" + vertificationToken + '\'' +
                 ", roleId=" + roleId +
                 ", newPassword='" + newPassword + '\'' +

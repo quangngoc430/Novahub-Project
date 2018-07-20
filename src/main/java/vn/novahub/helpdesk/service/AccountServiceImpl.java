@@ -76,7 +76,7 @@ public class AccountServiceImpl implements AccountService {
         }
 
         if(tokenService.isTokenExpired(token)) {
-            token.setStatus(TokenEnum.CLOSE.name());
+            token.setStatus(TokenEnum.EXPIRED.name());
             tokenRepository.save(token);
             throw new TokenIsExpiredException(token.getAccessToken());
         }
@@ -114,11 +114,6 @@ public class AccountServiceImpl implements AccountService {
         return true;
     }
 
-    @Override
-    public Account updateToken(Account account, String token) {
-        account.setToken(token);
-        return accountRepository.save(account);
-    }
 
     @Override
     public Account login(Account accountInput, HttpServletRequest request) throws AccountInvalidException, AccountInactiveException, AccountLockedException, AccountValidationException {
@@ -169,6 +164,7 @@ public class AccountServiceImpl implements AccountService {
 
         Account account = getByEmail(googlePojo.getEmail());
 
+        // create new account
         if(account == null) {
             account = new Account();
             account.setEmail(googlePojo.getEmail());
@@ -180,7 +176,10 @@ public class AccountServiceImpl implements AccountService {
                 account.setLastName(googlePojo.getFamily_name());
             }
             account.setAvatarUrl(googlePojo.getPicture());
-            account.setToken(accessToken);
+            // TODO : create token depends on accessToken of google
+            // account.setToken(accessToken);
+            account.setVertificationToken(null);
+            account.setStatus(AccountConstant.STATUS_ACTIVE);
             account.setRoleId(roleService.getByName(RoleConstant.ROLE_USER).getId());
             account.setUpdatedAt(new Date());
             account.setCreatedAt(new Date());
@@ -188,8 +187,9 @@ public class AccountServiceImpl implements AccountService {
 
             account.setRole(roleService.getById(account.getRoleId()));
         } else {
-            account.setToken(accessToken);
-            account = updateToken(account, accessToken);
+            // TODO : create Token depends on accessToken of google
+            //account.setToken(accessToken);
+            account = accountRepository.save(account);
         }
 
         UserDetails userDetail = googleService.buildUser(googlePojo, RoleConstant.PREFIX_ROLE + account.getRole().getName());
@@ -269,8 +269,6 @@ public class AccountServiceImpl implements AccountService {
         account.setStatus(AccountConstant.STATUS_ACTIVE);
         account.setRoleId(roleService.getByName(RoleConstant.ROLE_USER).getId());
         account.setPassword(null);
-        account.setToken(null);
-        account.setVertificationToken(null);
         account.setCreatedAt(new Date());
         account.setUpdatedAt(new Date());
 
@@ -287,8 +285,6 @@ public class AccountServiceImpl implements AccountService {
         // check changing password
         if(oldAccount.getPassword() != null){
             if(account.getNewPassword() != null || account.getPassword() != null){
-                accountValidation.validate(account, GroupUpdatePasswordAccount.class);
-
                 if(!bCryptPasswordEncoder.matches(account.getPassword(), oldAccount.getPassword()))
                     throw new AccountPasswordNotEqualException("Password do not match");
 
@@ -365,6 +361,3 @@ public class AccountServiceImpl implements AccountService {
     }
 
 }
-
-
-// fix conflict between token and verificationToken

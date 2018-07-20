@@ -25,7 +25,6 @@ CREATE TABLE `account` (
   `updated_at` datetime NOT NULL DEFAULT NOW(),
   `joiningDate` datetime DEFAULT NOW(),
   `vertification_token` char(255),
-  `token` char(255),
   `role_id` int NOT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_user_role` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`)

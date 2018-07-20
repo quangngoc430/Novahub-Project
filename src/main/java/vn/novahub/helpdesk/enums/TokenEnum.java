@@ -2,6 +2,7 @@ package vn.novahub.helpdesk.enums;
 
 public enum TokenEnum {
     OPEN,
+    EXPIRED,
     CLOSE,
     TIME_OF_TOKEN {
         @Override

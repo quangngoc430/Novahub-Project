@@ -39,7 +39,6 @@ public class HomeController {
         return "login";
     }
 
-
     @PreAuthorize("isAuthenticated()")
     @RequestMapping("/update")
     public String updateClerk() {
