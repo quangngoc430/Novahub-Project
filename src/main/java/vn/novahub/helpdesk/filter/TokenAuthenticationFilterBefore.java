@@ -22,7 +22,7 @@ public class TokenAuthenticationFilterBefore extends GenericFilterBean {
         String method = httpServletRequest.getMethod();
 
         if (requestsNeedAuthencationToken == null)
-            requestsNeedAuthencationToken = getRequestsNeedAuthencationToken();
+            requestsNeedAuthencationToken = RequestsNeedAuthencationToken.get();
 
         boolean isCheckToken = false;
 
@@ -41,29 +41,5 @@ public class TokenAuthenticationFilterBefore extends GenericFilterBean {
         } else {
             filterChain.doFilter(servletRequest, servletResponse);
         }
-    }
-
-    private ArrayList<Request> getRequestsNeedAuthencationToken(){
-        ArrayList<Request> requests = new ArrayList<>();
-        // roles
-        requests.add(new Request("\\/api\\/roles\\/(\\d+)", new String[]{"GET", "POST"}));
-        requests.add(new Request("\\/api\\/roles", new String[]{"GET"}));
-        // users
-        requests.add(new Request("\\/api\\/users", new String[]{"GET", "POST"}));
-        requests.add(new Request("\\/api\\/users\\/(\\d+)", new String[]{"GET", "PUT", "DELETE"}));
-        requests.add(new Request("\\/api\\/users\\/me", new String[]{"GET", "PUT"}));
-        // categories
-        requests.add(new Request("\\/api\\/categories", new String[]{"GET", "POST"}));
-        requests.add(new Request("\\/api\\/categories\\/(\\d+)", new String[]{"GET", "PUT", "DELETE"}));
-        requests.add(new Request("\\/api\\/categories\\/(\\d+)\\/skills", new String[]{"GET", "POST"}));
-        requests.add(new Request("\\/api\\/categories\\/(\\d+)\\/skills\\/(\\d+)", new String[]{"GET", "PUT", "DELETE"}));
-        // skills
-        requests.add(new Request("\\/api\\/skills", new String[]{"GET", "POST"}));
-        requests.add(new Request("\\/api\\/skills\\/(\\d+)", new String[]{"GET", "PUT", "DELETE"}));
-        requests.add(new Request("\\/api\\/skills\\/(\\d+)\\/users", new String[]{"GET"}));
-        requests.add(new Request("\\/api\\/users\\/me\\/skills", new String[]{"GET", "POST"}));
-        requests.add(new Request("\\/api\\/users\\/me\\/skills\\/(\\d+)", new String[]{"GET", "PUT", "DELETE"}));
-
-        return requests;
     }
 }

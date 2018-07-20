@@ -23,7 +23,7 @@ public class TokenAuthenticationFilterAfter extends GenericFilterBean {
         String method = httpServletRequest.getMethod();
 
         if (requestsNeedAuthencationToken == null)
-            requestsNeedAuthencationToken = getRequestsNeedAuthencationToken();
+            requestsNeedAuthencationToken = RequestsNeedAuthencationToken.get();
 
         boolean isCheckToken = false;
 
@@ -37,14 +37,5 @@ public class TokenAuthenticationFilterAfter extends GenericFilterBean {
         SecurityContextHolder.clearContext();
 
         filterChain.doFilter(servletRequest, servletResponse);
-    }
-
-    ArrayList<Request> getRequestsNeedAuthencationToken(){
-        ArrayList<Request> requests = new ArrayList<>();
-        requests.add(new Request("\\/api\\/users", new String[]{"GET", "POST"}));
-        requests.add(new Request("\\/api\\/users\\/(\\d+)", new String[]{"GET", "PUT", "DELETE"}));
-        requests.add(new Request("\\/api\\/users\\/me", new String[]{"GET", "PUT"}));
-
-        return requests;
     }
 }

@@ -121,14 +121,14 @@ INSERT INTO `role`(name) VALUES ("ADMIN");
 INSERT INTO `role`(name) VALUES ("CLERK");
 INSERT INTO `role`(name) VALUES ("USER");
 
-INSERT INTO `account`(email, first_name, last_name, password, status, token, role_id)
-VALUES("helpdesk@novahub.vn", "desk", "help", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", "ACTIVE", "abcdefghijk123456789", 1);
-INSERT INTO `account`(email, first_name, last_name, password, status, token, role_id)
-VALUES("huong@novahub.vn", "mai", "huong", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", "ACTIVE", "abcdefghijk123456789", 2);
-INSERT INTO `account`(email, first_name, last_name, password, status, token, role_id)
-VALUES("ngoc@novahub.vn", "bui lam", "quang ngoc", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", "ACTIVE", "abcdefghijk123456789", 3);
-INSERT INTO `account`(email, first_name, last_name, password, status, token, role_id)
-VALUES("hai@novahub.vn", "bui lam", "thanh hai", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", "ACTIVE", "abcdefghijk123456789", 3);
+INSERT INTO `account`(email, first_name, last_name, password, status, role_id)
+VALUES("helpdesk@novahub.vn", "Desk", "Help", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", "ACTIVE", 1);
+INSERT INTO `account`(email, first_name, last_name, password, status, role_id)
+VALUES("ngocbui@novahub.vn", "Quang Ngoc", "Bui Lam", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", "ACTIVE", 2);
+INSERT INTO `account`(email, first_name, last_name, password, status, role_id)
+VALUES("linhtran@novahub.vn", "Linh", "Tran Manh", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", "ACTIVE", 3);
+INSERT INTO `account`(email, first_name, last_name, password, status, role_id)
+VALUES("vutran@novahub.vn", "Vu", "Tran", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", "ACTIVE", 3);
 
 INSERT INTO `category`(name) VALUES
 ("Programming Language"),
@@ -155,14 +155,14 @@ INSERT INTO `account_has_skill`(account_id, skill_id) VALUES
 (2, 6);
 
 INSERT INTO `issue`(title, content, status, account_id)
-VALUES("title", "content", "pending", 1);
+VALUES("title", "content", "PENDING", 1);
 INSERT INTO `issue`(title, content, status, account_id)
-VALUES("title1", "content1", "pending", 1);
+VALUES("title1", "content1", "PENDING", 1);
 INSERT INTO `issue`(title, content, status, account_id)
-VALUES("title", "content", "pending", 2);
+VALUES("title", "content", "PENDING", 2);
 INSERT INTO `issue`(title, content, status, account_id)
-VALUES("title1", "content1", "pending", 2);
+VALUES("title1", "content1", "PENDING", 2);
 INSERT INTO `issue`(title, content, status, account_id)
-VALUES("title", "content", "pending", 3);
+VALUES("title", "content", "PENDING", 3);
 INSERT INTO `issue`(title, content, status, account_id)
-VALUES("title1", "content1", "pending", 3);
+VALUES("title1", "content1", "PENDING", 3);

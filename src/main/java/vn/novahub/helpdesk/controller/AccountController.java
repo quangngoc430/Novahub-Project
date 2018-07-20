@@ -52,7 +52,6 @@ public class AccountController {
         requestDispatcher.forward(request, response);
     }
 
-
     @PermitAll
     @PostMapping(path = "/login", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Account> login(@RequestBody Account account,
@@ -184,4 +183,5 @@ public class AccountController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
 }
