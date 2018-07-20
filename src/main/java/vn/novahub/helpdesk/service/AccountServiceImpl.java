@@ -133,14 +133,12 @@ public class AccountServiceImpl implements AccountService {
 
         Token accessToken = new Token();
         accessToken.setAccessToken(tokenService.generateToken(account.getId() + account.getEmail() + (new Date()).getTime()));
-        accessToken.setTime(TokenEnum.TIME_OF_TOKEN.value()); // 1 hour
+        accessToken.setTime(TokenEnum.TIME_OF_TOKEN.value());
         accessToken.setAccountId(account.getId());
         accessToken.setStatus(TokenEnum.OPEN.name());
         accessToken.setCreatedAt(new Date());
         accessToken.setUpdatedAt(new Date());
-        accessToken.setTimeExpired(TokenEnum.TIME_OF_TOKEN.value());
-
-        accessToken = tokenRepository.save(accessToken);
+        accessToken.setTimeExpired(TokenEnum.TIME_OF_TOKEN.value());accessToken = tokenRepository.save(accessToken);
         accessToken.setAccount(account);
 
         return accessToken;

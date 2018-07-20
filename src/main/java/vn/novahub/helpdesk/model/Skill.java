@@ -3,6 +3,8 @@ package vn.novahub.helpdesk.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 import vn.novahub.helpdesk.validation.GroupCreateSkill;
 import vn.novahub.helpdesk.validation.GroupUpdateSkill;
 import javax.validation.constraints.Max;
@@ -34,14 +36,17 @@ public class Skill implements Serializable {
     @Column(name = "level")
     private long level;
 
+    @JsonProperty(value = "created_at")
     @NotNull(message = "Create At is not null")
     @Column(name = "created_at")
     private Date createdAt;
 
+    @JsonProperty(value = "updated_at")
     @NotNull(message = "Update At is not null")
     @Column(name = "updated_at")
     private Date updatedAt;
 
+    @JsonProperty(value = "category_id")
     @NotNull(message = "Category Id is not null")
     @Column(name = "category_id")
     private long categoryId;

@@ -25,8 +25,10 @@ public class Account implements Serializable {
     private long id;
 
     @NotEmpty(message = "Email is not empty", groups = {GroupCreateAccount.class, GroupLoginAccount.class, GroupCreateWithAccountGoogle.class})
-    @Email(regexp = "^[a-zA-Z0-9]+\\@novahub.vn", message = "Email must be end with @novahub.vn"
-            , groups = {GroupCreateAccount.class, GroupLoginAccount.class})
+    @Email(regexp = "^[a-zA-Z0-9]+\\@novahub.vn", message = "Email contains [a-z|A-Z|0-9] and end with @novahub.vn ",
+            groups = {GroupCreateAccount.class, GroupLoginAccount.class, GroupCreateWithAccountGoogle.class})
+    @Size(min = 8, max = 80, message = "Email must have between 8 and 80 characters",
+            groups = {GroupCreateAccount.class, GroupLoginAccount.class, GroupCreateWithAccountGoogle.class})
     @Column(name = "email")
     private String email;
 
@@ -49,8 +51,10 @@ public class Account implements Serializable {
     private String avatarUrl;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @NotEmpty(message = "Password is not empty"
-            , groups = {GroupCreateAccount.class, GroupLoginAccount.class})
+    @NotEmpty(message = "Password is not empty",
+            groups = {GroupCreateAccount.class, GroupLoginAccount.class})
+    @Size(min = 8, max = 40, message = "Password must have between 8 and 40 characters",
+            groups = {GroupCreateAccount.class, GroupLoginAccount.class})
     @Column(name = "password")
     private String password;
 
