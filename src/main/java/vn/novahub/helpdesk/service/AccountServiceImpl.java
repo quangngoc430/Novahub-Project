@@ -16,10 +16,7 @@ import vn.novahub.helpdesk.constant.AccountConstant;
 import vn.novahub.helpdesk.constant.RoleConstant;
 import vn.novahub.helpdesk.enums.TokenEnum;
 import vn.novahub.helpdesk.exception.*;
-import vn.novahub.helpdesk.model.Account;
-import vn.novahub.helpdesk.model.GooglePojo;
-import vn.novahub.helpdesk.model.Mail;
-import vn.novahub.helpdesk.model.Token;
+import vn.novahub.helpdesk.model.*;
 import vn.novahub.helpdesk.repository.AccountRepository;
 import vn.novahub.helpdesk.repository.TokenRepository;
 import vn.novahub.helpdesk.validation.*;
@@ -69,15 +66,13 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void authenticationToken(String authenticationToken, HttpServletRequest request) throws TokenIsExpiredException, UnauthorizedException {
-        Token token = tokenRepository.getByAccessTokenAndStatus(authenticationToken, TokenEnum.OPEN.name());
+        Token token = tokenRepository.getByAccessToken(authenticationToken);
 
         if(token == null) {
             throw new UnauthorizedException("Invalid token");
         }
 
         if(tokenService.isTokenExpired(token)) {
-            token.setStatus(TokenEnum.EXPIRED.name());
-            tokenRepository.save(token);
             throw new TokenIsExpiredException(token.getAccessToken());
         }
 
@@ -101,14 +96,14 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public boolean activateAccount(long accountId, String verificationToken) {
-        Account account = accountRepository.getByIdAndVertificationToken(accountId, verificationToken);
+        Account account = accountRepository.getByIdAndVerificationToken(accountId, verificationToken);
 
         if(account == null) {
             return false;
         }
 
         account.setStatus(AccountConstant.STATUS_ACTIVE);
-        account.setVertificationToken(null);
+        account.setVerificationToken(null);
         accountRepository.save(account);
 
         return true;
@@ -116,7 +111,7 @@ public class AccountServiceImpl implements AccountService {
 
 
     @Override
-    public Token login(Account accountInput, HttpServletRequest request) throws AccountInvalidException, AccountInactiveException, AccountLockedException, AccountValidationException {
+    public Token login(Account accountInput) throws AccountInvalidException, AccountInactiveException, AccountLockedException, AccountValidationException {
 
         accountValidation.validate(accountInput, GroupLoginAccount.class);
 
@@ -133,13 +128,62 @@ public class AccountServiceImpl implements AccountService {
 
         Token accessToken = new Token();
         accessToken.setAccessToken(tokenService.generateToken(account.getId() + account.getEmail() + (new Date()).getTime()));
-        accessToken.setTime(TokenEnum.TIME_OF_TOKEN.value());
+        accessToken.setExpiredIn(TokenEnum.TIME_OF_TOKEN.value());
+        accessToken.setExpiredAt(new Date((new Date()).getTime() + TokenEnum.TIME_OF_TOKEN.value() * 1000));
         accessToken.setAccountId(account.getId());
-        accessToken.setStatus(TokenEnum.OPEN.name());
         accessToken.setCreatedAt(new Date());
         accessToken.setUpdatedAt(new Date());
-        accessToken.setTimeExpired(TokenEnum.TIME_OF_TOKEN.value());accessToken = tokenRepository.save(accessToken);
+        accessToken = tokenRepository.save(accessToken);
         accessToken.setAccount(account);
+
+        return accessToken;
+    }
+
+    @Override
+    public Token loginWithGoogle(Token token) throws IOException, EmailFormatException, RoleNotFoundException, UnauthorizedException, TokenIsExpiredException {
+        GooglePojo googlePojo = googleService.getUserInfo(token.getAccessToken());
+
+        Account account = getByEmail(googlePojo.getEmail());
+
+        if(account == null) {
+            account = new Account();
+            account.setEmail(googlePojo.getEmail());
+            account.setFirstName(googlePojo.getGivenName());
+            account.setLastName(googlePojo.getFamilyName());
+            account.setAvatarUrl(googlePojo.getPicture());
+            account.setVerificationToken(null);
+            account.setPassword(null);
+            account.setStatus(AccountConstant.STATUS_ACTIVE);
+            Role role = roleService.getByName(RoleConstant.ROLE_USER);
+            account.setRoleId(role.getId());
+            account.setCreatedAt(new Date());
+            account.setUpdatedAt(new Date());
+
+            account = accountRepository.save(account);
+            account.setRole(role);
+        } else {
+            if(account.getVerificationToken() != null) {
+                account.setVerificationToken(null);
+                accountRepository.save(account);
+            }
+        }
+
+        Token accessToken = tokenRepository.getByAccessToken(token.getAccessToken());
+        if(accessToken == null) {
+            accessToken = new Token();
+            accessToken.setAccessToken(token.getAccessToken());
+            accessToken.setExpiredIn(TokenEnum.TIME_OF_TOKEN.value());
+            accessToken.setExpiredAt((new Date((new Date()).getTime() + TokenEnum.TIME_OF_TOKEN.value() * 1000)));
+            accessToken.setAccountId(account.getId());
+            accessToken.setCreatedAt(new Date());
+            accessToken.setUpdatedAt(new Date());
+            accessToken = tokenRepository.save(accessToken);
+            accessToken.setAccount(account);
+        } else {
+            if(tokenService.isTokenExpired(accessToken)) {
+                throw new TokenIsExpiredException(token.getAccessToken());
+            }
+        }
 
         return accessToken;
     }
@@ -151,54 +195,7 @@ public class AccountServiceImpl implements AccountService {
         if(token == null)
             throw new TokenNotFoundException(accessToken);
 
-        token.setStatus(TokenEnum.CLOSE.name());
-
         tokenRepository.save(token);
-    }
-
-    @Override
-    public Account loginWithGoogle(String code, HttpServletRequest request) throws EmailFormatException,
-            RoleNotFoundException, AccountIsExistException, AccountValidationException, IOException {
-        String accessToken = googleService.getToken(code);
-        GooglePojo googlePojo = googleService.getUserInfo(accessToken);
-
-        Account account = getByEmail(googlePojo.getEmail());
-
-        // create new account
-        if(account == null) {
-            account = new Account();
-            account.setEmail(googlePojo.getEmail());
-
-            if(googlePojo.getName() == null || googlePojo.getName().equals(""))
-                account.setFirstName(account.getEmail().substring(0, account.getEmail().indexOf("@novahub.vn")));
-            else {
-                account.setFirstName(googlePojo.getGiven_name());
-                account.setLastName(googlePojo.getFamily_name());
-            }
-            account.setAvatarUrl(googlePojo.getPicture());
-            // TODO : create token depends on accessToken of google
-            // account.setToken(accessToken);
-            account.setVertificationToken(null);
-            account.setStatus(AccountConstant.STATUS_ACTIVE);
-            account.setRoleId(roleService.getByName(RoleConstant.ROLE_USER).getId());
-            account.setUpdatedAt(new Date());
-            account.setCreatedAt(new Date());
-            account = createWithGoogleAccount(account);
-
-            account.setRole(roleService.getById(account.getRoleId()));
-        } else {
-            // TODO : create Token depends on accessToken of google
-            //account.setToken(accessToken);
-            account = accountRepository.save(account);
-        }
-
-        UserDetails userDetail = googleService.buildUser(googlePojo, RoleConstant.PREFIX_ROLE + account.getRole().getName());
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetail, null,
-                userDetail.getAuthorities());
-        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        return account;
     }
 
     @Override
@@ -239,7 +236,7 @@ public class AccountServiceImpl implements AccountService {
 
         account.setPassword(bCryptPasswordEncoder.encode(account.getPassword()));
         account.setStatus(AccountConstant.STATUS_INACTIVE);
-        account.setVertificationToken(tokenService.generateToken(account.getEmail() + account.getEmail()));
+        account.setVerificationToken(tokenService.generateToken(account.getEmail() + account.getEmail()));
         account.setRoleId(roleService.getByName(RoleConstant.ROLE_USER).getId());
         account.setCreatedAt(new Date());
         account.setUpdatedAt(new Date());
@@ -249,7 +246,7 @@ public class AccountServiceImpl implements AccountService {
         Mail mail = new Mail();
         mail.setEmailReceiving(new String[]{account.getEmail()});
         mail.setSubject(env.getProperty("subject_email_sign_up"));
-        String urlAccountActive = "http://localhost:8080/api/users/" + account.getId() + "/active?token=" + account.getVertificationToken();
+        String urlAccountActive = "http://localhost:8080/api/users/" + account.getId() + "/active?token=" + account.getVerificationToken();
         String contentEmailSignUp = env.getProperty("content_email_sign_up");
         contentEmailSignUp = contentEmailSignUp.replace("{url-activate-account}", urlAccountActive);
         mail.setContent(contentEmailSignUp);
@@ -338,7 +335,7 @@ public class AccountServiceImpl implements AccountService {
         if(account.getStatus() != null) {
             if(oldAccount.getStatus().equals(AccountConstant.STATUS_INACTIVE)
                && account.getStatus().equals(AccountConstant.STATUS_ACTIVE))
-                oldAccount.setVertificationToken(null);
+                oldAccount.setVerificationToken(null);
 
             oldAccount.setStatus(account.getStatus());
         }

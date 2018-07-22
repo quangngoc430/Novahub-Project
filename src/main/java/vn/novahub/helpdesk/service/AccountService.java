@@ -22,11 +22,11 @@ public interface AccountService {
 
     boolean activateAccount(long accountId, String token);
 
-    Token login(Account account, HttpServletRequest request) throws AccountInvalidException, AccountInactiveException, AccountLockedException, AccountValidationException;
+    Token login(Account account) throws AccountInvalidException, AccountInactiveException, AccountLockedException, AccountValidationException;
+
+    Token loginWithGoogle(Token token) throws IOException, EmailFormatException, RoleNotFoundException, UnauthorizedException, TokenIsExpiredException;
 
     void logout(String token) throws TokenNotFoundException;
-
-    Account loginWithGoogle(String code, HttpServletRequest request) throws IOException, EmailFormatException, RoleNotFoundException, AccountIsExistException, AccountValidationException;
 
     Page<Account> getAll(String keyword, String status, String role, Pageable pageable);
 

@@ -8,6 +8,4 @@ public interface TokenService {
 
     boolean isTokenExpired(Token token);
 
-    long countTimeExpired(Token token);
-
 }

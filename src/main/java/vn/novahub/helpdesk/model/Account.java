@@ -25,28 +25,31 @@ public class Account implements Serializable {
     private long id;
 
     @NotEmpty(message = "Email is not empty", groups = {GroupCreateAccount.class, GroupLoginAccount.class, GroupCreateWithAccountGoogle.class})
-    @Email(regexp = "^[a-zA-Z0-9]+\\@novahub.vn", message = "Email contains [a-z|A-Z|0-9] and end with @novahub.vn ",
+    @Email(regexp = "^[a-zA-Z0-9._]+\\@novahub.vn", message = "Email contains [a-z|A-Z|0-9|.|_] and end with @novahub.vn ",
             groups = {GroupCreateAccount.class, GroupLoginAccount.class, GroupCreateWithAccountGoogle.class})
     @Size(min = 8, max = 80, message = "Email must have between 8 and 80 characters",
             groups = {GroupCreateAccount.class, GroupLoginAccount.class, GroupCreateWithAccountGoogle.class})
     @Column(name = "email")
     private String email;
 
+    @JsonProperty(value = "first_name")
     @Column(name = "first_name")
     private String firstName;
 
+    @JsonProperty(value = "last_name")
     @Column(name = "last_name")
     private String lastName;
 
     @JsonProperty(value = "birth_day")
     @Temporal(TemporalType.TIMESTAMP)
-    @JsonFormat(pattern = "dd-MM-yyyy")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(name = "birth_day")
     private Date dayOfBirth;
 
     @Column(name = "address")
     private String address;
 
+    @JsonProperty(value = "avatar_url")
     @Column(name = "avatar_url")
     private String avatarUrl;
 
@@ -64,24 +67,26 @@ public class Account implements Serializable {
     @Column(name = "status")
     private String status;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty(value = "created_at")
     @NotNull(message = "Create At is not null")
     @Column(name = "created_at")
     private Date createdAt;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty(value = "updated_at")
     @NotNull(message = "Update At is not null")
     @Column(name = "updated_at")
     private Date updatedAt;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @JsonFormat(pattern = "dd-MM-yyyy")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(name = "joiningDate")
     private Date joiningDate;
 
     @JsonIgnore
-    @Column(name = "vertification_token")
-    private String vertificationToken;
+    @Column(name = "verification_token")
+    private String verificationToken;
 
     @JsonProperty("role_id")
     @NotNull(message = "Role id is not empty")
@@ -211,12 +216,12 @@ public class Account implements Serializable {
         this.role = role;
     }
 
-    public String getVertificationToken() {
-        return vertificationToken;
+    public String getVerificationToken() {
+        return verificationToken;
     }
 
-    public void setVertificationToken(String vertificationToken) {
-        this.vertificationToken = vertificationToken;
+    public void setVerificationToken(String verificationToken) {
+        this.verificationToken = verificationToken;
     }
 
     public Date getJoiningDate() {
@@ -259,7 +264,7 @@ public class Account implements Serializable {
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 ", joiningDate=" + joiningDate +
-                ", vertificationToken='" + vertificationToken + '\'' +
+                ", vertificationToken='" + verificationToken + '\'' +
                 ", roleId=" + roleId +
                 ", newPassword='" + newPassword + '\'' +
                 ", role=" + role +

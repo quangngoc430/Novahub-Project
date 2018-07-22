@@ -25,7 +25,12 @@
 			$(".data").css("display", "block");
 			$("#pic").attr('src', profile.getImageUrl());
 			$("email").text(profile.getEmail());
-		}	
+		}
+
+		function signOut() {
+			var authInstance = gapi.auth2.getAuthInstance();
+			authInstance.signOut();
+        }
 	</script>
 </head>
 <body>

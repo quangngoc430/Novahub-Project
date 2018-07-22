@@ -24,7 +24,7 @@ CREATE TABLE `account` (
   `created_at` datetime NOT NULL DEFAULT NOW(),
   `updated_at` datetime NOT NULL DEFAULT NOW(),
   `joiningDate` datetime DEFAULT NOW(),
-  `vertification_token` char(255),
+  `verification_token` char(255),
   `role_id` int NOT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_user_role` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`)
@@ -34,8 +34,8 @@ DROP TABLE IF EXISTS `token`;
 CREATE TABLE `token` (
   `id` int NOT NULL AUTO_INCREMENT,
   `access_token` varchar(256) NOT NULL,
-  `time` int NOT NULL,
-  `status` varchar(50) NOT NULL,
+  `expired_in` int NOT NULL,
+  `expired_at` datetime NOT NULL,
   `account_id` int NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
@@ -124,7 +124,7 @@ INSERT INTO `role`(name) VALUES ("USER");
 INSERT INTO `account`(email, first_name, last_name, password, status, role_id)
 VALUES("helpdesk@novahub.vn", "Desk", "Help", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", "ACTIVE", 1);
 INSERT INTO `account`(email, first_name, last_name, password, status, role_id)
-VALUES("ngocbui@novahub.vn", "Quang Ngoc", "Bui Lam", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", "ACTIVE", 2);
+VALUES("ngocbui1@novahub.vn", "Quang Ngoc", "Bui Lam", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", "ACTIVE", 2);
 INSERT INTO `account`(email, first_name, last_name, password, status, role_id)
 VALUES("linhtran@novahub.vn", "Linh", "Tran Manh", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", "ACTIVE", 3);
 INSERT INTO `account`(email, first_name, last_name, password, status, role_id)

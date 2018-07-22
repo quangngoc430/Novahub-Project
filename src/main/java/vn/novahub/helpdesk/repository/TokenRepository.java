@@ -9,6 +9,4 @@ public interface TokenRepository extends CrudRepository<Token, Long> {
 
     Token getByAccessToken(String accessToken);
 
-    Token getByAccessTokenAndStatus(String accessToken, String status);
-
 }

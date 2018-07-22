@@ -19,7 +19,6 @@ import vn.novahub.helpdesk.model.Token;
 import vn.novahub.helpdesk.service.AccountService;
 import vn.novahub.helpdesk.service.LogService;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.security.PermitAll;
 import javax.mail.MessagingException;
 import javax.servlet.RequestDispatcher;
@@ -55,20 +54,20 @@ public class AccountController {
 
     @PermitAll
     @PostMapping(path = "/login", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Token> login(@RequestBody Account account,
-                                         HttpServletRequest request) throws AccountInvalidException, AccountLockedException, AccountValidationException, AccountInactiveException {
-        logService.log(request, logger);
+    public ResponseEntity<Token> login(@RequestBody Account account) throws AccountInvalidException, AccountLockedException, AccountValidationException, AccountInactiveException {
 
-        Token accessToken = accountService.login(account, request);
+        Token accessToken = accountService.login(account);
 
         return new ResponseEntity<>(accessToken, HttpStatus.OK);
     }
 
     @PermitAll
     @PostMapping(path = "/login/google", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Void> login(@RequestBody Token token) {
+    public ResponseEntity<Token> login(@RequestBody Token token) throws EmailFormatException, RoleNotFoundException, IOException, UnauthorizedException, TokenIsExpiredException {
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        Token accessToken = accountService.loginWithGoogle(token);
+
+        return new ResponseEntity<>(accessToken, HttpStatus.OK);
     }
 
     @PermitAll

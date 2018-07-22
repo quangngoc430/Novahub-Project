@@ -49,7 +49,7 @@ public interface AccountRepository extends PagingAndSortingRepository<Account, L
 
     Account getById(long accountId);
 
-    Account getByIdAndVertificationToken(long accountId, String verificationToken);
+    Account getByIdAndVerificationToken(long accountId, String verificationToken);
 
     Account getByEmailAndPassword(String email, String password);
 

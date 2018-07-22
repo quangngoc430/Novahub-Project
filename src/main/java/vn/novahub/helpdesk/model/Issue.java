@@ -1,6 +1,8 @@
 package vn.novahub.helpdesk.model;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -28,10 +30,12 @@ public class Issue implements Serializable {
     @Column(name = "status")
     private String status;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @NotNull
     @Column(name = "created_at")
     private Date createdAt;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @NotNull
     @Column(name = "updated_at")
     private Date updatedAt;

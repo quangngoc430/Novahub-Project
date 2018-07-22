@@ -1,5 +1,6 @@
 package vn.novahub.helpdesk.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -7,12 +8,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Table(name = "token")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Token {
+public class Token implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -24,27 +26,25 @@ public class Token {
     @Column(name = "access_token")
     private String accessToken;
 
-    @JsonIgnore
-    @NotNull
-    @Column(name = "time")
-    private long time;
-
     @JsonProperty(value = "expired_in")
-    @Transient
-    private long timeExpired;
+    @NotNull
+    @Column(name = "expired_in")
+    private long expiredIn;
 
-    @JsonIgnore
-    @NotEmpty
-    @Column(name = "status")
-    private String status;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonProperty(value = "expired_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    @NotNull
+    @Column(name = "expired_at")
+    private Date expiredAt;
 
-    @JsonIgnore
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Temporal(TemporalType.TIMESTAMP)
     @NotNull
     @Column(name = "created_at")
     private Date createdAt;
 
-    @JsonIgnore
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Temporal(TemporalType.TIMESTAMP)
     @NotNull
     @Column(name = "updated_at")
@@ -75,28 +75,20 @@ public class Token {
         this.accessToken = accessToken;
     }
 
-    public long getTime() {
-        return time;
+    public long getExpiredIn() {
+        return expiredIn;
     }
 
-    public void setTime(long time) {
-        this.time = time;
+    public void setExpiredIn(long expiredIn) {
+        this.expiredIn = expiredIn;
     }
 
-    public long getTimeExpired() {
-        return timeExpired;
+    public Date getExpiredAt() {
+        return expiredAt;
     }
 
-    public void setTimeExpired(long timeExpired) {
-        this.timeExpired = timeExpired;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
+    public void setExpiredAt(Date expiredAt) {
+        this.expiredAt = expiredAt;
     }
 
     public Date getCreatedAt() {
@@ -136,8 +128,8 @@ public class Token {
         return "Token{" +
                 "id=" + id +
                 ", accessToken='" + accessToken + '\'' +
-                ", time=" + time +
-                ", status='" + status + '\'' +
+                ", expiredIn=" + expiredIn +
+                ", expiredAt=" + expiredAt +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 ", accountId=" + accountId +

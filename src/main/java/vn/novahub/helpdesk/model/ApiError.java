@@ -1,10 +1,10 @@
 package vn.novahub.helpdesk.model;
 
-
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.Map;
 
-public class ApiError {
+public class ApiError implements Serializable {
 
     private Instant timestamp;
     private int status;

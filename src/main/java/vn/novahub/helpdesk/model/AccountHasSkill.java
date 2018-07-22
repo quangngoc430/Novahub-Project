@@ -1,10 +1,11 @@
 package vn.novahub.helpdesk.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "account_has_skill")
-public class AccountHasSkill {
+public class AccountHasSkill implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

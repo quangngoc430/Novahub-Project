@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 public class TokenAuthenticationFilterBefore extends GenericFilterBean {
 
-    private static ArrayList<Request> requestsNeedAuthencationToken;
+    private ArrayList<Request> requestsNeedAuthencationToken;
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
