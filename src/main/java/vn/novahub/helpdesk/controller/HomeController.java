@@ -79,6 +79,11 @@ public class HomeController {
         return "403";
     }
 
+    @RequestMapping("/index")
+    public String index(){
+        return "index";
+    }
+
     @RequestMapping("/login-google")
     public String loginGoogle(@RequestParam(value = "code", defaultValue = "") String code,
                               HttpServletRequest request) throws IOException, EmailFormatException, AccountIsExistException, AccountValidationException, RoleNotFoundException {
