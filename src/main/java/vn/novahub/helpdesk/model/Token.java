@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import vn.novahub.helpdesk.validation.GroupLoginWithGoogle;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -22,36 +23,36 @@ public class Token implements Serializable {
     private long id;
 
     @JsonProperty(value = "access_token")
-    @NotEmpty
+    @NotEmpty(message = "access_token is not empty", groups = {GroupLoginWithGoogle.class})
     @Column(name = "access_token")
     private String accessToken;
 
     @JsonProperty(value = "expired_in")
-    @NotNull
+    @NotNull(message = "expired_in is not null")
     @Column(name = "expired_in")
     private long expiredIn;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty(value = "expired_at")
     @Temporal(TemporalType.TIMESTAMP)
-    @NotNull
+    @NotNull(message = "expired_at is not null")
     @Column(name = "expired_at")
     private Date expiredAt;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Temporal(TemporalType.TIMESTAMP)
-    @NotNull
+    @NotNull(message = "create_at is not null")
     @Column(name = "created_at")
     private Date createdAt;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Temporal(TemporalType.TIMESTAMP)
-    @NotNull
+    @NotNull(message = "updated_at is not null")
     @Column(name = "updated_at")
     private Date updatedAt;
 
     @JsonProperty(value = "account_id")
-    @NotNull
+    @NotNull(message = "account_id is not null")
     @Column(name = "account_id")
     private long accountId;
 

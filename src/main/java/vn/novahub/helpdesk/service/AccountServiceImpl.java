@@ -47,6 +47,9 @@ public class AccountServiceImpl implements AccountService {
     private TokenRepository tokenRepository;
 
     @Autowired
+    private TokenValidation tokenValidation;
+
+    @Autowired
     private RoleService roleService;
 
     @Autowired
@@ -140,7 +143,10 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Token loginWithGoogle(Token token) throws IOException, EmailFormatException, RoleNotFoundException, UnauthorizedException, TokenIsExpiredException {
+    public Token loginWithGoogle(Token token) throws IOException, EmailFormatException, RoleNotFoundException, UnauthorizedException, TokenIsExpiredException, AccountValidationException {
+
+        tokenValidation.validate(token, GroupLoginWithGoogle.class);
+
         GooglePojo googlePojo = googleService.getUserInfo(token.getAccessToken());
 
         Account account = getByEmail(googlePojo.getEmail());
@@ -251,25 +257,6 @@ public class AccountServiceImpl implements AccountService {
         contentEmailSignUp = contentEmailSignUp.replace("{url-activate-account}", urlAccountActive);
         mail.setContent(contentEmailSignUp);
         mailService.sendHTMLMail(mail);
-
-        return account;
-    }
-
-    @Override
-    public Account createWithGoogleAccount(Account account) throws AccountValidationException, AccountIsExistException, RoleNotFoundException {
-
-        accountValidation.validate(account, GroupCreateWithAccountGoogle.class);
-
-        if(accountRepository.getByEmail(account.getEmail()) != null)
-            throw new AccountIsExistException(account.getEmail());
-
-        account.setStatus(AccountConstant.STATUS_ACTIVE);
-        account.setRoleId(roleService.getByName(RoleConstant.ROLE_USER).getId());
-        account.setPassword(null);
-        account.setCreatedAt(new Date());
-        account.setUpdatedAt(new Date());
-
-        account = accountRepository.save(account);
 
         return account;
     }

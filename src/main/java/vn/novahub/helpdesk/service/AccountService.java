@@ -24,7 +24,7 @@ public interface AccountService {
 
     Token login(Account account) throws AccountInvalidException, AccountInactiveException, AccountLockedException, AccountValidationException;
 
-    Token loginWithGoogle(Token token) throws IOException, EmailFormatException, RoleNotFoundException, UnauthorizedException, TokenIsExpiredException;
+    Token loginWithGoogle(Token token) throws IOException, EmailFormatException, RoleNotFoundException, UnauthorizedException, TokenIsExpiredException, AccountValidationException;
 
     void logout(String token) throws TokenNotFoundException;
 
@@ -33,8 +33,6 @@ public interface AccountService {
     Account get(long accountId) throws AccountNotFoundException;
 
     Account create(Account account) throws AccountIsExistException, RoleNotFoundException, AccountValidationException, MessagingException;
-
-    Account createWithGoogleAccount(Account account) throws AccountValidationException, AccountIsExistException, RoleNotFoundException;
 
     Account update(Account account) throws AccountValidationException, AccountPasswordNotEqualException;
 

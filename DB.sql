@@ -124,7 +124,7 @@ INSERT INTO `role`(name) VALUES ("USER");
 INSERT INTO `account`(email, first_name, last_name, password, status, role_id)
 VALUES("helpdesk@novahub.vn", "Desk", "Help", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", "ACTIVE", 1);
 INSERT INTO `account`(email, first_name, last_name, password, status, role_id)
-VALUES("ngocbui1@novahub.vn", "Quang Ngoc", "Bui Lam", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", "ACTIVE", 2);
+VALUES("ngocbui@novahub.vn", "Quang Ngoc", "Bui Lam", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", "ACTIVE", 2);
 INSERT INTO `account`(email, first_name, last_name, password, status, role_id)
 VALUES("linhtran@novahub.vn", "Linh", "Tran Manh", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", "ACTIVE", 3);
 INSERT INTO `account`(email, first_name, last_name, password, status, role_id)

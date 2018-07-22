@@ -24,11 +24,11 @@ public class Account implements Serializable {
     @Column(name = "id")
     private long id;
 
-    @NotEmpty(message = "Email is not empty", groups = {GroupCreateAccount.class, GroupLoginAccount.class, GroupCreateWithAccountGoogle.class})
+    @NotEmpty(message = "Email is not empty", groups = {GroupCreateAccount.class, GroupLoginAccount.class})
     @Email(regexp = "^[a-zA-Z0-9._]+\\@novahub.vn", message = "Email contains [a-z|A-Z|0-9|.|_] and end with @novahub.vn ",
-            groups = {GroupCreateAccount.class, GroupLoginAccount.class, GroupCreateWithAccountGoogle.class})
+            groups = {GroupCreateAccount.class, GroupLoginAccount.class})
     @Size(min = 8, max = 80, message = "Email must have between 8 and 80 characters",
-            groups = {GroupCreateAccount.class, GroupLoginAccount.class, GroupCreateWithAccountGoogle.class})
+            groups = {GroupCreateAccount.class, GroupLoginAccount.class})
     @Column(name = "email")
     private String email;
 

@@ -63,7 +63,7 @@ public class AccountController {
 
     @PermitAll
     @PostMapping(path = "/login/google", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Token> login(@RequestBody Token token) throws EmailFormatException, RoleNotFoundException, IOException, UnauthorizedException, TokenIsExpiredException {
+    public ResponseEntity<Token> login(@RequestBody Token token) throws EmailFormatException, RoleNotFoundException, IOException, UnauthorizedException, TokenIsExpiredException, AccountValidationException {
 
         Token accessToken = accountService.loginWithGoogle(token);
 

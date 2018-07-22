@@ -60,4 +60,16 @@ public class TokenExceptionHandler {
         return new ResponseEntity<>(apiError, HttpStatus.UNAUTHORIZED);
     }
 
+    @ExceptionHandler(value = TokenValidationException.class)
+    public ResponseEntity<ApiError> handleTokenValidationException(HttpServletRequest request, Exception ex){
+        ApiError apiError = new ApiError();
+
+        apiError.setTimestamp(Instant.now());
+        apiError.setStatus(HttpStatus.NOT_ACCEPTABLE.value());
+        apiError.setError(((TokenValidationException) ex).getErrors());
+        apiError.setPath(request.getRequestURI());
+        apiError.setMessage(ex.getMessage());
+
+        return new ResponseEntity<>(apiError, HttpStatus.NOT_ACCEPTABLE);
+    }
 }
