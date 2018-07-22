@@ -65,6 +65,13 @@ public class AccountController {
     }
 
     @PermitAll
+    @PostMapping(path = "/login/google", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Void> login(@RequestBody Token token) {
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PermitAll
     @GetMapping(path = "/logout", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Void> logout(@RequestHeader(value = "access_token", defaultValue = "") String accessToken) throws TokenNotFoundException {
 
