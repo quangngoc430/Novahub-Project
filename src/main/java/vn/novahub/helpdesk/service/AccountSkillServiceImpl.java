@@ -63,7 +63,7 @@ public class AccountSkillServiceImpl implements AccountSkillService {
 
     @Override
     public Page<Skill> getAllByKeyword(String keyword, Pageable pageable) {
-        return skillRepository.getAllByNameLike("%" + keyword + "&", pageable);
+        return skillRepository.getAllByNameLike("%" + keyword + "%", pageable);
     }
 
 
