@@ -1,4 +1,4 @@
-package vn.novahub.helpdesk.service;
+package vn.novahub.helpdesk.service.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +17,7 @@ import vn.novahub.helpdesk.model.*;
 import vn.novahub.helpdesk.repository.AccountRepository;
 import vn.novahub.helpdesk.repository.DayOffRepository;
 import vn.novahub.helpdesk.repository.DayOffTypeRepository;
+import vn.novahub.helpdesk.service.*;
 
 import javax.mail.MessagingException;
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 @Service
-public class DayOffServiceImpl implements DayOffService{
+public class DayOffServiceImpl implements DayOffService {
 
     @Autowired
     private DayOffRepository dayOffRepository;

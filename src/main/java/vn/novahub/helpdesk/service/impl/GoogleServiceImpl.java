@@ -1,4 +1,4 @@
-package vn.novahub.helpdesk.service;
+package vn.novahub.helpdesk.service.impl;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,9 +18,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import vn.novahub.helpdesk.exception.EmailFormatException;
 import vn.novahub.helpdesk.model.GooglePojo;
+import vn.novahub.helpdesk.service.GoogleService;
 
 @Component
-public class GoogleServiceImpl implements GoogleService{
+public class GoogleServiceImpl implements GoogleService {
 
     @Autowired
     private Environment env;

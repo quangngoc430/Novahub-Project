@@ -1,15 +1,16 @@
-package vn.novahub.helpdesk.service;
+package vn.novahub.helpdesk.service.impl;
 
 import org.springframework.stereotype.Service;
 import vn.novahub.helpdesk.constant.DayOffTypeConstant;
 import vn.novahub.helpdesk.exception.DayOffTypeIsNotValidException;
 import vn.novahub.helpdesk.model.DayOffType;
+import vn.novahub.helpdesk.service.DayOffTypeFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class DayOffTypeFactoryImpl implements DayOffTypeFactory{
+public class DayOffTypeFactoryImpl implements DayOffTypeFactory {
 
     private List<String> dayOffTypes = new ArrayList<>();
     

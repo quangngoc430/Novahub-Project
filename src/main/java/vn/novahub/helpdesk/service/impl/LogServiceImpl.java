@@ -1,7 +1,8 @@
-package vn.novahub.helpdesk.service;
+package vn.novahub.helpdesk.service.impl;
 
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
+import vn.novahub.helpdesk.service.LogService;
 
 import javax.servlet.http.HttpServletRequest;
 
