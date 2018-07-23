@@ -1,4 +1,4 @@
-package vn.novahub.helpdesk.impl;
+package vn.novahub.helpdesk.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;

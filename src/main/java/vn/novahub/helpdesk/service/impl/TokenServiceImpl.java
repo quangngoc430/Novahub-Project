@@ -1,4 +1,4 @@
-package vn.novahub.helpdesk.impl;
+package vn.novahub.helpdesk.service.impl;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Service;
@@ -17,6 +17,6 @@ public class TokenServiceImpl implements TokenService {
 
     @Override
     public boolean isTokenExpired(Token token) {
-        return (new Date()).getTime() <= token.getExpiredIn();
+        return (new Date()).getTime() <= token.getExpiredAt().getTime();
     }
 }

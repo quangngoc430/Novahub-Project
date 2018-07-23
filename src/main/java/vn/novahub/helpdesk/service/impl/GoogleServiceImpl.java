@@ -1,4 +1,4 @@
-package vn.novahub.helpdesk.impl;
+package vn.novahub.helpdesk.service.impl;
 
 import java.io.IOException;
 import org.apache.http.client.HttpResponseException;
