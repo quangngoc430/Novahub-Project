@@ -1,6 +1,8 @@
 package vn.novahub.helpdesk.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import vn.novahub.helpdesk.validation.GroupCreateCategory;
+import vn.novahub.helpdesk.validation.GroupUpdateCategory;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -19,7 +21,7 @@ public class Category implements Serializable {
     @Column(name = "id")
     private long id;
 
-    @NotEmpty(message = "Name is not empty")
+    @NotEmpty(message = "Name is not empty", groups = {GroupCreateCategory.class, GroupUpdateCategory.class})
     @Column(name = "name", unique = true)
     private String name;
 
