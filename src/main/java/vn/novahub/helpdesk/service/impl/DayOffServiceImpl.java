@@ -1,4 +1,4 @@
-package vn.novahub.helpdesk.service;
+package vn.novahub.helpdesk.service.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,15 +17,17 @@ import vn.novahub.helpdesk.model.*;
 import vn.novahub.helpdesk.repository.AccountRepository;
 import vn.novahub.helpdesk.repository.DayOffRepository;
 import vn.novahub.helpdesk.repository.DayOffTypeRepository;
+import vn.novahub.helpdesk.service.*;
 
 import javax.mail.MessagingException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
 @Service
-public class DayOffServiceImpl implements DayOffService{
+public class DayOffServiceImpl implements DayOffService {
 
     @Autowired
     private DayOffRepository dayOffRepository;
@@ -50,8 +52,6 @@ public class DayOffServiceImpl implements DayOffService{
 
     @Autowired
     private DayOffTypeFactory dayOffTypeFactory;
-
-    Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
     public Page<DayOff> getAllByAccountIdAndTypeAndStatus(
@@ -96,10 +96,10 @@ public class DayOffServiceImpl implements DayOffService{
     public void delete(DayOff dayOff)
             throws MessagingException,
                     DayOffOverdueException {
-        Date currentDate = new Date();
+        LocalDateTime currentDate = LocalDateTime.now();
         dayOff = dayOffRepository.getById(dayOff.getId());
 
-        if (currentDate.before(dayOff.getStartDate())) {
+        if (currentDate.isBefore(dayOff.getStartDate())) {
             dayOffRepository.delete(dayOff);
         } else {
             throw new DayOffOverdueException(dayOff.getId());
@@ -161,7 +161,6 @@ public class DayOffServiceImpl implements DayOffService{
                         createdYear);
 
         if (dayOffType == null) {
-            logger.info("Day off type null");
             dayOffType = dayOffTypeFactory.create(dayOff.getType());
             dayOffType.setAccountId(accountLogin.getId());
             dayOffType.setYear(createdYear);
@@ -173,7 +172,7 @@ public class DayOffServiceImpl implements DayOffService{
 
     private void initialize(DayOff dayOff) {
         Account accountLogin = accountService.getAccountLogin();
-        Date createdDate = new Date();
+        LocalDateTime createdDate = LocalDateTime.now();
 
         dayOff.setCreatedAt(createdDate);
         dayOff.setUpdatedAt(createdDate);

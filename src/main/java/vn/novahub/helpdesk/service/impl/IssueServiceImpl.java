@@ -1,4 +1,4 @@
-package vn.novahub.helpdesk.service;
+package vn.novahub.helpdesk.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -18,6 +18,10 @@ import vn.novahub.helpdesk.model.Mail;
 import vn.novahub.helpdesk.repository.AccountRepository;
 import vn.novahub.helpdesk.repository.IssueRepository;
 import vn.novahub.helpdesk.repository.RoleRepository;
+import vn.novahub.helpdesk.service.AccountService;
+import vn.novahub.helpdesk.service.IssueService;
+import vn.novahub.helpdesk.service.MailService;
+import vn.novahub.helpdesk.service.TokenService;
 import vn.novahub.helpdesk.validation.IssueValidation;
 
 import javax.mail.MessagingException;

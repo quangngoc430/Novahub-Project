@@ -1,4 +1,4 @@
-package vn.novahub.helpdesk.service;
+package vn.novahub.helpdesk.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,6 +15,8 @@ import vn.novahub.helpdesk.repository.AccountHasSkillRepository;
 import vn.novahub.helpdesk.repository.AccountRepository;
 import vn.novahub.helpdesk.repository.CategoryRepository;
 import vn.novahub.helpdesk.repository.SkillRepository;
+import vn.novahub.helpdesk.service.AccountService;
+import vn.novahub.helpdesk.service.AccountSkillService;
 import vn.novahub.helpdesk.validation.GroupCreateSkill;
 import vn.novahub.helpdesk.validation.GroupUpdateSkill;
 import vn.novahub.helpdesk.validation.SkillValidation;
@@ -31,7 +33,7 @@ public class AccountSkillServiceImpl implements AccountSkillService {
     private SkillValidation skillValidation;
 
     @Autowired
-    private  AccountService accountService;
+    private AccountService accountService;
 
     @Autowired
     private AccountHasSkillRepository accountHasSkillRepository;

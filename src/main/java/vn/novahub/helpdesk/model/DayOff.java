@@ -3,6 +3,7 @@ package vn.novahub.helpdesk.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -17,17 +18,17 @@ public class DayOff {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "start_date")
-    private Date startDate;
+    @Column(name = "start_date", columnDefinition = "TIMESTAMP WITH TIME ZONE")
+    private LocalDateTime startDate;
 
-    @Column(name = "end_date")
-    private Date endDate;
+    @Column(name = "end_date", columnDefinition = "TIMESTAMP WITH TIME ZONE")
+    private LocalDateTime endDate;
 
-    @Column(name = "created_at")
-    private Date createdAt;
+    @Column(name = "created_at", columnDefinition = "TIMESTAMP WITH TIME ZONE")
+    private LocalDateTime createdAt;
 
-    @Column(name = "updated_at")
-    private Date updatedAt;
+    @Column(name = "updated_at", columnDefinition = "TIMESTAMP WITH TIME ZONE")
+    private LocalDateTime updatedAt;
 
     @Column(name = "number_of_hours")
     private int numberOfHours;
@@ -58,8 +59,8 @@ public class DayOff {
     private Account account;
 
     public DayOff() {
-        createdAt = new Date();
-        updatedAt = new Date();
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
     }
 
     public long getId() {
@@ -78,35 +79,35 @@ public class DayOff {
         this.title = title;
     }
 
-    public Date getStartDate() {
+    public LocalDateTime getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(LocalDateTime startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public LocalDateTime getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
     }
 
-    public Date getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Date getUpdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Date updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 
