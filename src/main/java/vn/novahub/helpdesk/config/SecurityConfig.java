@@ -9,8 +9,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-import vn.novahub.helpdesk.filter.TokenAuthenticationFilterAfter;
-import vn.novahub.helpdesk.filter.TokenAuthenticationFilterBefore;
 import vn.novahub.helpdesk.service.MyUserDetailService;
 
 @EnableWebSecurity

@@ -26,6 +26,7 @@ public class SkillExceptionHandler {
         apiError.setMessage(ex.getMessage());
 
         return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
+
     }
 
     @ExceptionHandler(value = SkillIsExistException.class)
@@ -54,6 +55,7 @@ public class SkillExceptionHandler {
         apiError.setMessage(ex.getMessage());
 
         return new ResponseEntity<>(apiError, HttpStatus.NOT_ACCEPTABLE);
+
     }
 
 }

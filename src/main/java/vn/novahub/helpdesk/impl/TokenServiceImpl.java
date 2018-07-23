@@ -1,8 +1,9 @@
-package vn.novahub.helpdesk.service;
+package vn.novahub.helpdesk.impl;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Service;
 import vn.novahub.helpdesk.model.Token;
+import vn.novahub.helpdesk.service.TokenService;
 
 import java.util.Date;
 

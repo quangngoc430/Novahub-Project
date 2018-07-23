@@ -1,4 +1,4 @@
-package vn.novahub.helpdesk.service;
+package vn.novahub.helpdesk.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import vn.novahub.helpdesk.exception.RoleNotFoundException;
 import vn.novahub.helpdesk.model.Role;
 import vn.novahub.helpdesk.repository.RoleRepository;
+import vn.novahub.helpdesk.service.RoleService;
 
 @Service
 public class RoleServiceImpl implements RoleService {

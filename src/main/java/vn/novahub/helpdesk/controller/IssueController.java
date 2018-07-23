@@ -8,12 +8,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import vn.novahub.helpdesk.exception.IssueIsClosedException;
 import vn.novahub.helpdesk.exception.IssueNotFoundException;
+import vn.novahub.helpdesk.exception.IssueValidationException;
 import vn.novahub.helpdesk.model.Issue;
 import vn.novahub.helpdesk.service.IssueService;
 import vn.novahub.helpdesk.service.LogService;
 
+import javax.annotation.security.PermitAll;
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
@@ -28,78 +33,122 @@ public class IssueController {
     @Autowired
     private LogService logService;
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping(path = "/issues", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Page<Issue>> getAllIssues(@RequestParam(name = "keyword", required = false) String keyword,
-                                                       @RequestParam(name = "status", required = false) String status,
+    public ResponseEntity<Page<Issue>> getAllForAdmin(@RequestParam(name = "keyword", required = false, defaultValue = "") String keyword,
+                                                       @RequestParam(name = "status", required = false, defaultValue = "") String status,
                                                        Pageable pageable,
                                                        HttpServletRequest request){
         logService.log(request, logger);
-        Page<Issue> issuePage = issueService.getAllByKeyword(keyword, status, pageable);
+
+        Page<Issue> issuePage = issueService.getAllByKeywordAndStatusForAdmin(keyword, status, pageable);
 
         return new ResponseEntity<>(issuePage, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping(path = "/issues/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Issue> get(@PathVariable(name = "issueId") long issueId,
+    public ResponseEntity<Issue> getForAdmin(@PathVariable(name = "issueId") long issueId,
                                               HttpServletRequest request) throws IssueNotFoundException {
         logService.log(request, logger);
-        Issue issue = issueService.getByIssueId(issueId);
+        Issue issue = issueService.getByIdForAdmin(issueId);
 
         return new ResponseEntity<>(issue, HttpStatus.OK);
     }
 
-    @GetMapping(path = "/accounts/issues", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Page<Issue>> getAllOfAnAccount(@RequestParam(name = "keyword", required = false) String keyword,
-                                                            @RequestParam(name = "status", required = false) String status,
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping(path = "/issues/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Issue> updateForAdmin(@PathVariable(name = "issueId") long issueId,
+                                                @RequestBody Issue issue,
+                                                HttpServletRequest request) throws IssueValidationException, IssueNotFoundException, MessagingException {
+        logService.log(request, logger);
+        Issue issueUpdated = issueService.updateForAdmin(issueId, issue);
+
+        return new ResponseEntity<>(issueUpdated, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping(path = "issues/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Void> deleteForAdmin(@PathVariable(name = "issueId") long issueId,
+                                               HttpServletRequest request) throws IssueNotFoundException {
+        logService.log(request, logger);
+        issueService.deleteForAdmin(issueId);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping(path = "/users/me/issues", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Page<Issue>> getAll(@RequestParam(name = "keyword", required = false, defaultValue = "") String keyword,
+                                                            @RequestParam(name = "status", required = false, defaultValue = "") String status,
                                                             HttpServletRequest request,
                                                             Pageable pageable){
         logService.log(request, logger);
-        Page<Issue> issuePage = issueService.getAllOfAccountByKeyword(keyword, status, pageable, request);
+        Page<Issue> issuePage = issueService.getAllByKeywordAndStatus(keyword, status, pageable);
 
         return new ResponseEntity<>(issuePage, HttpStatus.OK);
     }
 
-    @PostMapping(path = "/issues", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Issue> create(HttpServletRequest request,
-                                                 @RequestBody Issue issue){
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping(path = "/users/me/issues/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Issue> get(@PathVariable("issueId") long issueId,
+                                                HttpServletRequest request) throws IssueNotFoundException {
         logService.log(request, logger);
-        issue = issueService.create(issue, request);
+        Issue issue = issueService.getById(issueId);
 
         return new ResponseEntity<>(issue, HttpStatus.OK);
     }
 
-    @PutMapping(path = "/issues/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping(path = "/users/me/issues", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Issue> create(HttpServletRequest request,
+                                                 @RequestBody Issue issue) throws IssueValidationException, MessagingException {
+        logService.log(request, logger);
+        issue = issueService.create(issue);
+
+        return new ResponseEntity<>(issue, HttpStatus.OK);
+    }
+
+    @PreAuthorize("isAuthenticated() and @issueServiceImpl.isIssueOfAccountLogin(#issueId)")
+    @PutMapping(path = "/users/me/issues/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Issue> update(HttpServletRequest request,
                                                  @RequestBody Issue issue,
-                                                 @PathVariable(name = "issueId") long issueId) throws IssueNotFoundException {
+                                                 @PathVariable(name = "issueId") long issueId) throws IssueNotFoundException, IssueValidationException, MessagingException {
         logService.log(request, logger);
         issue = issueService.update(issueId, issue);
 
         return new ResponseEntity<>(issue, HttpStatus.OK);
     }
 
-    @DeleteMapping(path = "/issues/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PreAuthorize("isAuthenticated() and @issueServiceImpl.isIssueOfAccountLogin(#issueId)")
+    @DeleteMapping(path = "/users/me/issues/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Void> delete(@PathVariable(name = "issueId") long issueId,
-                                                 HttpServletRequest request) throws IssueNotFoundException {
+                                       HttpServletRequest request) throws IssueNotFoundException {
         logService.log(request, logger);
         issueService.delete(issueId);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PermitAll
     @GetMapping(path = "/issues/{issueId}/approve", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void approve(@RequestParam(name = "token") String token,
-                        @PathVariable(name = "issueId") long issueId,
-                        HttpServletRequest request) throws IssueNotFoundException {
+    public ResponseEntity<Void> approve(@RequestParam(name = "token", required = false, defaultValue = "") String token,
+                                        @PathVariable(name = "issueId") long issueId,
+                                        HttpServletRequest request) throws IssueNotFoundException, IssueIsClosedException, MessagingException {
         logService.log(request, logger);
         issueService.approve(issueId, token);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PermitAll
     @GetMapping(path = "/issues/{issueId}/deny", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void deny(@RequestParam(name = "token") String token,
-                     @PathVariable(name = "issueId") long issueId,
-                     HttpServletRequest request) throws IssueNotFoundException {
+    public ResponseEntity<Void> deny(@RequestParam(name = "token", required = false, defaultValue = "") String token,
+                                     @PathVariable(name = "issueId") long issueId,
+                                     HttpServletRequest request) throws IssueNotFoundException, IssueIsClosedException, MessagingException {
         logService.log(request, logger);
         issueService.deny(issueId, token);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

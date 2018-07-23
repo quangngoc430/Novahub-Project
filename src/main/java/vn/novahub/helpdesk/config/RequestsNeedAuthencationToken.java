@@ -1,4 +1,4 @@
-package vn.novahub.helpdesk.filter;
+package vn.novahub.helpdesk.config;
 
 import vn.novahub.helpdesk.model.Request;
 
