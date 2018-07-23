@@ -10,9 +10,9 @@ import vn.novahub.helpdesk.exception.CategoryValidationException;
 import vn.novahub.helpdesk.model.Category;
 import vn.novahub.helpdesk.repository.CategoryRepository;
 import vn.novahub.helpdesk.validation.CategoryValidation;
-
 import javax.validation.groups.Default;
 import java.util.Date;
+
 
 @Service
 public class CategoryServiceImpl implements CategoryService{
@@ -66,9 +66,11 @@ public class CategoryServiceImpl implements CategoryService{
             throw new CategoryIsExistException(category.getName());
 
         oldCategory.setName(category.getName());
+
         oldCategory.setUpdatedAt(new Date());
 
         categoryValidation.validate(oldCategory, Default.class);
+
 
         return categoryRepository.save(oldCategory);
     }

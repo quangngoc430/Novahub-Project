@@ -1,5 +1,7 @@
 package vn.novahub.helpdesk.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -33,15 +35,32 @@ public class DayOff {
     @Column(name = "status")
     private String status;
 
+    @JsonIgnore
     @Column(name = "token")
     private String token;
 
     @Column(name = "account_id")
     private long accountId;
 
+    @Column(name = "type")
+    private String type;
+
     @Column(name = "type_id")
     private long typeId;
 
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = DayOffType.class)
+    @JoinColumn(name = "type_id", insertable = false, updatable = false)
+    private DayOffType dayOffType;
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Account.class)
+    @JoinColumn(name = "account_id", insertable = false, updatable = false)
+    private Account account;
+
+    public DayOff() {
+        createdAt = new Date();
+        updatedAt = new Date();
+    }
 
     public long getId() {
         return id;
@@ -123,6 +142,14 @@ public class DayOff {
         this.accountId = accountId;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     public long getTypeId() {
         return typeId;
     }
@@ -130,4 +157,13 @@ public class DayOff {
     public void setTypeId(long typeId) {
         this.typeId = typeId;
     }
+
+    public DayOffType getDayOffType() {
+        return dayOffType;
+    }
+
+    public void setDayOffType(DayOffType dayOffType) {
+        this.dayOffType = dayOffType;
+    }
+
 }

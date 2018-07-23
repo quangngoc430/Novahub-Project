@@ -72,8 +72,14 @@ CREATE TABLE `account_has_skill` (
 CREATE TABLE `day_off_type` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `type` varchar(20) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `year` int(11) NOT NULL,
+  `quota` int(11) NOT NULL,
+  `remaining_time` int(11) NOT NULL,
+  `account_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_day_off_type_account` (`account_id`),
+  CONSTRAINT `fk_day_off_type_account` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 
 CREATE TABLE `day_off` (
@@ -82,17 +88,20 @@ CREATE TABLE `day_off` (
   `content` varchar(1000) DEFAULT NULL,
   `start_date` datetime DEFAULT NULL,
   `end_date` datetime DEFAULT NULL,
-  `created_at` datetime NOT NULL DEFAULT NOW(),
-  `updated_at` datetime NOT NULL DEFAULT NOW(),
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
   `number_of_hours` int(11) NOT NULL,
   `status` varchar(45) NOT NULL,
   `token` char(255) NOT NULL,
   `account_id` int(11) NOT NULL,
-  `type_id` int(11) NOT NULL,
+  `type` varchar(100) NOT NULL,
+  `type_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  CONSTRAINT `fk_day_off_account` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`) ON DELETE CASCADE ,
+  KEY `fk_day_off_account` (`account_id`),
+  KEY `fk_day_off_type` (`type_id`),
+  CONSTRAINT `fk_day_off_account` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fk_day_off_type` FOREIGN KEY (`type_id`) REFERENCES `day_off_type` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `issue` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -114,19 +123,20 @@ INSERT INTO `role`(name) VALUES ("ADMIN");
 INSERT INTO `role`(name) VALUES ("CLERK");
 INSERT INTO `role`(name) VALUES ("USER");
 
-INSERT INTO `account`(email, first_name, last_name, password, status, token, role_id)
-VALUES("helpdesk@novahub.vn", "desk", "help", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", "ACTIVE", "abcdefghijk123456789", 1);
-INSERT INTO `account`(email, first_name, last_name, password, status, token, role_id)
-VALUES("huong@novahub.vn", "mai", "huong", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", "ACTIVE", "abcdefghijk123456789", 2);
-INSERT INTO `account`(email, first_name, last_name, password, status, token, role_id)
-VALUES("ngoc@novahub.vn", "bui lam", "quang ngoc", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", "ACTIVE", "abcdefghijk123456789", 3);
-INSERT INTO `account`(email, first_name, last_name, password, status, token, role_id)
-VALUES("hai@novahub.vn", "bui lam", "thanh hai", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", "ACTIVE", "abcdefghijk123456789", 3);
+INSERT INTO `account`(email, first_name, last_name, password, status, role_id)
+VALUES("helpdesk@novahub.vn", "help", "desk", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", "ACTIVE", 1);
+INSERT INTO `account`(email, first_name, last_name, password, status, role_id)
+VALUES("ngocbui@novahub.vn", "ngoc", "bui", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", "ACTIVE", 2);
+INSERT INTO `account`(email, first_name, last_name, password, status, role_id)
+VALUES("linhtran@novahub.vn", "linh", "tran", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", "ACTIVE", 3);
+INSERT INTO `account`(email, first_name, last_name, password, status, role_id)
+VALUES("vutran@novahub.vn", "vu", "tran", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", "ACTIVE", 3);
 
 INSERT INTO `category`(name) VALUES
 ("Programming Language"),
 ("Backend Framework"),
-("Frontend Framework");
+("Frontend Framework"),
+("Web Design");
 
 INSERT INTO `skill`(name, category_id, level) VALUES
 ("Java", 1, 7),
@@ -148,14 +158,14 @@ INSERT INTO `account_has_skill`(account_id, skill_id) VALUES
 (2, 6);
 
 INSERT INTO `issue`(title, content, status, account_id)
-VALUES("title", "content", "pending", 1);
+VALUES("title", "content", "PENDING", 1);
 INSERT INTO `issue`(title, content, status, account_id)
-VALUES("title1", "content1", "pending", 1);
+VALUES("title1", "content1", "PENDING", 1);
 INSERT INTO `issue`(title, content, status, account_id)
-VALUES("title", "content", "pending", 2);
+VALUES("title", "content", "PENDING", 2);
 INSERT INTO `issue`(title, content, status, account_id)
-VALUES("title1", "content1", "pending", 2);
+VALUES("title1", "content1", "PENDING", 2);
 INSERT INTO `issue`(title, content, status, account_id)
-VALUES("title", "content", "pending", 3);
+VALUES("title", "content", "PENDING", 3);
 INSERT INTO `issue`(title, content, status, account_id)
-VALUES("title1", "content1", "pending", 3);
+VALUES("title1", "content1", "PENDING", 3);

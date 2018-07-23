@@ -8,12 +8,15 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import vn.novahub.helpdesk.model.Account;
 
+import java.util.List;
+
 @Repository
 public interface AccountRepository extends PagingAndSortingRepository<Account, Long> {
 
     Account findByEmailAndPassword(String email, String password);
 
     Account getByEmail(String email);
+
 
     @Query("FROM Account account " +
            "WHERE account.email LIKE :keyword or account.firstName LIKE :keyword or account.lastName LIKE :keyword")
@@ -47,11 +50,16 @@ public interface AccountRepository extends PagingAndSortingRepository<Account, L
                                                                                  @Param("name") String name,
                                                                                  Pageable pageable);
 
+
     Account getById(long accountId);
 
     Account getByIdAndVertificationToken(long accountId, String verificationToken);
 
     Account getByEmailAndPassword(String email, String password);
+
+
+    @Query("SELECT account FROM Account account JOIN Role role ON account.roleId = role.id WHERE role.name = :name")
+    List<Account> getAllByRoleName(@Param("name") String roleName);
 
     @Query("SELECT account " +
            "FROM Account account " +
@@ -59,4 +67,5 @@ public interface AccountRepository extends PagingAndSortingRepository<Account, L
            "ON account.id = accountHasSkill.accountId " +
            "WHERE accountHasSkill.skillId = :skillId")
     Page<Account> getAllBySkillId(@Param("skillId") long skillId, Pageable pageable);
+
 }

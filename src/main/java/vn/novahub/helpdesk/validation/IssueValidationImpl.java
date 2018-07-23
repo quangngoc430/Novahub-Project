@@ -1,16 +1,16 @@
 package vn.novahub.helpdesk.validation;
 
 import org.springframework.stereotype.Component;
-
+import vn.novahub.helpdesk.exception.IssueValidationException;
 import vn.novahub.helpdesk.exception.SkillValidationException;
-import vn.novahub.helpdesk.model.Skill;
+import vn.novahub.helpdesk.model.Issue;
 
 import javax.validation.*;
 import java.util.HashMap;
 import java.util.Set;
 
 @Component
-public class SkillValidationImpl implements SkillValidation {
+public class IssueValidationImpl implements IssueValidation {
 
     private static final Validator validator;
 
@@ -22,17 +22,17 @@ public class SkillValidationImpl implements SkillValidation {
     }
 
     @Override
-    public void validate(Skill skill, Class groupClassValidation) throws SkillValidationException {
-        Set<ConstraintViolation<Skill>> constraintViolations = validator.validate(skill, groupClassValidation);
+    public void validate(Issue issue, Class classGroupValidation) throws IssueValidationException {
+        Set<ConstraintViolation<Issue>> constraintViolations = validator.validate(issue, classGroupValidation);
 
         HashMap<String, String> errors = new HashMap<>();
 
         if(!constraintViolations.isEmpty()){
-            for(ConstraintViolation<Skill> commentConstraintViolation : constraintViolations){
+            for(ConstraintViolation<Issue> commentConstraintViolation : constraintViolations){
                 errors.put(commentConstraintViolation.getPropertyPath().toString(), commentConstraintViolation.getMessage());
             }
 
-            throw new SkillValidationException(constraintViolations.size(), errors);
+            throw new IssueValidationException(constraintViolations.size(), errors);
         }
     }
 }

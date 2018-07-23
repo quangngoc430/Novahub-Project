@@ -37,8 +37,11 @@ public class AccountController {
     @PreAuthorize("hasRole('ROLE_ANONYMOUS')")
     @PostMapping(path = "/login", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Account> login(@RequestBody Account account,
-                                         HttpServletRequest request) throws AccountInvalidException, AccountLockedException, AccountValidationException, AccountInactiveException {
-        logService.log(request, logger);
+                                         HttpServletRequest request)
+            throws AccountInvalidException,
+            AccountLockedException,
+            AccountValidationException,
+            AccountInactiveException {
 
         Account accountLogin = accountService.login(account, request);
 
@@ -50,9 +53,7 @@ public class AccountController {
     public ResponseEntity<Page<Account>> getAll(@RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
                                                 @RequestParam(value = "status", required = false, defaultValue = "") String status,
                                                 @RequestParam(value = "role", required = false, defaultValue = "") String role,
-                                                HttpServletRequest request,
                                                 Pageable pageable){
-        logService.log(request, logger);
 
         Page<Account> accounts = accountService.getAll(keyword, status, role, pageable);
 
@@ -81,7 +82,10 @@ public class AccountController {
     @PutMapping(path = "/users/me", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<JsonNode> updateForAccountLogin(@RequestParam(value = "checkPasswordNull", defaultValue = "false") String checkPasswordNull,
                                                           @RequestBody Account account,
-                                                          HttpServletRequest request) throws AccountPasswordNotEqualException, AccountValidationException {
+                                                          HttpServletRequest request)
+            throws AccountPasswordNotEqualException,
+            AccountValidationException {
+
         logService.log(request, logger);
 
         Account accountUpdated = accountService.update(account);
