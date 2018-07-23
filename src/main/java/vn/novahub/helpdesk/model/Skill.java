@@ -1,10 +1,10 @@
 package vn.novahub.helpdesk.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import javax.persistence.*;
 import vn.novahub.helpdesk.validation.GroupCreateSkill;
 import vn.novahub.helpdesk.validation.GroupUpdateSkill;
-
-import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
@@ -16,6 +16,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "skill")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Skill implements Serializable {
 
     @Id

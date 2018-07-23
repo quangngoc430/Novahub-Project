@@ -1,6 +1,7 @@
-package vn.novahub.helpdesk.service;
+package vn.novahub.helpdesk.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
@@ -19,6 +20,7 @@ import vn.novahub.helpdesk.model.Account;
 import vn.novahub.helpdesk.model.GooglePojo;
 import vn.novahub.helpdesk.model.Mail;
 import vn.novahub.helpdesk.repository.AccountRepository;
+import vn.novahub.helpdesk.service.*;
 import vn.novahub.helpdesk.validation.*;
 
 import javax.mail.MessagingException;
@@ -30,6 +32,12 @@ import java.util.Date;
 @Service
 @PropertySource("classpath:email.properties")
 public class AccountServiceImpl implements AccountService {
+
+    @Value("${subject_email_sign_up}")
+    private String subjectEmailSignUp;
+
+    @Value("${content_email_sign_up}")
+    private String contentEmailSignUp;
 
     @Autowired
     private Environment env;
@@ -55,6 +63,7 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     private GoogleService googleService;
 
+
     @Override
     public boolean isAccountLogin(long accountId) {
         Account account = getAccountLogin();
@@ -76,6 +85,7 @@ public class AccountServiceImpl implements AccountService {
     public boolean activateAccount(long accountId, String verificationToken) {
         Account account = accountRepository.getByIdAndVertificationToken(accountId, verificationToken);
 
+
         if(account == null) {
             return false;
         }
@@ -91,6 +101,7 @@ public class AccountServiceImpl implements AccountService {
     public Account updateToken(Account account, String token) {
         account.setToken(token);
         return accountRepository.save(account);
+
     }
 
     @Override
@@ -205,6 +216,7 @@ public class AccountServiceImpl implements AccountService {
 
         Mail mail = new Mail();
         mail.setEmailReceiving(new String[]{account.getEmail()});
+
         mail.setSubject(env.getProperty("subject_email_sign_up"));
         String urlAccountActive = "http://localhost:8080/api/users/" + account.getId() + "/active?token=" + account.getVertificationToken();
         String contentEmailSignUp = env.getProperty("content_email_sign_up");
