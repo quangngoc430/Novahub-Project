@@ -72,8 +72,14 @@ CREATE TABLE `account_has_skill` (
 CREATE TABLE `day_off_type` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `type` varchar(20) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `year` int(11) NOT NULL,
+  `quota` int(11) NOT NULL,
+  `remaining_time` int(11) NOT NULL,
+  `account_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_day_off_type_account` (`account_id`),
+  CONSTRAINT `fk_day_off_type_account` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 
 CREATE TABLE `day_off` (
@@ -82,17 +88,20 @@ CREATE TABLE `day_off` (
   `content` varchar(1000) DEFAULT NULL,
   `start_date` datetime DEFAULT NULL,
   `end_date` datetime DEFAULT NULL,
-  `created_at` datetime NOT NULL DEFAULT NOW(),
-  `updated_at` datetime NOT NULL DEFAULT NOW(),
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
   `number_of_hours` int(11) NOT NULL,
   `status` varchar(45) NOT NULL,
   `token` char(255) NOT NULL,
   `account_id` int(11) NOT NULL,
-  `type_id` int(11) NOT NULL,
+  `type` varchar(100) NOT NULL,
+  `type_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  CONSTRAINT `fk_day_off_account` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`) ON DELETE CASCADE ,
+  KEY `fk_day_off_account` (`account_id`),
+  KEY `fk_day_off_type` (`type_id`),
+  CONSTRAINT `fk_day_off_account` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fk_day_off_type` FOREIGN KEY (`type_id`) REFERENCES `day_off_type` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `issue` (
   `id` int(11) NOT NULL AUTO_INCREMENT,

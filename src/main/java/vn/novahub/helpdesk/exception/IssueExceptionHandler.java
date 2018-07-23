@@ -14,7 +14,7 @@ import java.util.HashMap;
 public class IssueExceptionHandler {
 
     @ExceptionHandler(value = IssueNotFoundException.class)
-    public ResponseEntity<ApiError> handleIssueNotFoundException(HttpServletRequest request, Exception ex){
+    public ResponseEntity<ApiError> handleIssueNotFoundException(HttpServletRequest request, Exception ex) {
         ApiError apiError = new ApiError();
 
         apiError.setTimestamp(Instant.now());
@@ -29,7 +29,7 @@ public class IssueExceptionHandler {
     }
 
     @ExceptionHandler(value = IssueValidationException.class)
-    public ResponseEntity<ApiError> handleIssueValidationException(HttpServletRequest request, Exception ex){
+    public ResponseEntity<ApiError> handleIssueValidationException(HttpServletRequest request, Exception ex) {
         ApiError apiError = new ApiError();
 
         apiError.setTimestamp(Instant.now());

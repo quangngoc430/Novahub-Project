@@ -21,6 +21,7 @@ public interface IssueRepository extends PagingAndSortingRepository<Issue, Long>
 
     @Query("FROM Issue issue WHERE issue.accountId = :accountId AND (issue.title LIKE :keyword OR issue.content LIKE :keyword)")
     Page<Issue> getAllByAccountIdAndContentLikeOrTitleLike(@Param("accountId") long accountId,
+
                                             @Param("keyword") String keyword,
                                             Pageable pageable);
 

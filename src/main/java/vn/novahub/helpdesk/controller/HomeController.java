@@ -29,11 +29,11 @@ public class HomeController {
 
         String roleName = (SecurityContextHolder.getContext().getAuthentication().getAuthorities().toArray())[0].toString();
 
-        if(roleName.equals("ROLE_" + RoleEnum.ADMIN.name()))
+        if(roleName.equals(RoleEnum.PREFIX.value() + RoleEnum.ADMIN.name()))
             return "redirect:/admin";
-        else if(roleName.equals("ROLE_" + RoleEnum.CLERK.name()))
+        else if(roleName.equals(RoleEnum.PREFIX.value() + RoleEnum.CLERK.name()))
             return "redirect:/clerk";
-        else if(roleName.equals("ROLE_" + RoleEnum.USER.name()))
+        else if(roleName.equals(RoleEnum.PREFIX.value() + RoleEnum.USER.name()))
             return "redirect:/user";
 
         return "login";

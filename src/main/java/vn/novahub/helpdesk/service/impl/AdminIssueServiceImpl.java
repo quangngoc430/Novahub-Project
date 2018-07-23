@@ -1,4 +1,4 @@
-package vn.novahub.helpdesk.service;
+package vn.novahub.helpdesk.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
@@ -15,6 +15,8 @@ import vn.novahub.helpdesk.model.Issue;
 import vn.novahub.helpdesk.model.Mail;
 import vn.novahub.helpdesk.repository.AccountRepository;
 import vn.novahub.helpdesk.repository.IssueRepository;
+import vn.novahub.helpdesk.service.AdminIssueService;
+import vn.novahub.helpdesk.service.MailService;
 import vn.novahub.helpdesk.validation.IssueValidation;
 
 import javax.mail.MessagingException;
@@ -24,7 +26,7 @@ import java.util.Date;
 
 @Service
 @PropertySource("classpath:email.properties")
-public class AdminIssueServiceImpl implements AdminIssueService{
+public class AdminIssueServiceImpl implements AdminIssueService {
 
     @Autowired
     private Environment env;

@@ -23,7 +23,7 @@ public interface AccountService {
 
     Account login(Account account, HttpServletRequest request) throws AccountInvalidException, AccountInactiveException, AccountLockedException, AccountValidationException;
 
-    public Account loginWithGoogle(String code, HttpServletRequest request) throws IOException, EmailFormatException, RoleNotFoundException, AccountIsExistException, AccountValidationException;
+    Account loginWithGoogle(String code, HttpServletRequest request) throws IOException, EmailFormatException, RoleNotFoundException, AccountIsExistException, AccountValidationException;
 
     Page<Account> getAll(String keyword, String status, String role, Pageable pageable);
 
