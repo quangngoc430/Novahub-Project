@@ -42,6 +42,28 @@ public class AccountController {
     @GetMapping(path = "/authentication-token")
     public void authenticationToken(HttpServletRequest request,
                                                        HttpServletResponse response) throws ServletException, IOException, TokenIsExpiredException, UnauthorizedException {
+        handleAuthenticationToken(request, response);
+    }
+
+    @PostMapping(path = "/authentication-token-post")
+    public void authenticationTokenPost(HttpServletRequest request,
+                                    HttpServletResponse response) throws ServletException, IOException, TokenIsExpiredException, UnauthorizedException {
+        handleAuthenticationToken(request, response);
+    }
+
+    @PutMapping(path = "/authentication-token-put")
+    public void authenticationTokenPut(HttpServletRequest request,
+                                       HttpServletResponse response) throws UnauthorizedException, TokenIsExpiredException, ServletException, IOException {
+        handleAuthenticationToken(request, response);
+    }
+
+    @DeleteMapping(path = "/authentication-token-delete")
+    public void authenticationTokenDelete(HttpServletRequest request,
+                                          HttpServletResponse response) throws UnauthorizedException, TokenIsExpiredException, ServletException, IOException {
+        handleAuthenticationToken(request, response);
+    }
+
+    private void handleAuthenticationToken(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, UnauthorizedException, TokenIsExpiredException {
         String accessToken = request.getHeader("access_token");
         String urlRequest = (String) request.getAttribute("url_request");
         request.removeAttribute("url_request");
@@ -51,6 +73,7 @@ public class AccountController {
         RequestDispatcher requestDispatcher = request.getServletContext().getRequestDispatcher(urlRequest);
         requestDispatcher.forward(request, response);
     }
+
 
     @PermitAll
     @PostMapping(path = "/login", produces = {MediaType.APPLICATION_JSON_VALUE})
