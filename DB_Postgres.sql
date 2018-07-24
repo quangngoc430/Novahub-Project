@@ -31,7 +31,7 @@ CREATE TABLE account (
   joiningDate TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
   vertification_token VARCHAR(255),
   token VARCHAR(255),
-  role_id INT REFERENCES account(id)
+  role_id INT REFERENCES role(id)
 );
 
 CREATE TABLE category (
@@ -70,8 +70,7 @@ CREATE TABLE day_off_type (
 
 CREATE TABLE day_off (
   id BIGSERIAL PRIMARY KEY,
-  title VARCHAR(200) DEFAULT NULL,
-  content VARCHAR(1000) DEFAULT NULL,
+  comment VARCHAR(1000) DEFAULT NULL,
   start_date TIMESTAMP WITH TIME ZONE DEFAULT NULL,
   end_date TIMESTAMP WITH TIME ZONE DEFAULT NULL,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NULL,
@@ -104,8 +103,8 @@ INSERT INTO role(name) VALUES ('USER');
 
 INSERT INTO account(email, first_name, last_name, password, status, role_id)
 VALUES('helpdesk@novahub.vn', 'help', 'desk', '$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja', 'ACTIVE', 1);
-INSERT INTO account(id, email, first_name, last_name, password, status, role_id)
-VALUES(2,'ngocbui@novahub.vn', 'ngoc', 'bui', '$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja', 'ACTIVE', 3);
+INSERT INTO account(email, first_name, last_name, password, status, role_id)
+VALUES('ngocbui@novahub.vn', 'ngoc', 'bui', '$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja', 'ACTIVE', 3);
 INSERT INTO account(email, first_name, last_name, password, status, role_id)
 VALUES('linhtran@novahub.vn', 'linh', 'tran', '$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja', 'ACTIVE', 3);
 

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 @Table(name = "day_off")
@@ -15,8 +14,8 @@ public class DayOff {
     @Column(name = "id")
     private long id;
 
-    @Column(name = "title")
-    private String title;
+    @Column(name = "comment")
+    private String comment;
 
     @Column(name = "start_date", columnDefinition = "TIMESTAMP WITH TIME ZONE")
     private LocalDateTime startDate;
@@ -71,12 +70,12 @@ public class DayOff {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getComment() {
+        return comment;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     public LocalDateTime getStartDate() {

@@ -177,7 +177,7 @@ public class DayOffServiceImpl implements DayOffService {
         dayOff.setCreatedAt(createdDate);
         dayOff.setUpdatedAt(createdDate);
         dayOff.setStatus(DayOffConstant.STATUS_PENDING);
-        dayOff.setToken(tokenService.generateToken(accountLogin.getId() + dayOff.getTitle()));
+        dayOff.setToken(tokenService.generateToken(accountLogin.getId() + dayOff.getComment()));
         dayOff.setAccountId(accountLogin.getId());
     }
 
@@ -190,7 +190,7 @@ public class DayOffServiceImpl implements DayOffService {
         String content = env.getProperty("content_email_create_day_off");
         content = content.replace("{day-off-id}", String.valueOf(dayOff.getId()));
         content = content.replace("{email}", accountLogin.getEmail());
-        content = content.replace("{title}", dayOff.getTitle());
+        content = content.replace("{title}", dayOff.getComment());
         content = content.replace("{status}", dayOff.getStatus());
         content = content.replace("{url-approve-day-off}", "http://localhost:8080/api/day-offs/" + dayOff.getId() + "/approve?token=" + dayOff.getToken());
         content = content.replace("{url-deny-day-off}", "http://localhost:8080/api/day-offs/" + dayOff.getId() + "/deny?token=" + dayOff.getToken());
@@ -211,7 +211,7 @@ public class DayOffServiceImpl implements DayOffService {
         String content = env.getProperty("content_email_update_day_off_account");
         content = content.replace("{day-off-id}", String.valueOf(dayOff.getId()));
         content = content.replace("{email}", account.getEmail());
-        content = content.replace("{title}", dayOff.getTitle());
+        content = content.replace("{title}", dayOff.getComment());
         content = content.replace("{status}", dayOff.getStatus());
         mail.setContent(content);
         mail.setEmailReceiving(new String[]{account.getEmail()});
@@ -230,7 +230,7 @@ public class DayOffServiceImpl implements DayOffService {
         String content = env.getProperty("content_email_delete_day_off");
         content = content.replace("{day-off-id}", String.valueOf(dayOff.getId()));
         content = content.replace("{email}", account.getEmail());
-        content = content.replace("{title}", dayOff.getTitle());
+        content = content.replace("{title}", dayOff.getComment());
         content = content.replace("{status}", dayOff.getStatus());
         mail.setContent(content);
 
