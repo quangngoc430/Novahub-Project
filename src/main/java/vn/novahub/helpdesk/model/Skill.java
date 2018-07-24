@@ -7,6 +7,7 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import vn.novahub.helpdesk.validation.GroupCreateSkill;
+import vn.novahub.helpdesk.validation.GroupUpdateSkill;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -24,7 +25,7 @@ public class Skill implements Serializable {
     @Column(name = "id")
     private long id;
 
-    @NotEmpty(message = "name is not empty", groups = {GroupCreateSkill.class})
+    @NotEmpty(message = "name is not empty", groups = {GroupCreateSkill.class, GroupUpdateSkill.class})
     @Column(name = "name", unique = true)
     private String name;
 
@@ -44,7 +45,7 @@ public class Skill implements Serializable {
     private Date updatedAt;
 
     @JsonProperty(value = "category_id")
-    @NotNull(message = "category_id is not null", groups = {GroupCreateSkill.class})
+    @NotNull(message = "category_id is not null", groups = {GroupCreateSkill.class, GroupUpdateSkill.class})
     @Column(name = "category_id")
     private long categoryId;
 

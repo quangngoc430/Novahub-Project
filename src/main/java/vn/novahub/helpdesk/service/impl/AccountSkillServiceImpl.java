@@ -198,7 +198,13 @@ public class AccountSkillServiceImpl implements AccountSkillService {
         if(!accountRepository.existsById(accountId))
             throw new AccountNotFoundException(accountId);
 
-        return skillRepository.getAllByAccountId(accountId, pageable);
+        Page<Skill> skills = skillRepository.getAllByAccountId(accountId, pageable);
+
+        for(Skill skill : skills) {
+            skill.setLevel(levelRepository.getBySkillId(skill.getId()));
+        }
+
+        return skills;
     }
 
 }
