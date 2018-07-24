@@ -79,6 +79,7 @@ public class Account implements Serializable {
     @Column(name = "updated_at")
     private Date updatedAt;
 
+    @JsonProperty(value = "joining_date")
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(name = "joiningDate")

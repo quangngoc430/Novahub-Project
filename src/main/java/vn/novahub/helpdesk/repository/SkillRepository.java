@@ -28,7 +28,9 @@ public interface SkillRepository extends PagingAndSortingRepository<Skill, Long>
                                   @Param("categoryId") long categoryId,
                                   Pageable pageable);
 
-    Page<Skill> getAllByNameLike(String name, Pageable pageable);
+    //Page<Skill> getAllByNameLike(String name, Pageable pageable);
+
+    Page<Skill> getAllByNameContaining(String keyword, Pageable pageable);
 
     @Query("SELECT skill " +
            "FROM Skill skill " +
