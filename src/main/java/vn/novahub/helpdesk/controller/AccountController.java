@@ -137,8 +137,7 @@ public class AccountController {
     public ResponseEntity<JsonNode> updateForAccountLogin(@RequestParam(value = "checkPasswordNull", defaultValue = "false") String checkPasswordNull,
                                                           @RequestBody Account account,
                                                           HttpServletRequest request)
-            throws AccountPasswordNotEqualException,
-            AccountValidationException {
+                                                          throws AccountPasswordNotEqualException, AccountValidationException {
 
         logService.log(request, logger);
 

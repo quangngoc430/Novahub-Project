@@ -95,7 +95,7 @@ public class Account implements Serializable {
     private long roleId;
 
     @Transient
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String newPassword;
 
     @ManyToOne(fetch = FetchType.EAGER, targetEntity = Role.class)

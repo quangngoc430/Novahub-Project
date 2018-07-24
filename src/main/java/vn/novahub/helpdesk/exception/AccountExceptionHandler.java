@@ -110,7 +110,7 @@ public class AccountExceptionHandler {
         apiError.setTimestamp(Instant.now());
         apiError.setStatus(HttpStatus.LOCKED.value());
         HashMap<String, String> errors = new HashMap<>();
-        errors.put(MESSAGE, "User is locked");
+        errors.put(MESSAGE, "Account is locked");
         apiError.setError(errors);
         apiError.setPath(request.getRequestURI());
         apiError.setMessage(ex.getMessage());
