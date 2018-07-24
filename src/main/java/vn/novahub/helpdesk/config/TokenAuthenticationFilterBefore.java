@@ -37,7 +37,7 @@ public class TokenAuthenticationFilterBefore extends GenericFilterBean {
         if (isCheckToken) {
             httpServletRequest.setAttribute("url_request", requestURI);
 
-            RequestDispatcher requestDispatcher;
+            RequestDispatcher requestDispatcher = null;
             switch (method){
                 case "GET" : {
                     requestDispatcher = httpServletRequest.getServletContext().getRequestDispatcher("/api/authentication-token");
@@ -51,7 +51,7 @@ public class TokenAuthenticationFilterBefore extends GenericFilterBean {
                     requestDispatcher = httpServletRequest.getServletContext().getRequestDispatcher("/api/authentication-token-put");
                     break;
                 }
-                default: { //DELETE
+                case "DELETE" : {
                     requestDispatcher = httpServletRequest.getServletContext().getRequestDispatcher("/api/authentication-token-delete");
                     break;
                 }
