@@ -28,6 +28,7 @@ public class Skill implements Serializable {
     @Column(name = "name", unique = true)
     private String name;
 
+    @Transient
     private Level level;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

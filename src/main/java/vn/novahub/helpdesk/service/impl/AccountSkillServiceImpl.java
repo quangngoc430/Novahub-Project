@@ -75,7 +75,13 @@ public class AccountSkillServiceImpl implements AccountSkillService {
     public Page<Skill> getAllByKeywordForAccountLogin(String keyword, Pageable pageable) {
         Account accountLogin = accountService.getAccountLogin();
 
-        return skillRepository.getAllByNameContainingAndAccountId("%" + keyword + "%", accountLogin.getId(), pageable);
+        Page<Skill> skills = skillRepository.getAllByNameContainingAndAccountId("%" + keyword + "%", accountLogin.getId(), pageable);
+
+        for(Skill skill : skills) {
+            skill.setLevel(levelRepository.getBySkillId(skill.getId()));
+        }
+
+        return skills;
     }
 
     @Override
@@ -155,16 +161,12 @@ public class AccountSkillServiceImpl implements AccountSkillService {
     public void delete(long skillId) throws SkillNotFoundException {
         Account accountLogin = accountService.getAccountLogin();
 
-        if(skillRepository.getByAccountIdAndSkillId(accountLogin.getId(), skillId) == null)
+        if(!skillRepository.existsById(skillId)) {
             throw new SkillNotFoundException(skillId);
-
-        accountHasSkillRepository.deleteByAccountIdAndSkillId(accountLogin.getId(), skillId);
-
-        // check count of skill has skillId, if it equals 1 then delete its
-        if(accountHasSkillRepository.countBySkillId(skillId) == 1) {
-            skillRepository.deleteById(skillId);
         }
 
+        accountHasSkillRepository.deleteByAccountIdAndSkillId(accountLogin.getId(), skillId);
+        levelRepository.deleteByAccountIdAndSkillId(accountLogin.getId(), skillId);
     }
 
     @Override
@@ -182,7 +184,13 @@ public class AccountSkillServiceImpl implements AccountSkillService {
         if(!categoryRepository.existsById(categoryId))
             throw new CategoryNotFoundException(categoryId);
 
-        return skillRepository.getAllByCategoryIdAndNameContaining(categoryId, "%" + name + "%", pageable);
+        Page<Skill> skills = skillRepository.getAllByCategoryIdAndNameContaining(categoryId, "%" + name + "%", pageable);
+
+        for(Skill skill : skills) {
+            skill.setLevel(null);
+        }
+
+        return skills;
     }
 
     @Override
