@@ -11,10 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 
-import vn.novahub.helpdesk.exception.CategoryNotFoundException;
-import vn.novahub.helpdesk.exception.SkillIsExistException;
-import vn.novahub.helpdesk.exception.SkillNotFoundException;
-import vn.novahub.helpdesk.exception.SkillValidationException;
+import vn.novahub.helpdesk.exception.*;
 import vn.novahub.helpdesk.model.Account;
 import vn.novahub.helpdesk.model.Skill;
 import vn.novahub.helpdesk.service.AccountSkillService;
@@ -81,7 +78,7 @@ public class SkillController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping(path = "/users/me/skills", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Skill> create(@RequestBody Skill skill) throws SkillIsExistException, SkillValidationException {
+    public ResponseEntity<Skill> create(@RequestBody Skill skill) throws SkillIsExistException, SkillValidationException, CategoryNotFoundException {
         return new ResponseEntity<>(accountSkillService.create(skill), HttpStatus.OK);
     }
 
@@ -103,7 +100,7 @@ public class SkillController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping(path = "/users/{id}/skills", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Page<Skill>> getAllByAccountId(@PathVariable("id") long accountId,
-                                                         Pageable pageable) {
+                                                         Pageable pageable) throws AccountNotFoundException {
         return new ResponseEntity<>(accountSkillService.getAllByAccountId(accountId, pageable), HttpStatus.OK);
     }
 }

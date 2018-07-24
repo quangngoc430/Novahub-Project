@@ -14,4 +14,6 @@ public interface CategoryRepository extends PagingAndSortingRepository<Category,
     Category getById(long id);
 
     boolean existsByName(String name);
+
+    boolean existsById(long categoryId);
 }

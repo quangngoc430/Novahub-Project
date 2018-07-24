@@ -25,14 +25,14 @@ INSERT INTO `skill`(name, category_id) VALUES
 ("ReactJS", 3),
 ("HTML", 4);
 
-INSERT INTO `level`(value, account_id, skill_id) VALUES
-(6, 1, 1),
-(5, 1, 2),
-(9, 1, 3),
-(5, 1, 4),
-(8, 2, 2),
-(3, 2, 3),
-(10, 2, 6);
+-- INSERT INTO `level`(value, account_id, skill_id) VALUES
+-- (6, 1, 1),
+-- (5, 1, 2),
+-- (9, 1, 3),
+-- (5, 1, 4),
+-- (8, 2, 2),
+-- (3, 2, 3),
+-- (10, 2, 6);
 
 INSERT INTO `account_has_skill`(account_id, skill_id) VALUES
 (1, 1),

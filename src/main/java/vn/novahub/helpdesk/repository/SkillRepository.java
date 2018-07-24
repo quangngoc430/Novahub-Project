@@ -34,11 +34,11 @@ public interface SkillRepository extends PagingAndSortingRepository<Skill, Long>
     Skill getById(long skillId);
 
 
-    @Query("SELECT account " +
-           "FROM Account account " +
+    @Query("SELECT skill " +
+           "FROM Skill skill " +
            "JOIN AccountHasSkill accountHasSkill " +
-           "ON account.id = accountHasSkill.accountId " +
-           "WHERE account.id = :accountId AND accountHasSkill.skillId = :skillId")
+           "ON skill.id = accountHasSkill.skillId " +
+           "WHERE accountHasSkill.accountId = :accountId AND skill.id = :skillId")
     Skill getByAccountIdAndSkillId(@Param("accountId") long accountId,
                                    @Param("skillId") long skillId);
 
@@ -49,9 +49,10 @@ public interface SkillRepository extends PagingAndSortingRepository<Skill, Long>
     Page<Skill> getAllByAccountId(@Param("accountId") long accountId,
                                   Pageable pageable);
 
-    boolean existsByNameAndLevelAndCategoryId(String name, long level, long categoryId);
+//    @Query("FROM Skill")
+//    boolean existsByNameAndLevelAndCategoryId(String name, long level, long categoryId);
 
-    Skill getByNameAndLevelAndCategoryId(String name, long level, long categoryId);
+//    Skill getByNameAndLevelAndCategoryId(String name, long level, long categoryId);
 
     boolean deleteByIdAndCategoryId(long skillId, long categoryId);
 

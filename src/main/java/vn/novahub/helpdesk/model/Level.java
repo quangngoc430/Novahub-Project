@@ -21,11 +21,11 @@ public class Level implements Serializable {
     @Column(name = "id")
     private long id;
 
-    @Column(name = "value", unique = true)
+    @Column(name = "value")
     @NotNull(message = "value is not empty")
     @Min(value = 1, message = "value must be greater than or equal to 1")
     @Max(value = 10, message = "value must be less than or equal to 10")
-    private int value;
+    private long value;
 
     @JsonProperty(value = "account_id")
     @Column(name = "account_id")
@@ -57,11 +57,11 @@ public class Level implements Serializable {
         this.id = id;
     }
 
-    public int getValue() {
+    public long getValue() {
         return value;
     }
 
-    public void setValue(int value) {
+    public void setValue(long value) {
         this.value = value;
     }
 
