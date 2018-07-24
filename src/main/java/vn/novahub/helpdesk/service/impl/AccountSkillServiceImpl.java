@@ -79,9 +79,10 @@ public class AccountSkillServiceImpl implements AccountSkillService {
     }
 
     @Override
-    public Skill create(Skill newSkill) throws SkillValidationException, SkillIsExistException, CategoryNotFoundException {
+    public Skill create(Skill newSkill) throws SkillValidationException, SkillIsExistException, CategoryNotFoundException, LevelValidationException {
 
         skillValidation.validate(newSkill, GroupCreateSkill.class);
+        levelValidation.validate(newSkill.getLevel(), GroupCreateSkill.class);
 
         if(newSkill.getCategory() != null && !categoryRepository.existsById(newSkill.getCategoryId()))
             throw new CategoryNotFoundException(newSkill.getCategoryId());
@@ -108,16 +109,19 @@ public class AccountSkillServiceImpl implements AccountSkillService {
         }
 
         Level newLevel = new Level();
-        newLevel.setValue(newSkill.getLevel());
+        newLevel.setValue(newSkill.getLevel().getValue());
         newLevel.setAccountId(accountLogin.getId());
         newLevel.setSkillId(newSkill.getId());
         newLevel.setCreatedAt(new Date());
         newLevel.setUpdatedAt(new Date());
-        levelRepository.save(newLevel);
+        newLevel = levelRepository.save(newLevel);
+        newSkill.setLevel(newLevel);
 
         AccountHasSkill accountHasSkill = new AccountHasSkill();
         accountHasSkill.setAccountId(accountLogin.getId());
         accountHasSkill.setSkillId(newSkill.getId());
+        accountHasSkill.setCreatedAt(new Date());
+        accountHasSkill.setUpdatedAt(new Date());
         accountHasSkillRepository.save(accountHasSkill);
 
         newSkill.setCategory(categoryRepository.getById(newSkill.getCategoryId()));
@@ -126,9 +130,9 @@ public class AccountSkillServiceImpl implements AccountSkillService {
     }
 
     @Override
-    public Skill update(long skillId, Skill newSkill) throws SkillValidationException, SkillNotFoundException {
+    public Skill update(long skillId, Skill newSkill) throws SkillNotFoundException, LevelValidationException {
 
-        skillValidation.validate(newSkill, GroupUpdateSkill.class);
+        levelValidation.validate(newSkill.getLevel(), GroupUpdateSkill.class);
 
         Account accountLogin = accountService.getAccountLogin();
 
@@ -138,10 +142,11 @@ public class AccountSkillServiceImpl implements AccountSkillService {
             throw new SkillNotFoundException(skillId);
 
         Level oldLevel = levelRepository.getByAccountIdAndSkillId(accountLogin.getId(), skillId);
-        oldLevel.setValue(newSkill.getLevel());
-        levelRepository.save(oldLevel);
+        oldLevel.setValue(newSkill.getLevel().getValue());
+        oldLevel.setUpdatedAt(new Date());
+        oldLevel = levelRepository.save(oldLevel);
 
-        oldSkill.setLevel(newSkill.getLevel());
+        oldSkill.setLevel(oldLevel);
 
         return oldSkill;
     }

@@ -2,6 +2,7 @@ package vn.novahub.helpdesk.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 @Entity
 @Table(name = "account_has_skill")
@@ -17,6 +18,12 @@ public class AccountHasSkill implements Serializable {
 
     @Column(name = "skill_id")
     private long skillId;
+
+    @Column(name = "created_at")
+    private Date createdAt;
+
+    @Column(name = "updated_at")
+    private Date updatedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id", insertable = false, updatable = false)
@@ -50,6 +57,22 @@ public class AccountHasSkill implements Serializable {
         this.skillId = skillId;
     }
 
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
     public Account getAccount() {
         return account;
     }
@@ -66,14 +89,14 @@ public class AccountHasSkill implements Serializable {
         this.skill = skill;
     }
 
-
-
     @Override
     public String toString() {
         return "AccountHasSkill{" +
                 "id=" + id +
                 ", accountId=" + accountId +
                 ", skillId=" + skillId +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
                 ", account=" + account +
                 ", skill=" + skill +
                 '}';

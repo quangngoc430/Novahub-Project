@@ -16,9 +16,9 @@ public interface AccountSkillService {
 
     Page<Skill> getAllByKeywordForAccountLogin(String keyword, Pageable pageable);
 
-    Skill create(Skill skill) throws SkillValidationException, SkillIsExistException, CategoryNotFoundException;
+    Skill create(Skill skill) throws SkillValidationException, SkillIsExistException, CategoryNotFoundException, LevelValidationException;
 
-    Skill update(long skillId, Skill skill) throws SkillValidationException, SkillNotFoundException;
+    Skill update(long skillId, Skill skill) throws SkillNotFoundException, LevelValidationException;
 
     void delete(long skillId) throws SkillNotFoundException;
 

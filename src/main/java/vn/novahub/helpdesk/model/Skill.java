@@ -7,10 +7,7 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import vn.novahub.helpdesk.validation.GroupCreateSkill;
-import vn.novahub.helpdesk.validation.GroupUpdateSkill;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -31,15 +28,7 @@ public class Skill implements Serializable {
     @Column(name = "name", unique = true)
     private String name;
 
-    @Transient
-    @NotNull(message = "value is not empty", groups = {GroupCreateSkill.class, GroupUpdateSkill.class})
-    @Min(value = 1, message = "level must be greater than or equal to 1", groups = {GroupCreateSkill.class, GroupUpdateSkill.class})
-    @Max(value = 10, message = "level must be less than or equal to 10", groups = {GroupCreateSkill.class, GroupUpdateSkill.class})
-    private long level;
-
-    @JsonIgnore
-    @OneToMany()
-    private List<Level> levelList;
+    private Level level;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty(value = "created_at")
@@ -54,7 +43,7 @@ public class Skill implements Serializable {
     private Date updatedAt;
 
     @JsonProperty(value = "category_id")
-    @NotNull(message = "category_id is not null")
+    @NotNull(message = "category_id is not null", groups = {GroupCreateSkill.class})
     @Column(name = "category_id")
     private long categoryId;
 
@@ -82,20 +71,12 @@ public class Skill implements Serializable {
         this.name = name;
     }
 
-    public long getLevel() {
+    public Level getLevel() {
         return level;
     }
 
-    public void setLevel(long level) {
+    public void setLevel(Level level) {
         this.level = level;
-    }
-
-    public List<Level> getLevelList() {
-        return levelList;
-    }
-
-    public void setLevelList(List<Level> levelList) {
-        this.levelList = levelList;
     }
 
     public long getCategoryId() {
@@ -143,7 +124,7 @@ public class Skill implements Serializable {
         return "Skill{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", level=" + levelList +
+                ", level=" + level +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 ", categoryId=" + categoryId +

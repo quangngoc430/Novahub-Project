@@ -3,6 +3,8 @@ package vn.novahub.helpdesk.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import vn.novahub.helpdesk.validation.GroupCreateSkill;
+import vn.novahub.helpdesk.validation.GroupUpdateSkill;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -22,9 +24,9 @@ public class Level implements Serializable {
     private long id;
 
     @Column(name = "value")
-    @NotNull(message = "value is not empty")
-    @Min(value = 1, message = "value must be greater than or equal to 1")
-    @Max(value = 10, message = "value must be less than or equal to 10")
+    @NotNull(message = "value is not empty", groups = {GroupCreateSkill.class, GroupUpdateSkill.class})
+    @Min(value = 1, message = "value must be greater than or equal to 1", groups = {GroupCreateSkill.class, GroupUpdateSkill.class})
+    @Max(value = 10, message = "value must be less than or equal to 10", groups = {GroupCreateSkill.class, GroupUpdateSkill.class})
     private long value;
 
     @JsonProperty(value = "account_id")
