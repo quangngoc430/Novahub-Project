@@ -96,7 +96,7 @@ public class AccountExceptionHandler {
         apiError.setTimestamp(Instant.now());
         apiError.setStatus(HttpStatus.FORBIDDEN.value());
         HashMap<String, String> errors = new HashMap<>();
-        errors.put(MESSAGE, "Inactive email");
+        errors.put(MESSAGE, "Account is inactive");
         apiError.setError(errors);
         apiError.setPath(request.getRequestURI());
         apiError.setMessage(ex.getMessage());
