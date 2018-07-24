@@ -14,38 +14,16 @@ import javax.transaction.Transactional;
 @Transactional
 public interface SkillRepository extends PagingAndSortingRepository<Skill, Long> {
 
-    Page<Skill> getAllByCategoryId(long categoryId, Pageable pageable);
-
-    @Query("FROM Skill skill " +
-            "JOIN AccountHasSkill accountHasSkill ON skill.id = accountHasSkill.skillId " +
-            "WHERE accountHasSkill.accountId = :accountId AND skill.name LIKE :nameSkill")
-    Page<Skill> getAllSkillsByAccountIdAndNameLike(@Param("accountId") long accountId,
-                                                   @Param("name") String nameSkill,
-                                                   Pageable pageable);
-
-    @Query("FROM Skill skill JOIN AccountHasSkill accountHasSkill ON skill.id = accountHasSkill.skillId WHERE accountHasSkill.accountId = :accountId AND skill.categoryId = :categoryId")
-    Page<Skill> getAllByAccountId(@Param("accountId") long accountId,
-                                  @Param("categoryId") long categoryId,
-                                  Pageable pageable);
-
-    //Page<Skill> getAllByNameLike(String name, Pageable pageable);
-
     Page<Skill> getAllByNameContaining(String keyword, Pageable pageable);
 
-    @Query("SELECT skill " +
-           "FROM Skill skill " +
-           "JOIN AccountHasSkill accountHasSkill " +
-           "ON skill.id = accountHasSkill.skillId " +
-           "JOIN Account account " +
-           "ON account.id = accountHasSkill.accountId " +
-           "WHERE skill.name LIKE :name AND account.id = :accountId")
-    Page<Skill> getAllByNameLikeAndAccountId(@Param("name") String name,
-                                             @Param("accountId") long accountId,
-                                             Pageable pageable);
+    @Query("FROM Skill skill " +
+           "JOIN AccountHasSkill accountHasSkill ON skill.id = accountHasSkill.skillId " +
+           "WHERE accountHasSkill.accountId = :accountId AND skill.name LIKE :nameSkill")
+    Page<Skill> getAllByNameContainingAndAccountId(@Param("name") String name,
+                                                   @Param("accountId") long accountId,
+                                                   Pageable pageable);
 
-    Skill getByNameAndCategoryId(String name, long categoryId);
-
-    Page<Skill> getAllByCategoryIdAndNameLike(long categoryId, String name, Pageable pageable);
+    Page<Skill> getAllByCategoryIdAndNameContaining(long categoryId, String name, Pageable pageable);
 
     Skill getByName(String skillName);
 
@@ -55,7 +33,6 @@ public interface SkillRepository extends PagingAndSortingRepository<Skill, Long>
 
     Skill getById(long skillId);
 
-    boolean existsByNameAndCategoryId(String name, long categoryId);
 
     @Query("SELECT account " +
            "FROM Account account " +
@@ -65,9 +42,12 @@ public interface SkillRepository extends PagingAndSortingRepository<Skill, Long>
     Skill getByAccountIdAndSkillId(@Param("accountId") long accountId,
                                    @Param("skillId") long skillId);
 
-    boolean existsByName(String email);
 
-    boolean existsByNameAndLevel(String name, long level);
+    @Query("FROM Skill skill " +
+           "JOIN AccountHasSkill accountHasSkill ON skill.id = accountHasSkill.skillId " +
+           "WHERE accountHasSkill.accountId = :accountId")
+    Page<Skill> getAllByAccountId(@Param("accountId") long accountId,
+                                  Pageable pageable);
 
     boolean existsByNameAndLevelAndCategoryId(String name, long level, long categoryId);
 

@@ -4,10 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import vn.novahub.helpdesk.exception.CategoryNotFoundException;
-import vn.novahub.helpdesk.exception.SkillIsExistException;
-import vn.novahub.helpdesk.exception.SkillNotFoundException;
-import vn.novahub.helpdesk.exception.SkillValidationException;
+import vn.novahub.helpdesk.exception.*;
 import vn.novahub.helpdesk.model.Account;
 import vn.novahub.helpdesk.model.AccountHasSkill;
 import vn.novahub.helpdesk.model.Skill;
@@ -73,7 +70,7 @@ public class AccountSkillServiceImpl implements AccountSkillService {
     public Page<Skill> getAllByKeywordForAccountLogin(String keyword, Pageable pageable) {
         Account accountLogin = accountService.getAccountLogin();
 
-        return skillRepository.getAllByNameLikeAndAccountId("%" + keyword + "%", accountLogin.getId(), pageable);
+        return skillRepository.getAllByNameContainingAndAccountId("%" + keyword + "%", accountLogin.getId(), pageable);
     }
 
     @Override
@@ -196,7 +193,15 @@ public class AccountSkillServiceImpl implements AccountSkillService {
         if(!categoryRepository.existsById(categoryId))
             throw new CategoryNotFoundException(categoryId);
 
-        return skillRepository.getAllByCategoryIdAndNameLike(categoryId, "%" + name + "%", pageable);
+        return skillRepository.getAllByCategoryIdAndNameContaining(categoryId, "%" + name + "%", pageable);
+    }
+
+    @Override
+    public Page<Skill> getAllByAccountId(long accountId, Pageable pageable) throws AccountNotFoundException {
+        if(!accountRepository.existsById(accountId))
+            throw new AccountNotFoundException(accountId);
+
+        return skillRepository.getAllByAccountId(accountId, pageable);
     }
 
 }

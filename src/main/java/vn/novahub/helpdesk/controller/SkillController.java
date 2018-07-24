@@ -34,7 +34,7 @@ public class SkillController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping(path = "/skills", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Page<Skill>> getAll(@RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
-                                              Pageable pageable){
+                                              Pageable pageable) {
         return new ResponseEntity<>(accountSkillService.getAllByKeyword(keyword, pageable), HttpStatus.OK);
     }
 
@@ -75,7 +75,7 @@ public class SkillController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping(path = "/users/me/skills", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Page<Skill>> getAllByAccountLogin(@RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
-                                                             Pageable pageable){
+                                                             Pageable pageable) {
         return new ResponseEntity<>(accountSkillService.getAllByKeywordForAccountLogin(keyword, pageable), HttpStatus.OK);
     }
 
@@ -98,5 +98,12 @@ public class SkillController {
         accountSkillService.delete(skillId);
 
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping(path = "/users/{id}/skills", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Page<Skill>> getAllByAccountId(@PathVariable("id") long accountId,
+                                                         Pageable pageable) {
+        return new ResponseEntity<>(accountSkillService.getAllByAccountId(accountId, pageable), HttpStatus.OK);
     }
 }

@@ -17,15 +17,22 @@ INSERT INTO `category`(name) VALUES
 ("Frontend Framework"),
 ("Web Design");
 
-INSERT INTO `skill`(name, category_id, level) VALUES
-("Java", 1, 7),
-("Ruby", 1, 6),
-("C#", 1, 5),
-("Python", 1, 2),
-("Spring", 2, 3),
-("Rails", 2, 5),
-("Angular", 3, 10),
-("Reactjs", 3, 6);
+INSERT INTO `skill`(name, category_id) VALUES
+("Java", 1),
+("Javascript", 3),
+("Ruby", 1),
+("Perl", 1),
+("ReactJS", 3),
+("HTML", 4);
+
+INSERT INTO `level`(value, account_id, skill_id) VALUES
+(6, 1, 1),
+(5, 1, 2),
+(9, 1, 3),
+(5, 1, 4),
+(8, 2, 2),
+(3, 2, 3),
+(10, 2, 6);
 
 INSERT INTO `account_has_skill`(account_id, skill_id) VALUES
 (1, 1),

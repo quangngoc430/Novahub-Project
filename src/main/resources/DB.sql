@@ -27,7 +27,7 @@ CREATE TABLE `account` (
   `verification_token` char(255),
   `role_id` int NOT NULL,
   PRIMARY KEY (`id`),
-  CONSTRAINT `fk_user_role` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`)
+  CONSTRAINT `fk_user_role` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `token`;
@@ -40,7 +40,7 @@ CREATE TABLE `token` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  CONSTRAINT `fk_token_account` FOREIGN KEY (`account_id`) REFERENCES `account`(`id`)
+  CONSTRAINT `fk_token_account` FOREIGN KEY (`account_id`) REFERENCES `account`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `category`;
@@ -55,14 +55,26 @@ CREATE TABLE `category` (
 DROP TABLE IF EXISTS `skill`;
 CREATE TABLE `skill` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) DEFAULT NULL,
-  `level` int NOT NULL,
+  `name` varchar(45) UNIQUE DEFAULT NULL,
   `category_id` int(11) NOT NULL,
   `created_at` datetime NOT NULL DEFAULT NOW(),
   `updated_at` datetime NOT NULL DEFAULT NOW(),
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_skill_category` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `level`;
+CREATE TABLE `level` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `value` int NOT NULL,
+  `skill_id` int NOT NULL,
+  `account_id` int NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT NOW(),
+  `updated_at` datetime NOT NULL DEFAULT NOW(),
+  PRIMARY KEY (`id`),
+  CONSTRAINT `fk_level_skill` FOREIGN KEY (`skill_id`) REFERENCES `skill`(`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_level_account` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`) ON DELETE CASCADE
+);
 
 DROP TABLE IF EXISTS `account_has_skill`;
 CREATE TABLE `account_has_skill` (
