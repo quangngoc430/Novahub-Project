@@ -21,7 +21,7 @@ public class CategoryExceptionHandler {
         apiError.setStatus(HttpStatus.NOT_FOUND.value());
         HashMap<String, String> errors = new HashMap<>();
         errors.put("message", "Category not found");
-        apiError.setErrors(errors);
+        apiError.setError(errors);
         apiError.setPath(request.getRequestURI());
         apiError.setMessage(ex.getMessage());
 
@@ -37,7 +37,7 @@ public class CategoryExceptionHandler {
         apiError.setStatus(HttpStatus.CONFLICT.value());
         HashMap<String, String> errors = new HashMap<>();
         errors.put("message", "Category is exist");
-        apiError.setErrors(errors);
+        apiError.setError(errors);
         apiError.setPath(request.getRequestURI());
         apiError.setMessage(ex.getMessage());
 
@@ -50,7 +50,7 @@ public class CategoryExceptionHandler {
 
         apiError.setTimestamp(Instant.now());
         apiError.setStatus(HttpStatus.NOT_ACCEPTABLE.value());
-        apiError.setErrors(((CategoryValidationException) ex).getErrors());
+        apiError.setError(((CategoryValidationException) ex).getErrors());
         apiError.setPath(request.getRequestURI());
         apiError.setMessage(ex.getMessage());
 

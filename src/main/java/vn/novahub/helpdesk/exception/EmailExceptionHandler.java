@@ -4,7 +4,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import vn.novahub.helpdesk.model.ApiError;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,21 +11,23 @@ import java.time.Instant;
 import java.util.HashMap;
 
 @ControllerAdvice
-public class RoleExceptionHandler {
+public class EmailExceptionHandler {
 
-    @ExceptionHandler(value = RoleNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseEntity<ApiError> handleRoleNotFoundException(HttpServletRequest request, Exception ex){
+    private static final String MESSAGE = "message";
+
+    @ExceptionHandler(value = EmailFormatException.class)
+    public ResponseEntity<ApiError> handleEmailFormatException(HttpServletRequest request, Exception ex){
+
         ApiError apiError = new ApiError();
 
         apiError.setTimestamp(Instant.now());
-        apiError.setStatus(HttpStatus.NOT_FOUND.value());
+        apiError.setStatus(HttpStatus.NOT_ACCEPTABLE.value());
         HashMap<String, String> errors = new HashMap<>();
-        errors.put("message", "Role not found");
+        errors.put(MESSAGE, "Wrong email format");
         apiError.setError(errors);
         apiError.setPath(request.getRequestURI());
         apiError.setMessage(ex.getMessage());
 
-        return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(apiError, HttpStatus.NOT_ACCEPTABLE);
     }
 }

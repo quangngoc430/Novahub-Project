@@ -6,16 +6,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import vn.novahub.helpdesk.constant.RoleConstant;
-import vn.novahub.helpdesk.exception.AccountIsExistException;
-import vn.novahub.helpdesk.exception.AccountValidationException;
-import vn.novahub.helpdesk.exception.EmailFormatException;
-import vn.novahub.helpdesk.exception.RoleNotFoundException;
-import vn.novahub.helpdesk.model.Account;
 import vn.novahub.helpdesk.service.AccountService;
 
 import javax.annotation.security.PermitAll;
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 
 @Controller
 public class HomeController {
@@ -58,41 +52,29 @@ public class HomeController {
 
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @RequestMapping("/user")
-    public String user(){
+    public String user() {
         return "user";
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @RequestMapping("/admin")
-    public String admin(){
+    public String admin() {
         return "admin";
     }
 
     @PreAuthorize("hasRole('ROLE_CLERK')")
     @RequestMapping("/clerk")
-    public String clerk(){
+    public String clerk() {
         return "clerk";
     }
 
     @RequestMapping("/403")
-    public String er(){
+    public String error403() {
         return "403";
     }
 
-    @RequestMapping("/login-google")
-    public String loginGoogle(@RequestParam(value = "code", defaultValue = "") String code,
-                              HttpServletRequest request) throws IOException, EmailFormatException, AccountIsExistException, AccountValidationException, RoleNotFoundException {
-        if (code.isEmpty())
-            return "redirect:/login?google=error";
-
-        Account account = accountService.loginWithGoogle(code, request);
-
-        if(account.getRole().getName().equals(RoleConstant.ROLE_ADMIN))
-            return "redirect:/admin";
-        else if(account.getRole().getName().equals(RoleConstant.ROLE_CLERK))
-            return "redirect:/clerk";
-
-        return "redirect:/user";
+    @RequestMapping("/index")
+    public String index() {
+        return "index";
     }
-
 }

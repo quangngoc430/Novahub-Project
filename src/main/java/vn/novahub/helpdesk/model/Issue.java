@@ -1,6 +1,7 @@
 package vn.novahub.helpdesk.model;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import vn.novahub.helpdesk.annotation.IssueStatus;
 import vn.novahub.helpdesk.constant.IssueConstant;
@@ -34,11 +35,15 @@ public class Issue implements Serializable {
     @Column(name = "status")
     private String status;
 
-    @NotNull(message = "CreateAt is not null")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Temporal(TemporalType.TIMESTAMP)
+    @NotNull(message = "CreatedAt is not null")
     @Column(name = "created_at")
     private Date createdAt;
 
-    @NotNull(message = "UpdateAt is not null")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Temporal(TemporalType.TIMESTAMP)
+    @NotNull(message = "UpdatedAt is not null")
     @Column(name = "updated_at")
     private Date updatedAt;
 

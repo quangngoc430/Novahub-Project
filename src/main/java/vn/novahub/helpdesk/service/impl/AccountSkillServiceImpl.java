@@ -4,21 +4,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import vn.novahub.helpdesk.exception.CategoryNotFoundException;
-import vn.novahub.helpdesk.exception.SkillIsExistException;
-import vn.novahub.helpdesk.exception.SkillNotFoundException;
-import vn.novahub.helpdesk.exception.SkillValidationException;
+import vn.novahub.helpdesk.exception.*;
 import vn.novahub.helpdesk.model.Account;
 import vn.novahub.helpdesk.model.AccountHasSkill;
+import vn.novahub.helpdesk.model.Level;
 import vn.novahub.helpdesk.model.Skill;
-import vn.novahub.helpdesk.repository.AccountHasSkillRepository;
-import vn.novahub.helpdesk.repository.AccountRepository;
-import vn.novahub.helpdesk.repository.CategoryRepository;
-import vn.novahub.helpdesk.repository.SkillRepository;
+import vn.novahub.helpdesk.repository.*;
 import vn.novahub.helpdesk.service.AccountService;
 import vn.novahub.helpdesk.service.AccountSkillService;
 import vn.novahub.helpdesk.validation.GroupCreateSkill;
 import vn.novahub.helpdesk.validation.GroupUpdateSkill;
+import vn.novahub.helpdesk.validation.LevelValidation;
 import vn.novahub.helpdesk.validation.SkillValidation;
 
 import java.util.Date;
@@ -44,6 +40,12 @@ public class AccountSkillServiceImpl implements AccountSkillService {
     @Autowired
     private AccountRepository accountRepository;
 
+    @Autowired
+    private LevelValidation levelValidation;
+
+    @Autowired
+    private LevelRepository levelRepository;
+
     @Override
     public Skill findOne(long skillId) throws SkillNotFoundException {
         Skill skill = skillRepository.getById(skillId);
@@ -65,7 +67,7 @@ public class AccountSkillServiceImpl implements AccountSkillService {
 
     @Override
     public Page<Skill> getAllByKeyword(String keyword, Pageable pageable) {
-        return skillRepository.getAllByNameLike("%" + keyword + "&", pageable);
+        return skillRepository.getAllByNameContaining(keyword, pageable);
     }
 
 
@@ -73,48 +75,70 @@ public class AccountSkillServiceImpl implements AccountSkillService {
     public Page<Skill> getAllByKeywordForAccountLogin(String keyword, Pageable pageable) {
         Account accountLogin = accountService.getAccountLogin();
 
-        return skillRepository.getAllByNameLikeAndAccountId("%" + keyword + "%", accountLogin.getId(), pageable);
+        Page<Skill> skills = skillRepository.getAllByNameContainingAndAccountId(keyword, accountLogin.getId(), pageable);
+
+        for(Skill skill : skills) {
+            skill.setLevel(levelRepository.getBySkillId(skill.getId()));
+        }
+
+        return skills;
     }
 
     @Override
-    public Skill create(Skill skill) throws SkillValidationException, SkillIsExistException {
+    public Skill create(Skill newSkill) throws SkillValidationException, SkillIsExistException, CategoryNotFoundException, LevelValidationException {
 
-        skillValidation.validate(skill, GroupCreateSkill.class);
+        skillValidation.validate(newSkill, GroupCreateSkill.class);
+        levelValidation.validate(newSkill.getLevel(), GroupCreateSkill.class);
+
+        if(newSkill.getCategory() != null && !categoryRepository.existsById(newSkill.getCategoryId()))
+            throw new CategoryNotFoundException(newSkill.getCategoryId());
 
         Account accountLogin = accountService.getAccountLogin();
 
-        Skill oldSkill = skillRepository.getByNameAndLevelAndCategoryId(skill.getName(), skill.getLevel(), skill.getCategoryId());
+        // check skill is exists
+        Skill oldSkill = skillRepository.getByName(newSkill.getName());
 
-        // skill is exist
-        if(oldSkill != null){
+        if(oldSkill == null) {
 
-            // check account has skill
-            if(!accountHasSkillRepository.existsByAccountIdAndSkillId(accountLogin.getId(), oldSkill.getId())) {
-                AccountHasSkill accountHasSkill = new AccountHasSkill();
-                accountHasSkill.setAccountId(accountLogin.getId());
-                accountHasSkill.setSkillId(oldSkill.getId());
-                accountHasSkillRepository.save(accountHasSkill);
-                return oldSkill;
-            } else {
-                throw new SkillIsExistException(skill.getName(), skill.getLevel(), skill.getCategoryId());
-            }
+            newSkill.setCreatedAt(new Date());
+            newSkill.setUpdatedAt(new Date());
+            newSkill = skillRepository.save(newSkill);
+
+        } else {
+
+            newSkill.setId(oldSkill.getId());
+            newSkill.setCategoryId(oldSkill.getCategoryId());
+
+            if(accountHasSkillRepository.existsByAccountIdAndSkillId(accountLogin.getId(), newSkill.getId()))
+                throw new SkillIsExistException(newSkill.getName());
+
         }
 
-        skill.setCreatedAt(new Date());
-        skill.setUpdatedAt(new Date());
-        skill = skillRepository.save(skill);
+        Level newLevel = new Level();
+        newLevel.setValue(newSkill.getLevel().getValue());
+        newLevel.setAccountId(accountLogin.getId());
+        newLevel.setSkillId(newSkill.getId());
+        newLevel.setCreatedAt(new Date());
+        newLevel.setUpdatedAt(new Date());
+        newLevel = levelRepository.save(newLevel);
+        newSkill.setLevel(newLevel);
+
         AccountHasSkill accountHasSkill = new AccountHasSkill();
         accountHasSkill.setAccountId(accountLogin.getId());
-        accountHasSkill.setSkillId(skill.getId());
+        accountHasSkill.setSkillId(newSkill.getId());
+        accountHasSkill.setCreatedAt(new Date());
+        accountHasSkill.setUpdatedAt(new Date());
         accountHasSkillRepository.save(accountHasSkill);
 
-        skill.setCategory(categoryRepository.getById(skill.getCategoryId()));
+        newSkill.setCategory(categoryRepository.getById(newSkill.getCategoryId()));
 
-        return skill;
+        return newSkill;
     }
 
     @Override
-    public Skill update(long skillId, Skill skill) throws SkillValidationException, SkillNotFoundException {
+    public Skill update(long skillId, Skill newSkill) throws SkillNotFoundException, LevelValidationException {
+
+        levelValidation.validate(newSkill.getLevel(), GroupUpdateSkill.class);
 
         Account accountLogin = accountService.getAccountLogin();
 
@@ -123,62 +147,26 @@ public class AccountSkillServiceImpl implements AccountSkillService {
         if(oldSkill == null)
             throw new SkillNotFoundException(skillId);
 
-        skillValidation.validate(skill, GroupUpdateSkill.class);
+        Level oldLevel = levelRepository.getByAccountIdAndSkillId(accountLogin.getId(), skillId);
+        oldLevel.setValue(newSkill.getLevel().getValue());
+        oldLevel.setUpdatedAt(new Date());
+        oldLevel = levelRepository.save(oldLevel);
 
-        // check changing of data between input with oldSkill
-        if(skill.equals(oldSkill))
-            return oldSkill;
+        oldSkill.setLevel(oldLevel);
 
-        accountHasSkillRepository.deleteByAccountIdAndSkillId(accountLogin.getId(), skillId);
-
-        // check count of oldSkill, if it equals 1 then delete its
-        if(accountHasSkillRepository.countBySkillId(oldSkill.getId()) == 1) {
-            skillRepository.deleteById(oldSkill.getId());
-        }
-
-        // get skill that have same data with input skill
-        Skill skillSameInput = skillRepository.getByNameAndLevelAndCategoryId(skill.getName(), skill.getLevel(), skill.getCategoryId());
-
-        // skill have same data that found
-        if(skillSameInput != null) {
-            AccountHasSkill newAccountHasSkill = new AccountHasSkill();
-            newAccountHasSkill.setSkillId(skillSameInput.getId());
-            newAccountHasSkill.setAccountId(accountLogin.getId());
-            accountHasSkillRepository.save(newAccountHasSkill);
-
-            return skillSameInput;
-        }
-
-        // skill have same data that isn't found
-        // create new skill
-        skill.setCreatedAt(new Date());
-        skill.setUpdatedAt(new Date());
-        skill = skillRepository.save(skill);
-
-        AccountHasSkill newAccountHasSkill = new AccountHasSkill();
-        newAccountHasSkill.setSkillId(skill.getId());
-        newAccountHasSkill.setAccountId(accountLogin.getId());
-        accountHasSkillRepository.save(newAccountHasSkill);
-
-        skill.setCategory(categoryRepository.getById(skill.getCategoryId()));
-
-        return skill;
+        return oldSkill;
     }
 
     @Override
     public void delete(long skillId) throws SkillNotFoundException {
         Account accountLogin = accountService.getAccountLogin();
 
-        if(skillRepository.getByAccountIdAndSkillId(accountLogin.getId(), skillId) == null)
+        if(!skillRepository.existsById(skillId)) {
             throw new SkillNotFoundException(skillId);
-
-        accountHasSkillRepository.deleteByAccountIdAndSkillId(accountLogin.getId(), skillId);
-
-        // check count of skill has skillId, if it equals 1 then delete its
-        if(accountHasSkillRepository.countBySkillId(skillId) == 1) {
-            skillRepository.deleteById(skillId);
         }
 
+        accountHasSkillRepository.deleteByAccountIdAndSkillId(accountLogin.getId(), skillId);
+        levelRepository.deleteByAccountIdAndSkillId(accountLogin.getId(), skillId);
     }
 
     @Override
@@ -196,7 +184,27 @@ public class AccountSkillServiceImpl implements AccountSkillService {
         if(!categoryRepository.existsById(categoryId))
             throw new CategoryNotFoundException(categoryId);
 
-        return skillRepository.getAllByCategoryIdAndNameLike(categoryId, "%" + name + "%", pageable);
+        Page<Skill> skills = skillRepository.getAllByCategoryIdAndNameContaining(categoryId, name, pageable);
+
+        for(Skill skill : skills) {
+            skill.setLevel(null);
+        }
+
+        return skills;
+    }
+
+    @Override
+    public Page<Skill> getAllByAccountId(long accountId, Pageable pageable) throws AccountNotFoundException {
+        if(!accountRepository.existsById(accountId))
+            throw new AccountNotFoundException(accountId);
+
+        Page<Skill> skills = skillRepository.getAllByAccountId(accountId, pageable);
+
+        for(Skill skill : skills) {
+            skill.setLevel(levelRepository.getBySkillId(skill.getId()));
+        }
+
+        return skills;
     }
 
 }

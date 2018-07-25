@@ -1,7 +1,6 @@
 package vn.novahub.helpdesk.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -140,18 +139,15 @@ public class SkillServiceImpl implements SkillService {
         if(!categoryRepository.existsById(categoryId))
             throw new CategoryNotFoundException(categoryId);
 
-        return skillRepository.getAllByCategoryIdAndNameLike(categoryId, "%" + name + "%", pageable);
+        return skillRepository.getAllByCategoryIdAndNameContaining(categoryId, name, pageable);
     }
 
     @Override
     public Page<Skill> getAllByName(String nameSkill, Pageable pageable, HttpServletRequest request) {
-        nameSkill = "%" + nameSkill + "%";
 
         Account accountLogin = accountService.getAccountLogin();
 
-        return skillRepository.getAllSkillsByAccountIdAndNameLike(accountLogin.getId(), nameSkill, pageable);
+        return skillRepository.getAllByNameContainingAndAccountId(nameSkill, accountLogin.getId(), pageable);
     }
-
-
 
 }

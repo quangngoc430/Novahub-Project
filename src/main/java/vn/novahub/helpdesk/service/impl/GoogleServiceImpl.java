@@ -1,22 +1,15 @@
 package vn.novahub.helpdesk.service.impl;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.http.client.fluent.Form;
+import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.fluent.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import vn.novahub.helpdesk.exception.EmailFormatException;
+import vn.novahub.helpdesk.exception.UnauthorizedException;
 import vn.novahub.helpdesk.model.GooglePojo;
 import vn.novahub.helpdesk.service.GoogleService;
 
@@ -26,41 +19,32 @@ public class GoogleServiceImpl implements GoogleService {
     @Autowired
     private Environment env;
 
-    public String getToken(final String code) throws IOException {
-        String link = env.getProperty("google.link.get.token");
-
-        String response = Request.Post(link)
-                .bodyForm(Form.form().add("client_id", env.getProperty("google.app.id"))
-                        .add("client_secret", env.getProperty("google.app.secret"))
-                        .add("redirect_uri", env.getProperty("google.redirect.uri")).add("code", code)
-                        .add("grant_type", "authorization_code").build())
-                .execute().returnContent().asString();
-
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode node = mapper.readTree(response).get("access_token");
-        return node.textValue();
-    }
-
-    public GooglePojo getUserInfo(final String accessToken) throws IOException, EmailFormatException {
+    public GooglePojo getUserInfo(final String accessToken) throws IOException, EmailFormatException, UnauthorizedException {
         String link = env.getProperty("google.link.get.user_info") + accessToken;
-        String response = Request.Get(link).execute().returnContent().asString();
+        String response = "";
+
+        try {
+            response = Request.Get(link).execute().returnContent().asString();
+        } catch (HttpResponseException httpResponseException){
+            throw new UnauthorizedException(httpResponseException.getMessage());
+        }
+
         ObjectMapper mapper = new ObjectMapper();
-        JsonNode node = mapper.readTree(response).get("email");
 
-        if(!node.textValue().endsWith("@novahub.vn"))
-            throw new EmailFormatException(node.textValue());
 
-        return mapper.readValue(response, GooglePojo.class);
-    }
 
-    public UserDetails buildUser(GooglePojo googlePojo, String roleName) {
-        boolean enabled = true;
-        boolean accountNonExpired = true;
-        boolean credentialsNonExpired = true;
-        boolean accountNonLocked = true;
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(roleName));
-        return new User(googlePojo.getEmail(),
-                "", enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
+        GooglePojo googlePojo = new GooglePojo();
+        googlePojo.setEmail(mapper.readTree(response).get("email").textValue());
+
+        if(!googlePojo.getEmail().endsWith("@novahub.vn"))
+            throw new EmailFormatException(googlePojo.getEmail());
+
+        googlePojo.setName(mapper.readTree(response).get("name").textValue());
+        googlePojo.setFamilyName(mapper.readTree(response).get("family_name").textValue());
+        googlePojo.setGivenName(mapper.readTree(response).get("given_name").textValue());
+        googlePojo.setPicture(mapper.readTree(response).get("picture").textValue());
+        googlePojo.setHd(mapper.readTree(response).get("hd").textValue());
+
+        return googlePojo;
     }
 }

@@ -15,12 +15,17 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.novahub.helpdesk.exception.*;
 import vn.novahub.helpdesk.model.Account;
+import vn.novahub.helpdesk.model.Token;
 import vn.novahub.helpdesk.service.AccountService;
 import vn.novahub.helpdesk.service.LogService;
 
 import javax.annotation.security.PermitAll;
 import javax.mail.MessagingException;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @RestController
 @RequestMapping(path = "/api")
@@ -34,21 +39,70 @@ public class AccountController {
     @Autowired
     private LogService logService;
 
-    @PreAuthorize("hasRole('ROLE_ANONYMOUS')")
-    @PostMapping(path = "/login", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Account> login(@RequestBody Account account,
-                                         HttpServletRequest request)
-            throws AccountInvalidException,
-            AccountLockedException,
-            AccountValidationException,
-            AccountInactiveException {
-
-        Account accountLogin = accountService.login(account, request);
-
-        return new ResponseEntity<>(accountLogin, HttpStatus.OK);
+    @GetMapping(path = "/authentication-token")
+    public void authenticationToken(HttpServletRequest request,
+                                                       HttpServletResponse response) throws ServletException, IOException, TokenIsExpiredException, UnauthorizedException {
+        handleAuthenticationToken(request, response);
     }
 
-    @PreAuthorize("isAuthenticated()")
+    @PostMapping(path = "/authentication-token-post")
+    public void authenticationTokenPost(HttpServletRequest request,
+                                    HttpServletResponse response) throws ServletException, IOException, TokenIsExpiredException, UnauthorizedException {
+        handleAuthenticationToken(request, response);
+    }
+
+    @PutMapping(path = "/authentication-token-put")
+    public void authenticationTokenPut(HttpServletRequest request,
+                                       HttpServletResponse response) throws UnauthorizedException, TokenIsExpiredException, ServletException, IOException {
+        handleAuthenticationToken(request, response);
+    }
+
+    @DeleteMapping(path = "/authentication-token-delete")
+    public void authenticationTokenDelete(HttpServletRequest request,
+                                          HttpServletResponse response) throws UnauthorizedException, TokenIsExpiredException, ServletException, IOException {
+        handleAuthenticationToken(request, response);
+    }
+
+    private void handleAuthenticationToken(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, UnauthorizedException, TokenIsExpiredException {
+        String accessToken = request.getHeader("access_token");
+        String urlRequest = (String) request.getAttribute("url_request");
+        request.removeAttribute("url_request");
+
+        accountService.authenticationToken(accessToken, request);
+
+        RequestDispatcher requestDispatcher = request.getServletContext().getRequestDispatcher(urlRequest);
+        requestDispatcher.forward(request, response);
+    }
+
+
+    @PermitAll
+    @PostMapping(path = "/login", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Token> login(@RequestBody Account account) throws AccountInvalidException, AccountLockedException, AccountValidationException, AccountInactiveException {
+
+        Token accessToken = accountService.login(account);
+
+        return new ResponseEntity<>(accessToken, HttpStatus.OK);
+    }
+
+    @PermitAll
+    @PostMapping(path = "/login/google", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Token> login(@RequestBody Token token) throws EmailFormatException, RoleNotFoundException, IOException, UnauthorizedException, TokenIsExpiredException, AccountValidationException {
+
+        Token accessToken = accountService.loginWithGoogle(token);
+
+        return new ResponseEntity<>(accessToken, HttpStatus.OK);
+    }
+
+    @PermitAll
+    @GetMapping(path = "/logout", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Void> logout(@RequestHeader(value = "access_token", defaultValue = "") String accessToken) throws TokenNotFoundException {
+
+        accountService.logout(accessToken);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping(path = "/users", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Page<Account>> getAll(@RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
                                                 @RequestParam(value = "status", required = false, defaultValue = "") String status,
@@ -83,8 +137,7 @@ public class AccountController {
     public ResponseEntity<JsonNode> updateForAccountLogin(@RequestParam(value = "checkPasswordNull", defaultValue = "false") String checkPasswordNull,
                                                           @RequestBody Account account,
                                                           HttpServletRequest request)
-            throws AccountPasswordNotEqualException,
-            AccountValidationException {
+                                                          throws AccountPasswordNotEqualException, AccountValidationException {
 
         logService.log(request, logger);
 
@@ -142,7 +195,7 @@ public class AccountController {
     @PutMapping(path = "/users/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Account> updateForAdmin(@PathVariable("id") long accountId,
                                                   @RequestBody Account account,
-                                                  HttpServletRequest request) throws AccountValidationException {
+                                                  HttpServletRequest request) throws AccountValidationException, AccountNotFoundException {
         logService.log(request, logger);
 
         Account accountUpdated = accountService.updatedForAdmin(accountId, account);
@@ -160,4 +213,5 @@ public class AccountController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
 }
