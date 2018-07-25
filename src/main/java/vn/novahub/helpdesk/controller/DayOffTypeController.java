@@ -14,17 +14,12 @@ import vn.novahub.helpdesk.exception.DayOffTypeIsNotValidException;
 import vn.novahub.helpdesk.exception.DayOffTypeNotFoundException;
 import vn.novahub.helpdesk.model.DayOffType;
 import vn.novahub.helpdesk.service.DayOffTypeService;
-import vn.novahub.helpdesk.service.LogService;
+
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping(path = "/api", produces = {MediaType.APPLICATION_JSON_VALUE})
 public class DayOffTypeController {
-
-    private static final Logger logger = LoggerFactory.getLogger(DayOffTypeController.class);
-
-    @Autowired
-    private LogService logService;
 
     @Autowired
     private DayOffTypeService dayOffTypeService;
@@ -53,8 +48,6 @@ public class DayOffTypeController {
     public ResponseEntity<String> update(@RequestBody DayOffType dayOffType,
                                                    HttpServletRequest request)
                                                    throws DayOffTypeNotFoundException {
-
-        logService.log(request, logger);
 
         dayOffTypeService.update(dayOffType);
 

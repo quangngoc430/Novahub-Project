@@ -13,18 +13,12 @@ import org.springframework.web.bind.annotation.*;
 import vn.novahub.helpdesk.exception.*;
 import vn.novahub.helpdesk.model.DayOff;
 import vn.novahub.helpdesk.service.DayOffService;
-import vn.novahub.helpdesk.service.LogService;
 
 import javax.mail.MessagingException;
 
 @RestController
 @RequestMapping(path = "/api", produces = {MediaType.APPLICATION_JSON_VALUE})
 public class DayOffController {
-
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
-
-    @Autowired
-    private LogService logService;
 
     @Autowired
     private DayOffService dayOffService;
