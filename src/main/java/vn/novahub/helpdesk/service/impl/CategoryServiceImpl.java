@@ -27,7 +27,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Page<Category> getAllByName(String name,
                                        Pageable pageable) {
-        return categoryRepository.getAllByNameContaining("%" + name + "%", pageable);
+        return categoryRepository.getAllByNameContaining(name, pageable);
     }
 
     @Override

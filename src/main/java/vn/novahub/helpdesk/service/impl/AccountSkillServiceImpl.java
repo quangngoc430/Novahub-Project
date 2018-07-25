@@ -67,7 +67,7 @@ public class AccountSkillServiceImpl implements AccountSkillService {
 
     @Override
     public Page<Skill> getAllByKeyword(String keyword, Pageable pageable) {
-        return skillRepository.getAllByNameContaining("%" + keyword + "%", pageable);
+        return skillRepository.getAllByNameContaining(keyword, pageable);
     }
 
 
@@ -75,7 +75,7 @@ public class AccountSkillServiceImpl implements AccountSkillService {
     public Page<Skill> getAllByKeywordForAccountLogin(String keyword, Pageable pageable) {
         Account accountLogin = accountService.getAccountLogin();
 
-        Page<Skill> skills = skillRepository.getAllByNameContainingAndAccountId("%" + keyword + "%", accountLogin.getId(), pageable);
+        Page<Skill> skills = skillRepository.getAllByNameContainingAndAccountId(keyword, accountLogin.getId(), pageable);
 
         for(Skill skill : skills) {
             skill.setLevel(levelRepository.getBySkillId(skill.getId()));
@@ -184,7 +184,7 @@ public class AccountSkillServiceImpl implements AccountSkillService {
         if(!categoryRepository.existsById(categoryId))
             throw new CategoryNotFoundException(categoryId);
 
-        Page<Skill> skills = skillRepository.getAllByCategoryIdAndNameContaining(categoryId, "%" + name + "%", pageable);
+        Page<Skill> skills = skillRepository.getAllByCategoryIdAndNameContaining(categoryId, name, pageable);
 
         for(Skill skill : skills) {
             skill.setLevel(null);
