@@ -29,7 +29,7 @@ public class CategoryController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping(path = "/categories", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Page<Category>> getAll(@RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
-                                                 Pageable pageable){
+                                                 Pageable pageable) {
         Page<Category> categoryPage = categoryService.getAllByName(keyword, pageable);
 
         return new ResponseEntity<>(categoryPage, HttpStatus.OK);

@@ -14,7 +14,6 @@ import vn.novahub.helpdesk.validation.CategoryValidation;
 import vn.novahub.helpdesk.validation.GroupCreateCategory;
 import vn.novahub.helpdesk.validation.GroupUpdateCategory;
 
-import javax.validation.groups.Default;
 import java.util.Date;
 
 @Service

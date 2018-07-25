@@ -13,8 +13,6 @@ import java.util.List;
 @Repository
 public interface AccountRepository extends PagingAndSortingRepository<Account, Long> {
 
-    Account findByEmailAndPassword(String email, String password);
-
     Account getByEmail(String email);
 
     @Query("FROM Account account " +
@@ -61,8 +59,6 @@ public interface AccountRepository extends PagingAndSortingRepository<Account, L
     Account getById(long accountId);
 
     Account getByIdAndVerificationToken(long accountId, String verificationToken);
-
-    Account getByEmailAndPassword(String email, String password);
 
     @Query("SELECT account FROM Account account JOIN Role role ON account.roleId = role.id WHERE role.name = :name")
     List<Account> getAllByRoleName(@Param("name") String roleName);

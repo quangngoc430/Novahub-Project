@@ -8,5 +8,4 @@ import vn.novahub.helpdesk.model.Token;
 public interface TokenRepository extends CrudRepository<Token, Long> {
 
     Token getByAccessToken(String accessToken);
-
 }

@@ -6,11 +6,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import vn.novahub.helpdesk.enums.RoleEnum;
-import vn.novahub.helpdesk.exception.AccountIsExistException;
-import vn.novahub.helpdesk.exception.AccountValidationException;
-import vn.novahub.helpdesk.exception.EmailFormatException;
-import vn.novahub.helpdesk.exception.RoleNotFoundException;
-import vn.novahub.helpdesk.model.Account;
 import vn.novahub.helpdesk.service.AccountService;
 
 import javax.annotation.security.PermitAll;

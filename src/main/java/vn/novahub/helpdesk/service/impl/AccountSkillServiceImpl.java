@@ -99,7 +99,6 @@ public class AccountSkillServiceImpl implements AccountSkillService {
         Skill oldSkill = skillRepository.getByName(newSkill.getName());
 
         if(oldSkill == null) {
-
             newSkill.setCreatedAt(new Date());
             newSkill.setUpdatedAt(new Date());
             newSkill = skillRepository.save(newSkill);

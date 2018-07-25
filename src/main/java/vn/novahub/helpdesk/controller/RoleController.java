@@ -26,11 +26,8 @@ public class RoleController {
     }
 
     @GetMapping(path = "/roles")
-    public ResponseEntity<?> getAll(@RequestParam(value = "name", required = false) String roleName,
-                                    Pageable pageable) throws RoleNotFoundException {
-        if(roleName != null)
-            return new ResponseEntity<Role>(roleService.getByName(roleName), HttpStatus.OK);
-
-        return new ResponseEntity<Page<Role>>(roleService.getAll(pageable), HttpStatus.OK);
+    public ResponseEntity<Page<Role>> getAll(@RequestParam(value = "name", required = false) String roleName,
+                                             Pageable pageable) {
+        return new ResponseEntity<>(roleService.getAll(roleName, pageable), HttpStatus.OK);
     }
 }
