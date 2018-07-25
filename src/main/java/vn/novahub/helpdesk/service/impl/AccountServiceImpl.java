@@ -215,19 +215,17 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Page<Account> getAll(String keyword, String status, String role, Pageable pageable) {
-        keyword = "%" + keyword + "%";
-
         if(status.equals("") && role.equals(""))
-            return accountRepository.getAllByEmailLikeOrFirstNameLikeOrLastNameLike(keyword, pageable);
+            return accountRepository.getAllByEmailContainingOrFirstNameContainingOrLastNameContaining(keyword, pageable);
 
         if(!status.equals("") && role.equals(""))
-            return accountRepository.getAllByEmailLikeOrFirstNameLikeOrLastNameLikeAndStatus(keyword, status, pageable);
+            return accountRepository.getAllByEmailContainingOrFirstNameContainingOrLastNameContainingAndStatus(keyword, status, pageable);
 
         if(status.equals("") && !role.equals(""))
-            return accountRepository.getAllByEmailLikeOrFirstNameLikeOrLastNameLikeAndRole(keyword, role, pageable);
+            return accountRepository.getAllByEmailContainingOrFirstNameContainingOrLastNameContainingAndRole(keyword, role, pageable);
 
         //if status != "" and role != ""
-        return accountRepository.getAllByEmailLikeOrFirstNameLikeOrLastNameLikeAndStatusAndRole(keyword, status, role, pageable);
+        return accountRepository.getAllByEmailContainingOrFirstNameContainingOrLastNameContainingAndStatusAndRole(keyword, status, role, pageable);
     }
 
     @Override

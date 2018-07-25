@@ -139,7 +139,7 @@ public class SkillServiceImpl implements SkillService {
         if(!categoryRepository.existsById(categoryId))
             throw new CategoryNotFoundException(categoryId);
 
-        return skillRepository.getAllByCategoryIdAndNameContaining(categoryId, "%" + name + "%", pageable);
+        return skillRepository.getAllByCategoryIdAndNameContaining(categoryId, name, pageable);
     }
 
     @Override
@@ -147,7 +147,7 @@ public class SkillServiceImpl implements SkillService {
 
         Account accountLogin = accountService.getAccountLogin();
 
-        return skillRepository.getAllByNameContainingAndAccountId("%" + nameSkill + "%", accountLogin.getId(), pageable);
+        return skillRepository.getAllByNameContainingAndAccountId(nameSkill, accountLogin.getId(), pageable);
     }
 
 }

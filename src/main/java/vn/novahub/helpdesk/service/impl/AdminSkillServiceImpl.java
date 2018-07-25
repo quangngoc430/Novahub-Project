@@ -87,9 +87,6 @@ public class AdminSkillServiceImpl implements AdminSkillService {
         skill.setCategoryId(categoryId);
         skillValidation.validate(skill, GroupCreateSkill.class);
 
-//        if(skillRepository.existsByNameAndLevelAndCategoryId(skill.getName(), skill.getLevel(), skill.getCategoryId()))
-//            throw new SkillIsExistException(skill.getName(), skill.getLevel(), skill.getCategoryId());
-
         skill.setCreatedAt(new Date());
         skill.setUpdatedAt(new Date());
 

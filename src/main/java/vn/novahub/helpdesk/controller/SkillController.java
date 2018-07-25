@@ -1,7 +1,5 @@
 package vn.novahub.helpdesk.controller;
 
-
-
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,7 +14,6 @@ import vn.novahub.helpdesk.model.Account;
 import vn.novahub.helpdesk.model.Skill;
 import vn.novahub.helpdesk.service.AccountSkillService;
 import vn.novahub.helpdesk.service.AdminSkillService;
-
 
 @RestController
 @RequestMapping(path = "/api")

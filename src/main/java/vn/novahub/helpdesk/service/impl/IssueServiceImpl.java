@@ -69,7 +69,6 @@ public class IssueServiceImpl implements IssueService {
 
     @Override
     public Page<Issue> getAllByKeywordAndStatusForAdmin(String keyword, String status, Pageable pageable) {
-        //keyword = "%" + keyword + "%";
         if (status.equals(""))
             return issueRepository.getAllByTitleContainingOrContentContaining(keyword, keyword, pageable);
 
@@ -144,9 +143,9 @@ public class IssueServiceImpl implements IssueService {
         Account accountLogin = accountService.getAccountLogin();
 
         if (status.equals(""))
-            return issueRepository.getAllByAccountIdAndContentLikeOrTitleLike(accountLogin.getId(), "%" + keyword + "%", pageable);
+            return issueRepository.getAllByAccountIdAndTitleLikeAndContentLike(accountLogin.getId(), keyword, pageable);
 
-        return issueRepository.getAllByAccountIdAndTitleLikeOrContentLikeAndStatus(accountLogin.getId(), "%" + keyword + "%", status, pageable);
+        return issueRepository.getAllByAccountIdAndStatusAndTitleContainingAndContentContaining(accountLogin.getId(), keyword, status, pageable);
     }
 
     @Override
