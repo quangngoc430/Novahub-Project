@@ -24,7 +24,7 @@ public class AccountExceptionHandler {
         apiError.setStatus(HttpStatus.NOT_FOUND.value());
         HashMap<String, String> errors = new HashMap<>();
         errors.put(MESSAGE, "Account not found");
-        apiError.setErrors(errors);
+        apiError.setError(errors);
         apiError.setPath(request.getRequestURI());
         apiError.setMessage(ex.getMessage());
 
@@ -39,7 +39,7 @@ public class AccountExceptionHandler {
         apiError.setStatus(HttpStatus.CONFLICT.value());
         HashMap<String, String> errors = new HashMap<>();
         errors.put(MESSAGE, "Account is exist");
-        apiError.setErrors(errors);
+        apiError.setError(errors);
         apiError.setPath(request.getRequestURI());
         apiError.setMessage(ex.getMessage());
 
@@ -52,7 +52,7 @@ public class AccountExceptionHandler {
 
         apiError.setTimestamp(Instant.now());
         apiError.setStatus(HttpStatus.NOT_ACCEPTABLE.value());
-        apiError.setErrors(((AccountValidationException) ex).getErrors());
+        apiError.setError(((AccountValidationException) ex).getErrors());
         apiError.setPath(request.getRequestURI());
         apiError.setMessage(ex.getMessage());
 
@@ -67,7 +67,7 @@ public class AccountExceptionHandler {
         apiError.setStatus(HttpStatus.NOT_ACCEPTABLE.value());
         HashMap<String, String> errors = new HashMap<>();
         errors.put(MESSAGE, "Two passwords do not match");
-        apiError.setErrors(errors);
+        apiError.setError(errors);
         apiError.setPath(request.getRequestURI());
         apiError.setMessage(ex.getMessage());
 
@@ -82,7 +82,7 @@ public class AccountExceptionHandler {
         apiError.setStatus(HttpStatus.NOT_FOUND.value());
         HashMap<String, String> errors = new HashMap<>();
         errors.put(MESSAGE, "Invalid email or passowrd");
-        apiError.setErrors(errors);
+        apiError.setError(errors);
         apiError.setPath(request.getRequestURI());
         apiError.setMessage(ex.getMessage());
 
@@ -96,8 +96,8 @@ public class AccountExceptionHandler {
         apiError.setTimestamp(Instant.now());
         apiError.setStatus(HttpStatus.FORBIDDEN.value());
         HashMap<String, String> errors = new HashMap<>();
-        errors.put(MESSAGE, "Inactive email");
-        apiError.setErrors(errors);
+        errors.put(MESSAGE, "Account is inactive");
+        apiError.setError(errors);
         apiError.setPath(request.getRequestURI());
         apiError.setMessage(ex.getMessage());
         return new ResponseEntity<>(apiError, HttpStatus.FORBIDDEN);
@@ -110,8 +110,8 @@ public class AccountExceptionHandler {
         apiError.setTimestamp(Instant.now());
         apiError.setStatus(HttpStatus.LOCKED.value());
         HashMap<String, String> errors = new HashMap<>();
-        errors.put(MESSAGE, "User is locked");
-        apiError.setErrors(errors);
+        errors.put(MESSAGE, "Account is locked");
+        apiError.setError(errors);
         apiError.setPath(request.getRequestURI());
         apiError.setMessage(ex.getMessage());
 

@@ -15,11 +15,11 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Service;
 import vn.novahub.helpdesk.enums.AccountEnum;
 import vn.novahub.helpdesk.enums.RoleEnum;
+import vn.novahub.helpdesk.enums.TokenEnum;
 import vn.novahub.helpdesk.exception.*;
-import vn.novahub.helpdesk.model.Account;
-import vn.novahub.helpdesk.model.GooglePojo;
-import vn.novahub.helpdesk.model.Mail;
+import vn.novahub.helpdesk.model.*;
 import vn.novahub.helpdesk.repository.AccountRepository;
+import vn.novahub.helpdesk.repository.TokenRepository;
 import vn.novahub.helpdesk.service.*;
 import vn.novahub.helpdesk.validation.*;
 
@@ -49,6 +49,12 @@ public class AccountServiceImpl implements AccountService {
     private TokenService tokenService;
 
     @Autowired
+    private TokenRepository tokenRepository;
+
+    @Autowired
+    private TokenValidation tokenValidation;
+
+    @Autowired
     private RoleService roleService;
 
     @Autowired
@@ -67,8 +73,27 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public void authenticationToken(String authenticationToken, HttpServletRequest request) throws TokenIsExpiredException, UnauthorizedException {
+        Token token = tokenRepository.getByAccessToken(authenticationToken);
+
+        if(token == null) {
+            throw new UnauthorizedException("Invalid token");
+        }
+
+        if(tokenService.isTokenExpired(token)) {
+            throw new TokenIsExpiredException(token.getAccessToken());
+        }
+
+        Account accountLogin = token.getAccount();
+        UserDetails userDetails = new User(accountLogin.getEmail(), "", accountLogin.getAuthorities());
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+    }
+
+    @Override
     public Account getAccountLogin() {
-        String email = ((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        String email = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         return accountRepository.getByEmail(email);
     }
 
@@ -79,27 +104,21 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public boolean activateAccount(long accountId, String verificationToken) {
-        Account account = accountRepository.getByIdAndVertificationToken(accountId, verificationToken);
+        Account account = accountRepository.getByIdAndVerificationToken(accountId, verificationToken);
 
         if(account == null) {
             return false;
         }
 
         account.setStatus(AccountEnum.ACTIVE.name());
-        account.setVertificationToken(null);
+        account.setVerificationToken(null);
         accountRepository.save(account);
 
         return true;
     }
 
     @Override
-    public Account updateToken(Account account, String token) {
-        account.setToken(token);
-        return accountRepository.save(account);
-    }
-
-    @Override
-    public Account login(Account accountInput, HttpServletRequest request) throws AccountInvalidException, AccountInactiveException, AccountLockedException, AccountValidationException {
+    public Token login(Account accountInput) throws AccountInvalidException, AccountInactiveException, AccountLockedException, AccountValidationException {
 
         accountValidation.validate(accountInput, GroupLoginAccount.class);
 
@@ -114,70 +133,94 @@ public class AccountServiceImpl implements AccountService {
         if(account.getStatus().equals(AccountEnum.LOCKED.name()))
             throw new AccountLockedException(account.getEmail());
 
-        UserDetails userDetails = new User(account.getEmail(), account.getPassword(), account.getAuthorities());
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null,
-                userDetails.getAuthorities());
-        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        Token accessToken = new Token();
+        accessToken.setAccessToken(tokenService.generateToken(account.getId() + account.getEmail() + (new Date()).getTime()));
+        accessToken.setExpiredIn(TokenEnum.TIME_OF_TOKEN.value());
+        accessToken.setExpiredAt(new Date((new Date()).getTime() + TokenEnum.TIME_OF_TOKEN.value() * 1000));
+        accessToken.setAccountId(account.getId());
+        accessToken.setCreatedAt(new Date());
+        accessToken.setUpdatedAt(new Date());
+        accessToken = tokenRepository.save(accessToken);
+        accessToken.setAccount(account);
 
-        return account;
+        return accessToken;
     }
 
     @Override
-    public Account loginWithGoogle(String code, HttpServletRequest request) throws EmailFormatException,
-            RoleNotFoundException, AccountIsExistException, AccountValidationException, IOException {
-        String accessToken = googleService.getToken(code);
-        GooglePojo googlePojo = googleService.getUserInfo(accessToken);
+    public Token loginWithGoogle(Token token) throws IOException, EmailFormatException, RoleNotFoundException, UnauthorizedException, TokenIsExpiredException, AccountValidationException {
+
+        tokenValidation.validate(token, GroupLoginWithGoogle.class);
+
+        GooglePojo googlePojo = googleService.getUserInfo(token.getAccessToken());
 
         Account account = getByEmail(googlePojo.getEmail());
 
         if(account == null) {
             account = new Account();
             account.setEmail(googlePojo.getEmail());
-
-            if(googlePojo.getName() == null || googlePojo.getName().equals(""))
-                account.setFirstName(account.getEmail().substring(0, account.getEmail().indexOf("@novahub.vn")));
-            else {
-                account.setFirstName(googlePojo.getGiven_name());
-                account.setLastName(googlePojo.getFamily_name());
-            }
+            account.setFirstName(googlePojo.getGivenName());
+            account.setLastName(googlePojo.getFamilyName());
             account.setAvatarUrl(googlePojo.getPicture());
-            account.setToken(accessToken);
-            account.setRoleId(roleService.getByName(RoleEnum.USER.name()).getId());
-            account.setUpdatedAt(new Date());
+            account.setVerificationToken(null);
+            account.setPassword(null);
+            account.setStatus(AccountEnum.ACTIVE.name());
+            Role role = roleService.getByName(RoleEnum.USER.name());
+            account.setRoleId(role.getId());
             account.setCreatedAt(new Date());
-            account = createWithGoogleAccount(account);
+            account.setUpdatedAt(new Date());
 
-            account.setRole(roleService.getById(account.getRoleId()));
+            account = accountRepository.save(account);
+            account.setRole(role);
         } else {
-            account.setToken(accessToken);
-            account = updateToken(account, accessToken);
+            if(account.getVerificationToken() != null) {
+                account.setVerificationToken(null);
+                accountRepository.save(account);
+            }
         }
 
-        UserDetails userDetail = googleService.buildUser(googlePojo, "ROLE_" + account.getRole().getName());
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetail, null,
-                userDetail.getAuthorities());
-        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        Token accessToken = tokenRepository.getByAccessToken(token.getAccessToken());
+        if(accessToken == null) {
+            accessToken = new Token();
+            accessToken.setAccessToken(token.getAccessToken());
+            accessToken.setExpiredIn(TokenEnum.TIME_OF_TOKEN.value());
+            accessToken.setExpiredAt((new Date((new Date()).getTime() + TokenEnum.TIME_OF_TOKEN.value() * 1000)));
+            accessToken.setAccountId(account.getId());
+            accessToken.setCreatedAt(new Date());
+            accessToken.setUpdatedAt(new Date());
+            accessToken = tokenRepository.save(accessToken);
+            accessToken.setAccount(account);
+        } else {
+            if(tokenService.isTokenExpired(accessToken)) {
+                throw new TokenIsExpiredException(token.getAccessToken());
+            }
+        }
 
-        return account;
+        return accessToken;
+    }
+
+    @Override
+    public void logout(String accessToken) throws TokenNotFoundException {
+        Token token = tokenRepository.getByAccessToken(accessToken);
+
+        if(token == null)
+            throw new TokenNotFoundException(accessToken);
+
+        tokenRepository.save(token);
     }
 
     @Override
     public Page<Account> getAll(String keyword, String status, String role, Pageable pageable) {
-        keyword = "%" + keyword + "%";
-
         if(status.equals("") && role.equals(""))
-            return accountRepository.getAllByEmailLikeOrFirstNameLikeOrLastNameLike(keyword, pageable);
+            return accountRepository.getAllByEmailContainingOrFirstNameContainingOrLastNameContaining(keyword, pageable);
 
         if(!status.equals("") && role.equals(""))
-            return accountRepository.getAllByEmailLikeOrFirstNameLikeOrLastNameLikeAndStatus(keyword, status, pageable);
+            return accountRepository.getAllByEmailContainingOrFirstNameContainingOrLastNameContainingAndStatus(keyword, status, pageable);
 
         if(status.equals("") && !role.equals(""))
-            return accountRepository.getAllByEmailLikeOrFirstNameLikeOrLastNameLikeAndRole(keyword, role, pageable);
+            return accountRepository.getAllByEmailContainingOrFirstNameContainingOrLastNameContainingAndRole(keyword, role, pageable);
 
         //if status != "" and role != ""
-        return accountRepository.getAllByEmailLikeOrFirstNameLikeOrLastNameLikeAndStatusAndRole(keyword, status, role, pageable);
+        return accountRepository.getAllByEmailContainingOrFirstNameContainingOrLastNameContainingAndStatusAndRole(keyword, status, role, pageable);
     }
 
     @Override
@@ -201,7 +244,7 @@ public class AccountServiceImpl implements AccountService {
 
         account.setPassword(bCryptPasswordEncoder.encode(account.getPassword()));
         account.setStatus(AccountEnum.INACTIVE.name());
-        account.setVertificationToken(tokenService.generateToken(account.getEmail() + account.getEmail()));
+        account.setVerificationToken(tokenService.generateToken(account.getEmail() + account.getEmail()));
         account.setRoleId(roleService.getByName(RoleEnum.USER.name()).getId());
         account.setCreatedAt(new Date());
         account.setUpdatedAt(new Date());
@@ -211,31 +254,11 @@ public class AccountServiceImpl implements AccountService {
         Mail mail = new Mail();
         mail.setEmailReceiving(new String[]{account.getEmail()});
         mail.setSubject(env.getProperty("subject_email_sign_up"));
-        String urlAccountActive = "http://localhost:8080/api/users/" + account.getId() + "/active?token=" + account.getVertificationToken();
+        String urlAccountActive = "http://localhost:8080/api/users/" + account.getId() + "/active?token=" + account.getVerificationToken();
         String contentEmailSignUp = mailService.getContentMail("sign_up.html");
         contentEmailSignUp = contentEmailSignUp.replace("{url-activate-account}", urlAccountActive);
         mail.setContent(contentEmailSignUp);
         mailService.sendHTMLMail(mail);
-
-        return account;
-    }
-
-    @Override
-    public Account createWithGoogleAccount(Account account) throws AccountValidationException, AccountIsExistException, RoleNotFoundException {
-
-        accountValidation.validate(account, GroupCreateWithAccountGoogle.class);
-
-        if(accountRepository.getByEmail(account.getEmail()) != null)
-            throw new AccountIsExistException(account.getEmail());
-
-        account.setStatus(AccountEnum.ACTIVE.name());
-        account.setRoleId(roleService.getByName(RoleEnum.USER.name()).getId());
-        account.setPassword(null);
-        account.setVertificationToken(null);
-        account.setCreatedAt(new Date());
-        account.setUpdatedAt(new Date());
-
-        account = accountRepository.save(account);
 
         return account;
     }
@@ -248,8 +271,6 @@ public class AccountServiceImpl implements AccountService {
         // check changing password
         if(oldAccount.getPassword() != null){
             if(account.getNewPassword() != null || account.getPassword() != null){
-                accountValidation.validate(account, GroupUpdatePasswordAccount.class);
-
                 if(!bCryptPasswordEncoder.matches(account.getPassword(), oldAccount.getPassword()))
                     throw new AccountPasswordNotEqualException("Password do not match");
 
@@ -278,8 +299,11 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account updatedForAdmin(long accountId, Account account) throws AccountValidationException {
+    public Account updatedForAdmin(long accountId, Account account) throws AccountValidationException, AccountNotFoundException {
         Account oldAccount = accountRepository.getById(accountId);
+
+        if(oldAccount == null)
+            throw new AccountNotFoundException(accountId);
 
         // check changing password
         if(account.getPassword() != null){
@@ -300,7 +324,7 @@ public class AccountServiceImpl implements AccountService {
         if(account.getStatus() != null) {
             if(oldAccount.getStatus().equals(AccountEnum.INACTIVE.name())
                     && account.getStatus().equals(AccountEnum.ACTIVE.name()))
-                oldAccount.setVertificationToken(null);
+                oldAccount.setVerificationToken(null);
 
             oldAccount.setStatus(account.getStatus());
         }

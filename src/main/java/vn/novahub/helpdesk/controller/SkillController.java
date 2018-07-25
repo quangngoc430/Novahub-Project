@@ -9,10 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 
-import vn.novahub.helpdesk.exception.CategoryNotFoundException;
-import vn.novahub.helpdesk.exception.SkillIsExistException;
-import vn.novahub.helpdesk.exception.SkillNotFoundException;
-import vn.novahub.helpdesk.exception.SkillValidationException;
+import vn.novahub.helpdesk.exception.*;
 import vn.novahub.helpdesk.model.Account;
 import vn.novahub.helpdesk.model.Skill;
 import vn.novahub.helpdesk.service.AccountSkillService;
@@ -31,7 +28,7 @@ public class SkillController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping(path = "/skills", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Page<Skill>> getAll(@RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
-                                              Pageable pageable){
+                                              Pageable pageable) {
         return new ResponseEntity<>(accountSkillService.getAllByKeyword(keyword, pageable), HttpStatus.OK);
     }
 
@@ -72,20 +69,20 @@ public class SkillController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping(path = "/users/me/skills", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Page<Skill>> getAllByAccountLogin(@RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
-                                                             Pageable pageable){
+                                                             Pageable pageable) {
         return new ResponseEntity<>(accountSkillService.getAllByKeywordForAccountLogin(keyword, pageable), HttpStatus.OK);
     }
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping(path = "/users/me/skills", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Skill> create(@RequestBody Skill skill) throws SkillIsExistException, SkillValidationException {
+    public ResponseEntity<Skill> create(@RequestBody Skill skill) throws SkillIsExistException, SkillValidationException, CategoryNotFoundException, LevelValidationException {
         return new ResponseEntity<>(accountSkillService.create(skill), HttpStatus.OK);
     }
 
     @PreAuthorize("isAuthenticated()")
     @PutMapping(path = "/users/me/skills/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Skill> update(@PathVariable("id") long skillId,
-                                        @RequestBody Skill skill) throws SkillValidationException, SkillNotFoundException, SkillIsExistException {
+                                        @RequestBody Skill skill) throws SkillNotFoundException, LevelValidationException, SkillValidationException, SkillIsExistException {
         return new ResponseEntity<>(accountSkillService.update(skillId, skill), HttpStatus.OK);
     }
 
@@ -95,5 +92,12 @@ public class SkillController {
         accountSkillService.delete(skillId);
 
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping(path = "/users/{id}/skills", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Page<Skill>> getAllByAccountId(@PathVariable("id") long accountId,
+                                                         Pageable pageable) throws AccountNotFoundException {
+        return new ResponseEntity<>(accountSkillService.getAllByAccountId(accountId, pageable), HttpStatus.OK);
     }
 }

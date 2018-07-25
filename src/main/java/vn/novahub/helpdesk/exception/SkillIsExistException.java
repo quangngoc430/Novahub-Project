@@ -15,11 +15,10 @@ public class SkillIsExistException extends Exception {
     }
 
     public SkillIsExistException(String name, long level, long categoryId){
-        super("SkillIsExistException with name = " + name + " , level = " + level + " , categoryId = " + categoryId);
+        super("SkillIsExistException with name = " + name + ", level = " + level + ", categoryId = " + categoryId);
     }
 
-    public SkillIsExistException(long skillId, long accountId){
-        super("SkillIsExistException with skillId = " + skillId + ", accountId = " + accountId);
+    public SkillIsExistException(String name, long level, long accountId, long categoryId){
+        super("SkillIsExistException with name = " + name + ", level = " + level + ", accountId = " + accountId + ", categoryId = " + categoryId);
     }
-
 }

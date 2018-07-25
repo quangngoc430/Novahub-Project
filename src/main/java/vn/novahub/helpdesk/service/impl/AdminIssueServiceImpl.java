@@ -56,9 +56,9 @@ public class AdminIssueServiceImpl implements AdminIssueService {
     @Override
     public Page<Issue> getAllByKeywordAndStatus(String keyword, String status, Pageable pageable) {
         if (status.equals(""))
-            return issueRepository.getAllByTitleLikeOrContentLike("%" + keyword + "%", pageable);
+            return issueRepository.getAllByTitleContainingOrContentContaining(keyword, keyword, pageable);
 
-        return issueRepository.getAllByTitleLikeOrContentLikeAndStatus("%" + keyword + "%", status, pageable);
+        return issueRepository.getAllByTitleContainingOrContentContainingAndStatus(keyword, keyword, status, pageable);
     }
 
     @Override

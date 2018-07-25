@@ -101,6 +101,7 @@ public class CategoryController {
     public ResponseEntity<Skill> updateASkill(@PathVariable("id") long categoryId,
                                               @PathVariable("skill_id") long skillId,
                                               @RequestBody Skill skill) throws CategoryNotFoundException, SkillNotFoundException, SkillValidationException, SkillIsExistException {
+
         Skill skillUpdated = adminSkillService.updateByCategoryIdAndSkillId(skill, categoryId, skillId);
 
         return new ResponseEntity<>(skillUpdated, HttpStatus.OK);

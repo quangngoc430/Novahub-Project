@@ -1,5 +1,6 @@
 package vn.novahub.helpdesk.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import vn.novahub.helpdesk.validation.GroupCreateCategory;
 import vn.novahub.helpdesk.validation.GroupUpdateCategory;
@@ -25,10 +26,12 @@ public class Category implements Serializable {
     @Column(name = "name", unique = true)
     private String name;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @NotNull(message = "Create At is not null")
     @Column(name = "created_at")
     private Date createdAt;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @NotNull(message = "Update At is not null")
     @Column(name = "updated_at")
     private Date updatedAt;

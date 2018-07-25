@@ -34,13 +34,15 @@ public class Issue implements Serializable {
     @Column(name = "status")
     private String status;
 
-    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
-    @NotNull(message = "CreateAt is not null")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Temporal(TemporalType.TIMESTAMP)
+    @NotNull(message = "CreatedAt is not null")
     @Column(name = "created_at")
     private Date createdAt;
 
-    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
-    @NotNull(message = "UpdateAt is not null")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Temporal(TemporalType.TIMESTAMP)
+    @NotNull(message = "UpdatedAt is not null")
     @Column(name = "updated_at")
     private Date updatedAt;
 

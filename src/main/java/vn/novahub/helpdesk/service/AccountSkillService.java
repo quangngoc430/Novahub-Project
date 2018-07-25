@@ -2,10 +2,7 @@ package vn.novahub.helpdesk.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import vn.novahub.helpdesk.exception.CategoryNotFoundException;
-import vn.novahub.helpdesk.exception.SkillIsExistException;
-import vn.novahub.helpdesk.exception.SkillNotFoundException;
-import vn.novahub.helpdesk.exception.SkillValidationException;
+import vn.novahub.helpdesk.exception.*;
 import vn.novahub.helpdesk.model.Account;
 import vn.novahub.helpdesk.model.Skill;
 
@@ -19,14 +16,16 @@ public interface AccountSkillService {
 
     Page<Skill> getAllByKeywordForAccountLogin(String keyword, Pageable pageable);
 
-    Skill create(Skill skill) throws SkillValidationException, SkillIsExistException;
+    Skill create(Skill skill) throws SkillValidationException, SkillIsExistException, CategoryNotFoundException, LevelValidationException;
 
-    Skill update(long skillId, Skill skill) throws SkillValidationException, SkillNotFoundException, SkillIsExistException;
+    Skill update(long skillId, Skill skill) throws SkillNotFoundException, LevelValidationException;
 
     void delete(long skillId) throws SkillNotFoundException;
 
     Skill getByCategoryIdAndSkillId(long categoryId, long skillId) throws SkillNotFoundException;
 
     Page<Skill> getAllByCategoryIdAndName(long categoryId, String name, Pageable pageable) throws CategoryNotFoundException;
+
+    Page<Skill> getAllByAccountId(long accountId, Pageable pageable) throws AccountNotFoundException;
 
 }

@@ -58,9 +58,9 @@ public class AccountIssueServiceImpl implements AccountIssueService {
         Account accountLogin = accountService.getAccountLogin();
 
         if (status.equals(""))
-            return issueRepository.getAllByAccountIdAndContentLikeOrTitleLike(accountLogin.getId(), "%" + keyword + "%", pageable);
+            return issueRepository.getAllByAccountIdAndTitleContainingOrContentContaining(accountLogin.getId(), keyword, pageable);
 
-        return issueRepository.getAllByAccountIdAndTitleLikeOrContentLikeAndStatus(accountLogin.getId(), "%" + keyword + "%", status, pageable);
+        return issueRepository.getAllByAccountIdAndStatusAndTitleContainingAndContentContaining(accountLogin.getId(), status, keyword, pageable);
     }
 
     @Override
