@@ -13,8 +13,8 @@ public interface IssueRepository extends PagingAndSortingRepository<Issue, Long>
 
     Issue getByIdAndAccountId(long issueId, long accountId);
 
-    Page<Issue> getAllByTitleContainingOrContentContaining(@Param("title") String title,
-                                                           @Param("content") String content,
+    Page<Issue> getAllByTitleContainingOrContentContaining(String title,
+                                                           String content,
                                                            Pageable pageable);
 
     @Query("SELECT issue FROM Issue issue WHERE (issue.title LIKE CONCAT('%', :title, '%') OR issue.content LIKE CONCAT('%', :content, '%')) AND issue.status = :status")
