@@ -122,7 +122,6 @@ public class AccountIssueServiceImpl implements AccountIssueService {
         issueValidation.validate(oldIssue, Default.class);
 
         if(isSendMail) {
-
             oldIssue.setUpdatedAt(new Date());
             oldIssue = issueRepository.save(oldIssue);
             // TODO: uncomment
