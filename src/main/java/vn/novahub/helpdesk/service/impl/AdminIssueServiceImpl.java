@@ -61,13 +61,15 @@ public class AdminIssueServiceImpl implements AdminIssueService {
         return issueRepository.getAllByTitleContainingOrContentContainingAndStatus(keyword, keyword, status, pageable);
     }
 
-    // TODO: check issue is closed
     @Override
-    public Issue update(long issueId, Issue issue) throws IssueNotFoundException, IssueValidationException, MessagingException, IOException {
+    public Issue update(long issueId, Issue issue) throws IssueNotFoundException, IssueValidationException, MessagingException, IOException, IssueIsClosedException {
         Issue oldIssue = issueRepository.getById(issueId);
 
         if (oldIssue == null)
             throw new IssueNotFoundException(issueId);
+
+        if (oldIssue.getToken() == null)
+            throw new IssueIsClosedException(issueId);
 
         boolean isSendMail = false;
 
@@ -97,9 +99,8 @@ public class AdminIssueServiceImpl implements AdminIssueService {
         oldIssue.setUpdatedAt(new Date());
         oldIssue = issueRepository.save(oldIssue);
 
-        // TODO: uncomment
-//        if(isSendMail)
-//            sendMailUpdateIssueForUser(oldIssue);
+        if(isSendMail)
+            sendMailUpdateIssueForUser(oldIssue);
 
         return oldIssue;
     }
@@ -115,36 +116,34 @@ public class AdminIssueServiceImpl implements AdminIssueService {
     public void approve(long issueId, String token) throws IssueNotFoundException, IssueIsClosedException, MessagingException, IOException {
         Issue issue = issueRepository.getById(issueId);
 
-        if (issue != null && issue.getToken() == null)
-            throw new IssueIsClosedException(issueId);
-
-        if (issue == null || !issue.getToken().equals(token))
+        if (issue == null)
             throw new IssueNotFoundException(issueId);
+
+        if (issue.getToken() == null)
+            throw new IssueIsClosedException(issueId);
 
         issue.setToken(null);
         issue.setStatus(IssueEnum.APPROVE.name());
         issue = issueRepository.save(issue);
 
-        // TODO: uncomment
-//        sendMailUpdateIssueForUser(issue);
+        sendMailUpdateIssueForUser(issue);
     }
 
     @Override
     public void deny(long issueId, String token) throws IssueNotFoundException, IssueIsClosedException, MessagingException, IOException {
         Issue issue = issueRepository.getById(issueId);
 
-        if (issue != null && issue.getToken() == null)
-            throw new IssueIsClosedException(issueId);
-
-        if (issue == null || !issue.getToken().equals(token))
+        if (issue == null)
             throw new IssueNotFoundException(issueId);
+
+        if (issue.getToken() == null)
+            throw new IssueIsClosedException(issueId);
 
         issue.setToken(null);
         issue.setStatus(IssueEnum.DENY.name());
         issue = issueRepository.save(issue);
 
-        // TODO: uncomment
-//        sendMailUpdateIssueForUser(issue);
+        sendMailUpdateIssueForUser(issue);
     }
 
     private void sendMailUpdateIssueForUser(Issue issue) throws MessagingException, IOException {

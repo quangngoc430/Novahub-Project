@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import vn.novahub.helpdesk.enums.IssueEnum;
 import vn.novahub.helpdesk.enums.RoleEnum;
+import vn.novahub.helpdesk.exception.IssueIsClosedException;
 import vn.novahub.helpdesk.exception.IssueNotFoundException;
 import vn.novahub.helpdesk.exception.IssueValidationException;
 import vn.novahub.helpdesk.model.Account;
@@ -91,15 +92,13 @@ public class AccountIssueServiceImpl implements AccountIssueService {
         issue = issueRepository.save(issue);
         issue.setAccount(accountRepository.getById(issue.getAccountId()));
 
-        // TODO: uncomment
-        //sendMailCreateIssueForAdmin(issue, accountLogin);
+        sendMailCreateIssueForAdmin(issue, accountLogin);
 
         return issue;
     }
 
-    // TODO: check issue is closed
     @Override
-    public Issue update(long issueId, Issue issue) throws IssueNotFoundException, IssueValidationException, MessagingException, IOException {
+    public Issue update(long issueId, Issue issue) throws IssueNotFoundException, IssueValidationException, MessagingException, IOException, IssueIsClosedException {
 
         Account account = accountService.getAccountLogin();
 
@@ -107,6 +106,9 @@ public class AccountIssueServiceImpl implements AccountIssueService {
 
         if (oldIssue == null)
             throw new IssueNotFoundException(issueId, account.getId());
+
+        if (oldIssue.getToken() == null)
+            throw new IssueIsClosedException(issueId);
 
         boolean isSendMail = false;
 
@@ -124,8 +126,7 @@ public class AccountIssueServiceImpl implements AccountIssueService {
         if(isSendMail) {
             oldIssue.setUpdatedAt(new Date());
             oldIssue = issueRepository.save(oldIssue);
-            // TODO: uncomment
-            //sendMailUpdateIssueForAdmin(oldIssue);
+            sendMailUpdateIssueForAdmin(oldIssue);
         }
 
         return oldIssue;
