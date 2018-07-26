@@ -100,21 +100,19 @@ public class AdminSkillServiceImpl implements AdminSkillService {
     }
 
     @Override
-    public Skill updateByCategoryIdAndSkillId(Skill skill, long categoryId, long skillId) throws CategoryNotFoundException, SkillNotFoundException, SkillValidationException, SkillIsExistException {
-        // TODO: validation skill
-
+    public Skill updateByCategoryIdAndSkillId(Skill skill, long categoryId, long skillId) throws SkillNotFoundException, SkillValidationException, SkillIsExistException {
+        skill.setCategoryId(categoryId);
+        skillValidation.validate(skill, GroupUpdateSkill.class);
 
         Skill oldSkill = skillRepository.getByIdAndCategoryId(skillId, categoryId);
 
         if(oldSkill == null)
             throw new SkillNotFoundException(skillId, categoryId);
 
-        // TODO: check name is duplicate
         if(skill.getName() != null &&
            !oldSkill.getName().equals(skill.getName())
            && skillRepository.getByName(skill.getName()) != null)
             throw new SkillIsExistException(skill.getName());
-
 
         oldSkill.setName(skill.getName());
         oldSkill.setUpdatedAt(new Date());

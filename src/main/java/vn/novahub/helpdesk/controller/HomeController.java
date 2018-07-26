@@ -15,8 +15,7 @@ import java.io.IOException;
 @Controller
 public class HomeController {
 
-    @Autowired
-    private AccountService accountService;
+    private static String PREFIX = "ROLE_";
 
     @PermitAll
     @RequestMapping("/login")
@@ -24,11 +23,11 @@ public class HomeController {
 
         String roleName = (SecurityContextHolder.getContext().getAuthentication().getAuthorities().toArray())[0].toString();
 
-        if(roleName.equals(RoleEnum.PREFIX.value() + RoleEnum.ADMIN.name()))
+        if(roleName.equals(PREFIX + RoleEnum.ADMIN.name()))
             return "redirect:/admin";
-        else if(roleName.equals(RoleEnum.PREFIX.value() + RoleEnum.CLERK.name()))
+        else if(roleName.equals(PREFIX + RoleEnum.CLERK.name()))
             return "redirect:/clerk";
-        else if(roleName.equals(RoleEnum.PREFIX.value() + RoleEnum.USER.name()))
+        else if(roleName.equals(PREFIX + RoleEnum.USER.name()))
             return "redirect:/user";
 
         return "login";

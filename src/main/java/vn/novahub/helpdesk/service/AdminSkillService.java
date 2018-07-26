@@ -16,7 +16,7 @@ public interface AdminSkillService {
 
     Skill createByCategoryId(Skill skill, long categoryId) throws CategoryNotFoundException, SkillValidationException, SkillIsExistException;
 
-    Skill updateByCategoryIdAndSkillId(Skill skill, long categoryId, long skillId) throws CategoryNotFoundException, SkillNotFoundException, SkillValidationException, SkillIsExistException;
+    Skill updateByCategoryIdAndSkillId(Skill skill, long categoryId, long skillId) throws SkillNotFoundException, SkillValidationException, SkillIsExistException;
 
     void deleteByCategoryIdAndSkillId(long categoryId, long skillId) throws SkillNotFoundException;
 }

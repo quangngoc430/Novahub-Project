@@ -100,7 +100,7 @@ public class CategoryController {
     @PutMapping(path = "/categories/{id}/skills/{skill_id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Skill> updateASkill(@PathVariable("id") long categoryId,
                                               @PathVariable("skill_id") long skillId,
-                                              @RequestBody Skill skill) throws CategoryNotFoundException, SkillNotFoundException, SkillValidationException, SkillIsExistException {
+                                              @RequestBody Skill skill) throws SkillNotFoundException, SkillValidationException, SkillIsExistException {
 
         Skill skillUpdated = adminSkillService.updateByCategoryIdAndSkillId(skill, categoryId, skillId);
 
