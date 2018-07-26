@@ -21,7 +21,7 @@ public class IssueExceptionHandler {
         apiError.setStatus(HttpStatus.NOT_FOUND.value());
         HashMap<String, String> errors = new HashMap<>();
         errors.put("message", "Issue not found");
-        apiError.setErrors(errors);
+        apiError.setError(errors);
         apiError.setPath(request.getRequestURI());
         apiError.setMessage(ex.getMessage());
 
@@ -36,7 +36,7 @@ public class IssueExceptionHandler {
 
         apiError.setTimestamp(Instant.now());
         apiError.setStatus(HttpStatus.NOT_ACCEPTABLE.value());
-        apiError.setErrors(((IssueValidationException) ex).getErrors());
+        apiError.setError(((IssueValidationException) ex).getErrors());
         apiError.setPath(request.getRequestURI());
         apiError.setMessage(ex.getMessage());
 
