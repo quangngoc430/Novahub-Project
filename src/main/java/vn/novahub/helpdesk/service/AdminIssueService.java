@@ -16,7 +16,7 @@ public interface AdminIssueService{
 
     Page<Issue> getAllByKeywordAndStatus(String keyword, String status, Pageable pageable);
 
-    Issue update(long issuetId, Issue issue) throws IssueNotFoundException, IssueValidationException, MessagingException, IOException, IssueIsClosedException;
+    Issue update(long issuetId, Issue issue) throws IssueNotFoundException, IssueValidationException, MessagingException, IOException;
 
     void delete(long issueId) throws IssueNotFoundException;
 

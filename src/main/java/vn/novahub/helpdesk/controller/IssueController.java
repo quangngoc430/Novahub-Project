@@ -48,7 +48,7 @@ public class IssueController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping(path = "/issues/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Issue> updateForAdmin(@PathVariable(name = "issueId") long issueId,
-                                                @RequestBody Issue issue) throws IssueValidationException, IssueNotFoundException, MessagingException, IOException, IssueIsClosedException {
+                                                @RequestBody Issue issue) throws IssueValidationException, IssueNotFoundException, MessagingException, IOException {
         Issue issueUpdated = adminIssueService.update(issueId, issue);
 
         return new ResponseEntity<>(issueUpdated, HttpStatus.OK);

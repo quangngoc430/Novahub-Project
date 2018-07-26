@@ -62,14 +62,11 @@ public class AdminIssueServiceImpl implements AdminIssueService {
     }
 
     @Override
-    public Issue update(long issueId, Issue issue) throws IssueNotFoundException, IssueValidationException, MessagingException, IOException, IssueIsClosedException {
+    public Issue update(long issueId, Issue issue) throws IssueNotFoundException, IssueValidationException, MessagingException, IOException {
         Issue oldIssue = issueRepository.getById(issueId);
 
         if (oldIssue == null)
             throw new IssueNotFoundException(issueId);
-
-        if (oldIssue.getToken() == null)
-            throw new IssueIsClosedException(issueId);
 
         boolean isSendMail = false;
 
