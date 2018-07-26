@@ -10,7 +10,7 @@ public interface AdminSkillService {
 
     Skill create(Skill skill) throws SkillValidationException, SkillIsExistException;
 
-    Skill update(long skillId, Skill skill) throws SkillValidationException, SkillIsExistException, SkillNotFoundException, CategoryNotFoundException;
+    Skill update(long skillId, Skill skill) throws SkillValidationException, SkillIsExistException, SkillNotFoundException;
 
     void delete(long skillId) throws SkillNotFoundException;
 

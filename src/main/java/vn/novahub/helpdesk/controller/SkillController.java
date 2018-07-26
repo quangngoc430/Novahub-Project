@@ -47,7 +47,7 @@ public class SkillController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping(path = "/skills/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Skill> updateByAdmin(@PathVariable("id") long skillId,
-                                               @RequestBody Skill skill) throws SkillIsExistException, SkillValidationException, SkillNotFoundException, CategoryNotFoundException {
+                                               @RequestBody Skill skill) throws SkillIsExistException, SkillValidationException, SkillNotFoundException {
         return new ResponseEntity<>(adminSkillService.update(skillId, skill), HttpStatus.OK);
     }
 

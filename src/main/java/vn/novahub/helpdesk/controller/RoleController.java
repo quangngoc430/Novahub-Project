@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.novahub.helpdesk.exception.RoleNotFoundException;
 import vn.novahub.helpdesk.model.Role;
@@ -18,6 +19,7 @@ public class RoleController {
     @Autowired
     private RoleService roleService;
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping(path = "/roles/{id}")
     public ResponseEntity<Role> get(@PathVariable("id") long roleId) throws RoleNotFoundException {
         Role role = roleService.getById(roleId);
@@ -25,8 +27,9 @@ public class RoleController {
         return new ResponseEntity<>(role, HttpStatus.OK);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping(path = "/roles")
-    public ResponseEntity<Page<Role>> getAll(@RequestParam(value = "name", required = false) String roleName,
+    public ResponseEntity<Page<Role>> getAll(@RequestParam(value = "name", required = false, defaultValue = "") String roleName,
                                              Pageable pageable) {
         return new ResponseEntity<>(roleService.getAll(roleName, pageable), HttpStatus.OK);
     }
