@@ -26,7 +26,8 @@ public class CommonExceptionHandler {
         errors.put(MESSAGE, "Unauthorized");
         apiError.setError(errors);
         apiError.setMessage(exception.getMessage());
-        apiError.setPath(request.getRequestURI());
+        String url = ((UnauthorizedException) exception).getUrl();
+        apiError.setPath((url == null) ? request.getRequestURI() : url);
 
         return new ResponseEntity<>(apiError, HttpStatus.UNAUTHORIZED);
     }

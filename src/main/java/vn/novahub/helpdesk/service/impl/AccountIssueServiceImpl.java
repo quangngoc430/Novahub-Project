@@ -85,16 +85,19 @@ public class AccountIssueServiceImpl implements AccountIssueService {
         issue.setCreatedAt(new Date());
         issue.setUpdatedAt(new Date());
         issue.setStatus(IssueEnum.PENDING.name());
-        issue.setToken(tokenService.generateToken(accountLogin.getId() + issue.getTitle()));
+        issue.setToken(tokenService.generateToken(accountLogin.getId() + issue.getTitle() + (new Date()).getTime()));
         issue.setAccountId(accountLogin.getId());
 
         issue = issueRepository.save(issue);
+        issue.setAccount(accountRepository.getById(issue.getAccountId()));
 
-        sendMailCreateIssueForAdmin(issue, accountLogin);
+        // TODO: uncomment
+        //sendMailCreateIssueForAdmin(issue, accountLogin);
 
         return issue;
     }
 
+    // TODO: check issue is closed
     @Override
     public Issue update(long issueId, Issue issue) throws IssueNotFoundException, IssueValidationException, MessagingException, IOException {
 
@@ -122,7 +125,8 @@ public class AccountIssueServiceImpl implements AccountIssueService {
 
             oldIssue.setUpdatedAt(new Date());
             oldIssue = issueRepository.save(oldIssue);
-            sendMailUpdateIssueForAdmin(oldIssue);
+            // TODO: uncomment
+            //sendMailUpdateIssueForAdmin(oldIssue);
         }
 
         return oldIssue;

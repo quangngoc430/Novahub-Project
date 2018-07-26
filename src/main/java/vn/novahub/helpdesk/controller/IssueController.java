@@ -62,6 +62,22 @@ public class IssueController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PermitAll
+    @GetMapping(path = "/issues/{issueId}/action", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Void> action(@RequestParam(name = "status", required = false, defaultValue = "") String status,
+                                       @RequestParam(name = "token", required = false, defaultValue = "") String token,
+                                       @PathVariable(name = "issueId") long issueId) throws IssueNotFoundException, IssueIsClosedException, MessagingException, IOException {
+        if(status.equals(IssueEnum.APPROVE.name())) {
+            adminIssueService.approve(issueId, token);
+        } else if(status.equals(IssueEnum.DENY.name())){
+            adminIssueService.deny(issueId, token);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @PreAuthorize("isAuthenticated()")
     @GetMapping(path = "/users/me/issues", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Page<Issue>> getAll(@RequestParam(name = "keyword", required = false, defaultValue = "") String keyword,
@@ -73,17 +89,17 @@ public class IssueController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping(path = "/users/me/issues/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Issue> findOne(@PathVariable("issueId") long issueId) throws IssueNotFoundException {
-        return new ResponseEntity<>(accountIssueService.findOne(issueId), HttpStatus.OK);
-    }
-
-    @PreAuthorize("isAuthenticated()")
     @PostMapping(path = "/users/me/issues", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Issue> create(@RequestBody Issue issue) throws IssueValidationException, MessagingException, IOException {
         issue = accountIssueService.create(issue);
 
         return new ResponseEntity<>(issue, HttpStatus.OK);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping(path = "/users/me/issues/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Issue> findOne(@PathVariable("issueId") long issueId) throws IssueNotFoundException {
+        return new ResponseEntity<>(accountIssueService.findOne(issueId), HttpStatus.OK);
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -103,28 +119,5 @@ public class IssueController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PermitAll
-    @GetMapping(path = "/issues/{issueId}/approve", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Void> approve(@RequestParam(name = "token", required = false, defaultValue = "") String token,
-                                        @PathVariable(name = "issueId") long issueId) throws IssueNotFoundException, IssueIsClosedException, MessagingException, IOException {
-        adminIssueService.approve(issueId, token);
 
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @PermitAll
-    @GetMapping(path = "/issues/{issueId}/action", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Void> action(@RequestParam(name = "status", required = false, defaultValue = "") String status,
-                                       @RequestParam(name = "token", required = false, defaultValue = "") String token,
-                                       @PathVariable(name = "issueId") long issueId) throws IssueNotFoundException, IssueIsClosedException, MessagingException, IOException {
-        if(status.equals(IssueEnum.APPROVE.name())) {
-            adminIssueService.approve(issueId, token);
-        } else if(status.equals(IssueEnum.DENY.name())){
-            adminIssueService.deny(issueId, token);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-        }
-
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
 }

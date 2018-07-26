@@ -77,7 +77,7 @@ public class AccountServiceImpl implements AccountService {
         Token token = tokenRepository.getByAccessToken(authenticationToken);
 
         if(token == null) {
-            throw new UnauthorizedException("Invalid token");
+            throw new UnauthorizedException("Invalid token", request.getAttribute("url_request").toString());
         }
 
         if(tokenService.isTokenExpired(token)) {
@@ -271,6 +271,8 @@ public class AccountServiceImpl implements AccountService {
         // check changing password
         if(oldAccount.getPassword() != null){
             if(account.getNewPassword() != null || account.getPassword() != null){
+                accountValidation.validate(account, GroupUpdatePasswordByAccount.class);
+
                 if(!bCryptPasswordEncoder.matches(account.getPassword(), oldAccount.getPassword()))
                     throw new AccountPasswordNotEqualException("Password do not match");
 
@@ -307,7 +309,7 @@ public class AccountServiceImpl implements AccountService {
 
         // check changing password
         if(account.getPassword() != null){
-            accountValidation.validate(account, GroupUpdatePasswordAccount.class);
+            accountValidation.validate(account, GroupUpdatePasswordByAdmin.class);
             oldAccount.setPassword(bCryptPasswordEncoder.encode(account.getPassword()));
         }
 
