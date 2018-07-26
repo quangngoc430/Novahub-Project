@@ -16,17 +16,19 @@ public class CommonExceptionHandler {
 
     @ExceptionHandler(value = UnauthorizedException.class)
     public ResponseEntity<ApiError> handleUnauthorizedException(HttpServletRequest request, Exception exception) {
-        return new ResponseEntity<>(createApiError(HttpStatus.UNAUTHORIZED, "Unauthorized", request, exception),
-                                    HttpStatus.UNAUTHORIZED);
+
+        String requestURI = ((UnauthorizedException) exception).getUrl();
+        requestURI = (requestURI == null) ? request.getRequestURI() : requestURI;
+        return new ResponseEntity<>(createApiError(HttpStatus.UNAUTHORIZED, "Unauthorized", requestURI, exception ), HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(value = AccessDeniedException.class)
     public ResponseEntity<ApiError> handleAccessDeniedException(HttpServletRequest request, Exception exception) {
-        return new ResponseEntity<>(createApiError(HttpStatus.FORBIDDEN, "Access is denied", request, exception),
+        return new ResponseEntity<>(createApiError(HttpStatus.FORBIDDEN, "Access is denied", request.getRequestURI(), exception),
                                     HttpStatus.FORBIDDEN);
     }
 
-    private ApiError createApiError(HttpStatus httpStatus, String message, HttpServletRequest request, Exception exception) {
+    private ApiError createApiError(HttpStatus httpStatus, String message, String requestURI, Exception exception) {
         ApiError apiError = new ApiError();
 
         apiError.setTimestamp(Instant.now());
@@ -35,7 +37,7 @@ public class CommonExceptionHandler {
         errors.put("message", message);
         apiError.setError(errors);
         apiError.setMessage(exception.getMessage());
-        apiError.setPath(request.getRequestURI());
+        apiError.setPath(requestURI);
 
         return apiError;
     }
