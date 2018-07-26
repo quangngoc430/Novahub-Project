@@ -14,37 +14,30 @@ import java.util.HashMap;
 @ControllerAdvice
 public class CommonExceptionHandler {
 
-    private static String MESSAGE = "message";
-
     @ExceptionHandler(value = UnauthorizedException.class)
     public ResponseEntity<ApiError> handleUnauthorizedException(HttpServletRequest request, Exception exception) {
-        ApiError apiError = new ApiError();
-
-        apiError.setTimestamp(Instant.now());
-        apiError.setStatus(HttpStatus.UNAUTHORIZED.value());
-        HashMap<String, String> errors = new HashMap<>();
-        errors.put(MESSAGE, "Unauthorized");
-        apiError.setError(errors);
-        apiError.setMessage(exception.getMessage());
-        String url = ((UnauthorizedException) exception).getUrl();
-        apiError.setPath((url == null) ? request.getRequestURI() : url);
-
-        return new ResponseEntity<>(apiError, HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(createApiError(HttpStatus.UNAUTHORIZED, "Unauthorized", request, exception),
+                                    HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(value = AccessDeniedException.class)
     public ResponseEntity<ApiError> handleAccessDeniedException(HttpServletRequest request, Exception exception) {
+        return new ResponseEntity<>(createApiError(HttpStatus.FORBIDDEN, "Access is denied", request, exception),
+                                    HttpStatus.FORBIDDEN);
+    }
+
+    private ApiError createApiError(HttpStatus httpStatus, String message, HttpServletRequest request, Exception exception) {
         ApiError apiError = new ApiError();
 
         apiError.setTimestamp(Instant.now());
-        apiError.setStatus(HttpStatus.FORBIDDEN.value());
+        apiError.setStatus(httpStatus.value());
         HashMap<String, String> errors = new HashMap<>();
-        errors.put(MESSAGE, "Access is denied");
+        errors.put("message", message);
         apiError.setError(errors);
         apiError.setMessage(exception.getMessage());
         apiError.setPath(request.getRequestURI());
 
-        return new ResponseEntity<>(apiError, HttpStatus.FORBIDDEN);
+        return apiError;
     }
 
 }

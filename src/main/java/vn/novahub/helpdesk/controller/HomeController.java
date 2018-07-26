@@ -1,16 +1,13 @@
 package vn.novahub.helpdesk.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import vn.novahub.helpdesk.enums.RoleEnum;
-import vn.novahub.helpdesk.service.AccountService;
 
 import javax.annotation.security.PermitAll;
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 
 @Controller
 public class HomeController {
@@ -19,7 +16,7 @@ public class HomeController {
 
     @PermitAll
     @RequestMapping("/login")
-    public String login() throws IOException {
+    public String login() {
 
         String roleName = (SecurityContextHolder.getContext().getAuthentication().getAuthorities().toArray())[0].toString();
 
