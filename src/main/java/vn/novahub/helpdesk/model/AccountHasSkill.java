@@ -1,5 +1,7 @@
 package vn.novahub.helpdesk.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -13,15 +15,19 @@ public class AccountHasSkill implements Serializable {
     @Column(name = "id")
     private long id;
 
+    @JsonProperty(value = "account_id")
     @Column(name = "account_id")
     private long accountId;
 
+    @JsonProperty(value = "skill_id")
     @Column(name = "skill_id")
     private long skillId;
 
+    @JsonProperty(value = "created_at")
     @Column(name = "created_at")
     private Date createdAt;
 
+    @JsonProperty(value = "updated_at")
     @Column(name = "updated_at")
     private Date updatedAt;
 
