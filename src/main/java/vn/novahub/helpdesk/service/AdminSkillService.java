@@ -8,7 +8,7 @@ import vn.novahub.helpdesk.model.Skill;
 
 public interface AdminSkillService {
 
-    Skill create(Skill skill) throws SkillValidationException, SkillIsExistException;
+    Skill create(Skill skill) throws SkillValidationException, SkillIsExistException, CategoryNotFoundException;
 
     Skill update(long skillId, Skill skill) throws SkillValidationException, SkillIsExistException, SkillNotFoundException;
 
