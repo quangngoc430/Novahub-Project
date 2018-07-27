@@ -30,8 +30,11 @@ public class AdminSkillServiceImpl implements AdminSkillService {
     private CategoryRepository categoryRepository;
 
     @Override
-    public Skill create(Skill skill) throws SkillValidationException, SkillIsExistException {
+    public Skill create(Skill skill) throws SkillValidationException, SkillIsExistException, CategoryNotFoundException {
         skillValidation.validate(skill, GroupCreateSkill.class);
+
+        if(!categoryRepository.existsById(skill.getCategoryId()))
+            throw new CategoryNotFoundException(skill.getCategoryId());
 
         if(skillRepository.getByName(skill.getName()) != null)
             throw new SkillIsExistException(skill.getName());
