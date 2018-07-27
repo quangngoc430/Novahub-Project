@@ -90,7 +90,7 @@ public class Account implements Serializable {
     private String verificationToken;
 
     @JsonProperty("role_id")
-    @NotNull(message = "Role id is not empty")
+    @NotNull(message = "role_id is not empty")
     @Column(name = "role_id")
     private long roleId;
 
