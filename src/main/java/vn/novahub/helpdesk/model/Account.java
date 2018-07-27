@@ -24,7 +24,7 @@ public class Account implements Serializable {
     private long id;
 
     @NotEmpty(message = "email is not empty", groups = {GroupCreateAccount.class, GroupLoginAccount.class})
-    @Email(regexp = "^[a-zA-Z0-9._]+\\@novahub.vn", message = "email contains [a-z|A-Z|0-9|.|_] and end with @novahub.vn ",
+    @Email(regexp = "^[a-zA-Z0-9._]+\\@novahub.vn", message = "email contains [a-z|A-Z|0-9|.|_] and end with @novahub.vn",
             groups = {GroupCreateAccount.class, GroupLoginAccount.class})
     @Size(min = 8, max = 80, message = "email must have between 8 and 80 characters",
             groups = {GroupCreateAccount.class, GroupLoginAccount.class})
