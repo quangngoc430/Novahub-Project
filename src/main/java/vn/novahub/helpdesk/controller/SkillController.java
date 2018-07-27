@@ -40,7 +40,7 @@ public class SkillController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping(path = "/skills", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Skill> createByAdmin(@RequestBody Skill skill) throws SkillIsExistException, SkillValidationException {
+    public ResponseEntity<Skill> createByAdmin(@RequestBody Skill skill) throws SkillIsExistException, SkillValidationException, CategoryNotFoundException {
         return new ResponseEntity<>(adminSkillService.create(skill), HttpStatus.OK);
     }
 
