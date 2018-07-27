@@ -48,8 +48,11 @@ public class AdminSkillServiceImpl implements AdminSkillService {
     }
 
     @Override
-    public Skill update(long skillId, Skill skill) throws SkillValidationException, SkillIsExistException, SkillNotFoundException {
+    public Skill update(long skillId, Skill skill) throws SkillValidationException, SkillIsExistException, SkillNotFoundException, CategoryNotFoundException {
         skillValidation.validate(skill, GroupUpdateSkill.class);
+
+        if(!categoryRepository.existsById(skill.getCategoryId()))
+            throw new CategoryNotFoundException(skill.getCategoryId());
 
         Skill oldSkill = skillRepository.getByIdAndCategoryId(skillId, skill.getCategoryId());
 
