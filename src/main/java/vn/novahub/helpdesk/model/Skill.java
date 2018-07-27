@@ -34,7 +34,7 @@ public class Skill implements Serializable {
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty(value = "created_at")
-    @NotNull(message = "create_at is not null")
+    @NotNull(message = "created_at is not null")
     @Column(name = "created_at")
     private Date createdAt;
 
@@ -53,7 +53,7 @@ public class Skill implements Serializable {
     @OneToMany
     private List<AccountHasSkill> accountHasSkillList;
 
-    @ManyToOne
+    @ManyToOne(targetEntity = Category.class)
     @JoinColumn(name = "category_id", insertable = false, updatable = false)
     private Category category;
 

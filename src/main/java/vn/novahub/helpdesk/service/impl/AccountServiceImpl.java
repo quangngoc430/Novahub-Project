@@ -13,8 +13,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
-import vn.novahub.helpdesk.constant.AccountConstant;
-import vn.novahub.helpdesk.constant.RoleConstant;
+import vn.novahub.helpdesk.enums.AccountEnum;
+import vn.novahub.helpdesk.enums.RoleEnum;
 import vn.novahub.helpdesk.enums.TokenEnum;
 import vn.novahub.helpdesk.exception.*;
 import vn.novahub.helpdesk.model.*;
@@ -35,9 +35,6 @@ public class AccountServiceImpl implements AccountService {
 
     @Value("${subject_email_sign_up}")
     private String subjectEmailSignUp;
-
-    @Value("${content_email_sign_up}")
-    private String contentEmailSignUp;
 
     @Autowired
     private Environment env;
@@ -69,7 +66,6 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     private GoogleService googleService;
 
-
     @Override
     public boolean isAccountLogin(long accountId) {
         Account account = getAccountLogin();
@@ -81,7 +77,7 @@ public class AccountServiceImpl implements AccountService {
         Token token = tokenRepository.getByAccessToken(authenticationToken);
 
         if(token == null) {
-            throw new UnauthorizedException("Invalid token");
+            throw new UnauthorizedException("Invalid token", request.getAttribute("url_request").toString());
         }
 
         if(tokenService.isTokenExpired(token)) {
@@ -110,12 +106,11 @@ public class AccountServiceImpl implements AccountService {
     public boolean activateAccount(long accountId, String verificationToken) {
         Account account = accountRepository.getByIdAndVerificationToken(accountId, verificationToken);
 
-
         if(account == null) {
             return false;
         }
 
-        account.setStatus(AccountConstant.STATUS_ACTIVE);
+        account.setStatus(AccountEnum.ACTIVE.name());
         account.setVerificationToken(null);
         accountRepository.save(account);
 
@@ -132,10 +127,10 @@ public class AccountServiceImpl implements AccountService {
         if(account == null || account.getPassword() == null || !bCryptPasswordEncoder.matches(accountInput.getPassword(), account.getPassword()))
             throw new AccountInvalidException();
 
-        if(account.getStatus().equals(AccountConstant.STATUS_INACTIVE))
+        if(account.getStatus().equals(AccountEnum.INACTIVE.name()))
             throw new AccountInactiveException(account.getEmail());
 
-        if(account.getStatus().equals(AccountConstant.STATUS_LOCKED))
+        if(account.getStatus().equals(AccountEnum.LOCKED.name()))
             throw new AccountLockedException(account.getEmail());
 
         Token accessToken = new Token();
@@ -168,8 +163,8 @@ public class AccountServiceImpl implements AccountService {
             account.setAvatarUrl(googlePojo.getPicture());
             account.setVerificationToken(null);
             account.setPassword(null);
-            account.setStatus(AccountConstant.STATUS_ACTIVE);
-            Role role = roleService.getByName(RoleConstant.ROLE_USER);
+            account.setStatus(AccountEnum.ACTIVE.name());
+            Role role = roleService.getByName(RoleEnum.USER.name());
             account.setRoleId(role.getId());
             account.setCreatedAt(new Date());
             account.setUpdatedAt(new Date());
@@ -240,7 +235,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account create(Account account) throws AccountIsExistException, RoleNotFoundException, AccountValidationException, MessagingException {
+    public Account create(Account account) throws AccountIsExistException, RoleNotFoundException, AccountValidationException, MessagingException, IOException {
 
         accountValidation.validate(account, GroupCreateAccount.class);
 
@@ -248,9 +243,9 @@ public class AccountServiceImpl implements AccountService {
             throw new AccountIsExistException(account.getEmail());
 
         account.setPassword(bCryptPasswordEncoder.encode(account.getPassword()));
-        account.setStatus(AccountConstant.STATUS_INACTIVE);
+        account.setStatus(AccountEnum.INACTIVE.name());
         account.setVerificationToken(tokenService.generateToken(account.getEmail() + account.getEmail()));
-        account.setRoleId(roleService.getByName(RoleConstant.ROLE_USER).getId());
+        account.setRoleId(roleService.getByName(RoleEnum.USER.name()).getId());
         account.setCreatedAt(new Date());
         account.setUpdatedAt(new Date());
 
@@ -258,10 +253,9 @@ public class AccountServiceImpl implements AccountService {
 
         Mail mail = new Mail();
         mail.setEmailReceiving(new String[]{account.getEmail()});
-
         mail.setSubject(env.getProperty("subject_email_sign_up"));
         String urlAccountActive = "http://localhost:8080/api/users/" + account.getId() + "/active?token=" + account.getVerificationToken();
-        String contentEmailSignUp = env.getProperty("content_email_sign_up");
+        String contentEmailSignUp = mailService.getContentMail("sign_up.html");
         contentEmailSignUp = contentEmailSignUp.replace("{url-activate-account}", urlAccountActive);
         mail.setContent(contentEmailSignUp);
         mailService.sendHTMLMail(mail);
@@ -277,6 +271,8 @@ public class AccountServiceImpl implements AccountService {
         // check changing password
         if(oldAccount.getPassword() != null){
             if(account.getNewPassword() != null || account.getPassword() != null){
+                accountValidation.validate(account, GroupUpdatePasswordByAccount.class);
+
                 if(!bCryptPasswordEncoder.matches(account.getPassword(), oldAccount.getPassword()))
                     throw new AccountPasswordNotEqualException("Password do not match");
 
@@ -313,7 +309,7 @@ public class AccountServiceImpl implements AccountService {
 
         // check changing password
         if(account.getPassword() != null){
-            accountValidation.validate(account, GroupUpdatePasswordAccount.class);
+            accountValidation.validate(account, GroupUpdatePasswordByAdmin.class);
             oldAccount.setPassword(bCryptPasswordEncoder.encode(account.getPassword()));
         }
 
@@ -328,18 +324,18 @@ public class AccountServiceImpl implements AccountService {
         if(account.getAvatarUrl() != null)
             oldAccount.setAvatarUrl(account.getAvatarUrl());
         if(account.getStatus() != null) {
-            if(oldAccount.getStatus().equals(AccountConstant.STATUS_INACTIVE)
-               && account.getStatus().equals(AccountConstant.STATUS_ACTIVE))
+            if(oldAccount.getStatus().equals(AccountEnum.INACTIVE.name())
+                    && account.getStatus().equals(AccountEnum.ACTIVE.name()))
                 oldAccount.setVerificationToken(null);
 
             oldAccount.setStatus(account.getStatus());
         }
         if(account.getJoiningDate() != null)
             oldAccount.setJoiningDate(account.getJoiningDate());
-        oldAccount.setUpdatedAt(new Date());
 
         accountValidation.validate(oldAccount, Default.class);
 
+        oldAccount.setUpdatedAt(new Date());
         return accountRepository.save(oldAccount);
     }
 

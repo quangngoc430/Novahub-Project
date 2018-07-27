@@ -10,7 +10,7 @@ import javax.transaction.Transactional;
 @Transactional
 public interface LevelRepository extends CrudRepository<Level, Long> {
 
-    boolean existsByValueAndAccountIdAndSkillId(int value, long accountId, long skillId);
+    boolean existsByValueAndAccountIdAndSkillId(long value, long accountId, long skillId);
 
     Level getByAccountIdAndSkillId(long accountId, long skillId);
 

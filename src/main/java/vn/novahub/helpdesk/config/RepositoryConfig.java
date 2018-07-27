@@ -15,5 +15,7 @@ public class RepositoryConfig extends RepositoryRestConfigurerAdapter {
         configuration.exposeIdsFor(Skill.class);
         configuration.exposeIdsFor(Category.class);
         configuration.exposeIdsFor(Account.class);
+        configuration.exposeIdsFor(DayOff.class);
+        configuration.exposeIdsFor(DayOffType.class);
     }
 }

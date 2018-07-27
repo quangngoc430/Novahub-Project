@@ -40,7 +40,7 @@ public class SkillController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping(path = "/skills", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Skill> createByAdmin(@RequestBody Skill skill) throws SkillIsExistException, SkillValidationException {
+    public ResponseEntity<Skill> createByAdmin(@RequestBody Skill skill) throws SkillIsExistException, SkillValidationException, CategoryNotFoundException {
         return new ResponseEntity<>(adminSkillService.create(skill), HttpStatus.OK);
     }
 
@@ -82,7 +82,7 @@ public class SkillController {
     @PreAuthorize("isAuthenticated()")
     @PutMapping(path = "/users/me/skills/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Skill> update(@PathVariable("id") long skillId,
-                                        @RequestBody Skill skill) throws SkillNotFoundException, LevelValidationException, SkillValidationException {
+                                        @RequestBody Skill skill) throws SkillNotFoundException, LevelValidationException {
         return new ResponseEntity<>(accountSkillService.update(skillId, skill), HttpStatus.OK);
     }
 
