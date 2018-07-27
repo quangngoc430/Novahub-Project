@@ -894,7 +894,7 @@ paths:
                     properties:
                       message:
                         type: string
-                        example: Role not found
+                        example: User not found
                   message:
                     type: string
                     example: UserNotFoundException with id = 1
@@ -1053,7 +1053,7 @@ paths:
                     properties:
                       message:
                         type: string
-                        example: Role not found
+                        example: User not found
                   message:
                     type: string
                     example: UserNotFoundException with id = 1
@@ -1207,7 +1207,7 @@ paths:
                     properties:
                       message:
                         type: string
-                        example: Role not found
+                        example: User not found
                   message:
                     type: string
                     example: UserNotFoundException with id = 1
@@ -2359,6 +2359,59 @@ paths:
                   path:
                     type: string
                     example: /api/skills
+        '404':
+          description: Category not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  timestamp:
+                    type: string
+                    example: '1532462094.006'
+                  status:
+                    type: integer
+                    example: 404
+                  error:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: Category not found
+                  message:
+                    type: string
+                    example: CategoryNotFoundException with id = 1
+                  path:
+                    type: string
+                    example: /api/skills
+        '406':
+          description: Not acceptable
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  timestamp:
+                    type: string
+                    example: '1532506012.933'
+                  status:
+                    type: integer
+                    format: int64
+                    example: 406
+                  error:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                        enum:
+                          - name is not empty
+                        example: name is not empty
+                  message:
+                    type: string
+                    example: SkillValidationException with number of errors = 1
+                  path:
+                    type: string
+                    example: /api/skills
         '409':
           description: Skill is exist
           content:
@@ -2641,7 +2694,7 @@ paths:
                     type: string
                     example: '/api/skills/{id}'
         '404':
-          description: skill not found
+          description: skill not found | Category not found
           content:
             application/json:
               schema:
@@ -2658,9 +2711,15 @@ paths:
                     properties:
                       message:
                         type: string
+                        enum:
+                          - Skill not found
+                          - Category not found
                         example: Skill not found
                   message:
                     type: string
+                    enum:
+                      - SkillNotFoundException with id = 1
+                      - CategoryNotFoundException with id = 1
                     example: SkillNotFoundException with id = 1
                   path:
                     type: string
