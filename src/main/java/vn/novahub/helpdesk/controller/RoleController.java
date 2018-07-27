@@ -27,7 +27,6 @@ public class RoleController {
         return new ResponseEntity<>(role, HttpStatus.OK);
     }
 
-    // TODO: change keyword
     @PreAuthorize("isAuthenticated()")
     @GetMapping(path = "/roles")
     public ResponseEntity<Page<Role>> getAll(@RequestParam(value = "keyword", required = false, defaultValue = "") String roleName,

@@ -1,6 +1,6 @@
 package vn.novahub.helpdesk.repository;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 import vn.novahub.helpdesk.model.Level;
 
@@ -8,7 +8,7 @@ import javax.transaction.Transactional;
 
 @Repository
 @Transactional
-public interface LevelRepository extends CrudRepository<Level, Long> {
+public interface LevelRepository extends PagingAndSortingRepository<Level, Long> {
 
     boolean existsByValueAndAccountIdAndSkillId(long value, long accountId, long skillId);
 
