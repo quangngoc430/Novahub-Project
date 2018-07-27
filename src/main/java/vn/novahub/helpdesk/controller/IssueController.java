@@ -118,6 +118,4 @@ public class IssueController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
-
 }

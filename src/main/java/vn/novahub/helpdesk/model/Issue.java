@@ -2,6 +2,7 @@ package vn.novahub.helpdesk.model;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import vn.novahub.helpdesk.annotation.Status;
 import vn.novahub.helpdesk.validation.GroupCreateIssue;
