@@ -3,21 +3,14 @@ CREATE DATABASE `helpdesk`;
 
 USE `helpdesk`;
 
-DROP TABLE IF EXISTS `day_off`;
-DROP TABLE IF EXISTS `day_off_type`;
-DROP TABLE IF EXISTS `issue`;
-DROP TABLE IF EXISTS `account_has_skill`;
-DROP TABLE IF EXISTS `skill`;
-DROP TABLE IF EXISTS `category`;
-DROP TABLE IF EXISTS `account`;
 DROP TABLE IF EXISTS `role`;
-
 CREATE TABLE `role` (
   id int NOT NULL AUTO_INCREMENT,
   name char(80) NOT NULL,
   PRIMARY KEY (id)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `account`;
 CREATE TABLE `account` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `email` varchar(45) NOT NULL,
@@ -31,13 +24,26 @@ CREATE TABLE `account` (
   `created_at` datetime NOT NULL DEFAULT NOW(),
   `updated_at` datetime NOT NULL DEFAULT NOW(),
   `joiningDate` datetime DEFAULT NOW(),
-  `vertification_token` char(255),
-  `token` char(255),
+  `verification_token` char(255),
   `role_id` int NOT NULL,
   PRIMARY KEY (`id`),
-  CONSTRAINT `fk_user_role` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`)
+  CONSTRAINT `fk_user_role` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `token`;
+CREATE TABLE `token` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `access_token` varchar(256) NOT NULL,
+  `expired_in` int NOT NULL,
+  `expired_at` datetime NOT NULL,
+  `account_id` int NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `fk_token_account` FOREIGN KEY (`account_id`) REFERENCES `account`(`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `category`;
 CREATE TABLE `category` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) DEFAULT NULL,
@@ -49,8 +55,7 @@ CREATE TABLE `category` (
 DROP TABLE IF EXISTS `skill`;
 CREATE TABLE `skill` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) DEFAULT NULL,
-  `level` int NOT NULL,
+  `name` varchar(45) UNIQUE DEFAULT NULL,
   `category_id` int(11) NOT NULL,
   `level` int NOT NULL,
   `created_at` datetime NOT NULL DEFAULT NOW(),
@@ -59,6 +64,20 @@ CREATE TABLE `skill` (
   CONSTRAINT `fk_skill_category` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `level`;
+CREATE TABLE `level` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `value` int NOT NULL,
+  `skill_id` int NOT NULL,
+  `account_id` int NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT NOW(),
+  `updated_at` datetime NOT NULL DEFAULT NOW(),
+  PRIMARY KEY (`id`),
+  CONSTRAINT `fk_level_skill` FOREIGN KEY (`skill_id`) REFERENCES `skill`(`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_level_account` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`) ON DELETE CASCADE
+);
+
+DROP TABLE IF EXISTS `account_has_skill`;
 CREATE TABLE `account_has_skill` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `account_id` int(11) NOT NULL,
@@ -70,6 +89,7 @@ CREATE TABLE `account_has_skill` (
   CONSTRAINT `fk_account_has_skill_skill` FOREIGN KEY (`skill_id`) REFERENCES `skill` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `day_off_type`;
 CREATE TABLE `day_off_type` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `type` varchar(20) NOT NULL,
@@ -82,7 +102,7 @@ CREATE TABLE `day_off_type` (
   CONSTRAINT `fk_day_off_type_account` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
-
+DROP TABLE IF EXISTS `day_off`;
 CREATE TABLE `day_off` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(200) DEFAULT NULL,
@@ -104,6 +124,7 @@ CREATE TABLE `day_off` (
   CONSTRAINT `fk_day_off_type` FOREIGN KEY (`type_id`) REFERENCES `day_off_type` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `issue`;
 CREATE TABLE `issue` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(200) NOT NULL,
@@ -117,56 +138,3 @@ CREATE TABLE `issue` (
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_issue_account` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-
-INSERT INTO `role`(name) VALUES ("ADMIN");
-INSERT INTO `role`(name) VALUES ("CLERK");
-INSERT INTO `role`(name) VALUES ("USER");
-
-INSERT INTO `account`(email, first_name, last_name, password, status, role_id)
-VALUES("helpdesk@novahub.vn", "help", "desk", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", "ACTIVE", 1);
-INSERT INTO `account`(email, first_name, last_name, password, status, role_id)
-VALUES("ngocbui@novahub.vn", "ngoc", "bui", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", "ACTIVE", 2);
-INSERT INTO `account`(email, first_name, last_name, password, status, role_id)
-VALUES("linhtran@novahub.vn", "linh", "tran", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", "ACTIVE", 3);
-INSERT INTO `account`(email, first_name, last_name, password, status, role_id)
-VALUES("vutran@novahub.vn", "vu", "tran", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", "ACTIVE", 3);
-
-INSERT INTO `category`(name) VALUES
-("Programming Language"),
-("Backend Framework"),
-("Frontend Framework"),
-("Web Design");
-
-INSERT INTO `skill`(name, category_id, level) VALUES
-("Java", 1, 7),
-("Ruby", 1, 6),
-("C#", 1, 5),
-("Python", 1, 2),
-("Spring", 2, 3),
-("Rails", 2, 5),
-("Angular", 3, 10),
-("Reactjs", 3, 6);
-
-INSERT INTO `account_has_skill`(account_id, skill_id) VALUES
-(1, 1),
-(1, 2),
-(1, 3),
-(1, 4),
-(2, 2),
-(2, 3),
-(2, 6);
-
-INSERT INTO `issue`(title, content, status, account_id)
-VALUES("title", "content", "PENDING", 1);
-INSERT INTO `issue`(title, content, status, account_id)
-VALUES("title1", "content1", "PENDING", 1);
-INSERT INTO `issue`(title, content, status, account_id)
-VALUES("title", "content", "PENDING", 2);
-INSERT INTO `issue`(title, content, status, account_id)
-VALUES("title1", "content1", "PENDING", 2);
-INSERT INTO `issue`(title, content, status, account_id)
-VALUES("title", "content", "PENDING", 3);
-INSERT INTO `issue`(title, content, status, account_id)
-VALUES("title1", "content1", "PENDING", 3);

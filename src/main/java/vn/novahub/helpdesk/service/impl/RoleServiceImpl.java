@@ -40,7 +40,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Page<Role> getAll(String roleName, Pageable pageable) {
 
-        return roleRepository.getAllByNameLike("%" + roleName + "%", pageable);
+        return roleRepository.getAllByNameContaining(roleName, pageable);
     }
 
 }

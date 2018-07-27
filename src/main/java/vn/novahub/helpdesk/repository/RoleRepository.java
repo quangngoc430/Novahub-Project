@@ -13,5 +13,5 @@ public interface RoleRepository extends PagingAndSortingRepository<Role, Long> {
 
     Role getByName(String roleName);
 
-    Page<Role> getAllByNameLike(String roleName, Pageable pageable);
+    Page<Role> getAllByNameContaining(String roleName, Pageable pageable);
 }

@@ -13,23 +13,33 @@ public interface IssueRepository extends PagingAndSortingRepository<Issue, Long>
 
     Issue getByIdAndAccountId(long issueId, long accountId);
 
-    @Query("SELECT issue FROM Issue issue WHERE issue.title LIKE :keyword OR issue.content LIKE :keyword")
-    Page<Issue> getAllByTitleLikeOrContentLike(@Param("keyword") String keyword, Pageable pageable);
+    Page<Issue> getAllByTitleContainingOrContentContaining(String title,
+                                                           String content,
+                                                           Pageable pageable);
 
-    @Query("SELECT issue FROM Issue issue WHERE (issue.title LIKE :keyword OR issue.content LIKE :keyword) AND issue.status = :status ")
-    Page<Issue> getAllByTitleLikeOrContentLikeAndStatus(@Param("keyword") String keyword, @Param("status") String status, Pageable pageable);
+    @Query("SELECT issue FROM Issue issue WHERE (issue.title LIKE CONCAT('%', :title, '%') OR issue.content LIKE CONCAT('%', :content, '%')) AND issue.status = :status")
+    Page<Issue> getAllByTitleContainingOrContentContainingAndStatus(@Param("title") String title,
+                                                                    @Param("content") String content,
+                                                                    @Param("status") String status,
+                                                                    Pageable pageable);
 
-    @Query("FROM Issue issue WHERE issue.accountId = :accountId AND (issue.title LIKE :keyword OR issue.content LIKE :keyword)")
-    Page<Issue> getAllByAccountIdAndContentLikeOrTitleLike(@Param("accountId") long accountId,
+    @Query("FROM Issue issue " +
+           "WHERE issue.accountId = :accountId " +
+           "AND (issue.title LIKE CONCAT('%', :keyword, '%') " +
+            "OR issue.content LIKE CONCAT('%', :keyword, '%'))")
+    Page<Issue> getAllByAccountIdAndTitleContainingOrContentContaining(@Param("accountId") long accountId,
+                                                                       @Param("keyword") String keyword,
+                                                                       Pageable pageable);
 
-                                            @Param("keyword") String keyword,
-                                            Pageable pageable);
-
-    @Query("FROM Issue issue WHERE issue.status = :status AND issue.accountId = :accountId AND (issue.title LIKE :keyword OR issue.content LIKE :keyword)")
-    Page<Issue> getAllByAccountIdAndTitleLikeOrContentLikeAndStatus(@Param("accountId") long accountId,
-                                            @Param("keyword") String keyword,
-                                            @Param("status") String status,
-                                            Pageable pageable);
+    @Query("FROM Issue issue " +
+           "WHERE issue.status = :status " +
+           "AND issue.accountId = :accountId " +
+           "AND (issue.title LIKE CONCAT('%', :keyword, '%') " +
+            "OR issue.content LIKE CONCAT('%', :keyword, '%'))")
+    Page<Issue> getAllByAccountIdAndStatusAndTitleContainingAndContentContaining(@Param("accountId") long accountId,
+                                                                                 @Param("keyword") String keyword,
+                                                                                 @Param("status") String status,
+                                                                                 Pageable pageable);
 
     Issue findByIdAndToken(long id, String token);
 

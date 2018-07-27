@@ -1,9 +1,11 @@
 package vn.novahub.helpdesk.model;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import vn.novahub.helpdesk.annotation.IssueStatus;
-import vn.novahub.helpdesk.constant.IssueConstant;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import vn.novahub.helpdesk.annotation.Status;
+import vn.novahub.helpdesk.validation.GroupCreateIssue;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -20,36 +22,43 @@ public class Issue implements Serializable {
     @Column(name = "id")
     private long id;
 
-    @NotEmpty(message = "Title is not empty")
+    @NotEmpty(message = "title is not empty", groups = {GroupCreateIssue.class})
     @Column(name = "title")
     private String title;
 
-    @NotEmpty(message = "Content is not empty")
+    @NotEmpty(message = "content is not empty", groups = {GroupCreateIssue.class})
     @Column(name = "content")
     private String content;
 
-    @IssueStatus(message = "Status does not match any statuses",
-                 statuses = {IssueConstant.STATUS_PENDING, IssueConstant.STATUS_APPROVE, IssueConstant.STATUS_APPROVE})
-    @NotEmpty(message = "Status is not empty")
+    @Status(message = "status does not match any statuses", targetClass = Issue.class)
+    @NotEmpty(message = "status is not empty")
     @Column(name = "status")
     private String status;
 
-    @NotNull(message = "CreateAt is not null")
+    @JsonProperty(value = "created_at")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Temporal(TemporalType.TIMESTAMP)
+    @NotNull(message = "created_at is not null")
     @Column(name = "created_at")
     private Date createdAt;
 
-    @NotNull(message = "UpdateAt is not null")
+    @JsonProperty(value = "updated_at")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Temporal(TemporalType.TIMESTAMP)
+    @NotNull(message = "updated_at is not null")
     @Column(name = "updated_at")
     private Date updatedAt;
 
+    @JsonProperty(value = "reply_message")
     @Column(name = "reply_message")
     private String replyMessage;
 
-    @NotNull(message = "AccountId is not null")
+    @JsonProperty(value = "account_id")
+    @NotNull(message = "account_id is not null")
     @Column(name = "account_id")
     private long accountId;
 
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(name = "token")
     private String token;
 

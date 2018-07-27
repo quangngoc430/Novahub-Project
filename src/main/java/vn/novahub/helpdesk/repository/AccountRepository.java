@@ -13,50 +13,52 @@ import java.util.List;
 @Repository
 public interface AccountRepository extends PagingAndSortingRepository<Account, Long> {
 
-    Account findByEmailAndPassword(String email, String password);
-
     Account getByEmail(String email);
 
+    @Query("FROM Account account " +
+            "WHERE account.email LIKE CONCAT('%', :keyword, '%') " +
+            "or account.firstName LIKE CONCAT('%', :keyword, '%') " +
+            "or account.lastName LIKE CONCAT('%' ,:keyword, '%')")
+    Page<Account> getAllByEmailContainingOrFirstNameContainingOrLastNameContaining(@Param("keyword") String keyword, Pageable pageable);
 
     @Query("FROM Account account " +
-           "WHERE account.email LIKE :keyword or account.firstName LIKE :keyword or account.lastName LIKE :keyword")
-    Page<Account> getAllByEmailLikeOrFirstNameLikeOrLastNameLike(@Param("keyword") String keyword, Pageable pageable);
-
-    @Query("FROM Account account " +
-           "WHERE (account.email LIKE :keyword or account.firstName LIKE :keyword or account.lastName LIKE :keyword) " +
-           "AND account.status = :status")
-    Page<Account> getAllByEmailLikeOrFirstNameLikeOrLastNameLikeAndStatus(@Param("keyword") String keyword,
-                                                                          @Param("status") String status, Pageable pageable);
+            "WHERE (account.email LIKE CONCAT('%', :keyword, '%') " +
+            "OR account.firstName LIKE CONCAT('%', :keyword, '%') " +
+            "OR account.lastName LIKE CONCAT('%' ,:keyword, '%')) " +
+            "AND account.status = :status")
+    Page<Account> getAllByEmailContainingOrFirstNameContainingOrLastNameContainingAndStatus(@Param("keyword") String keyword,
+                                                                                            @Param("status") String status,
+                                                                                            Pageable pageable);
 
     @Query("SELECT account " +
            "FROM Account account " +
            "JOIN Role role " +
            "ON account.roleId = role.id " +
-           "WHERE (account.email LIKE :keyword or account.firstName LIKE :keyword or account.lastName LIKE :keyword) " +
+           "WHERE (account.email LIKE CONCAT('%', :keyword, '%') " +
+           "OR account.firstName LIKE CONCAT('%', :keyword, '%') " +
+           "OR account.lastName LIKE CONCAT('%', :keyword, '%')) " +
            "AND role.name = :name")
-    Page<Account> getAllByEmailLikeOrFirstNameLikeOrLastNameLikeAndRole(@Param("keyword") String keyword,
-                                                                        @Param("name") String name,
-                                                                        Pageable pageable);
+    Page<Account> getAllByEmailContainingOrFirstNameContainingOrLastNameContainingAndRole(@Param("keyword") String keyword,
+                                                                                          @Param("name") String name,
+                                                                                          Pageable pageable);
 
     @Query("SELECT account " +
             "FROM Account account " +
             "JOIN Role role " +
             "ON account.roleId = role.id " +
-            "WHERE (account.email LIKE :keyword or account.firstName LIKE :keyword or account.lastName LIKE :keyword) " +
+            "WHERE (account.email LIKE CONCAT('%', :keyword, '%') " +
+            "OR account.firstName LIKE CONCAT('%', :keyword, '%') " +
+            "OR account.lastName LIKE CONCAT('%', :keyword, '%')) " +
             "AND account.status = :status " +
             "AND role.name = :name")
-    Page<Account> getAllByEmailLikeOrFirstNameLikeOrLastNameLikeAndStatusAndRole(@Param("keyword") String keyword,
-                                                                                 @Param("status") String status,
-                                                                                 @Param("name") String name,
-                                                                                 Pageable pageable);
-
+    Page<Account> getAllByEmailContainingOrFirstNameContainingOrLastNameContainingAndStatusAndRole(@Param("keyword") String keyword,
+                                                                                                   @Param("status") String status,
+                                                                                                   @Param("name") String name,
+                                                                                                   Pageable pageable);
 
     Account getById(long accountId);
 
-    Account getByIdAndVertificationToken(long accountId, String verificationToken);
-
-    Account getByEmailAndPassword(String email, String password);
-
+    Account getByIdAndVerificationToken(long accountId, String verificationToken);
 
     @Query("SELECT account FROM Account account JOIN Role role ON account.roleId = role.id WHERE role.name = :name")
     List<Account> getAllByRoleName(@Param("name") String roleName);
@@ -67,5 +69,4 @@ public interface AccountRepository extends PagingAndSortingRepository<Account, L
            "ON account.id = accountHasSkill.accountId " +
            "WHERE accountHasSkill.skillId = :skillId")
     Page<Account> getAllBySkillId(@Param("skillId") long skillId, Pageable pageable);
-
 }

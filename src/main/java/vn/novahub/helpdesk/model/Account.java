@@ -3,8 +3,7 @@ package vn.novahub.helpdesk.model;
 import com.fasterxml.jackson.annotation.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import vn.novahub.helpdesk.annotation.AccountStatus;
-import vn.novahub.helpdesk.constant.AccountConstant;
+import vn.novahub.helpdesk.annotation.Status;
 import vn.novahub.helpdesk.validation.*;
 
 import javax.persistence.*;
@@ -24,74 +23,91 @@ public class Account implements Serializable {
     @Column(name = "id")
     private long id;
 
-    @NotEmpty(message = "Email is not empty", groups = {GroupCreateAccount.class, GroupLoginAccount.class, GroupCreateWithAccountGoogle.class})
-    @Column(name = "email")
-    @Email(regexp = "^[a-zA-Z0-9]+\\@novahub.vn", message = "Email must be end with @novahub.vn"
-            , groups = {GroupCreateAccount.class, GroupLoginAccount.class})
+    @NotEmpty(message = "email is not empty", groups = {GroupCreateAccount.class, GroupLoginAccount.class})
+    @Email(regexp = "^[a-zA-Z0-9._]+\\@novahub.vn", message = "email contains [a-z|A-Z|0-9|.|_] and end with @novahub.vn",
+            groups = {GroupCreateAccount.class, GroupLoginAccount.class})
+    @Size(min = 8, max = 80, message = "email must have between 8 and 80 characters",
+            groups = {GroupCreateAccount.class, GroupLoginAccount.class})
+    @Column(name = "email", unique = true)
     private String email;
 
+    @JsonProperty(value = "first_name")
     @Column(name = "first_name")
     private String firstName;
 
+    @JsonProperty(value = "last_name")
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "birth_day")
+    @JsonProperty(value = "birth_day")
     @Temporal(TemporalType.TIMESTAMP)
-    @JsonFormat(pattern = "dd-MM-yyyy")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Column(name = "birth_day")
     private Date dayOfBirth;
 
     @Column(name = "address")
     private String address;
 
+    @JsonProperty(value = "avatar_url")
     @Column(name = "avatar_url")
     private String avatarUrl;
 
-    @NotEmpty(message = "Password is not empty"
-            , groups = {GroupCreateAccount.class, GroupLoginAccount.class})
-    @Column(name = "password")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @NotEmpty(message = "password is not empty",
+            groups = {GroupCreateAccount.class, GroupLoginAccount.class,
+                      GroupUpdatePasswordByAccount.class, GroupUpdatePasswordByAdmin.class})
+    @Size(min = 8, max = 40, message = "password must have between 8 and 40 characters",
+            groups = {GroupCreateAccount.class, GroupLoginAccount.class,
+                      GroupUpdatePasswordByAccount.class, GroupUpdatePasswordByAdmin.class})
+    @Column(name = "password")
     private String password;
 
-    @AccountStatus(message = "Status does not match any statuses",
-            statuses = {AccountConstant.STATUS_LOCKED, AccountConstant.STATUS_ACTIVE, AccountConstant.STATUS_INACTIVE})
-    @NotEmpty(message = "Status is not empty")
+    @Status(message = "status does not match any statuses", targetClass = Account.class)
+    @NotEmpty(message = "status is not empty")
     @Column(name = "status")
     private String status;
 
-    @NotNull(message = "Create At is not null")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonProperty(value = "created_at")
+    @NotNull(message = "created_at is not null")
     @Column(name = "created_at")
     private Date createdAt;
 
-    @NotNull(message = "Update At is not null")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonProperty(value = "updated_at")
+    @NotNull(message = "updated_at is not null")
     @Column(name = "updated_at")
     private Date updatedAt;
 
+    @JsonProperty(value = "joining_date")
     @Temporal(TemporalType.TIMESTAMP)
-    @JsonFormat(pattern = "dd-MM-yyyy")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(name = "joiningDate")
     private Date joiningDate;
 
-    @Column(name = "token")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @NotEmpty(message = "Token is not empty", groups = GroupCreateWithAccountGoogle.class)
-    private String token;
+    @JsonIgnore
+    @Column(name = "verification_token")
+    private String verificationToken;
 
-    @Column(name = "vertification_token")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private String vertificationToken;
-
-    @NotNull(message = "Role id is not empty")
+    @JsonProperty("role_id")
+    @NotNull(message = "role_id is not empty")
     @Column(name = "role_id")
     private long roleId;
 
     @Transient
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonProperty(value = "new_password", access = JsonProperty.Access.WRITE_ONLY)
+    @NotEmpty(message = "new_pasword is not empty",
+            groups = {GroupUpdatePasswordByAccount.class})
+    @Size(min = 8, max = 40, message = "new_password must have between 8 and 40 characters",
+            groups = {GroupUpdatePasswordByAccount.class})
     private String newPassword;
 
     @ManyToOne(fetch = FetchType.EAGER, targetEntity = Role.class)
     @JoinColumn(name = "role_id", insertable = false, updatable = false)
     private Role role;
+
+    @Transient
+    private Token accessToken;
 
     public long getId() {
         return id;
@@ -205,20 +221,12 @@ public class Account implements Serializable {
         this.role = role;
     }
 
-    public String getToken() {
-        return token;
+    public String getVerificationToken() {
+        return verificationToken;
     }
 
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public String getVertificationToken() {
-        return vertificationToken;
-    }
-
-    public void setVertificationToken(String vertificationToken) {
-        this.vertificationToken = vertificationToken;
+    public void setVerificationToken(String verificationToken) {
+        this.verificationToken = verificationToken;
     }
 
     public Date getJoiningDate() {
@@ -227,6 +235,14 @@ public class Account implements Serializable {
 
     public void setJoiningDate(Date joiningDate) {
         this.joiningDate = joiningDate;
+    }
+
+    public Token getAccessToken() {
+        return accessToken;
+    }
+
+    public void setAccessToken(Token accessToken) {
+        this.accessToken = accessToken;
     }
 
     @Transient
@@ -253,11 +269,11 @@ public class Account implements Serializable {
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 ", joiningDate=" + joiningDate +
-                ", token='" + token + '\'' +
-                ", vertificationToken='" + vertificationToken + '\'' +
+                ", vertificationToken='" + verificationToken + '\'' +
                 ", roleId=" + roleId +
                 ", newPassword='" + newPassword + '\'' +
                 ", role=" + role +
+                ", accessToken=" + accessToken +
                 '}';
     }
 }

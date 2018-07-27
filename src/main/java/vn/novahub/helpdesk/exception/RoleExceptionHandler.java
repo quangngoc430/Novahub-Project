@@ -23,7 +23,7 @@ public class RoleExceptionHandler {
         apiError.setStatus(HttpStatus.NOT_FOUND.value());
         HashMap<String, String> errors = new HashMap<>();
         errors.put("message", "Role not found");
-        apiError.setErrors(errors);
+        apiError.setError(errors);
         apiError.setPath(request.getRequestURI());
         apiError.setMessage(ex.getMessage());
 

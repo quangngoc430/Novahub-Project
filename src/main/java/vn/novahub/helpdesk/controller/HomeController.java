@@ -1,27 +1,18 @@
 package vn.novahub.helpdesk.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import vn.novahub.helpdesk.constant.RoleConstant;
-import vn.novahub.helpdesk.exception.AccountIsExistException;
-import vn.novahub.helpdesk.exception.AccountValidationException;
-import vn.novahub.helpdesk.exception.EmailFormatException;
-import vn.novahub.helpdesk.exception.RoleNotFoundException;
-import vn.novahub.helpdesk.model.Account;
-import vn.novahub.helpdesk.service.AccountService;
+import vn.novahub.helpdesk.enums.RoleEnum;
 
 import javax.annotation.security.PermitAll;
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 
 @Controller
 public class HomeController {
 
-    @Autowired
-    private AccountService accountService;
+    private static String PREFIX = "ROLE_";
 
     @PermitAll
     @RequestMapping("/login")
@@ -29,11 +20,11 @@ public class HomeController {
 
         String roleName = (SecurityContextHolder.getContext().getAuthentication().getAuthorities().toArray())[0].toString();
 
-        if(roleName.equals(RoleConstant.PREFIX_ROLE + RoleConstant.ROLE_ADMIN))
+        if(roleName.equals(PREFIX + RoleEnum.ADMIN.name()))
             return "redirect:/admin";
-        else if(roleName.equals(RoleConstant.PREFIX_ROLE + RoleConstant.ROLE_CLERK))
+        else if(roleName.equals(PREFIX + RoleEnum.CLERK.name()))
             return "redirect:/clerk";
-        else if(roleName.equals(RoleConstant.PREFIX_ROLE + RoleConstant.ROLE_USER))
+        else if(roleName.equals(PREFIX + RoleEnum.USER.name()))
             return "redirect:/user";
 
         return "login";
@@ -64,41 +55,31 @@ public class HomeController {
 
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @RequestMapping("/user")
-    public String user(){
+    public String user() {
         return "user";
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @RequestMapping("/admin")
-    public String admin(){
+    public String admin() {
         return "admin";
     }
 
     @PreAuthorize("hasRole('ROLE_CLERK')")
     @RequestMapping("/clerk")
-    public String clerk(){
+    public String clerk() {
         return "clerk";
     }
 
     @RequestMapping("/403")
-    public String er(){
+    public String error(){
+
         return "403";
     }
 
-    @RequestMapping("/login-google")
-    public String loginGoogle(@RequestParam(value = "code", defaultValue = "") String code,
-                              HttpServletRequest request) throws IOException, EmailFormatException, AccountIsExistException, AccountValidationException, RoleNotFoundException {
-        if (code.isEmpty())
-            return "redirect:/login?google=error";
+    @RequestMapping("/index")
+    public String index() {
+        return "index";
 
-        Account account = accountService.loginWithGoogle(code, request);
-
-        if(account.getRole().getName().equals(RoleConstant.ROLE_ADMIN))
-            return "redirect:/admin";
-        else if(account.getRole().getName().equals(RoleConstant.ROLE_CLERK))
-            return "redirect:/clerk";
-
-        return "redirect:/user";
     }
-
 }
