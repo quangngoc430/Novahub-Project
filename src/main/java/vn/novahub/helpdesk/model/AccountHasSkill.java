@@ -1,5 +1,6 @@
 package vn.novahub.helpdesk.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
@@ -24,10 +25,12 @@ public class AccountHasSkill implements Serializable {
     private long skillId;
 
     @JsonProperty(value = "created_at")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "created_at")
     private Date createdAt;
 
     @JsonProperty(value = "updated_at")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "updated_at")
     private Date updatedAt;
 
