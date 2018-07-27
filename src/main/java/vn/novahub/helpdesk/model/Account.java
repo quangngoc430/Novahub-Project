@@ -1,7 +1,6 @@
 package vn.novahub.helpdesk.model;
 
 import com.fasterxml.jackson.annotation.*;
-import io.swagger.annotations.ApiModelProperty;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import vn.novahub.helpdesk.annotation.AccountStatus;

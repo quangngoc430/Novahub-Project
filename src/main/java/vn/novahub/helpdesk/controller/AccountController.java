@@ -3,7 +3,6 @@ package vn.novahub.helpdesk.controller;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +24,6 @@ import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping(path = "/api")
-@Api(tags = "Users Rest Controller")
 public class AccountController {
 
     private static final Logger logger = LoggerFactory.getLogger(AccountController.class);
@@ -36,12 +34,6 @@ public class AccountController {
     @Autowired
     private LogService logService;
 
-
-    @ApiOperation(value = "Login user", tags = "Users Rest Controller")
-    @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
-                            @ApiResponse(code = 403, message = "Inactive user"),
-                            @ApiResponse(code = 404, message = "Invalid email or password"),
-                            @ApiResponse(code = 423, message = "User is locked")})
     @PermitAll
     @PostMapping(path = "/login", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Account> login(@RequestBody Account account,
