@@ -1,6 +1,5 @@
 package vn.novahub.helpdesk.model;
 
-import java.util.Arrays;
 import java.util.Objects;
 
 public class Request {
@@ -50,12 +49,5 @@ public class Request {
         }
 
         return false;
-    }
-
-    private boolean isMatchPath(String oldPath, String newPath){
-        int indexOldPath = 0, indexNewPath = 0;
-
-
-        return true;
     }
 }
