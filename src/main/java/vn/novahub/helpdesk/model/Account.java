@@ -28,7 +28,7 @@ public class Account implements Serializable {
             groups = {GroupCreateAccount.class, GroupLoginAccount.class})
     @Size(min = 8, max = 80, message = "email must have between 8 and 80 characters",
             groups = {GroupCreateAccount.class, GroupLoginAccount.class})
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     private String email;
 
     @JsonProperty(value = "first_name")
