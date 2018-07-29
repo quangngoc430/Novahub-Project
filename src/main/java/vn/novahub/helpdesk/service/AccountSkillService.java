@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import vn.novahub.helpdesk.exception.*;
 import vn.novahub.helpdesk.model.Account;
+import vn.novahub.helpdesk.model.Level;
 import vn.novahub.helpdesk.model.Skill;
 
 public interface AccountSkillService {
@@ -18,7 +19,7 @@ public interface AccountSkillService {
 
     Skill create(Skill skill) throws SkillValidationException, SkillIsExistException, CategoryNotFoundException, LevelValidationException;
 
-    Skill update(long skillId, Skill skill) throws SkillNotFoundException, LevelValidationException;
+    Skill update(long skillId, Level newLevel) throws SkillNotFoundException, LevelValidationException;
 
     void delete(long skillId) throws SkillNotFoundException;
 

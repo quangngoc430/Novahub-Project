@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 
 import vn.novahub.helpdesk.exception.*;
 import vn.novahub.helpdesk.model.Account;
+import vn.novahub.helpdesk.model.Level;
 import vn.novahub.helpdesk.model.Skill;
 import vn.novahub.helpdesk.service.AccountSkillService;
 import vn.novahub.helpdesk.service.AdminSkillService;
@@ -34,7 +35,7 @@ public class SkillController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping(path = "/skills/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Skill> get(@PathVariable("id") long skillId) throws SkillNotFoundException {
+    public ResponseEntity<Skill> getById(@PathVariable("id") long skillId) throws SkillNotFoundException {
         return new ResponseEntity<>(accountSkillService.findOne(skillId), HttpStatus.OK);
     }
 
@@ -80,10 +81,16 @@ public class SkillController {
     }
 
     @PreAuthorize("isAuthenticated()")
+    @GetMapping(path = "/users/me/skills/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Skill> get(@PathVariable("id") long skillId) throws SkillNotFoundException {
+        return new ResponseEntity<>(accountSkillService.findOne(skillId), HttpStatus.OK);
+    }
+
+    @PreAuthorize("isAuthenticated()")
     @PutMapping(path = "/users/me/skills/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Skill> update(@PathVariable("id") long skillId,
-                                        @RequestBody Skill skill) throws SkillNotFoundException, LevelValidationException {
-        return new ResponseEntity<>(accountSkillService.update(skillId, skill), HttpStatus.OK);
+                                        @RequestBody Level level) throws SkillNotFoundException, LevelValidationException {
+        return new ResponseEntity<>(accountSkillService.update(skillId, level), HttpStatus.OK);
     }
 
     @PreAuthorize("isAuthenticated()")
