@@ -7,11 +7,11 @@
     }
   ],
   "info": {
-    "description": "This is a simple API",
+    "description": "These are helpdesk apis",
     "version": "1.0.0",
-    "title": "Simple Inventory API",
+    "title": "Helpdesk APIs",
     "contact": {
-      "email": "you@your-company.com"
+      "email": "helpdesk@novahub.vn"
     },
     "license": {
       "name": "Apache 2.0",
@@ -28,12 +28,12 @@
       "description": "Role apis"
     },
     {
-      "name": "Skill Rest Controller",
-      "description": "Skill apis"
-    },
-    {
       "name": "Category Rest Controller",
       "description": "Category apis"
+    },
+    {
+      "name": "Skill Rest Controller",
+      "description": "Skill apis"
     },
     {
       "name": "Issue Rest Controller",
@@ -5142,6 +5142,11 @@
             "name": "status",
             "schema": {
               "type": "string",
+              "enum": [
+                "APPROVE",
+                "DENY",
+                "PENDING"
+              ],
               "example": "APPROVE"
             }
           },
@@ -6115,6 +6120,27 @@
             "schema": {
               "type": "string",
               "example": "dff4d0d4891bfd8bafdb859dac4cbccb218bcf5adc9887a627c6c159f76ef0b9"
+            }
+          },
+          {
+            "in": "query",
+            "name": "keyword",
+            "schema": {
+              "type": "string",
+              "example": "Java"
+            }
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "APPROVE",
+                "DENY",
+                "PENDING"
+              ],
+              "example": "APPROVE"
             }
           },
           {
