@@ -19,7 +19,7 @@ public interface AccountSkillService {
 
     Skill create(Skill skill) throws SkillValidationException, SkillIsExistException, CategoryNotFoundException, LevelValidationException;
 
-    Skill update(long skillId, Level newLevel) throws SkillNotFoundException, LevelValidationException;
+    Skill update(long skillId, Skill newSkill) throws SkillNotFoundException, LevelValidationException;
 
     void delete(long skillId) throws SkillNotFoundException;
 
