@@ -139,7 +139,7 @@ public class AccountSkillServiceImpl implements AccountSkillService {
     }
 
     @Override
-    public Skill update(long skillId, Level newLevel) throws SkillNotFoundException, LevelValidationException {
+    public Skill update(long skillId, Skill newSkill) throws SkillNotFoundException, LevelValidationException, SkillValidationException {
 
         skillValidation.validate(newSkill, GroupUpdateSkill.class);
         levelValidation.validate(newSkill.getLevel(), GroupUpdateSkill.class);
