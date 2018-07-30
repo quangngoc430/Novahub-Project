@@ -5141,7 +5141,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successfully",
+            "description": "Get an skill by id of user login successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -5544,11 +5544,11 @@
                         "value": {
                           "type": "string",
                           "enum": [
-                            "value is not empty",
+                            "value is not null",
                             "value must be greater than or equal to 1",
                             "value must be less than or equal to 10"
                           ],
-                          "example": "value is not empty"
+                          "example": "value is not null"
                         }
                       }
                     },
