@@ -46,7 +46,7 @@ CREATE TABLE `token` (
 DROP TABLE IF EXISTS `category`;
 CREATE TABLE `category` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) DEFAULT NULL,
+  `name` varchar(100) UNIQUE DEFAULT NULL,
   `created_at` datetime NOT NULL DEFAULT NOW(),
   `updated_at` datetime NOT NULL DEFAULT NOW(),
   PRIMARY KEY (`id`)
@@ -55,9 +55,8 @@ CREATE TABLE `category` (
 DROP TABLE IF EXISTS `skill`;
 CREATE TABLE `skill` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) UNIQUE DEFAULT NULL,
+  `name` varchar(45) DEFAULT NULL,
   `category_id` int(11) NOT NULL,
-  `level` int NOT NULL,
   `created_at` datetime NOT NULL DEFAULT NOW(),
   `updated_at` datetime NOT NULL DEFAULT NOW(),
   PRIMARY KEY (`id`),

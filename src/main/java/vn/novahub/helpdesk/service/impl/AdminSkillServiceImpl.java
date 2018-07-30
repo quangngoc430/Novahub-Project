@@ -46,8 +46,8 @@ public class AdminSkillServiceImpl implements AdminSkillService {
         if(!categoryRepository.existsById(skill.getCategoryId()))
             throw new CategoryNotFoundException(skill.getCategoryId());
 
-        if(skillRepository.getByName(skill.getName()) != null)
-            throw new SkillIsExistException(skill.getName());
+        if(skillRepository.getByNameAndCategoryId(skill.getName(), skill.getCategoryId()) != null)
+            throw new SkillIsExistException(skill.getName(), skill.getCategoryId());
 
         skill.setCreatedAt(new Date());
         skill.setUpdatedAt(new Date());
@@ -64,15 +64,15 @@ public class AdminSkillServiceImpl implements AdminSkillService {
         if(!categoryRepository.existsById(skill.getCategoryId()))
             throw new CategoryNotFoundException(skill.getCategoryId());
 
-        Skill oldSkill = skillRepository.getByIdAndCategoryId(skillId, skill.getCategoryId());
+        Skill oldSkill = skillRepository.getById(skillId);
 
         if (oldSkill == null) {
-            throw new SkillNotFoundException(skillId);
+            throw new SkillNotFoundException(skillId, skill.getCategoryId());
         }
 
-        Skill skillTemp = skillRepository.getByName(skill.getName());
+        Skill skillTemp = skillRepository.getByNameAndCategoryId(skill.getName(), skill.getCategoryId());
         if((skillTemp != null) && (skillTemp.getId() != skillId))
-            throw new SkillIsExistException(skill.getName());
+            throw new SkillIsExistException(skill.getName(), skill.getCategoryId());
 
         oldSkill.setName(skill.getName());
         oldSkill.setLevel(skill.getLevel());
@@ -103,7 +103,7 @@ public class AdminSkillServiceImpl implements AdminSkillService {
         skill.setCategoryId(categoryId);
         skillValidation.validate(skill, GroupCreateSkill.class);
 
-        if(skillRepository.getByName(skill.getName()) != null)
+        if(skillRepository.getByNameAndCategoryId(skill.getName(), categoryId) != null)
             throw new SkillIsExistException(skill.getName());
 
         skill.setCreatedAt(new Date());

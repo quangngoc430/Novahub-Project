@@ -11,7 +11,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 
 import vn.novahub.helpdesk.exception.*;
 import vn.novahub.helpdesk.model.Account;
-import vn.novahub.helpdesk.model.Level;
 import vn.novahub.helpdesk.model.Skill;
 import vn.novahub.helpdesk.service.AccountSkillService;
 import vn.novahub.helpdesk.service.AdminSkillService;

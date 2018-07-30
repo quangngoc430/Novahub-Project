@@ -5342,11 +5342,24 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "value": {
+                  "name": {
+                    "type": "string",
+                    "example": "Java"
+                  },
+                  "category_id": {
                     "type": "integer",
-                    "minimum": 1,
-                    "maximum": 10,
-                    "example": 5
+                    "example": 1
+                  },
+                  "level": {
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 10,
+                        "example": 5
+                      }
+                    }
                   }
                 }
               }

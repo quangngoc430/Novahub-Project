@@ -94,13 +94,13 @@ public class AccountSkillServiceImpl implements AccountSkillService {
         skillValidation.validate(newSkill, GroupCreateSkill.class);
         levelValidation.validate(newSkill.getLevel(), GroupCreateSkill.class);
 
-        if(newSkill.getCategory() != null && !categoryRepository.existsById(newSkill.getCategoryId()))
+        if(!categoryRepository.existsById(newSkill.getCategoryId()))
             throw new CategoryNotFoundException(newSkill.getCategoryId());
 
         Account accountLogin = accountService.getAccountLogin();
 
         // check skill is exists
-        Skill oldSkill = skillRepository.getByName(newSkill.getName());
+        Skill oldSkill = skillRepository.getByNameAndCategoryId(newSkill.getName(), newSkill.getCategoryId());
 
         if(oldSkill == null) {
             newSkill.setCreatedAt(new Date());
@@ -108,13 +108,11 @@ public class AccountSkillServiceImpl implements AccountSkillService {
             newSkill = skillRepository.save(newSkill);
 
         } else {
-
             newSkill.setId(oldSkill.getId());
             newSkill.setCategoryId(oldSkill.getCategoryId());
 
             if(accountHasSkillRepository.existsByAccountIdAndSkillId(accountLogin.getId(), newSkill.getId()))
                 throw new SkillIsExistException(newSkill.getName());
-
         }
 
         Level newLevel = new Level();
@@ -151,19 +149,52 @@ public class AccountSkillServiceImpl implements AccountSkillService {
         if(oldSkill == null)
             throw new SkillNotFoundException(skillId);
 
-        if(oldSkill.getCategoryId() != newSkill.getCategoryId() || !oldSkill.getName().equals(newSkill.getName())) {
-            // TODO: check and create new skill
+        // have same skillName and categoryId
+        if((oldSkill.getCategoryId() == newSkill.getCategoryId()) && (oldSkill.getName().equals(newSkill.getName()))) {
+            Level oldLevel = levelRepository.getByAccountIdAndSkillId(accountLogin.getId(), skillId);
+            oldLevel.setValue(newSkill.getLevel().getValue());
+            oldLevel.setUpdatedAt(new Date());
+            oldLevel = levelRepository.save(oldLevel);
+            oldSkill.setLevel(oldLevel);
+
+            return oldSkill;
         }
 
-        // TODO: if create new skill then delete or update account_has_skill and level
+        // check skill is exist
+        Skill skillTemp = skillRepository.getByNameAndCategoryId(newSkill.getName(), newSkill.getCategoryId());
 
-        Level oldLevel = levelRepository.getByAccountIdAndSkillId(accountLogin.getId(), skillId);
-        oldLevel.setValue(newSkill.getLevel().getValue());
-        oldLevel.setUpdatedAt(new Date());
-        oldLevel = levelRepository.save(oldLevel);
-        oldSkill.setLevel(oldLevel);
+        // skill is exist
+        if (skillTemp != null) {
+            AccountHasSkill accountHasSkill = accountHasSkillRepository.getByAccountIdAndSkillId(accountLogin.getId(), skillId);
+            accountHasSkill.setSkillId(skillTemp.getId());
+            accountHasSkillRepository.save(accountHasSkill);
 
-        return oldSkill;
+            Level level = levelRepository.getByAccountIdAndSkillId(accountLogin.getId(), skillId);
+            level.setSkillId(skillTemp.getId());
+            level.setValue(newSkill.getLevel().getValue());
+            skillTemp.setLevel(levelRepository.save(level));
+
+            return skillTemp;
+        } else {
+            newSkill.setCreatedAt(new Date());
+            newSkill.setUpdatedAt(new Date());
+            skillTemp = skillRepository.save(newSkill);
+            AccountHasSkill accountHasSkill = accountHasSkillRepository.getByAccountIdAndSkillId(accountLogin.getId(), skillId);
+            accountHasSkill.setSkillId(newSkill.getId());
+            accountHasSkillRepository.save(accountHasSkill);
+
+            Level level = levelRepository.getByAccountIdAndSkillId(accountLogin.getId(), skillId);
+            level.setSkillId(newSkill.getId());
+            level.setValue(newSkill.getLevel().getValue());
+            skillTemp.setLevel(levelRepository.save(level));
+
+            // delete skill if it
+            if (accountHasSkillRepository.countBySkillId(skillId) == 0) {
+               skillRepository.deleteById(skillId);
+            }
+
+            return skillTemp;
+        }
     }
 
     @Override

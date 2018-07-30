@@ -29,6 +29,8 @@ public interface SkillRepository extends PagingAndSortingRepository<Skill, Long>
 
     Skill getByName(String skillName);
 
+    Skill getByNameAndCategoryId(String skillName, long categoryId);
+
     Skill getByIdAndCategoryId(long skillId, long categoryId);
 
     boolean existsByIdAndCategoryId(long skillId, long categoryId);
