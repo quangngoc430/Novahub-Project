@@ -776,13 +776,13 @@
         ],
         "responses": {
           "200": {
-            "description": "Get all skills successfully",
+            "description": "Get profile of user login successfully",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Account",
                   "properties": {
-                    "category": {
+                    "role": {
                       "$ref": "#/components/schemas/Role"
                     }
                   },
