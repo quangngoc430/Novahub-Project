@@ -36,7 +36,7 @@ public class SkillController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping(path = "/skills/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Skill> getById(@PathVariable("id") long skillId) throws SkillNotFoundException {
-        return new ResponseEntity<>(accountSkillService.findOne(skillId), HttpStatus.OK);
+        return new ResponseEntity<>(adminSkillService.findOne(skillId), HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
