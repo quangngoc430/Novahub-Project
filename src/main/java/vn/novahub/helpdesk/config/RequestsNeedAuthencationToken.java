@@ -1,7 +1,6 @@
 package vn.novahub.helpdesk.config;
 
 import vn.novahub.helpdesk.model.Request;
-
 import java.util.ArrayList;
 
 public class RequestsNeedAuthencationToken {
@@ -14,7 +13,6 @@ public class RequestsNeedAuthencationToken {
         PUT,
         DELETE
     }
-    
     
     public static ArrayList<Request> get() {
         if(requestArrayList == null) {
@@ -49,7 +47,8 @@ public class RequestsNeedAuthencationToken {
             requestArrayList.add(new Request("\\/api\\/users\\/me\\/issues\\/(\\d+)", new String[]{Method.GET.name(), Method.PUT.name(), Method.DELETE.name()}));
 
             // day-off
-            requestArrayList.add(new Request("\\/api\\/day-offs", new String[]{Method.GET.name(), Method.POST.name(), Method.DELETE.name()}));
+            requestArrayList.add(new Request("\\/api\\/day-offs", new String[]{Method.GET.name(), Method.POST.name()}));
+            requestArrayList.add(new Request("\\/api\\/day-offs\\/(\\d+)", new String[]{Method.GET.name(), Method.PUT.name(), Method.DELETE.name()}));
 
             // day-of-type
             requestArrayList.add(new Request("\\/api\\/day-off-types", new String[]{Method.POST.name(), Method.PUT.name()}));

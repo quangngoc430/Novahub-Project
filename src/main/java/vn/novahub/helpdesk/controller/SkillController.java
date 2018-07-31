@@ -25,6 +25,7 @@ public class SkillController {
     @Autowired
     private AdminSkillService adminSkillService;
 
+    // TODO: add categoryId into request param
     @PreAuthorize("isAuthenticated()")
     @GetMapping(path = "/skills", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Page<Skill>> getAll(@RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
@@ -73,6 +74,7 @@ public class SkillController {
         return new ResponseEntity<>(accountSkillService.getAllByKeywordForAccountLogin(keyword, pageable), HttpStatus.OK);
     }
 
+    // TODO: add categoryId into request param
     @PreAuthorize("isAuthenticated()")
     @PostMapping(path = "/users/me/skills", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Skill> create(@RequestBody Skill skill) throws SkillIsExistException, SkillValidationException, CategoryNotFoundException, LevelValidationException {
@@ -100,6 +102,7 @@ public class SkillController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    // TODO: add categoryId into request param
     @PreAuthorize("isAuthenticated()")
     @GetMapping(path = "/users/{id}/skills", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Page<Skill>> getAllByAccountId(@PathVariable("id") long accountId,
