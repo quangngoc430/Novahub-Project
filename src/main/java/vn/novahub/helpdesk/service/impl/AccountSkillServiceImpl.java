@@ -137,7 +137,7 @@ public class AccountSkillServiceImpl implements AccountSkillService {
     }
 
     @Override
-    public Skill update(long skillId, Skill newSkill) throws SkillNotFoundException, LevelValidationException, SkillValidationException {
+    public Skill update(long skillId, Skill newSkill) throws SkillNotFoundException, LevelValidationException, SkillValidationException, SkillIsExistException {
 
         skillValidation.validate(newSkill, GroupUpdateSkill.class);
         levelValidation.validate(newSkill.getLevel(), GroupUpdateSkill.class);
@@ -165,6 +165,9 @@ public class AccountSkillServiceImpl implements AccountSkillService {
 
         // skill is exist
         if (skillTemp != null) {
+            if(accountHasSkillRepository.getByAccountIdAndSkillId(accountLogin.getId(), skillTemp.getId()) != null)
+                throw new SkillIsExistException(skillTemp.getName(), accountLogin.getId(), skillTemp.getCategoryId());
+
             AccountHasSkill accountHasSkill = accountHasSkillRepository.getByAccountIdAndSkillId(accountLogin.getId(), skillId);
             accountHasSkill.setSkillId(skillTemp.getId());
             accountHasSkillRepository.save(accountHasSkill);
@@ -179,6 +182,7 @@ public class AccountSkillServiceImpl implements AccountSkillService {
             newSkill.setCreatedAt(new Date());
             newSkill.setUpdatedAt(new Date());
             skillTemp = skillRepository.save(newSkill);
+
             AccountHasSkill accountHasSkill = accountHasSkillRepository.getByAccountIdAndSkillId(accountLogin.getId(), skillId);
             accountHasSkill.setSkillId(newSkill.getId());
             accountHasSkillRepository.save(accountHasSkill);
@@ -188,7 +192,7 @@ public class AccountSkillServiceImpl implements AccountSkillService {
             level.setValue(newSkill.getLevel().getValue());
             skillTemp.setLevel(levelRepository.save(level));
 
-            // delete skill if it
+            // delete skill if it doesn't belong to any users
             if (accountHasSkillRepository.countBySkillId(skillId) == 0) {
                skillRepository.deleteById(skillId);
             }

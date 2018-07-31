@@ -16,6 +16,7 @@ import vn.novahub.helpdesk.validation.SkillValidation;
 
 import javax.validation.groups.Default;
 import java.util.Date;
+import java.util.Optional;
 
 @Service
 public class AdminSkillServiceImpl implements AdminSkillService {
@@ -31,12 +32,12 @@ public class AdminSkillServiceImpl implements AdminSkillService {
 
     @Override
     public Skill findOne(long skillId) throws SkillNotFoundException {
-        Skill skill = skillRepository.getById(skillId);
+        Optional<Skill> skill = skillRepository.findById(skillId);
 
-        if(skill == null)
+        if(!skill.isPresent())
             throw new SkillNotFoundException(skillId);
 
-        return skill;
+        return skill.get();
     }
 
     @Override
