@@ -102,7 +102,9 @@ public class AccountSkillServiceImpl implements AccountSkillService {
         skillValidation.validate(newSkill, GroupCreateSkill.class);
         levelValidation.validate(newSkill.getLevel(), GroupCreateSkill.class);
 
-        if(!categoryRepository.existsById(newSkill.getCategoryId()))
+        Optional<Category> categoryOptional = categoryRepository.findById(newSkill.getCategoryId());
+
+        if(!categoryOptional.isPresent())
             throw new CategoryNotFoundException(newSkill.getCategoryId());
 
         Account accountLogin = accountService.getAccountLogin();
@@ -139,7 +141,7 @@ public class AccountSkillServiceImpl implements AccountSkillService {
         accountHasSkill.setUpdatedAt(new Date());
         accountHasSkillRepository.save(accountHasSkill);
 
-        newSkill.setCategory(categoryRepository.getById(newSkill.getCategoryId()));
+        newSkill.setCategory(categoryOptional.get());
 
         return newSkill;
     }

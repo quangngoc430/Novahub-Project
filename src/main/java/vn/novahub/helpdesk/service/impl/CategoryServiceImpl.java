@@ -15,6 +15,7 @@ import vn.novahub.helpdesk.validation.GroupCreateCategory;
 import vn.novahub.helpdesk.validation.GroupUpdateCategory;
 
 import java.util.Date;
+import java.util.Optional;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -33,12 +34,12 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category get(long categoryId) throws CategoryNotFoundException {
-        Category category = categoryRepository.getById(categoryId);
+        Optional<Category> categoryOptional = categoryRepository.findById(categoryId);
 
-        if(category == null)
+        if(!categoryOptional.isPresent())
             throw new CategoryNotFoundException(categoryId);
 
-        return category;
+        return categoryOptional.get();
     }
 
     @Override
@@ -61,10 +62,12 @@ public class CategoryServiceImpl implements CategoryService {
 
         categoryValidation.validate(category, GroupUpdateCategory.class);
 
-        Category oldCategory = categoryRepository.getById(categoryId);
+        Optional<Category> categoryOptional = categoryRepository.findById(categoryId);
 
-        if(oldCategory == null)
+        if(!categoryOptional.isPresent())
             throw new CategoryNotFoundException(categoryId);
+
+        Category oldCategory = categoryOptional.get();
 
         if(!oldCategory.equals(category) && categoryRepository.existsByName(category.getName()))
             throw new CategoryIsExistException(category.getName());

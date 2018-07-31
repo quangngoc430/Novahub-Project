@@ -56,8 +56,6 @@ public interface AccountRepository extends PagingAndSortingRepository<Account, L
                                                                                                    @Param("name") String name,
                                                                                                    Pageable pageable);
 
-    //Account getById(long accountId);
-
     Account getByIdAndVerificationToken(long accountId, String verificationToken);
 
     @Query("SELECT account FROM Account account JOIN Role role ON account.roleId = role.id WHERE role.name = :name")
