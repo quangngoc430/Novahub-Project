@@ -65,11 +65,12 @@ public class AdminSkillServiceImpl implements AdminSkillService {
         if(!categoryRepository.existsById(skill.getCategoryId()))
             throw new CategoryNotFoundException(skill.getCategoryId());
 
-        Skill oldSkill = skillRepository.getById(skillId);
+        Optional<Skill> optionalSkill = skillRepository.findById(skillId);
 
-        if (oldSkill == null) {
+        if (!optionalSkill.isPresent())
             throw new SkillNotFoundException(skillId, skill.getCategoryId());
-        }
+
+        Skill oldSkill = optionalSkill.get();
 
         Skill skillTemp = skillRepository.getByNameAndCategoryId(skill.getName(), skill.getCategoryId());
         if((skillTemp != null) && (skillTemp.getId() != skillId))

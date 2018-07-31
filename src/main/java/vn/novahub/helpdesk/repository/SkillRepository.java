@@ -35,9 +35,6 @@ public interface SkillRepository extends PagingAndSortingRepository<Skill, Long>
 
     boolean existsByIdAndCategoryId(long skillId, long categoryId);
 
-    Skill getById(long skillId);
-
-
     @Query("SELECT skill " +
            "FROM Skill skill " +
            "JOIN AccountHasSkill accountHasSkill " +
