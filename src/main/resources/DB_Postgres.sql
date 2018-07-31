@@ -13,7 +13,7 @@ DROP TABLE IF EXISTS role;
 
 CREATE TABLE role (
   id SERIAL PRIMARY KEY,
-  name char(80) NOT NULL
+  name VARCHAR(80) NOT NULL
 );
 
 CREATE TABLE account (

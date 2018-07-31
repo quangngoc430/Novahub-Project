@@ -18,10 +18,7 @@ import vn.novahub.helpdesk.service.*;
 
 import javax.mail.MessagingException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.*;
 
 @Service
 public class DayOffServiceImpl implements DayOffService {
@@ -90,28 +87,39 @@ public class DayOffServiceImpl implements DayOffService {
     }
 
     @Override
-    public void delete(DayOff dayOff)
+    public DayOff delete(long dayOffId)
             throws MessagingException,
                     DayOffOverdueException,
+                    DayOffIsNotExistException,
                     UnauthorizedException {
         Date currentDate = new Date();
-        dayOff = dayOffRepository.getById(dayOff.getId());
+        Optional<DayOff> dayOff = dayOffRepository.findById(dayOffId);
+
+        if (!dayOff.isPresent()) {
+            throw new DayOffIsNotExistException(dayOffId);
+        }
+
         Account account = accountService.getAccountLogin();
-        if (account.getId() != dayOff.getAccountId()) {
+        if (account.getId() != dayOff.get().getAccountId()) {
             throw new UnauthorizedException("This is not your day off", "/api/day-offs");
         }
 
-        if (currentDate.before(dayOff.getStartDate())) {
-            dayOffRepository.delete(dayOff);
+        if (currentDate.before(dayOff.get().getStartDate())) {
+            dayOffRepository.delete(dayOff.get());
         } else {
-            throw new DayOffOverdueException(dayOff.getId());
+            throw new DayOffOverdueException(dayOffId);
         }
-        sendMailDeleteForAdmin(dayOff);
+        sendMailDeleteForAdmin(dayOff.get());
+
+        return dayOff.get();
     }
 
     @Override
     public DayOff approve(long dayOffId, String token)
-            throws DayOffIsAnsweredException, DayOffTokenIsNotMatchException, MessagingException{
+            throws DayOffIsAnsweredException,
+            DayOffTokenIsNotMatchException,
+            DayOffIsNotExistException,
+            MessagingException{
 
         DayOff dayOff = checkIfRequestIsAnswered(dayOffId, token);
 
@@ -127,7 +135,10 @@ public class DayOffServiceImpl implements DayOffService {
 
     @Override
     public DayOff deny(long dayOffId, String token)
-            throws DayOffIsAnsweredException, DayOffTokenIsNotMatchException, MessagingException {
+            throws DayOffIsAnsweredException,
+            DayOffIsNotExistException,
+            DayOffTokenIsNotMatchException,
+            MessagingException {
         DayOff dayOff = checkIfRequestIsAnswered(dayOffId, token);
 
         if (dayOff.getToken().equals(token)) {
@@ -146,13 +157,19 @@ public class DayOffServiceImpl implements DayOffService {
         sendMailUpdateForUser(dayOff);
     }
 
-    private DayOff checkIfRequestIsAnswered(long dayOffId, String token) throws DayOffIsAnsweredException{
-        DayOff dayOff = dayOffRepository.getById(dayOffId);
+    private DayOff checkIfRequestIsAnswered(long dayOffId, String token)
+            throws DayOffIsAnsweredException,
+                   DayOffIsNotExistException {
+        Optional<DayOff> dayOff = dayOffRepository.findById(dayOffId);
 
-        if (dayOff.getToken().trim().isEmpty()) {
+        if (!dayOff.isPresent()) {
+            throw new DayOffIsNotExistException(dayOffId);
+        }
+
+        if (dayOff.get().getToken().trim().isEmpty()) {
             throw new DayOffIsAnsweredException(dayOffId);
         }
-        return dayOff;
+        return dayOff.get();
     }
 
     private void validateDayOffType(DayOff dayOff) throws DayOffTypeIsNotValidException{

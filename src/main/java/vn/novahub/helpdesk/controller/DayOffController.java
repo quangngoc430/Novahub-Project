@@ -53,11 +53,15 @@ public class DayOffController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @DeleteMapping(path = "/day-offs")
-    public ResponseEntity<DayOff> delete(@RequestBody DayOff dayOff)
-            throws MessagingException, DayOffOverdueException, UnauthorizedException{
+    @DeleteMapping(path = "/day-offs/{id}")
+    public ResponseEntity<DayOff> delete(@PathVariable long dayOffId)
+            throws MessagingException,
+            DayOffOverdueException,
+            DayOffIsNotExistException,
+            UnauthorizedException{
 
-        dayOffService.delete(dayOff);
+
+        DayOff dayOff = dayOffService.delete(dayOffId);
 
         return new ResponseEntity<>(dayOff, HttpStatus.OK);
     }
@@ -67,6 +71,7 @@ public class DayOffController {
                                           @RequestParam("token") String token)
                                              throws DayOffIsAnsweredException,
                                                     DayOffTokenIsNotMatchException,
+                                                    DayOffIsNotExistException,
                                                     MessagingException{
         DayOff dayOff = dayOffService.approve(dayOffId, token);
 
@@ -78,6 +83,7 @@ public class DayOffController {
                                        @RequestParam("token") String token)
                                             throws DayOffIsAnsweredException,
                                                    DayOffTokenIsNotMatchException,
+                                                   DayOffIsNotExistException,
                                                    MessagingException {
        DayOff dayOff =  dayOffService.deny(dayOffId, token);
 
