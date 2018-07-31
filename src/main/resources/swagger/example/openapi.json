@@ -2,7 +2,7 @@
   "openapi": "3.0.0",
   "servers": [
     {
-      "description": "Helpdesk Swagger API Examples",
+      "description": "Development server",
       "url": "http://localhost:8080/api"
     }
   ],
