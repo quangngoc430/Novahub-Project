@@ -2,16 +2,16 @@
   "openapi": "3.0.0",
   "servers": [
     {
-      "description": "SwaggerHub API Auto Mocking",
+      "description": "Helpdesk Swagger API Examples",
       "url": "http://localhost:8080"
     }
   ],
   "info": {
-    "description": "This is a simple API",
+    "description": "This is a simple example API for Helpdesk",
     "version": "1.0.0",
-    "title": "Simple Inventory API",
+    "title": "Simple Helpdesk API",
     "contact": {
-      "email": "you@your-company.com"
+      "email": "mentor@novahub.vn"
     },
     "license": {
       "name": "Apache 2.0",
@@ -20,23 +20,23 @@
   },
   "tags": [
     {
-      "name": "User Rest Controller",
+      "name": "User",
       "description": "User apis"
     },
     {
-      "name": "Role Rest Controller",
+      "name": "Role",
       "description": "Role apis"
     },
     {
-      "name": "Skill Rest Controller",
+      "name": "Skill",
       "description": "Skill apis"
     },
     {
-      "name": "Category Rest Controller",
+      "name": "Category",
       "description": "Category apis"
     },
     {
-      "name": "Issue Rest Controller",
+      "name": "Issue",
       "description": "Issue apis"
     }
   ],
@@ -44,7 +44,7 @@
     "/api/login": {
       "post": {
         "tags": [
-          "User Rest Controller"
+          "User"
         ],
         "summary": "basic login",
         "description": "Login user by username and password",
@@ -256,7 +256,7 @@
     "/api/login/google": {
       "post": {
         "tags": [
-          "User Rest Controller"
+          "User"
         ],
         "summary": "login with google",
         "description": "login with google",
@@ -385,7 +385,7 @@
     "/api/users": {
       "get": {
         "tags": [
-          "User Rest Controller"
+          "User"
         ],
         "summary": "Get all users (ADMIN)",
         "description": "Get all users (ADMIN)",
@@ -598,7 +598,7 @@
       },
       "post": {
         "tags": [
-          "User Rest Controller"
+          "User"
         ],
         "summary": "Create new user (SIGNUP)",
         "description": "Create new user (SIGNUP)",
@@ -751,7 +751,7 @@
     "/api/users/me": {
       "get": {
         "tags": [
-          "User Rest Controller"
+          "User"
         ],
         "summary": "Get profile of user login",
         "description": "Get profile of user login",
@@ -912,7 +912,7 @@
       },
       "put": {
         "tags": [
-          "User Rest Controller"
+          "User"
         ],
         "summary": "Get profile of user login",
         "description": "Get profile of user login",
@@ -1160,7 +1160,7 @@
     "/api/users/{id}": {
       "get": {
         "tags": [
-          "User Rest Controller"
+          "User"
         ],
         "summary": "Get user by id",
         "description": "Get user by id",
@@ -1355,7 +1355,7 @@
       },
       "put": {
         "tags": [
-          "User Rest Controller"
+          "User"
         ],
         "summary": "Update user by id (ADMIN)",
         "description": "Update user by id (ADMIN)",
@@ -1628,7 +1628,7 @@
       },
       "delete": {
         "tags": [
-          "User Rest Controller"
+          "User"
         ],
         "summary": "Delete user by id (ADMIN)",
         "description": "Delete user by id (ADMIN)",
@@ -1813,7 +1813,7 @@
     "/api/roles": {
       "get": {
         "tags": [
-          "Role Rest Controller"
+          "Role"
         ],
         "summary": "Get all roles",
         "description": "Get all roles",
@@ -2002,7 +2002,7 @@
     "/api/roles/{id}": {
       "get": {
         "tags": [
-          "Role Rest Controller"
+          "Role"
         ],
         "summary": "Get a role by id",
         "description": "Get a role by id",
@@ -2193,7 +2193,7 @@
     "/api/categories": {
       "get": {
         "tags": [
-          "Category Rest Controller"
+          "Category"
         ],
         "summary": "Get all categories",
         "description": "Get all categories",
@@ -2380,7 +2380,7 @@
       },
       "post": {
         "tags": [
-          "Category Rest Controller"
+          "Category"
         ],
         "summary": "Create a category (ADMIN)",
         "description": "Create a category (ADMIN)",
@@ -2619,7 +2619,7 @@
     "/api/categories/{id}": {
       "get": {
         "tags": [
-          "Category Rest Controller"
+          "Category"
         ],
         "summary": "Get a category by id (ADMIN)",
         "description": "Get a category by id (ADMIN)",
@@ -2808,7 +2808,7 @@
       },
       "put": {
         "tags": [
-          "Category Rest Controller"
+          "Category"
         ],
         "summary": "Create a category by id (ADMIN)",
         "description": "Create a category by id (ADMIN)",
@@ -3091,7 +3091,7 @@
       },
       "delete": {
         "tags": [
-          "Category Rest Controller"
+          "Category"
         ],
         "summary": "Delete a category by id (ADMIN)",
         "description": "Delete a category by id (ADMIN)",
@@ -3275,7 +3275,7 @@
     "/api/skills": {
       "get": {
         "tags": [
-          "Skill Rest Controller"
+          "Skill"
         ],
         "summary": "Get all skills",
         "description": "Get all skills",
@@ -3467,7 +3467,7 @@
       },
       "post": {
         "tags": [
-          "Skill Rest Controller"
+          "Skill"
         ],
         "summary": "Create new skill (ADMIN)",
         "description": "Create new skill (ADMIN)",
@@ -3716,7 +3716,7 @@
     "/api/skills/{id}": {
       "get": {
         "tags": [
-          "Skill Rest Controller"
+          "Skill"
         ],
         "summary": "Get a skill by id (ADMIN)",
         "description": "Get a skill by id (ADMIN)",
@@ -3911,7 +3911,7 @@
       },
       "put": {
         "tags": [
-          "Skill Rest Controller"
+          "Skill"
         ],
         "summary": "Edit a skill by id (ADMIN)",
         "description": "Edit a skill by id (ADMIN)",
@@ -4216,7 +4216,7 @@
       },
       "delete": {
         "tags": [
-          "Skill Rest Controller"
+          "Skill"
         ],
         "summary": "Delete a skill by id (ADMIN)",
         "description": "Delete a skill by id (ADMIN)",
@@ -4401,7 +4401,7 @@
     "/api/skills/{id}/users": {
       "get": {
         "tags": [
-          "Skill Rest Controller"
+          "Skill"
         ],
         "summary": "Get a skill by id",
         "description": "Get a skill by id",
@@ -4642,7 +4642,7 @@
     "/api/users/me/skills": {
       "get": {
         "tags": [
-          "Skill Rest Controller"
+          "Skill"
         ],
         "summary": "Get all skills of user login",
         "description": "Get all skills of user login",
@@ -4839,7 +4839,7 @@
       },
       "post": {
         "tags": [
-          "Skill Rest Controller"
+          "Skill"
         ],
         "summary": "Create new skill for user login",
         "description": "Create new skill for user login",
@@ -5115,7 +5115,7 @@
     "/api/users/me/skills/{id}": {
       "get": {
         "tags": [
-          "Skill Rest Controller"
+          "Skill"
         ],
         "summary": "Get an skill by id of user login",
         "description": "Get an skill by id of user login",
@@ -5312,7 +5312,7 @@
       },
       "put": {
         "tags": [
-          "Skill Rest Controller"
+          "Skill"
         ],
         "summary": "Update an skill by id of user login",
         "description": "Update an skill by id of user login",
@@ -5582,7 +5582,7 @@
       },
       "delete": {
         "tags": [
-          "Skill Rest Controller"
+          "Skill"
         ],
         "summary": "Delete an skill by id of user login",
         "description": "Delete an skill by id of user login",
@@ -5766,7 +5766,7 @@
     "/api/issues": {
       "get": {
         "tags": [
-          "Issue Rest Controller"
+          "Issue"
         ],
         "summary": "Get all issues (ADMIN)",
         "description": "Get all issues (ADMIN)",
@@ -5979,7 +5979,7 @@
     "/api/issues/{id}": {
       "get": {
         "tags": [
-          "Issue Rest Controller"
+          "Issue"
         ],
         "summary": "Get an issue by id (ADMIN)",
         "description": "Get an issue by id (ADMIN)",
@@ -6178,7 +6178,7 @@
       },
       "put": {
         "tags": [
-          "Issue Rest Controller"
+          "Issue"
         ],
         "summary": "Edit an issue by id (ADMIN)",
         "description": "Edit an issue by id (ADMIN)",
@@ -6446,7 +6446,7 @@
       },
       "delete": {
         "tags": [
-          "Issue Rest Controller"
+          "Issue"
         ],
         "summary": "Delete an issue by id (ADMIN)",
         "description": "Delete an issue by id (ADMIN)",
@@ -6629,7 +6629,7 @@
     "/api/issues/{id}/action": {
       "get": {
         "tags": [
-          "Issue Rest Controller"
+          "Issue"
         ],
         "summary": "APPROVE or DENY issue",
         "description": "APPROVE or DENY issue with token",
@@ -6754,7 +6754,7 @@
     "/api/users/me/issues": {
       "get": {
         "tags": [
-          "Issue Rest Controller"
+          "Issue"
         ],
         "summary": "Get all issues of user login",
         "description": "Get all issues of user login",
@@ -6946,7 +6946,7 @@
       },
       "post": {
         "tags": [
-          "Issue Rest Controller"
+          "Issue"
         ],
         "summary": "Create an issue of user login",
         "description": "Create an issue of user login",
@@ -7120,7 +7120,7 @@
     "/api/users/me/issues/{id}": {
       "get": {
         "tags": [
-          "Issue Rest Controller"
+          "Issue"
         ],
         "summary": "Get issue by id of user login",
         "description": "Get issue by id",
@@ -7319,7 +7319,7 @@
       },
       "put": {
         "tags": [
-          "Issue Rest Controller"
+          "Issue"
         ],
         "summary": "Edit an issue by id",
         "description": "Edit an issue by id",
@@ -7537,7 +7537,7 @@
       },
       "delete": {
         "tags": [
-          "Issue Rest Controller"
+          "Issue"
         ],
         "summary": "Delete an issue by id",
         "description": "Delete an issue by id",
