@@ -2,6 +2,7 @@ package vn.novahub.helpdesk.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import vn.novahub.helpdesk.exception.AccountNotFoundException;
 import vn.novahub.helpdesk.exception.IssueIsClosedException;
 import vn.novahub.helpdesk.exception.IssueNotFoundException;
 import vn.novahub.helpdesk.exception.IssueValidationException;
@@ -16,9 +17,9 @@ public interface AccountIssueService {
 
     Issue findOne(long issueId) throws IssueNotFoundException;
 
-    Issue create(Issue issue) throws IssueValidationException, MessagingException, IOException;
+    Issue create(Issue issue) throws IssueValidationException, MessagingException, IOException, AccountNotFoundException;
 
-    Issue update(long issueId, Issue issue) throws IssueNotFoundException, IssueValidationException, MessagingException, IOException, IssueIsClosedException;
+    Issue update(long issueId, Issue issue) throws IssueNotFoundException, IssueValidationException, MessagingException, IOException, IssueIsClosedException, AccountNotFoundException;
 
     void delete(long issueId) throws IssueNotFoundException;
 }

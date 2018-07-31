@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.groups.Default;
 import java.io.IOException;
 import java.util.Date;
+import java.util.Optional;
 
 @Service
 @PropertySource("classpath:email.properties")
@@ -226,12 +227,12 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account get(long accountId) throws AccountNotFoundException {
 
-        Account account = accountRepository.getById(accountId);
+        Optional<Account> accountOptional = accountRepository.findById(accountId);
 
-        if (account == null)
+        if(!accountOptional.isPresent())
             throw new AccountNotFoundException(accountId);
 
-        return account;
+        return accountOptional.get();
     }
 
     @Override
@@ -302,10 +303,12 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account updatedForAdmin(long accountId, Account account) throws AccountValidationException, AccountNotFoundException {
-        Account oldAccount = accountRepository.getById(accountId);
+        Optional<Account> accountOptional = accountRepository.findById(accountId);
 
-        if(oldAccount == null)
+        if(!accountOptional.isPresent())
             throw new AccountNotFoundException(accountId);
+
+        Account oldAccount = accountOptional.get();
 
         // check changing password
         if(account.getPassword() != null){
@@ -342,7 +345,9 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void delete(long accountId) throws AccountNotFoundException {
 
-        if(accountRepository.getById(accountId) == null)
+        Optional<Account> accountOptional = accountRepository.findById(accountId);
+
+        if(!accountOptional.isPresent())
             throw new AccountNotFoundException(accountId);
 
         accountRepository.deleteById(accountId);

@@ -56,7 +56,7 @@ public interface AccountRepository extends PagingAndSortingRepository<Account, L
                                                                                                    @Param("name") String name,
                                                                                                    Pageable pageable);
 
-    Account getById(long accountId);
+    //Account getById(long accountId);
 
     Account getByIdAndVerificationToken(long accountId, String verificationToken);
 

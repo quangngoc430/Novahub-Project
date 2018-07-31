@@ -3,7 +3,7 @@
   "servers": [
     {
       "description": "Helpdesk Swagger API Examples",
-      "url": "http://localhost:8080"
+      "url": "http://localhost:8080/api"
     }
   ],
   "info": {
@@ -41,7 +41,7 @@
     }
   ],
   "paths": {
-    "/api/login": {
+    "/login": {
       "post": {
         "tags": [
           "User"
@@ -120,7 +120,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/login"
+                      "example": "/login"
                     }
                   }
                 }
@@ -157,7 +157,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/login"
+                      "example": "/login"
                     }
                   }
                 }
@@ -206,7 +206,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/login"
+                      "example": "/login"
                     }
                   }
                 }
@@ -243,7 +243,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/login"
+                      "example": "/login"
                     }
                   }
                 }
@@ -253,7 +253,7 @@
         }
       }
     },
-    "/api/login/google": {
+    "/login/google": {
       "post": {
         "tags": [
           "User"
@@ -326,7 +326,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/login/google"
+                      "example": "/login/google"
                     }
                   }
                 }
@@ -372,7 +372,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/login/google"
+                      "example": "/login/google"
                     }
                   }
                 }
@@ -382,7 +382,7 @@
         }
       }
     },
-    "/api/users": {
+    "/users": {
       "get": {
         "tags": [
           "User"
@@ -511,7 +511,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users"
+                      "example": "/users"
                     }
                   }
                 }
@@ -549,7 +549,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users"
+                      "example": "/users"
                     }
                   }
                 }
@@ -587,7 +587,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users"
+                      "example": "/users"
                     }
                   }
                 }
@@ -700,7 +700,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users"
+                      "example": "/users"
                     }
                   }
                 }
@@ -738,7 +738,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users"
+                      "example": "/users"
                     }
                   }
                 }
@@ -748,7 +748,7 @@
         }
       }
     },
-    "/api/users/me": {
+    "/users/me": {
       "get": {
         "tags": [
           "User"
@@ -825,7 +825,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/me"
+                      "example": "/users/me"
                     }
                   }
                 }
@@ -863,7 +863,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/me"
+                      "example": "/users/me"
                     }
                   }
                 }
@@ -901,7 +901,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/me"
+                      "example": "/users/me"
                     }
                   }
                 }
@@ -1028,7 +1028,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/me"
+                      "example": "/users/me"
                     }
                   }
                 }
@@ -1066,7 +1066,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/me"
+                      "example": "/users/me"
                     }
                   }
                 }
@@ -1104,7 +1104,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/me"
+                      "example": "/users/me"
                     }
                   }
                 }
@@ -1147,7 +1147,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/me"
+                      "example": "/users/me"
                     }
                   }
                 }
@@ -1157,7 +1157,7 @@
         }
       }
     },
-    "/api/users/{id}": {
+    "/users/{id}": {
       "get": {
         "tags": [
           "User"
@@ -1231,7 +1231,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/{id}"
+                      "example": "/users/{id}"
                     }
                   }
                 }
@@ -1269,7 +1269,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/{id}"
+                      "example": "/users/{id}"
                     }
                   }
                 }
@@ -1307,7 +1307,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/{id}"
+                      "example": "/users/{id}"
                     }
                   }
                 }
@@ -1344,7 +1344,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/{id}"
+                      "example": "/users/{id}"
                     }
                   }
                 }
@@ -1463,7 +1463,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/{id}"
+                      "example": "/users/{id}"
                     }
                   }
                 }
@@ -1501,7 +1501,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/{id}"
+                      "example": "/users/{id}"
                     }
                   }
                 }
@@ -1539,7 +1539,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/{id}"
+                      "example": "/users/{id}"
                     }
                   }
                 }
@@ -1576,7 +1576,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/{id}"
+                      "example": "/users/{id}"
                     }
                   }
                 }
@@ -1617,7 +1617,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/{id}"
+                      "example": "/users/{id}"
                     }
                   }
                 }
@@ -1687,7 +1687,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/{id}"
+                      "example": "/users/{id}"
                     }
                   }
                 }
@@ -1725,7 +1725,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/{id}"
+                      "example": "/users/{id}"
                     }
                   }
                 }
@@ -1763,7 +1763,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/{id}"
+                      "example": "/users/{id}"
                     }
                   }
                 }
@@ -1800,7 +1800,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/{id}"
+                      "example": "/users/{id}"
                     }
                   }
                 }
@@ -1810,7 +1810,7 @@
         }
       }
     },
-    "/api/roles": {
+    "/roles": {
       "get": {
         "tags": [
           "Role"
@@ -1913,7 +1913,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/roles"
+                      "example": "/roles"
                     }
                   }
                 }
@@ -1951,7 +1951,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/roles"
+                      "example": "/roles"
                     }
                   }
                 }
@@ -1989,7 +1989,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/roles"
+                      "example": "/roles"
                     }
                   }
                 }
@@ -1999,7 +1999,7 @@
         }
       }
     },
-    "/api/roles/{id}": {
+    "/roles/{id}": {
       "get": {
         "tags": [
           "Role"
@@ -2067,7 +2067,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/roles/{id}"
+                      "example": "/roles/{id}"
                     }
                   }
                 }
@@ -2105,7 +2105,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/roles/{id}"
+                      "example": "/roles/{id}"
                     }
                   }
                 }
@@ -2143,7 +2143,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/roles/{id}"
+                      "example": "/roles/{id}"
                     }
                   }
                 }
@@ -2180,7 +2180,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/roles/{id}"
+                      "example": "/roles/{id}"
                     }
                   }
                 }
@@ -2190,7 +2190,7 @@
         }
       }
     },
-    "/api/categories": {
+    "/categories": {
       "get": {
         "tags": [
           "Category"
@@ -2293,7 +2293,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/categories"
+                      "example": "/categories"
                     }
                   }
                 }
@@ -2331,7 +2331,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/categories"
+                      "example": "/categories"
                     }
                   }
                 }
@@ -2369,7 +2369,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/categories"
+                      "example": "/categories"
                     }
                   }
                 }
@@ -2451,7 +2451,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/categories"
+                      "example": "/categories"
                     }
                   }
                 }
@@ -2489,7 +2489,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/categories"
+                      "example": "/categories"
                     }
                   }
                 }
@@ -2527,7 +2527,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/categories"
+                      "example": "/categories"
                     }
                   }
                 }
@@ -2568,7 +2568,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/categories"
+                      "example": "/categories"
                     }
                   }
                 }
@@ -2606,7 +2606,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/categories"
+                      "example": "/categories"
                     }
                   }
                 }
@@ -2616,7 +2616,7 @@
         }
       }
     },
-    "/api/categories/{id}": {
+    "/categories/{id}": {
       "get": {
         "tags": [
           "Category"
@@ -2684,7 +2684,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/categories/{id}"
+                      "example": "/categories/{id}"
                     }
                   }
                 }
@@ -2722,7 +2722,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/categories/{id}"
+                      "example": "/categories/{id}"
                     }
                   }
                 }
@@ -2760,7 +2760,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/categories/{id}"
+                      "example": "/categories/{id}"
                     }
                   }
                 }
@@ -2797,7 +2797,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/categories/{id}"
+                      "example": "/categories/{id}"
                     }
                   }
                 }
@@ -2888,7 +2888,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/categories/{id}"
+                      "example": "/categories/{id}"
                     }
                   }
                 }
@@ -2926,7 +2926,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/categories/{id}"
+                      "example": "/categories/{id}"
                     }
                   }
                 }
@@ -2964,7 +2964,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/categories/{id}"
+                      "example": "/categories/{id}"
                     }
                   }
                 }
@@ -3001,7 +3001,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/categories/{id}"
+                      "example": "/categories/{id}"
                     }
                   }
                 }
@@ -3042,7 +3042,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/categories/{id}"
+                      "example": "/categories/{id}"
                     }
                   }
                 }
@@ -3080,7 +3080,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/categories/{id}"
+                      "example": "/categories/{id}"
                     }
                   }
                 }
@@ -3149,7 +3149,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/categories/{id}"
+                      "example": "/categories/{id}"
                     }
                   }
                 }
@@ -3187,7 +3187,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/categories/{id}"
+                      "example": "/categories/{id}"
                     }
                   }
                 }
@@ -3225,7 +3225,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/categories/{id}"
+                      "example": "/categories/{id}"
                     }
                   }
                 }
@@ -3262,7 +3262,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/categories/{id}"
+                      "example": "/categories/{id}"
                     }
                   }
                 }
@@ -3272,7 +3272,7 @@
         }
       }
     },
-    "/api/skills": {
+    "/skills": {
       "get": {
         "tags": [
           "Skill"
@@ -3380,7 +3380,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/skills"
+                      "example": "/skills"
                     }
                   }
                 }
@@ -3418,7 +3418,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/skills"
+                      "example": "/skills"
                     }
                   }
                 }
@@ -3456,7 +3456,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/skills"
+                      "example": "/skills"
                     }
                   }
                 }
@@ -3549,7 +3549,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/skills"
+                      "example": "/skills"
                     }
                   }
                 }
@@ -3587,7 +3587,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/skills"
+                      "example": "/skills"
                     }
                   }
                 }
@@ -3624,7 +3624,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/skills"
+                      "example": "/skills"
                     }
                   }
                 }
@@ -3665,7 +3665,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/skills"
+                      "example": "/skills"
                     }
                   }
                 }
@@ -3703,7 +3703,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/skills"
+                      "example": "/skills"
                     }
                   }
                 }
@@ -3713,7 +3713,7 @@
         }
       }
     },
-    "/api/skills/{id}": {
+    "/skills/{id}": {
       "get": {
         "tags": [
           "Skill"
@@ -3787,7 +3787,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/skills/{id}"
+                      "example": "/skills/{id}"
                     }
                   }
                 }
@@ -3825,7 +3825,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/skills/{id}"
+                      "example": "/skills/{id}"
                     }
                   }
                 }
@@ -3863,7 +3863,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/skills/{id}"
+                      "example": "/skills/{id}"
                     }
                   }
                 }
@@ -3900,7 +3900,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/skills/{id}"
+                      "example": "/skills/{id}"
                     }
                   }
                 }
@@ -4002,7 +4002,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/skills/{id}"
+                      "example": "/skills/{id}"
                     }
                   }
                 }
@@ -4040,7 +4040,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/skills/{id}"
+                      "example": "/skills/{id}"
                     }
                   }
                 }
@@ -4078,7 +4078,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/skills/{id}"
+                      "example": "/skills/{id}"
                     }
                   }
                 }
@@ -4123,7 +4123,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/skills/{id}"
+                      "example": "/skills/{id}"
                     }
                   }
                 }
@@ -4164,7 +4164,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/skills/{id}"
+                      "example": "/skills/{id}"
                     }
                   }
                 }
@@ -4205,7 +4205,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/skills/{id}"
+                      "example": "/skills/{id}"
                     }
                   }
                 }
@@ -4275,7 +4275,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/skills/{id}"
+                      "example": "/skills/{id}"
                     }
                   }
                 }
@@ -4313,7 +4313,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/skills/{id}"
+                      "example": "/skills/{id}"
                     }
                   }
                 }
@@ -4351,7 +4351,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/skills/{id}"
+                      "example": "/skills/{id}"
                     }
                   }
                 }
@@ -4388,7 +4388,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/skills/{id}"
+                      "example": "/skills/{id}"
                     }
                   }
                 }
@@ -4398,7 +4398,7 @@
         }
       }
     },
-    "/api/skills/{id}/users": {
+    "/skills/{id}/users": {
       "get": {
         "tags": [
           "Skill"
@@ -4516,7 +4516,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/skills/{id}/users"
+                      "example": "/skills/{id}/users"
                     }
                   }
                 }
@@ -4554,7 +4554,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/skills/{id}/users"
+                      "example": "/skills/{id}/users"
                     }
                   }
                 }
@@ -4592,7 +4592,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/skills/{id}/users"
+                      "example": "/skills/{id}/users"
                     }
                   }
                 }
@@ -4629,7 +4629,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/skills/1"
+                      "example": "/skills/1"
                     }
                   }
                 }
@@ -4639,7 +4639,7 @@
         }
       }
     },
-    "/api/users/me/skills": {
+    "/users/me/skills": {
       "get": {
         "tags": [
           "Skill"
@@ -4752,7 +4752,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/me/skills"
+                      "example": "/users/me/skills"
                     }
                   }
                 }
@@ -4790,7 +4790,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/me/skills"
+                      "example": "/users/me/skills"
                     }
                   }
                 }
@@ -4828,7 +4828,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/me/skills"
+                      "example": "/users/me/skills"
                     }
                   }
                 }
@@ -4933,7 +4933,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/me/skills"
+                      "example": "/users/me/skills"
                     }
                   }
                 }
@@ -4971,7 +4971,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/me/skills"
+                      "example": "/users/me/skills"
                     }
                   }
                 }
@@ -5009,7 +5009,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/me/skills"
+                      "example": "/users/me/skills"
                     }
                   }
                 }
@@ -5061,7 +5061,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/me/skills"
+                      "example": "/users/me/skills"
                     }
                   }
                 }
@@ -5102,7 +5102,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/me/skills"
+                      "example": "/users/me/skills"
                     }
                   }
                 }
@@ -5112,7 +5112,7 @@
         }
       }
     },
-    "/api/users/me/skills/{id}": {
+    "/users/me/skills/{id}": {
       "get": {
         "tags": [
           "Skill"
@@ -5188,7 +5188,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/me/skills/{id}"
+                      "example": "/users/me/skills/{id}"
                     }
                   }
                 }
@@ -5226,7 +5226,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/me/skills/{id}"
+                      "example": "/users/me/skills/{id}"
                     }
                   }
                 }
@@ -5264,7 +5264,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/me/skills/{id}"
+                      "example": "/users/me/skills/{id}"
                     }
                   }
                 }
@@ -5301,7 +5301,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/me/skills/{id}"
+                      "example": "/users/me/skills/{id}"
                     }
                   }
                 }
@@ -5415,7 +5415,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/me/skills/{id}"
+                      "example": "/users/me/skills/{id}"
                     }
                   }
                 }
@@ -5453,7 +5453,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/me/skills/{id}"
+                      "example": "/users/me/skills/{id}"
                     }
                   }
                 }
@@ -5491,7 +5491,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/me/skills/{id}"
+                      "example": "/users/me/skills/{id}"
                     }
                   }
                 }
@@ -5528,7 +5528,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/me/skills/{id}"
+                      "example": "/users/me/skills/{id}"
                     }
                   }
                 }
@@ -5571,7 +5571,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/me/skills/{id}"
+                      "example": "/users/me/skills/{id}"
                     }
                   }
                 }
@@ -5640,7 +5640,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/me/skills/{id}"
+                      "example": "/users/me/skills/{id}"
                     }
                   }
                 }
@@ -5678,7 +5678,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/me/skills/{id}"
+                      "example": "/users/me/skills/{id}"
                     }
                   }
                 }
@@ -5716,7 +5716,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/me/skills/{id}"
+                      "example": "/users/me/skills/{id}"
                     }
                   }
                 }
@@ -5753,7 +5753,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/me/skills/{id}"
+                      "example": "/users/me/skills/{id}"
                     }
                   }
                 }
@@ -5763,7 +5763,7 @@
         }
       }
     },
-    "/api/issues": {
+    "/issues": {
       "get": {
         "tags": [
           "Issue"
@@ -5890,7 +5890,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/issues"
+                      "example": "/issues"
                     }
                   }
                 }
@@ -5928,7 +5928,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/issues"
+                      "example": "/issues"
                     }
                   }
                 }
@@ -5966,7 +5966,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/issues"
+                      "example": "/issues"
                     }
                   }
                 }
@@ -5976,7 +5976,7 @@
         }
       }
     },
-    "/api/issues/{id}": {
+    "/issues/{id}": {
       "get": {
         "tags": [
           "Issue"
@@ -6055,7 +6055,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/issues/{id}"
+                      "example": "/issues/{id}"
                     }
                   }
                 }
@@ -6093,7 +6093,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/issues/{id}"
+                      "example": "/issues/{id}"
                     }
                   }
                 }
@@ -6131,7 +6131,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/issues/{id}"
+                      "example": "/issues/{id}"
                     }
                   }
                 }
@@ -6167,7 +6167,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/issues/{id}"
+                      "example": "/issues/{id}"
                     }
                   }
                 }
@@ -6287,7 +6287,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/issues/{id}"
+                      "example": "/issues/{id}"
                     }
                   }
                 }
@@ -6325,7 +6325,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/issues/{id}"
+                      "example": "/issues/{id}"
                     }
                   }
                 }
@@ -6363,7 +6363,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/issues/{id}"
+                      "example": "/issues/{id}"
                     }
                   }
                 }
@@ -6399,7 +6399,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/issues/{id}"
+                      "example": "/issues/{id}"
                     }
                   }
                 }
@@ -6435,7 +6435,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/issues/{id}"
+                      "example": "/issues/{id}"
                     }
                   }
                 }
@@ -6504,7 +6504,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/issues/{id}"
+                      "example": "/issues/{id}"
                     }
                   }
                 }
@@ -6542,7 +6542,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/issues/{id}"
+                      "example": "/issues/{id}"
                     }
                   }
                 }
@@ -6580,7 +6580,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/issues/{id}"
+                      "example": "/issues/{id}"
                     }
                   }
                 }
@@ -6616,7 +6616,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/issues/{id}"
+                      "example": "/issues/{id}"
                     }
                   }
                 }
@@ -6626,7 +6626,7 @@
         }
       }
     },
-    "/api/issues/{id}/action": {
+    "/issues/{id}/action": {
       "get": {
         "tags": [
           "Issue"
@@ -6700,7 +6700,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/issues/1"
+                      "example": "/issues/1"
                     }
                   }
                 }
@@ -6741,7 +6741,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/issues/{id}/action"
+                      "example": "/issues/{id}/action"
                     }
                   }
                 }
@@ -6751,7 +6751,7 @@
         }
       }
     },
-    "/api/users/me/issues": {
+    "/users/me/issues": {
       "get": {
         "tags": [
           "Issue"
@@ -6859,7 +6859,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/me/issues"
+                      "example": "/users/me/issues"
                     }
                   }
                 }
@@ -6897,7 +6897,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/me/issues"
+                      "example": "/users/me/issues"
                     }
                   }
                 }
@@ -6935,7 +6935,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/me/issues"
+                      "example": "/users/me/issues"
                     }
                   }
                 }
@@ -7031,7 +7031,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/me/issues"
+                      "example": "/users/me/issues"
                     }
                   }
                 }
@@ -7069,7 +7069,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/me/issues"
+                      "example": "/users/me/issues"
                     }
                   }
                 }
@@ -7107,7 +7107,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/me/issues"
+                      "example": "/users/me/issues"
                     }
                   }
                 }
@@ -7117,7 +7117,7 @@
         }
       }
     },
-    "/api/users/me/issues/{id}": {
+    "/users/me/issues/{id}": {
       "get": {
         "tags": [
           "Issue"
@@ -7196,7 +7196,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/me/issues/{id}"
+                      "example": "/users/me/issues/{id}"
                     }
                   }
                 }
@@ -7234,7 +7234,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/me/issues/{id}"
+                      "example": "/users/me/issues/{id}"
                     }
                   }
                 }
@@ -7272,7 +7272,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/me/issues/{id}"
+                      "example": "/users/me/issues/{id}"
                     }
                   }
                 }
@@ -7308,7 +7308,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/me/issues/{id}"
+                      "example": "/users/me/issues/{id}"
                     }
                   }
                 }
@@ -7414,7 +7414,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/me/issues/{id}"
+                      "example": "/users/me/issues/{id}"
                     }
                   }
                 }
@@ -7452,7 +7452,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/me/issues/{id}"
+                      "example": "/users/me/issues/{id}"
                     }
                   }
                 }
@@ -7490,7 +7490,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/me/issues/{id}"
+                      "example": "/users/me/issues/{id}"
                     }
                   }
                 }
@@ -7526,7 +7526,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/me/issues/{id}"
+                      "example": "/users/me/issues/{id}"
                     }
                   }
                 }
@@ -7596,7 +7596,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/me/issues/{id}"
+                      "example": "/users/me/issues/{id}"
                     }
                   }
                 }
@@ -7634,7 +7634,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/me/issues/{id}"
+                      "example": "/users/me/issues/{id}"
                     }
                   }
                 }
@@ -7672,7 +7672,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/me/issues/{id}"
+                      "example": "/users/me/issues/{id}"
                     }
                   }
                 }
@@ -7708,7 +7708,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/api/users/me/issues/{id}"
+                      "example": "/users/me/issues/{id}"
                     }
                   }
                 }

@@ -9,10 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import vn.novahub.helpdesk.constant.DayOffConstant;
 import vn.novahub.helpdesk.enums.RoleEnum;
-import vn.novahub.helpdesk.exception.DayOffIsAnsweredException;
-import vn.novahub.helpdesk.exception.DayOffOverdueException;
-import vn.novahub.helpdesk.exception.DayOffTokenIsNotMatchException;
-import vn.novahub.helpdesk.exception.DayOffTypeIsNotValidException;
+import vn.novahub.helpdesk.exception.*;
 import vn.novahub.helpdesk.model.*;
 import vn.novahub.helpdesk.repository.AccountRepository;
 import vn.novahub.helpdesk.repository.DayOffRepository;
@@ -20,10 +17,7 @@ import vn.novahub.helpdesk.repository.DayOffTypeRepository;
 import vn.novahub.helpdesk.service.*;
 
 import javax.mail.MessagingException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.*;
 
 @Service
 public class DayOffServiceImpl implements DayOffService {
@@ -96,7 +90,7 @@ public class DayOffServiceImpl implements DayOffService {
     @Override
     public void delete(DayOff dayOff)
             throws MessagingException,
-                    DayOffOverdueException {
+            DayOffOverdueException, AccountNotFoundException {
         Date currentDate = new Date();
         dayOff = dayOffRepository.getById(dayOff.getId());
 
@@ -110,7 +104,7 @@ public class DayOffServiceImpl implements DayOffService {
 
     @Override
     public void approve(long dayOffId, String token)
-            throws DayOffIsAnsweredException, DayOffTokenIsNotMatchException, MessagingException{
+            throws DayOffIsAnsweredException, DayOffTokenIsNotMatchException, MessagingException, AccountNotFoundException {
 
         DayOff dayOff = checkIfRequestIsAnswered(dayOffId, token);
 
@@ -124,7 +118,7 @@ public class DayOffServiceImpl implements DayOffService {
 
     @Override
     public void deny(long dayOffId, String token)
-            throws DayOffIsAnsweredException, DayOffTokenIsNotMatchException, MessagingException {
+            throws DayOffIsAnsweredException, DayOffTokenIsNotMatchException, MessagingException, AccountNotFoundException {
         DayOff dayOff = checkIfRequestIsAnswered(dayOffId, token);
 
         if (dayOff.getToken().equals(token)) {
@@ -134,7 +128,7 @@ public class DayOffServiceImpl implements DayOffService {
         }
     }
 
-    private void answerDayOffRequest(DayOff dayOff, String status) throws MessagingException{
+    private void answerDayOffRequest(DayOff dayOff, String status) throws MessagingException, AccountNotFoundException {
         dayOff.setToken("");
         dayOff.setStatus(status);
         dayOffRepository.save(dayOff);
@@ -203,8 +197,13 @@ public class DayOffServiceImpl implements DayOffService {
         mailService.sendHTMLMail(mail);
     }
 
-    private void sendMailUpdateForUser(DayOff dayOff) throws MessagingException{
-        Account account = accountRepository.getById(dayOff.getAccountId());
+    private void sendMailUpdateForUser(DayOff dayOff) throws MessagingException, AccountNotFoundException {
+        Optional<Account> accountOptional = accountRepository.findById(dayOff.getAccountId());
+
+        if(!accountOptional.isPresent())
+            throw new AccountNotFoundException(dayOff.getAccountId());
+
+        Account account = accountOptional.get();
         Mail mail = new Mail();
         String subject = env.getProperty("subject_email_update_day_off_account");
         subject = subject.replace("{day-off-id}", String.valueOf(dayOff.getId()));
@@ -222,8 +221,13 @@ public class DayOffServiceImpl implements DayOffService {
 
     }
 
-    private void sendMailDeleteForAdmin(DayOff dayOff) throws MessagingException{
-        Account account = accountRepository.getById(dayOff.getAccountId());
+    private void sendMailDeleteForAdmin(DayOff dayOff) throws MessagingException, AccountNotFoundException {
+        Optional<Account> accountOptional = accountRepository.findById(dayOff.getAccountId());
+
+        if(!accountOptional.isPresent())
+            throw new AccountNotFoundException(dayOff.getAccountId());
+
+        Account account = accountOptional.get();
         Mail mail = new Mail();
         String subject = env.getProperty("subject_email_delete_day_off");
         subject = subject.replace("{day-off-id}", String.valueOf(dayOff.getId()));

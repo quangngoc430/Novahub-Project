@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.novahub.helpdesk.enums.IssueEnum;
+import vn.novahub.helpdesk.exception.AccountNotFoundException;
 import vn.novahub.helpdesk.exception.IssueIsClosedException;
 import vn.novahub.helpdesk.exception.IssueNotFoundException;
 import vn.novahub.helpdesk.exception.IssueValidationException;
@@ -90,7 +91,7 @@ public class IssueController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping(path = "/users/me/issues", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Issue> create(@RequestBody Issue issue) throws IssueValidationException, MessagingException, IOException {
+    public ResponseEntity<Issue> create(@RequestBody Issue issue) throws IssueValidationException, MessagingException, IOException, AccountNotFoundException {
         issue = accountIssueService.create(issue);
 
         return new ResponseEntity<>(issue, HttpStatus.OK);
@@ -105,7 +106,7 @@ public class IssueController {
     @PreAuthorize("isAuthenticated()")
     @PutMapping(path = "/users/me/issues/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Issue> update(@RequestBody Issue issue,
-                                        @PathVariable(name = "issueId") long issueId) throws IssueNotFoundException, IssueValidationException, MessagingException, IOException, IssueIsClosedException {
+                                        @PathVariable(name = "issueId") long issueId) throws IssueNotFoundException, IssueValidationException, MessagingException, IOException, IssueIsClosedException, AccountNotFoundException {
         issue = accountIssueService.update(issueId, issue);
 
         return new ResponseEntity<>(issue, HttpStatus.OK);

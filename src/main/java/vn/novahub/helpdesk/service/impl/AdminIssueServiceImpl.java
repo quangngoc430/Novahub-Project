@@ -23,6 +23,7 @@ import javax.mail.MessagingException;
 import javax.validation.groups.Default;
 import java.io.IOException;
 import java.util.Date;
+import java.util.Optional;
 
 @Service
 @PropertySource("classpath:email.properties")
@@ -144,7 +145,9 @@ public class AdminIssueServiceImpl implements AdminIssueService {
     }
 
     private void sendMailUpdateIssueForUser(Issue issue) throws MessagingException, IOException {
-        Account account = accountRepository.getById(issue.getAccountId());
+        Optional<Account> accountOptional = accountRepository.findById(issue.getAccountId());
+
+        Account account = accountOptional.get();
 
         Mail mail = new Mail();
         String subject = env.getProperty("subject_email_update_issue_account");
