@@ -1,12 +1,10 @@
 package vn.novahub.helpdesk.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import vn.novahub.helpdesk.constant.RoleConstant;
-import vn.novahub.helpdesk.service.AccountService;
+import vn.novahub.helpdesk.enums.RoleEnum;
 
 import javax.annotation.security.PermitAll;
 import javax.servlet.http.HttpServletRequest;
@@ -14,8 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class HomeController {
 
-    @Autowired
-    private AccountService accountService;
+    private static String PREFIX = "ROLE_";
 
     @PermitAll
     @RequestMapping("/login")
@@ -23,11 +20,11 @@ public class HomeController {
 
         String roleName = (SecurityContextHolder.getContext().getAuthentication().getAuthorities().toArray())[0].toString();
 
-        if(roleName.equals(RoleConstant.PREFIX_ROLE + RoleConstant.ROLE_ADMIN))
+        if(roleName.equals(PREFIX + RoleEnum.ADMIN.name()))
             return "redirect:/admin";
-        else if(roleName.equals(RoleConstant.PREFIX_ROLE + RoleConstant.ROLE_CLERK))
+        else if(roleName.equals(PREFIX + RoleEnum.CLERK.name()))
             return "redirect:/clerk";
-        else if(roleName.equals(RoleConstant.PREFIX_ROLE + RoleConstant.ROLE_USER))
+        else if(roleName.equals(PREFIX + RoleEnum.USER.name()))
             return "redirect:/user";
 
         return "login";
@@ -69,12 +66,14 @@ public class HomeController {
     }
 
     @RequestMapping("/403")
-    public String error403() {
+    public String error(){
+
         return "403";
     }
 
     @RequestMapping("/index")
     public String index() {
         return "index";
+
     }
 }

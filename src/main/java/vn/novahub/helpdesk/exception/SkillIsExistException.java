@@ -2,7 +2,6 @@ package vn.novahub.helpdesk.exception;
 
 public class SkillIsExistException extends Exception {
 
-
     public SkillIsExistException(long skillId){
         super("SkillIsExistException with skillId = " + skillId);
     }

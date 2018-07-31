@@ -32,7 +32,7 @@ public interface AccountService {
 
     Account get(long accountId) throws AccountNotFoundException;
 
-    Account create(Account account) throws AccountIsExistException, RoleNotFoundException, AccountValidationException, MessagingException;
+    Account create(Account account) throws AccountIsExistException, RoleNotFoundException, AccountValidationException, MessagingException, IOException;
 
     Account update(Account account) throws AccountValidationException, AccountPasswordNotEqualException;
 

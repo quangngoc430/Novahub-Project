@@ -1,7 +1,5 @@
 package vn.novahub.helpdesk.constant;
 
-import vn.novahub.helpdesk.model.DayOffType;
-
 public class DayOffTypeConstant {
 
     public static final String YEARLY_TYPE = "Nghi phep nam";

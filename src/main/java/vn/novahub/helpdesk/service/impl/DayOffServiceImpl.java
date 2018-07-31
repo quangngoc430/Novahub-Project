@@ -8,7 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import vn.novahub.helpdesk.constant.DayOffConstant;
-import vn.novahub.helpdesk.constant.RoleConstant;
+import vn.novahub.helpdesk.enums.RoleEnum;
 import vn.novahub.helpdesk.exception.DayOffIsAnsweredException;
 import vn.novahub.helpdesk.exception.DayOffOverdueException;
 import vn.novahub.helpdesk.exception.DayOffTokenIsNotMatchException;
@@ -241,9 +241,9 @@ public class DayOffServiceImpl implements DayOffService {
 
     private ArrayList<String> getEmailListOfAdmin() {
         ArrayList<Account> adminList = (ArrayList<Account>)
-                (accountRepository.getAllByRoleName(RoleConstant.ROLE_ADMIN));
+                (accountRepository.getAllByRoleName(RoleEnum.ADMIN.name()));
         ArrayList<Account> clerkList = (ArrayList<Account>)
-                (accountRepository.getAllByRoleName(RoleConstant.ROLE_CLERK));
+                (accountRepository.getAllByRoleName(RoleEnum.CLERK.name()));
 
         ArrayList<String> emails = new ArrayList<>();
 

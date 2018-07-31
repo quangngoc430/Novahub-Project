@@ -45,23 +45,8 @@ public class TokenExceptionHandler {
         return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(value = UnauthorizedException.class)
-    public ResponseEntity<ApiError> handleUnauthorizedException(HttpServletRequest request, Exception exception) {
-        ApiError apiError = new ApiError();
-
-        apiError.setTimestamp(Instant.now());
-        apiError.setStatus(HttpStatus.UNAUTHORIZED.value());
-        HashMap<String, String> errors = new HashMap<>();
-        errors.put(MESSAGE, "Unauthorized");
-        apiError.setError(errors);
-        apiError.setMessage(exception.getMessage());
-        apiError.setPath(request.getRequestURI());
-
-        return new ResponseEntity<>(apiError, HttpStatus.UNAUTHORIZED);
-    }
-
     @ExceptionHandler(value = TokenValidationException.class)
-    public ResponseEntity<ApiError> handleTokenValidationException(HttpServletRequest request, Exception ex){
+    public ResponseEntity<ApiError> handleTokenValidationException(HttpServletRequest request, Exception ex) {
         ApiError apiError = new ApiError();
 
         apiError.setTimestamp(Instant.now());

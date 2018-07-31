@@ -1,7 +1,6 @@
 package vn.novahub.helpdesk.validation;
 
 import org.springframework.stereotype.Component;
-
 import vn.novahub.helpdesk.exception.SkillValidationException;
 import vn.novahub.helpdesk.model.Skill;
 

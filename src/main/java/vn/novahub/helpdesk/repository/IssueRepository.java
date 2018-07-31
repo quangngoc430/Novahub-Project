@@ -27,9 +27,9 @@ public interface IssueRepository extends PagingAndSortingRepository<Issue, Long>
            "WHERE issue.accountId = :accountId " +
            "AND (issue.title LIKE CONCAT('%', :keyword, '%') " +
             "OR issue.content LIKE CONCAT('%', :keyword, '%'))")
-    Page<Issue> getAllByAccountIdAndTitleLikeAndContentLike(@Param("accountId") long accountId,
-                                                            @Param("keyword") String keyword,
-                                                            Pageable pageable);
+    Page<Issue> getAllByAccountIdAndTitleContainingOrContentContaining(@Param("accountId") long accountId,
+                                                                       @Param("keyword") String keyword,
+                                                                       Pageable pageable);
 
     @Query("FROM Issue issue " +
            "WHERE issue.status = :status " +

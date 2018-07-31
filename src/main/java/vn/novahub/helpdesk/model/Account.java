@@ -3,8 +3,7 @@ package vn.novahub.helpdesk.model;
 import com.fasterxml.jackson.annotation.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import vn.novahub.helpdesk.annotation.AccountStatus;
-import vn.novahub.helpdesk.constant.AccountConstant;
+import vn.novahub.helpdesk.annotation.Status;
 import vn.novahub.helpdesk.validation.*;
 
 import javax.persistence.*;
@@ -24,12 +23,12 @@ public class Account implements Serializable {
     @Column(name = "id")
     private long id;
 
-    @NotEmpty(message = "Email is not empty", groups = {GroupCreateAccount.class, GroupLoginAccount.class})
-    @Email(regexp = "^[a-zA-Z0-9._]+\\@novahub.vn", message = "Email contains [a-z|A-Z|0-9|.|_] and end with @novahub.vn ",
+    @NotEmpty(message = "email is not empty", groups = {GroupCreateAccount.class, GroupLoginAccount.class})
+    @Email(regexp = "^[a-zA-Z0-9._]+\\@novahub.vn", message = "email contains [a-z|A-Z|0-9|.|_] and end with @novahub.vn",
             groups = {GroupCreateAccount.class, GroupLoginAccount.class})
-    @Size(min = 8, max = 80, message = "Email must have between 8 and 80 characters",
+    @Size(min = 8, max = 80, message = "email must have between 8 and 80 characters",
             groups = {GroupCreateAccount.class, GroupLoginAccount.class})
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     private String email;
 
     @JsonProperty(value = "first_name")
@@ -54,28 +53,29 @@ public class Account implements Serializable {
     private String avatarUrl;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @NotEmpty(message = "Password is not empty",
-            groups = {GroupCreateAccount.class, GroupLoginAccount.class})
-    @Size(min = 8, max = 40, message = "Password must have between 8 and 40 characters",
-            groups = {GroupCreateAccount.class, GroupLoginAccount.class})
+    @NotEmpty(message = "password is not empty",
+            groups = {GroupCreateAccount.class, GroupLoginAccount.class,
+                      GroupUpdatePasswordByAccount.class, GroupUpdatePasswordByAdmin.class})
+    @Size(min = 8, max = 40, message = "password must have between 8 and 40 characters",
+            groups = {GroupCreateAccount.class, GroupLoginAccount.class,
+                      GroupUpdatePasswordByAccount.class, GroupUpdatePasswordByAdmin.class})
     @Column(name = "password")
     private String password;
 
-    @AccountStatus(message = "Status does not match any statuses",
-            statuses = {AccountConstant.STATUS_LOCKED, AccountConstant.STATUS_ACTIVE, AccountConstant.STATUS_INACTIVE})
-    @NotEmpty(message = "Status is not empty")
+    @Status(message = "status does not match any statuses", targetClass = Account.class)
+    @NotEmpty(message = "status is not empty")
     @Column(name = "status")
     private String status;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty(value = "created_at")
-    @NotNull(message = "Create At is not null")
+    @NotNull(message = "created_at is not null")
     @Column(name = "created_at")
     private Date createdAt;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty(value = "updated_at")
-    @NotNull(message = "Update At is not null")
+    @NotNull(message = "updated_at is not null")
     @Column(name = "updated_at")
     private Date updatedAt;
 
@@ -90,12 +90,16 @@ public class Account implements Serializable {
     private String verificationToken;
 
     @JsonProperty("role_id")
-    @NotNull(message = "Role id is not empty")
+    @NotNull(message = "role_id is not empty")
     @Column(name = "role_id")
     private long roleId;
 
     @Transient
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonProperty(value = "new_password", access = JsonProperty.Access.WRITE_ONLY)
+    @NotEmpty(message = "new_pasword is not empty",
+            groups = {GroupUpdatePasswordByAccount.class})
+    @Size(min = 8, max = 40, message = "new_password must have between 8 and 40 characters",
+            groups = {GroupUpdatePasswordByAccount.class})
     private String newPassword;
 
     @ManyToOne(fetch = FetchType.EAGER, targetEntity = Role.class)

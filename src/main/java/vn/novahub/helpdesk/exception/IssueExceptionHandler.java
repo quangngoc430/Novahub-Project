@@ -14,7 +14,7 @@ import java.util.HashMap;
 public class IssueExceptionHandler {
 
     @ExceptionHandler(value = IssueNotFoundException.class)
-    public ResponseEntity<ApiError> handleIssueNotFoundException(HttpServletRequest request, Exception ex){
+    public ResponseEntity<ApiError> handleIssueNotFoundException(HttpServletRequest request, Exception ex) {
         ApiError apiError = new ApiError();
 
         apiError.setTimestamp(Instant.now());
@@ -26,12 +26,10 @@ public class IssueExceptionHandler {
         apiError.setMessage(ex.getMessage());
 
         return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
-
-
     }
 
     @ExceptionHandler(value = IssueValidationException.class)
-    public ResponseEntity<ApiError> handleIssueValidationException(HttpServletRequest request, Exception ex){
+    public ResponseEntity<ApiError> handleIssueValidationException(HttpServletRequest request, Exception ex) {
         ApiError apiError = new ApiError();
 
         apiError.setTimestamp(Instant.now());
@@ -41,7 +39,20 @@ public class IssueExceptionHandler {
         apiError.setMessage(ex.getMessage());
 
         return new ResponseEntity<>(apiError, HttpStatus.NOT_ACCEPTABLE);
-
     }
 
+    @ExceptionHandler(value = IssueIsClosedException.class)
+    public ResponseEntity<ApiError> handleIssueIsCloseException(HttpServletRequest request, Exception ex) {
+        ApiError apiError = new ApiError();
+
+        apiError.setTimestamp(Instant.now());
+        apiError.setStatus(HttpStatus.LOCKED.value());
+        HashMap<String, String> errors = new HashMap<>();
+        errors.put("message", "Issue is closed");
+        apiError.setError(errors);
+        apiError.setPath(request.getRequestURI());
+        apiError.setMessage(ex.getMessage());
+
+        return new ResponseEntity<>(apiError, HttpStatus.LOCKED);
+    }
 }
