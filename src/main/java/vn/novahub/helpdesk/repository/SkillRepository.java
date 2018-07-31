@@ -14,16 +14,15 @@ import javax.transaction.Transactional;
 @Transactional
 public interface SkillRepository extends PagingAndSortingRepository<Skill, Long> {
 
-    Page<Skill> getAllByNameContaining(String keyword, Pageable pageable);
-
     @Query("SELECT skill " +
            "FROM Skill skill " +
            "JOIN AccountHasSkill accountHasSkill ON accountHasSkill.skillId = skill.id " +
            "JOIN Level level ON level.skillId = skill.id " +
-           "WHERE accountHasSkill.accountId = :accountId AND skill.name LIKE CONCAT('%', :name, '%')")
-    Page<Skill> getAllByNameContainingAndAccountId(@Param("name") String name,
-                                                   @Param("accountId") long accountId,
-                                                   Pageable pageable);
+           "WHERE accountHasSkill.accountId = :accountId AND skill.categoryId = :categoryId AND skill.name LIKE CONCAT('%', :name, '%')")
+    Page<Skill> getAllByNameContainingAndAccountIdAndCategoryId(@Param("name") String name,
+                                                                @Param("accountId") long accountId,
+                                                                @Param("categoryId") long categoryId,
+                                                                Pageable pageable);
 
     Page<Skill> getAllByCategoryIdAndNameContaining(long categoryId, String name, Pageable pageable);
 

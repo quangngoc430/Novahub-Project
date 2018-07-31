@@ -4,7 +4,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import vn.novahub.helpdesk.exception.*;
 import vn.novahub.helpdesk.model.Account;
-import vn.novahub.helpdesk.model.Level;
 import vn.novahub.helpdesk.model.Skill;
 
 public interface AccountSkillService {
@@ -13,9 +12,9 @@ public interface AccountSkillService {
 
     Page<Account> getAllUsersBySkillId(long skillId, Pageable pageable) throws SkillNotFoundException;
 
-    Page<Skill> getAllByKeyword(String keyword, Pageable pageable);
+    Page<Skill> getAllByKeyword(long categoryId, String keyword, Pageable pageable) throws CategoryNotFoundException;
 
-    Page<Skill> getAllByKeywordForAccountLogin(String keyword, Pageable pageable);
+    Page<Skill> getAllByKeywordForAccountLogin(long categoryId, String keyword, Pageable pageable) throws CategoryNotFoundException;
 
     Skill create(Skill skill) throws SkillValidationException, SkillIsExistException, CategoryNotFoundException, LevelValidationException;
 

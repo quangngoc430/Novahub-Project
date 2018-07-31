@@ -280,8 +280,11 @@ public class AccountServiceImpl implements AccountService {
                 oldAccount.setPassword(bCryptPasswordEncoder.encode(account.getNewPassword()));
             }
         } else {
-            if(account.getPassword() != null)
+            if (account.getPassword() != null) {
+                accountValidation.validate(account, GroupUpdatePasswordAccountSignupWithGoogle.class);
+
                 oldAccount.setPassword(bCryptPasswordEncoder.encode(account.getPassword()));
+            }
         }
 
         if(account.getFirstName() != null)

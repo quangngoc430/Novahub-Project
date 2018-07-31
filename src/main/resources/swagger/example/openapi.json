@@ -3291,6 +3291,15 @@
           },
           {
             "in": "query",
+            "name": "categoryId",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          },
+          {
+            "in": "query",
             "name": "keyword",
             "schema": {
               "type": "string",
@@ -3317,10 +3326,14 @@
             "schema": {
               "type": "string",
               "enum": [
-                "id,acs",
+                "id,asc",
                 "id,desc",
-                "name,acs",
-                "name,desc"
+                "name,asc",
+                "name,desc",
+                "createdAt,asc",
+                "createdAt,desc",
+                "updatedAt,asc",
+                "updatedAt,desc"
               ],
               "example": "name,desc"
             }
@@ -4445,11 +4458,11 @@
             "schema": {
               "type": "string",
               "enum": [
-                "id,acs",
+                "id,asc",
                 "id,desc",
-                "email,acs",
+                "email,asc",
                 "email,desc",
-                "status,acs",
+                "status,asc",
                 "status,desc",
                 "firstName,asc",
                 "firstName,desc",
@@ -4684,10 +4697,14 @@
             "schema": {
               "type": "string",
               "enum": [
-                "id,acs",
+                "id,asc",
                 "id,desc",
-                "name,acs",
-                "name,desc"
+                "name,asc",
+                "name,desc",
+                "createdAt,asc",
+                "createdAt,desc",
+                "updatedAt,asc",
+                "updatedAt,desc"
               ],
               "example": "name,desc"
             }
@@ -6788,15 +6805,15 @@
             "schema": {
               "type": "string",
               "enum": [
-                "id,acs",
+                "id,asc",
                 "id,desc",
-                "title,acs",
+                "title,asc",
                 "title,desc",
-                "content,acs",
+                "content,asc",
                 "content,desc",
-                "replyMessage,acs",
+                "replyMessage,asc",
                 "replyMessage,desc",
-                "status,acs",
+                "status,asc",
                 "status,desc"
               ],
               "example": "title,desc"

@@ -5,10 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import vn.novahub.helpdesk.exception.*;
-import vn.novahub.helpdesk.model.Account;
-import vn.novahub.helpdesk.model.AccountHasSkill;
-import vn.novahub.helpdesk.model.Level;
-import vn.novahub.helpdesk.model.Skill;
+import vn.novahub.helpdesk.model.*;
 import vn.novahub.helpdesk.repository.*;
 import vn.novahub.helpdesk.service.AccountService;
 import vn.novahub.helpdesk.service.AccountSkillService;
@@ -18,6 +15,7 @@ import vn.novahub.helpdesk.validation.LevelValidation;
 import vn.novahub.helpdesk.validation.SkillValidation;
 
 import java.util.Date;
+import java.util.Optional;
 
 @Service
 public class AccountSkillServiceImpl implements AccountSkillService {
@@ -70,16 +68,26 @@ public class AccountSkillServiceImpl implements AccountSkillService {
     }
 
     @Override
-    public Page<Skill> getAllByKeyword(String keyword, Pageable pageable) {
-        return skillRepository.getAllByNameContaining(keyword, pageable);
+    public Page<Skill> getAllByKeyword(long categoryId, String keyword, Pageable pageable) throws CategoryNotFoundException {
+        Optional<Category> categoryOptional = categoryRepository.findById(categoryId);
+
+        if(!categoryOptional.isPresent())
+            throw new CategoryNotFoundException(categoryId);
+
+        return skillRepository.getAllByCategoryIdAndNameContaining(categoryId, keyword, pageable);
     }
 
 
     @Override
-    public Page<Skill> getAllByKeywordForAccountLogin(String keyword, Pageable pageable) {
+    public Page<Skill> getAllByKeywordForAccountLogin(long categoryId, String keyword, Pageable pageable) throws CategoryNotFoundException {
+        Optional<Category> categoryOptional = categoryRepository.findById(categoryId);
+
+        if(!categoryOptional.isPresent())
+            throw new CategoryNotFoundException(categoryId);
+
         Account accountLogin = accountService.getAccountLogin();
 
-        Page<Skill> skills = skillRepository.getAllByNameContainingAndAccountId(keyword, accountLogin.getId(), pageable);
+        Page<Skill> skills = skillRepository.getAllByNameContainingAndAccountIdAndCategoryId(keyword, accountLogin.getId(), categoryId, pageable);
 
         for(Skill skill : skills) {
             skill.setLevel(levelRepository.getByAccountIdAndSkillId(accountLogin.getId(), skill.getId()));
@@ -205,9 +213,10 @@ public class AccountSkillServiceImpl implements AccountSkillService {
     public void delete(long skillId) throws SkillNotFoundException {
         Account accountLogin = accountService.getAccountLogin();
 
-        if(!skillRepository.existsById(skillId)) {
+        Optional<Skill> skillOptional = skillRepository.findById(skillId);
+
+        if(!skillOptional.isPresent())
             throw new SkillNotFoundException(skillId);
-        }
 
         accountHasSkillRepository.deleteByAccountIdAndSkillId(accountLogin.getId(), skillId);
         levelRepository.deleteByAccountIdAndSkillId(accountLogin.getId(), skillId);
@@ -225,7 +234,9 @@ public class AccountSkillServiceImpl implements AccountSkillService {
 
     @Override
     public Page<Skill> getAllByCategoryIdAndName(long categoryId, String name, Pageable pageable) throws CategoryNotFoundException {
-        if(!categoryRepository.existsById(categoryId))
+        Optional<Category> categoryOptional = categoryRepository.findById(categoryId);
+
+        if(!categoryOptional.isPresent())
             throw new CategoryNotFoundException(categoryId);
 
         Page<Skill> skills = skillRepository.getAllByCategoryIdAndNameContaining(categoryId, name, pageable);
@@ -239,7 +250,9 @@ public class AccountSkillServiceImpl implements AccountSkillService {
 
     @Override
     public Page<Skill> getAllByAccountId(long accountId, Pageable pageable) throws AccountNotFoundException {
-        if(!accountRepository.existsById(accountId))
+        Optional<Account> accountOptional = accountRepository.findById(accountId);
+
+        if(!accountOptional.isPresent())
             throw new AccountNotFoundException(accountId);
 
         Page<Skill> skills = skillRepository.getAllByAccountId(accountId, pageable);
