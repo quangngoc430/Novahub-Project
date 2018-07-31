@@ -9,10 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import vn.novahub.helpdesk.constant.DayOffConstant;
 import vn.novahub.helpdesk.enums.RoleEnum;
-import vn.novahub.helpdesk.exception.DayOffIsAnsweredException;
-import vn.novahub.helpdesk.exception.DayOffOverdueException;
-import vn.novahub.helpdesk.exception.DayOffTokenIsNotMatchException;
-import vn.novahub.helpdesk.exception.DayOffTypeIsNotValidException;
+import vn.novahub.helpdesk.exception.*;
 import vn.novahub.helpdesk.model.*;
 import vn.novahub.helpdesk.repository.AccountRepository;
 import vn.novahub.helpdesk.repository.DayOffRepository;
@@ -95,11 +92,16 @@ public class DayOffServiceImpl implements DayOffService {
     @Override
     public void delete(DayOff dayOff)
             throws MessagingException,
-                    DayOffOverdueException {
-        LocalDateTime currentDate = LocalDateTime.now();
+                    DayOffOverdueException,
+                    UnauthorizedException {
+        Date currentDate = new Date();
         dayOff = dayOffRepository.getById(dayOff.getId());
+        Account account = accountService.getAccountLogin();
+        if (account.getId() != dayOff.getAccountId()) {
+            throw new UnauthorizedException("This is not your day off", "/api/day-offs");
+        }
 
-        if (currentDate.isBefore(dayOff.getStartDate())) {
+        if (currentDate.before(dayOff.getStartDate())) {
             dayOffRepository.delete(dayOff);
         } else {
             throw new DayOffOverdueException(dayOff.getId());
@@ -108,7 +110,7 @@ public class DayOffServiceImpl implements DayOffService {
     }
 
     @Override
-    public void approve(long dayOffId, String token)
+    public DayOff approve(long dayOffId, String token)
             throws DayOffIsAnsweredException, DayOffTokenIsNotMatchException, MessagingException{
 
         DayOff dayOff = checkIfRequestIsAnswered(dayOffId, token);
@@ -119,10 +121,12 @@ public class DayOffServiceImpl implements DayOffService {
         } else {
             throw new DayOffTokenIsNotMatchException();
         }
+
+        return dayOff;
     }
 
     @Override
-    public void deny(long dayOffId, String token)
+    public DayOff deny(long dayOffId, String token)
             throws DayOffIsAnsweredException, DayOffTokenIsNotMatchException, MessagingException {
         DayOff dayOff = checkIfRequestIsAnswered(dayOffId, token);
 
@@ -131,6 +135,7 @@ public class DayOffServiceImpl implements DayOffService {
         } else {
             throw new DayOffTokenIsNotMatchException();
         }
+        return dayOff;
     }
 
     private void answerDayOffRequest(DayOff dayOff, String status) throws MessagingException{
@@ -172,7 +177,7 @@ public class DayOffServiceImpl implements DayOffService {
 
     private void initialize(DayOff dayOff) {
         Account accountLogin = accountService.getAccountLogin();
-        LocalDateTime createdDate = LocalDateTime.now();
+        Date createdDate = new Date();
 
         dayOff.setCreatedAt(createdDate);
         dayOff.setUpdatedAt(createdDate);

@@ -1,9 +1,11 @@
 package vn.novahub.helpdesk.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name = "day_off")
@@ -17,17 +19,21 @@ public class DayOff {
     @Column(name = "comment")
     private String comment;
 
-    @Column(name = "start_date", columnDefinition = "TIMESTAMP WITH TIME ZONE")
-    private LocalDateTime startDate;
+    @JsonFormat(pattern = "yyyy-mm-dd")
+    @Column(name = "start_date")
+    private Date startDate;
 
-    @Column(name = "end_date", columnDefinition = "TIMESTAMP WITH TIME ZONE")
-    private LocalDateTime endDate;
+    @JsonFormat(pattern = "yyyy-mm-dd")
+    @Column(name = "end_date")
+    private Date endDate;
 
-    @Column(name = "created_at", columnDefinition = "TIMESTAMP WITH TIME ZONE")
-    private LocalDateTime createdAt;
+    @JsonFormat(pattern = "yyyy-mm-dd")
+    @Column(name = "created_at")
+    private Date createdAt;
 
-    @Column(name = "updated_at", columnDefinition = "TIMESTAMP WITH TIME ZONE")
-    private LocalDateTime updatedAt;
+    @JsonFormat(pattern = "yyyy-mm-dd")
+    @Column(name = "updated_at")
+    private Date updatedAt;
 
     @Column(name = "number_of_hours")
     private int numberOfHours;
@@ -58,8 +64,8 @@ public class DayOff {
     private Account account;
 
     public DayOff() {
-        createdAt = LocalDateTime.now();
-        updatedAt = LocalDateTime.now();
+        createdAt = new Date();
+        updatedAt = new Date();
     }
 
     public long getId() {
@@ -78,35 +84,35 @@ public class DayOff {
         this.comment = comment;
     }
 
-    public LocalDateTime getStartDate() {
+    public Date getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDateTime startDate) {
+    public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
 
-    public LocalDateTime getEndDate() {
+    public Date getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(LocalDateTime endDate) {
+    public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
 
-    public LocalDateTime getUpdatedAt() {
+    public Date getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(LocalDateTime updatedAt) {
+    public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
 

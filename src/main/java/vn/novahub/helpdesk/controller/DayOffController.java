@@ -42,7 +42,7 @@ public class DayOffController {
         return new ResponseEntity<>(dayOffPage, HttpStatus.OK);
     }
 
-
+    @PreAuthorize("isAuthenticated()")
     @PostMapping(path = "/day-offs")
     public ResponseEntity<DayOff> create(@RequestBody DayOff dayOff)
             throws MessagingException, DayOffTypeIsNotValidException {
@@ -52,37 +52,36 @@ public class DayOffController {
         return new ResponseEntity<>(dayOff, HttpStatus.OK);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @DeleteMapping(path = "/day-offs")
-    public ResponseEntity<String> delete(@RequestBody DayOff dayOff)
-            throws MessagingException, DayOffOverdueException{
+    public ResponseEntity<DayOff> delete(@RequestBody DayOff dayOff)
+            throws MessagingException, DayOffOverdueException, UnauthorizedException{
 
         dayOffService.delete(dayOff);
 
-        return new ResponseEntity<>("Deleting day off request successful", HttpStatus.OK);
+        return new ResponseEntity<>(dayOff, HttpStatus.OK);
     }
 
     @GetMapping(path = "/day-offs/{id}/approve")
-    public ResponseEntity<String> approve(@PathVariable("id") long dayOffId,
+    public ResponseEntity<DayOff> approve(@PathVariable("id") long dayOffId,
                                           @RequestParam("token") String token)
                                              throws DayOffIsAnsweredException,
                                                     DayOffTokenIsNotMatchException,
                                                     MessagingException{
-        dayOffService.approve(dayOffId, token);
+        DayOff dayOff = dayOffService.approve(dayOffId, token);
 
-        return new ResponseEntity<>("The day off request with id = " + dayOffId + " has been approved",
-                                    HttpStatus.OK);
+        return new ResponseEntity<>(dayOff, HttpStatus.OK);
     }
 
     @GetMapping(path = "/day-offs/{id}/deny")
-    public ResponseEntity<String> deny(@PathVariable("id") long dayOffId,
+    public ResponseEntity<DayOff> deny(@PathVariable("id") long dayOffId,
                                        @RequestParam("token") String token)
                                             throws DayOffIsAnsweredException,
                                                    DayOffTokenIsNotMatchException,
                                                    MessagingException {
-        dayOffService.deny(dayOffId, token);
+       DayOff dayOff =  dayOffService.deny(dayOffId, token);
 
-        return new ResponseEntity<>("The day off request with id = " + dayOffId + " has been denied",
-                HttpStatus.OK);
+        return new ResponseEntity<>(dayOff, HttpStatus.OK);
     }
 
 
