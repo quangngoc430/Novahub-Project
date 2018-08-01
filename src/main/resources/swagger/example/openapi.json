@@ -382,6 +382,181 @@
         }
       }
     },
+    "/logout": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Logout",
+        "description": "Logout",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "access_token",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "dff4d0d4891bfd8bafdb859dac4cbccb218bcf5adc9887a627c6c159f76ef0b9"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Logout successfully"
+          },
+          "400": {
+            "description": "Token is expired",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": 1532589762.947
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Token is expired"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "TokenIsExpiredException with token = 579989c508208d49c978e6cb99383688e6f1fedabfc22c27d3542ab0341d3b13"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/logout"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": "1532506012.933"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 401
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Unauthorized"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid token"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/logout"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access is denied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": "1532506012.933"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 403
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Access is denied"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Access is denied"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/logout"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Token not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": "1532462094.006"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "User not found"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "TokenNotFoundException with accessToken = dff4d0d4891bfd8bafdb859dac4cbccb218bcf5adc9887a627c6c159f76ef0b9"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/logout"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/users": {
       "get": {
         "tags": [
