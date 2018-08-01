@@ -12,19 +12,19 @@ import vn.novahub.helpdesk.model.DayOff;
 @Repository
 public interface DayOffRepository extends PagingAndSortingRepository<DayOff, Long>{
 
-    @Query("SELECT dayOff FROM DayOff dayOff WHERE " +
-            "dayOff.accountId = :accountid AND " +
-            "dayOff.type LIKE :typekeyword AND dayOff.status LIKE :statuskeyword")
-    Page<DayOff> getAllByAccountIdAndTypeLikeAndStatusLike(
-            @Param("accountid") long accountId,
-            @Param("typekeyword") String typeKeyword,
-            @Param("statuskeyword") String statusKeyword,
-            Pageable pageable);
-
-    @Query("FROM DayOff dayOff WHERE " +
-            "dayOff.type LIKE :typekeyword AND dayOff.status LIKE :statuskeyword")
-    Page<DayOff> getAllByTypeLikeAndStatusLike(
-            @Param("typekeyword") String typeKeyword,
-            @Param("statuskeyword") String statusKeyword,
-            Pageable pageable);
+//    @Query("SELECT dayOff FROM DayOff dayOff WHERE " +
+//            "dayOff.accountId = :accountid AND " +
+//            "dayOff.type LIKE :typekeyword AND dayOff.status LIKE :statuskeyword")
+//    Page<DayOff> getAllByAccountIdAndTypeLikeAndStatusLike(
+//            @Param("accountid") long accountId,
+//            @Param("typekeyword") String typeKeyword,
+//            @Param("statuskeyword") String statusKeyword,
+//            Pageable pageable);
+//
+//    @Query("FROM DayOff dayOff WHERE " +
+//            "dayOff.type LIKE :typekeyword AND dayOff.status LIKE :statuskeyword")
+//    Page<DayOff> getAllByTypeLikeAndStatusLike(
+//            @Param("typekeyword") String typeKeyword,
+//            @Param("statuskeyword") String statusKeyword,
+//            Pageable pageable);
 }

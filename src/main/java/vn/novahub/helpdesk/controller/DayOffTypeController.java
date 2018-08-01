@@ -19,48 +19,48 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping(path = "/api", produces = {MediaType.APPLICATION_JSON_VALUE})
 public class DayOffTypeController {
 
-    @Autowired
-    private DayOffTypeService dayOffTypeService;
-
-    @GetMapping(path = "/day-off-types/{account-id}")
-    public ResponseEntity<Page<DayOffType>> getByAccountId(@PathVariable("account-id") long accountId,
-                                                           Pageable pageable)
-                                                                  throws DayOffTypeNotFoundException {
-
-        Page<DayOffType> dayOffTypes = dayOffTypeService.findByAccountId(accountId, pageable);
-
-        return new ResponseEntity<>(dayOffTypes, HttpStatus.OK);
-    }
-
-    @PostMapping(path = "/day-off-types")
-    public ResponseEntity<String> create(@RequestBody DayOffType dayOffType)
-            throws DayOffTypeIsExistException, DayOffTypeIsNotValidException {
-
-        dayOffTypeService.add(dayOffType);
-
-        return new ResponseEntity<>("Adding new Day off type successful", HttpStatus.OK);
-
-    }
-
-    @PutMapping(path = "/day-off-types")
-    public ResponseEntity<String> update(@RequestBody DayOffType dayOffType,
-                                                   HttpServletRequest request)
-                                                   throws DayOffTypeNotFoundException {
-
-        dayOffTypeService.update(dayOffType);
-
-        return new ResponseEntity<>("Updating day off type successful", HttpStatus.OK);
-    }
-
-    @DeleteMapping(path = "/day-off-types/{type-id}")
-    public ResponseEntity<String> delete(@PathVariable("type-id") long typeId) throws DayOffTypeNotFoundException {
-
-        DayOffType dayOffType = dayOffTypeService.getById(typeId);
-
-        dayOffTypeService.delete(dayOffType);
-
-        return new ResponseEntity<>("Deleting day off type successful", HttpStatus.OK);
-    }
+//    @Autowired
+//    private DayOffTypeService dayOffTypeService;
+//
+//    @GetMapping(path = "/day-off-types/{account-id}")
+//    public ResponseEntity<Page<DayOffType>> getByAccountId(@PathVariable("account-id") long accountId,
+//                                                           Pageable pageable)
+//                                                                  throws DayOffTypeNotFoundException {
+//
+//        Page<DayOffType> dayOffTypes = dayOffTypeService.findByAccountId(accountId, pageable);
+//
+//        return new ResponseEntity<>(dayOffTypes, HttpStatus.OK);
+//    }
+//
+//    @PostMapping(path = "/day-off-types")
+//    public ResponseEntity<String> create(@RequestBody DayOffType dayOffType)
+//            throws DayOffTypeIsExistException, DayOffTypeIsNotValidException {
+//
+//        dayOffTypeService.add(dayOffType);
+//
+//        return new ResponseEntity<>("Adding new Day off type successful", HttpStatus.OK);
+//
+//    }
+//
+//    @PutMapping(path = "/day-off-types")
+//    public ResponseEntity<String> update(@RequestBody DayOffType dayOffType,
+//                                                   HttpServletRequest request)
+//                                                   throws DayOffTypeNotFoundException {
+//
+//        dayOffTypeService.update(dayOffType);
+//
+//        return new ResponseEntity<>("Updating day off type successful", HttpStatus.OK);
+//    }
+//
+//    @DeleteMapping(path = "/day-off-types/{type-id}")
+//    public ResponseEntity<String> delete(@PathVariable("type-id") long typeId) throws DayOffTypeNotFoundException {
+//
+//        DayOffType dayOffType = dayOffTypeService.getById(typeId);
+//
+//        dayOffTypeService.delete(dayOffType);
+//
+//        return new ResponseEntity<>("Deleting day off type successful", HttpStatus.OK);
+//    }
 
 
 }
