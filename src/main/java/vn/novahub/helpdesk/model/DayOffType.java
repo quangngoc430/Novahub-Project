@@ -13,20 +13,21 @@ public class DayOffType {
     @Column(name = "id")
     private long id;
 
-    @Column(name = "type")
-    private String type;
-
     @Column(name = "year")
     private int year;
-
-    @Column(name = "quota")
-    private long quota;
 
     @Column(name = "remaining_time")
     private long remainingTime;
 
+    @Column(name = "common_type_id")
+    private int commonTypeId;
+
     @Column(name = "account_id")
     private long accountId;
+
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = CommonDayOffType.class)
+    @JoinColumn(name = "common_type_id", insertable = false, updatable = false)
+    private CommonDayOffType commonDayOffType;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = Account.class)
@@ -43,30 +44,6 @@ public class DayOffType {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public int getYear() {
-        return year;
-    }
-
-    public void setYear(int year) {
-        this.year = year;
-    }
-
-    public long getQuota() {
-        return quota;
-    }
-
-    public void setQuota(long quota) {
-        this.quota = quota;
     }
 
     public long getRemainingTime() {
@@ -97,7 +74,9 @@ public class DayOffType {
     public String toString() {
         return "DayOffType{" +
                 "id=" + id +
-                ", type='" + type + '\'' +
+                ", year=" + year +
+                ", remainingTime=" + remainingTime +
+                ", accountId=" + accountId +
                 '}';
     }
 }

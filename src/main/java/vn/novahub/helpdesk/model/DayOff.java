@@ -48,9 +48,6 @@ public class DayOff {
     @Column(name = "account_id")
     private long accountId;
 
-    @Column(name = "type")
-    private String type;
-
     @Column(name = "type_id")
     private long typeId;
 
@@ -146,14 +143,6 @@ public class DayOff {
 
     public void setAccountId(long accountId) {
         this.accountId = accountId;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public long getTypeId() {

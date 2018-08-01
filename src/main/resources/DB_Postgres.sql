@@ -58,12 +58,17 @@ CREATE TABLE account_has_skill (
   updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
 );
 
+CREATE TABLE common_day_off_type (
+  id SERIAL PRIMARY KEY,
+  type VARCHAR(20) NOT NULL,
+  quota INT NOT NULL
+);
+
 CREATE TABLE day_off_type (
   id BIGSERIAL PRIMARY KEY,
-  type VARCHAR(20) NOT NULL,
   year INT NOT NULL,
-  quota INT NOT NULL,
   remaining_time INT NOT NULL,
+  common_type_id INT REFERENCES common_day_off_type(id),
   account_id INT REFERENCES account(id)
 );
 
@@ -79,8 +84,7 @@ CREATE TABLE day_off (
   status VARCHAR(45) NOT NULL,
   token VARCHAR(255) NOT NULL,
   account_id BIGINT REFERENCES account(id),
-  type VARCHAR(100) NOT NULL,
-  type_id BIGINT REFERENCES day_off_type(type)
+  type_id BIGINT REFERENCES day_off_type(id)
 );
 
 CREATE TABLE issue (
