@@ -23,17 +23,23 @@ public interface DayOffService {
             throws MessagingException,
                    DayOffOverdueException,
                    DayOffIsNotExistException,
-                   UnauthorizedException;
+                   UnauthorizedException,
+                   AccountNotFoundException;
+
 
     DayOff approve(long dayOffId, String token)
             throws DayOffIsAnsweredException,
             DayOffTokenIsNotMatchException,
             DayOffIsNotExistException,
-            MessagingException;
+            MessagingException,
+            AccountNotFoundException;
+
 
     DayOff deny(long dayOffId, String token)
             throws DayOffIsAnsweredException,
             DayOffTokenIsNotMatchException,
             DayOffIsNotExistException,
-            MessagingException;
+            MessagingException,
+            AccountNotFoundException;
+
 }

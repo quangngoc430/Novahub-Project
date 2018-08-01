@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import vn.novahub.helpdesk.enums.IssueEnum;
 import vn.novahub.helpdesk.enums.RoleEnum;
+import vn.novahub.helpdesk.exception.AccountNotFoundException;
 import vn.novahub.helpdesk.exception.IssueIsClosedException;
 import vn.novahub.helpdesk.exception.IssueNotFoundException;
 import vn.novahub.helpdesk.exception.IssueValidationException;
@@ -28,6 +29,7 @@ import javax.validation.groups.Default;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Optional;
 
 @Service
 @PropertySource("classpath:email.properties")
@@ -77,7 +79,7 @@ public class AccountIssueServiceImpl implements AccountIssueService {
     }
 
     @Override
-    public Issue create(Issue issue) throws IssueValidationException, MessagingException, IOException {
+    public Issue create(Issue issue) throws IssueValidationException, MessagingException, IOException, AccountNotFoundException {
 
         issueValidation.validate(issue, GroupCreateIssue.class);
 
@@ -88,9 +90,14 @@ public class AccountIssueServiceImpl implements AccountIssueService {
         issue.setStatus(IssueEnum.PENDING.name());
         issue.setToken(tokenService.generateToken(accountLogin.getId() + issue.getTitle() + (new Date()).getTime()));
         issue.setAccountId(accountLogin.getId());
-
         issue = issueRepository.save(issue);
-        issue.setAccount(accountRepository.getById(issue.getAccountId()));
+
+        Optional<Account> accountOptional = accountRepository.findById(issue.getAccountId());
+
+        if(!accountOptional.isPresent())
+            throw new AccountNotFoundException(issue.getAccountId());
+
+        issue.setAccount(accountLogin);
 
         sendMailCreateIssueForAdmin(issue, accountLogin);
 
@@ -98,7 +105,7 @@ public class AccountIssueServiceImpl implements AccountIssueService {
     }
 
     @Override
-    public Issue update(long issueId, Issue issue) throws IssueNotFoundException, IssueValidationException, MessagingException, IOException, IssueIsClosedException {
+    public Issue update(long issueId, Issue issue) throws IssueNotFoundException, IssueValidationException, MessagingException, IOException, IssueIsClosedException, AccountNotFoundException {
 
         Account account = accountService.getAccountLogin();
 
@@ -163,8 +170,13 @@ public class AccountIssueServiceImpl implements AccountIssueService {
         mailService.sendHTMLMail(mail);
     }
 
-    private void sendMailUpdateIssueForAdmin(Issue issue) throws MessagingException, IOException {
-        Account accountLogin = accountRepository.getById(issue.getAccountId());
+    private void sendMailUpdateIssueForAdmin(Issue issue) throws MessagingException, IOException, AccountNotFoundException {
+        Optional<Account> accountOptional = accountRepository.findById(issue.getAccountId());
+
+        if(!accountOptional.isPresent())
+            throw new AccountNotFoundException(issue.getAccountId());
+
+        Account accountLogin = accountOptional.get();
 
         Mail mail = new Mail();
         String subject = env.getProperty("subject_email_update_issue_admin");

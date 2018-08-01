@@ -30,6 +30,12 @@ public class HomeController {
         return "login";
     }
 
+    @RequestMapping("/swagger/openapi.json")
+    public String swagger() {
+
+        return "../swagger/example/openapi.json";
+    }
+
     @PreAuthorize("isAuthenticated()")
     @RequestMapping("/update")
     public String updateClerk() {

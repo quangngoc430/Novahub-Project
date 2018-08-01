@@ -23,6 +23,7 @@ import javax.mail.MessagingException;
 import javax.validation.groups.Default;
 import java.io.IOException;
 import java.util.Date;
+import java.util.Optional;
 
 @Service
 @PropertySource("classpath:email.properties")
@@ -45,12 +46,12 @@ public class AdminIssueServiceImpl implements AdminIssueService {
 
     @Override
     public Issue findOne(long issueId) throws IssueNotFoundException {
-        Issue issue = issueRepository.getById(issueId);
+        Optional<Issue> issueOptional = issueRepository.findById(issueId);
 
-        if (issue == null)
+        if(!issueOptional.isPresent())
             throw new IssueNotFoundException(issueId);
 
-        return issue;
+        return issueOptional.get();
     }
 
     @Override
@@ -63,10 +64,12 @@ public class AdminIssueServiceImpl implements AdminIssueService {
 
     @Override
     public Issue update(long issueId, Issue issue) throws IssueNotFoundException, IssueValidationException, MessagingException, IOException {
-        Issue oldIssue = issueRepository.getById(issueId);
+        Optional<Issue> issueOptional = issueRepository.findById(issueId);
 
-        if (oldIssue == null)
+        if (!issueOptional.isPresent())
             throw new IssueNotFoundException(issueId);
+
+        Issue oldIssue = issueOptional.get();
 
         boolean isSendMail = false;
 
@@ -111,10 +114,12 @@ public class AdminIssueServiceImpl implements AdminIssueService {
 
     @Override
     public void approve(long issueId, String token) throws IssueNotFoundException, IssueIsClosedException, MessagingException, IOException {
-        Issue issue = issueRepository.getById(issueId);
+        Optional<Issue> issueOptional = issueRepository.findById(issueId);
 
-        if (issue == null)
+        if (!issueOptional.isPresent())
             throw new IssueNotFoundException(issueId);
+
+        Issue issue = issueOptional.get();
 
         if (issue.getToken() == null)
             throw new IssueIsClosedException(issueId);
@@ -128,10 +133,12 @@ public class AdminIssueServiceImpl implements AdminIssueService {
 
     @Override
     public void deny(long issueId, String token) throws IssueNotFoundException, IssueIsClosedException, MessagingException, IOException {
-        Issue issue = issueRepository.getById(issueId);
+        Optional<Issue> issueOptional = issueRepository.findById(issueId);
 
-        if (issue == null)
+        if (!issueOptional.isPresent())
             throw new IssueNotFoundException(issueId);
+
+        Issue issue = issueOptional.get();
 
         if (issue.getToken() == null)
             throw new IssueIsClosedException(issueId);
@@ -144,7 +151,9 @@ public class AdminIssueServiceImpl implements AdminIssueService {
     }
 
     private void sendMailUpdateIssueForUser(Issue issue) throws MessagingException, IOException {
-        Account account = accountRepository.getById(issue.getAccountId());
+        Optional<Account> accountOptional = accountRepository.findById(issue.getAccountId());
+
+        Account account = accountOptional.get();
 
         Mail mail = new Mail();
         String subject = env.getProperty("subject_email_update_issue_account");

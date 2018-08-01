@@ -6,6 +6,7 @@ import vn.novahub.helpdesk.exception.CategoryNotFoundException;
 import vn.novahub.helpdesk.exception.SkillIsExistException;
 import vn.novahub.helpdesk.exception.SkillNotFoundException;
 import vn.novahub.helpdesk.exception.SkillValidationException;
+import vn.novahub.helpdesk.model.Category;
 import vn.novahub.helpdesk.model.Skill;
 import vn.novahub.helpdesk.repository.CategoryRepository;
 import vn.novahub.helpdesk.repository.SkillRepository;
@@ -16,6 +17,7 @@ import vn.novahub.helpdesk.validation.SkillValidation;
 
 import javax.validation.groups.Default;
 import java.util.Date;
+import java.util.Optional;
 
 @Service
 public class AdminSkillServiceImpl implements AdminSkillService {
@@ -30,19 +32,31 @@ public class AdminSkillServiceImpl implements AdminSkillService {
     private CategoryRepository categoryRepository;
 
     @Override
+    public Skill findOne(long skillId) throws SkillNotFoundException {
+        Optional<Skill> skill = skillRepository.findById(skillId);
+
+        if(!skill.isPresent())
+            throw new SkillNotFoundException(skillId);
+
+        return skill.get();
+    }
+
+    @Override
     public Skill create(Skill skill) throws SkillValidationException, SkillIsExistException, CategoryNotFoundException {
         skillValidation.validate(skill, GroupCreateSkill.class);
 
-        if(!categoryRepository.existsById(skill.getCategoryId()))
+        Optional<Category> categoryOptional = categoryRepository.findById(skill.getCategoryId());
+
+        if(!categoryOptional.isPresent())
             throw new CategoryNotFoundException(skill.getCategoryId());
 
-        if(skillRepository.getByName(skill.getName()) != null)
-            throw new SkillIsExistException(skill.getName());
+        if(skillRepository.getByNameAndCategoryId(skill.getName(), skill.getCategoryId()) != null)
+            throw new SkillIsExistException(skill.getName(), skill.getCategoryId());
 
         skill.setCreatedAt(new Date());
         skill.setUpdatedAt(new Date());
         skill = skillRepository.save(skill);
-        skill.setCategory(categoryRepository.getById(skill.getCategoryId()));
+        skill.setCategory(categoryOptional.get());
 
         return skill;
     }
@@ -51,18 +65,21 @@ public class AdminSkillServiceImpl implements AdminSkillService {
     public Skill update(long skillId, Skill skill) throws SkillValidationException, SkillIsExistException, SkillNotFoundException, CategoryNotFoundException {
         skillValidation.validate(skill, GroupUpdateSkill.class);
 
-        if(!categoryRepository.existsById(skill.getCategoryId()))
+        Optional<Category> categoryOptional = categoryRepository.findById(skill.getCategoryId());
+
+        if(!categoryOptional.isPresent())
             throw new CategoryNotFoundException(skill.getCategoryId());
 
-        Skill oldSkill = skillRepository.getByIdAndCategoryId(skillId, skill.getCategoryId());
+        Optional<Skill> optionalSkill = skillRepository.findById(skillId);
 
-        if (oldSkill == null) {
-            throw new SkillNotFoundException(skillId);
-        }
+        if (!optionalSkill.isPresent())
+            throw new SkillNotFoundException(skillId, skill.getCategoryId());
 
-        Skill skillTemp = skillRepository.getByName(skill.getName());
+        Skill oldSkill = optionalSkill.get();
+
+        Skill skillTemp = skillRepository.getByNameAndCategoryId(skill.getName(), skill.getCategoryId());
         if((skillTemp != null) && (skillTemp.getId() != skillId))
-            throw new SkillIsExistException(skill.getName());
+            throw new SkillIsExistException(skill.getName(), skill.getCategoryId());
 
         oldSkill.setName(skill.getName());
         oldSkill.setLevel(skill.getLevel());
@@ -70,7 +87,7 @@ public class AdminSkillServiceImpl implements AdminSkillService {
         oldSkill.setUpdatedAt(new Date());
 
         oldSkill = skillRepository.save(oldSkill);
-        oldSkill.setCategory(categoryRepository.getById(oldSkill.getCategoryId()));
+        oldSkill.setCategory(categoryOptional.get());
 
         return oldSkill;
     }
@@ -86,21 +103,22 @@ public class AdminSkillServiceImpl implements AdminSkillService {
 
     @Override
     public Skill createByCategoryId(Skill skill, long categoryId) throws CategoryNotFoundException, SkillValidationException, SkillIsExistException {
+        Optional<Category> categoryOptional = categoryRepository.findById(categoryId);
 
-        if(!categoryRepository.existsById(categoryId))
+        if(!categoryOptional.isPresent())
             throw new CategoryNotFoundException(categoryId);
 
         skill.setCategoryId(categoryId);
         skillValidation.validate(skill, GroupCreateSkill.class);
 
-        if(skillRepository.getByName(skill.getName()) != null)
+        if(skillRepository.getByNameAndCategoryId(skill.getName(), categoryId) != null)
             throw new SkillIsExistException(skill.getName());
 
         skill.setCreatedAt(new Date());
         skill.setUpdatedAt(new Date());
 
         skill = skillRepository.save(skill);
-        skill.setCategory(categoryRepository.getById(categoryId));
+        skill.setCategory(categoryOptional.get());
 
         return skill;
     }

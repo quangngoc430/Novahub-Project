@@ -21,7 +21,5 @@ public interface AccountHasSkillRepository extends PagingAndSortingRepository<Ac
 
     long countBySkillId(long skillId);
 
-    void deleteBySkillId(long skillId);
-
     boolean existsByAccountIdAndSkillId(long accountId, long skillId);
 }

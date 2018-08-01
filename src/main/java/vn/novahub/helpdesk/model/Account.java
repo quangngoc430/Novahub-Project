@@ -55,10 +55,10 @@ public class Account implements Serializable {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NotEmpty(message = "password is not empty",
             groups = {GroupCreateAccount.class, GroupLoginAccount.class,
-                      GroupUpdatePasswordByAccount.class, GroupUpdatePasswordByAdmin.class})
+                      GroupUpdatePasswordByAccount.class, GroupUpdatePasswordByAdmin.class, GroupUpdatePasswordAccountSignupWithGoogle.class})
     @Size(min = 8, max = 40, message = "password must have between 8 and 40 characters",
             groups = {GroupCreateAccount.class, GroupLoginAccount.class,
-                      GroupUpdatePasswordByAccount.class, GroupUpdatePasswordByAdmin.class})
+                      GroupUpdatePasswordByAccount.class, GroupUpdatePasswordByAdmin.class, GroupUpdatePasswordAccountSignupWithGoogle.class})
     @Column(name = "password")
     private String password;
 

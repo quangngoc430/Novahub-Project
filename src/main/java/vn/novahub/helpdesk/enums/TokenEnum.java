@@ -7,7 +7,7 @@ public enum TokenEnum {
     TIME_OF_TOKEN {
         @Override
         public long value() {
-            return 3600; // 3600 sec = 24h
+            return 1209600; // 1209600 sec = 14 days
         }
     };
 

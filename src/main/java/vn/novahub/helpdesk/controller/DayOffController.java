@@ -52,14 +52,15 @@ public class DayOffController {
         return new ResponseEntity<>(dayOff, HttpStatus.OK);
     }
 
+
     @PreAuthorize("isAuthenticated()")
     @DeleteMapping(path = "/day-offs/{id}")
     public ResponseEntity<DayOff> delete(@PathVariable long dayOffId)
             throws MessagingException,
             DayOffOverdueException,
             DayOffIsNotExistException,
-            UnauthorizedException{
-
+            UnauthorizedException,
+            AccountNotFoundException {
 
         DayOff dayOff = dayOffService.delete(dayOffId);
 
@@ -72,8 +73,10 @@ public class DayOffController {
                                              throws DayOffIsAnsweredException,
                                                     DayOffTokenIsNotMatchException,
                                                     DayOffIsNotExistException,
-                                                    MessagingException{
+                                                    MessagingException,
+                                                    AccountNotFoundException {
         DayOff dayOff = dayOffService.approve(dayOffId, token);
+
 
         return new ResponseEntity<>(dayOff, HttpStatus.OK);
     }
@@ -84,11 +87,9 @@ public class DayOffController {
                                             throws DayOffIsAnsweredException,
                                                    DayOffTokenIsNotMatchException,
                                                    DayOffIsNotExistException,
-                                                   MessagingException {
+                                                   MessagingException,
+                                                   AccountNotFoundException {
        DayOff dayOff =  dayOffService.deny(dayOffId, token);
-
         return new ResponseEntity<>(dayOff, HttpStatus.OK);
     }
-
-
 }

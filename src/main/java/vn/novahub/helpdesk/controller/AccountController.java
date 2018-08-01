@@ -68,7 +68,6 @@ public class AccountController {
         requestDispatcher.forward(request, response);
     }
 
-
     @PermitAll
     @PostMapping(path = "/login", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Token> login(@RequestBody Account account) throws AccountInvalidException, AccountLockedException, AccountValidationException, AccountInactiveException {

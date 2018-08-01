@@ -24,7 +24,7 @@ public class Level implements Serializable {
     private long id;
 
     @Column(name = "value")
-    @NotNull(message = "value is not empty", groups = {GroupCreateSkill.class, GroupUpdateSkill.class})
+    @NotNull(message = "value is not null", groups = {GroupCreateSkill.class, GroupUpdateSkill.class})
     @Min(value = 1, message = "value must be greater than or equal to 1", groups = {GroupCreateSkill.class, GroupUpdateSkill.class})
     @Max(value = 10, message = "value must be less than or equal to 10", groups = {GroupCreateSkill.class, GroupUpdateSkill.class})
     private long value;

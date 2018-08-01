@@ -1,7 +1,6 @@
 package vn.novahub.helpdesk.config;
 
 import vn.novahub.helpdesk.model.Request;
-
 import java.util.ArrayList;
 
 public class RequestsNeedAuthencationToken {
@@ -14,7 +13,6 @@ public class RequestsNeedAuthencationToken {
         PUT,
         DELETE
     }
-    
     
     public static ArrayList<Request> get() {
         if(requestArrayList == null) {
