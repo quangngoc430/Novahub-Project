@@ -12,13 +12,13 @@ public interface AccountSkillService {
 
     Page<Account> getAllUsersBySkillId(long skillId, Pageable pageable) throws SkillNotFoundException;
 
-    Page<Skill> getAllByKeyword(String keyword, Pageable pageable);
+    Page<Skill> getAllByKeyword(long categoryId, String keyword, Pageable pageable) throws CategoryNotFoundException;
 
-    Page<Skill> getAllByKeywordForAccountLogin(String keyword, Pageable pageable);
+    Page<Skill> getAllByKeywordForAccountLogin(long categoryId, String keyword, Pageable pageable) throws CategoryNotFoundException;
 
     Skill create(Skill skill) throws SkillValidationException, SkillIsExistException, CategoryNotFoundException, LevelValidationException;
 
-    Skill update(long skillId, Skill skill) throws SkillNotFoundException, LevelValidationException;
+    Skill update(long skillId, Skill newSkill) throws SkillNotFoundException, LevelValidationException, SkillValidationException, SkillIsExistException;
 
     void delete(long skillId) throws SkillNotFoundException;
 

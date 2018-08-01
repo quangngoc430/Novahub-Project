@@ -27,15 +27,16 @@ public class SkillController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping(path = "/skills", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Page<Skill>> getAll(@RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
-                                              Pageable pageable) {
-        return new ResponseEntity<>(accountSkillService.getAllByKeyword(keyword, pageable), HttpStatus.OK);
+    public ResponseEntity<Page<Skill>> getAll(@RequestParam(value = "categoryId") long categoryId,
+                                              @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
+                                              Pageable pageable) throws CategoryNotFoundException {
+        return new ResponseEntity<>(accountSkillService.getAllByKeyword(categoryId, keyword, pageable), HttpStatus.OK);
     }
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping(path = "/skills/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Skill> get(@PathVariable("id") long skillId) throws SkillNotFoundException {
-        return new ResponseEntity<>(accountSkillService.findOne(skillId), HttpStatus.OK);
+    public ResponseEntity<Skill> getById(@PathVariable("id") long skillId) throws SkillNotFoundException {
+        return new ResponseEntity<>(adminSkillService.findOne(skillId), HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -68,9 +69,10 @@ public class SkillController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping(path = "/users/me/skills", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Page<Skill>> getAllByAccountLogin(@RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
-                                                             Pageable pageable) {
-        return new ResponseEntity<>(accountSkillService.getAllByKeywordForAccountLogin(keyword, pageable), HttpStatus.OK);
+    public ResponseEntity<Page<Skill>> getAllByAccountLogin(@RequestParam(value = "categoryId") long categoryId,
+                                                            @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
+                                                            Pageable pageable) throws CategoryNotFoundException {
+        return new ResponseEntity<>(accountSkillService.getAllByKeywordForAccountLogin(categoryId, keyword, pageable), HttpStatus.OK);
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -80,9 +82,15 @@ public class SkillController {
     }
 
     @PreAuthorize("isAuthenticated()")
+    @GetMapping(path = "/users/me/skills/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Skill> get(@PathVariable("id") long skillId) throws SkillNotFoundException {
+        return new ResponseEntity<>(accountSkillService.findOne(skillId), HttpStatus.OK);
+    }
+
+    @PreAuthorize("isAuthenticated()")
     @PutMapping(path = "/users/me/skills/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Skill> update(@PathVariable("id") long skillId,
-                                        @RequestBody Skill skill) throws SkillNotFoundException, LevelValidationException {
+                                        @RequestBody Skill skill) throws SkillNotFoundException, LevelValidationException, SkillValidationException, SkillIsExistException {
         return new ResponseEntity<>(accountSkillService.update(skillId, skill), HttpStatus.OK);
     }
 

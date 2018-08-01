@@ -26,10 +26,11 @@ public class Skill implements Serializable {
     private long id;
 
     @NotEmpty(message = "name is not empty", groups = {GroupCreateSkill.class, GroupUpdateSkill.class})
-    @Column(name = "name", unique = true)
+    @Column(name = "name")
     private String name;
 
     @Transient
+    @NotNull(message = "level is not null", groups = {GroupCreateSkill.class, GroupUpdateSkill.class})
     private Level level;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

@@ -29,7 +29,7 @@ public class RoleController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping(path = "/roles")
-    public ResponseEntity<Page<Role>> getAll(@RequestParam(value = "name", required = false, defaultValue = "") String roleName,
+    public ResponseEntity<Page<Role>> getAll(@RequestParam(value = "keyword", required = false, defaultValue = "") String roleName,
                                              Pageable pageable) {
         return new ResponseEntity<>(roleService.getAll(roleName, pageable), HttpStatus.OK);
     }

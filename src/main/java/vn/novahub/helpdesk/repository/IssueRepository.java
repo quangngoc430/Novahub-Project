@@ -43,8 +43,6 @@ public interface IssueRepository extends PagingAndSortingRepository<Issue, Long>
 
     Issue findByIdAndToken(long id, String token);
 
-    Issue getById(long issueId);
-
     boolean existsByIdAndAccountId(long issueId, long accountId);
 
     void deleteByIdAndAccountId(long issueId, long accountId);

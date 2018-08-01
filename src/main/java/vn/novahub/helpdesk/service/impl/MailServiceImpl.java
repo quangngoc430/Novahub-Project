@@ -6,6 +6,7 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import vn.novahub.helpdesk.model.Mail;
 import vn.novahub.helpdesk.service.MailService;
@@ -26,6 +27,7 @@ public class MailServiceImpl implements MailService {
     private ResourceLoader resourceLoader;
 
     @Override
+    @Async
     public void sendSimpleMail(Mail mail) {
         SimpleMailMessage message = new SimpleMailMessage();
 
@@ -37,6 +39,7 @@ public class MailServiceImpl implements MailService {
     }
 
     @Override
+    @Async
     public void sendHTMLMail(Mail mail) throws MessagingException {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, false, "utf-8");
