@@ -51,8 +51,6 @@ public class RequestsNeedAuthencationToken {
             // day-off
             requestArrayList.add(new Request("\\/api\\/day-offs", new String[]{Method.GET.name(), Method.POST.name()}));
             requestArrayList.add(new Request("\\/api\\/day-offs\\/(\\d+)", new String[]{Method.GET.name(), Method.PUT.name(), Method.DELETE.name()}));
-            requestArrayList.add(new Request("\\/api\\/day-offs\\/(\\d+)\\/approve", new String[]{Method.GET.name()}));
-            requestArrayList.add(new Request("\\/api\\/day-offs\\/(\\d+)\\/deny", new String[]{Method.GET.name()}));
 
             // day-of-type
             requestArrayList.add(new Request("\\/api\\/day-off-types", new String[]{Method.POST.name(), Method.PUT.name()}));
