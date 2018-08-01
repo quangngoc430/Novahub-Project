@@ -10,8 +10,7 @@ import javax.mail.MessagingException;
 public interface DayOffService {
 
     DayOff add(DayOff dayOff)
-            throws MessagingException,
-            DayOffTypeIsNotValidException;
+            throws MessagingException;
 
     Page<DayOff> getAllByAccountIdAndTypeAndStatus(
             long accountId,

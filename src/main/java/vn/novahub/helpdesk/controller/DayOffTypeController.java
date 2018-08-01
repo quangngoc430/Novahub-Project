@@ -6,21 +6,41 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.novahub.helpdesk.exception.DayOffTypeIsExistException;
-import vn.novahub.helpdesk.exception.DayOffTypeIsNotValidException;
-import vn.novahub.helpdesk.exception.DayOffTypeNotFoundException;
+import vn.novahub.helpdesk.model.Account;
 import vn.novahub.helpdesk.model.DayOffType;
+import vn.novahub.helpdesk.service.AccountService;
 import vn.novahub.helpdesk.service.DayOffTypeService;
-
-import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping(path = "/api", produces = {MediaType.APPLICATION_JSON_VALUE})
 public class DayOffTypeController {
 
-//    @Autowired
-//    private DayOffTypeService dayOffTypeService;
+    @Autowired
+    private DayOffTypeService dayOffTypeService;
+
+    @Autowired
+    private AccountService accountService;
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping(path = "/day-off-types")
+    public ResponseEntity<Page<DayOffType>> getUserLoginDayOffType(Pageable pageable) {
+        Account account = accountService.getAccountLogin();
+
+        return new ResponseEntity<>(
+                dayOffTypeService.findByAccountId(account.getId(), pageable),
+                HttpStatus.OK);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping(path = "/day-off-types")
+    public ResponseEntity<DayOffType> create(@RequestBody DayOffType dayOffType)
+            throws DayOffTypeIsExistException {
+        return new ResponseEntity<>(dayOffTypeService.add(dayOffType), HttpStatus.OK);
+    }
+
 //
 //    @GetMapping(path = "/day-off-types/{account-id}")
 //    public ResponseEntity<Page<DayOffType>> getByAccountId(@PathVariable("account-id") long accountId,

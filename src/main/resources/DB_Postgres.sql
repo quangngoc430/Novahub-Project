@@ -68,6 +68,7 @@ CREATE TABLE day_off_type (
   id BIGSERIAL PRIMARY KEY,
   year INT NOT NULL,
   remaining_time INT NOT NULL,
+  private_quota INT NOT NULL,
   common_type_id INT REFERENCES common_day_off_type(id),
   account_id INT REFERENCES account(id)
 );

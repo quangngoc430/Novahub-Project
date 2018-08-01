@@ -20,7 +20,7 @@ import java.util.*;
 @Service
 public class DayOffServiceImpl implements DayOffService {
     @Override
-    public DayOff add(DayOff dayOff) throws MessagingException, DayOffTypeIsNotValidException {
+    public DayOff add(DayOff dayOff) throws MessagingException {
         return null;
     }
 

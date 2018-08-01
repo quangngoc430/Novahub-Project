@@ -15,7 +15,7 @@ public class CommonDayOffType {
     private String type;
 
     @Column(name = "quota")
-    private long quota;
+    private int quota;
 
     public int getId() {
         return id;
@@ -33,11 +33,11 @@ public class CommonDayOffType {
         this.type = type;
     }
 
-    public long getQuota() {
+    public int getQuota() {
         return quota;
     }
 
-    public void setQuota(long quota) {
+    public void setQuota(int quota) {
         this.quota = quota;
     }
 }

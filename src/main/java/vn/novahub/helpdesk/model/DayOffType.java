@@ -16,6 +16,9 @@ public class DayOffType {
     @Column(name = "year")
     private int year;
 
+    @Column(name = "private_quota")
+    private int privateQuota;
+
     @Column(name = "remaining_time")
     private long remainingTime;
 
@@ -52,6 +55,38 @@ public class DayOffType {
 
     public void setRemainingTime(long remainingTime) {
         this.remainingTime = remainingTime;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public int getPrivateQuota() {
+        return privateQuota;
+    }
+
+    public void setPrivateQuota(int privateQuota) {
+        this.privateQuota = privateQuota;
+    }
+
+    public int getCommonTypeId() {
+        return commonTypeId;
+    }
+
+    public void setCommonTypeId(int commonTypeId) {
+        this.commonTypeId = commonTypeId;
+    }
+
+    public CommonDayOffType getCommonDayOffType() {
+        return commonDayOffType;
+    }
+
+    public void setCommonDayOffType(CommonDayOffType commonDayOffType) {
+        this.commonDayOffType = commonDayOffType;
     }
 
     public Account getAccount() {

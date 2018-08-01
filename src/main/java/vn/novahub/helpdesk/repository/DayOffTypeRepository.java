@@ -9,9 +9,7 @@ import vn.novahub.helpdesk.model.DayOffType;
 @Repository
 public interface DayOffTypeRepository extends PagingAndSortingRepository <DayOffType, Long>{
 
-//    DayOffType findByAccountIdAndTypeAndYear(long accountId, String type, int year);
-//
-//    DayOffType getById(long id);
-//
-//    Page<DayOffType> findByAccountId(long accountId, Pageable pageable);
+    Page<DayOffType> findByAccountId(long accountId, Pageable pageable);
+
+    DayOffType findByAccountIdAndCommonTypeIdAndYear(long accountId, int commonTypeId, int year);
 }

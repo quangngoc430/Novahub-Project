@@ -5,18 +5,35 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import vn.novahub.helpdesk.exception.DayOffTypeIsExistException;
-import vn.novahub.helpdesk.exception.DayOffTypeIsNotValidException;
 import vn.novahub.helpdesk.exception.DayOffTypeNotFoundException;
 import vn.novahub.helpdesk.model.DayOffType;
+import vn.novahub.helpdesk.repository.CommonDayOffTypeRepository;
 import vn.novahub.helpdesk.repository.DayOffTypeRepository;
-import vn.novahub.helpdesk.service.DayOffTypeFactory;
 import vn.novahub.helpdesk.service.DayOffTypeService;
 
 @Service
 public class DayOffTypeServiceImpl implements DayOffTypeService {
+
+    @Autowired
+    private DayOffTypeRepository dayOffTypeRepository;
+
+    @Autowired
+    private CommonDayOffTypeRepository commonDayOffTypeRepository;
+
     @Override
-    public DayOffType add(DayOffType dayOffType) throws DayOffTypeIsExistException, DayOffTypeIsNotValidException {
-        return null;
+    public DayOffType add(DayOffType dayOffType) throws DayOffTypeIsExistException {
+        DayOffType existingDayOffType =
+                dayOffTypeRepository
+                        .findByAccountIdAndCommonTypeIdAndYear(
+                                dayOffType.getAccountId(),
+                                dayOffType.getCommonTypeId(),
+                                dayOffType.getYear());
+
+        if (existingDayOffType != null) {
+            throw new DayOffTypeIsExistException(dayOffType.getCommonTypeId());
+        }
+
+        return dayOffTypeRepository.save(dayOffType);
     }
 
     @Override
@@ -29,10 +46,6 @@ public class DayOffTypeServiceImpl implements DayOffTypeService {
 
     }
 
-    @Override
-    public DayOffType getById(long typeId) throws DayOffTypeNotFoundException {
-        return null;
-    }
 
     @Override
     public Page<DayOffType> findByAccountId(long accountId, Pageable pageable) {
