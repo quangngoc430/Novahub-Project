@@ -19,17 +19,27 @@ public interface DayOffService {
             String status,
             Pageable pageable);
 
-    void delete(DayOff dayOff)
+    DayOff delete(long dayOffId)
             throws MessagingException,
-            DayOffOverdueException, AccountNotFoundException;
+                   DayOffOverdueException,
+                   DayOffIsNotExistException,
+                   UnauthorizedException,
+                   AccountNotFoundException;
 
-    void approve(long dayOffId, String token)
+
+    DayOff approve(long dayOffId, String token)
             throws DayOffIsAnsweredException,
             DayOffTokenIsNotMatchException,
-            MessagingException, AccountNotFoundException;
+            DayOffIsNotExistException,
+            MessagingException,
+            AccountNotFoundException;
 
-    void deny(long dayOffId, String token)
+
+    DayOff deny(long dayOffId, String token)
             throws DayOffIsAnsweredException,
             DayOffTokenIsNotMatchException,
-            MessagingException, AccountNotFoundException;
+            DayOffIsNotExistException,
+            MessagingException,
+            AccountNotFoundException;
+
 }

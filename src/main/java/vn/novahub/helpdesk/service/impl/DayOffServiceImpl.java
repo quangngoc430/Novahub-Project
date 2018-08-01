@@ -1,7 +1,5 @@
 package vn.novahub.helpdesk.service.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
@@ -46,8 +44,6 @@ public class DayOffServiceImpl implements DayOffService {
     @Autowired
     private DayOffTypeFactory dayOffTypeFactory;
 
-    Logger logger = LoggerFactory.getLogger(this.getClass());
-
     @Override
     public Page<DayOff> getAllByAccountIdAndTypeAndStatus(
             long accountId,
@@ -88,23 +84,43 @@ public class DayOffServiceImpl implements DayOffService {
     }
 
     @Override
-    public void delete(DayOff dayOff)
+    public DayOff delete(long dayOffId)
             throws MessagingException,
-            DayOffOverdueException, AccountNotFoundException {
-        Date currentDate = new Date();
-        dayOff = dayOffRepository.getById(dayOff.getId());
+                    DayOffOverdueException,
+                    DayOffIsNotExistException,
+                    UnauthorizedException,
+                    AccountNotFoundException {
 
-        if (currentDate.before(dayOff.getStartDate())) {
-            dayOffRepository.delete(dayOff);
-        } else {
-            throw new DayOffOverdueException(dayOff.getId());
+        Date currentDate = new Date();
+        Optional<DayOff> dayOff = dayOffRepository.findById(dayOffId);
+
+        if (!dayOff.isPresent()) {
+            throw new DayOffIsNotExistException(dayOffId);
         }
-        sendMailDeleteForAdmin(dayOff);
+
+        Account account = accountService.getAccountLogin();
+        if (account.getId() != dayOff.get().getAccountId()) {
+            throw new UnauthorizedException("This is not your day off", "/api/day-offs");
+        }
+
+        if (currentDate.before(dayOff.get().getStartDate())) {
+            dayOffRepository.delete(dayOff.get());
+        } else {
+            throw new DayOffOverdueException(dayOffId);
+        }
+
+        sendMailDeleteForAdmin(dayOff.get());
+
+        return dayOff.get();
     }
 
     @Override
-    public void approve(long dayOffId, String token)
-            throws DayOffIsAnsweredException, DayOffTokenIsNotMatchException, MessagingException, AccountNotFoundException {
+    public DayOff approve(long dayOffId, String token)
+            throws DayOffIsAnsweredException,
+            DayOffTokenIsNotMatchException,
+            DayOffIsNotExistException,
+            MessagingException,
+            AccountNotFoundException {
 
         DayOff dayOff = checkIfRequestIsAnswered(dayOffId, token);
 
@@ -114,11 +130,18 @@ public class DayOffServiceImpl implements DayOffService {
         } else {
             throw new DayOffTokenIsNotMatchException();
         }
+
+        return dayOff;
     }
 
     @Override
-    public void deny(long dayOffId, String token)
-            throws DayOffIsAnsweredException, DayOffTokenIsNotMatchException, MessagingException, AccountNotFoundException {
+    public DayOff deny(long dayOffId, String token)
+            throws DayOffIsAnsweredException,
+            DayOffIsNotExistException,
+            DayOffTokenIsNotMatchException,
+            MessagingException,
+            AccountNotFoundException {
+
         DayOff dayOff = checkIfRequestIsAnswered(dayOffId, token);
 
         if (dayOff.getToken().equals(token)) {
@@ -126,6 +149,7 @@ public class DayOffServiceImpl implements DayOffService {
         } else {
             throw new DayOffTokenIsNotMatchException();
         }
+        return dayOff;
     }
 
     private void answerDayOffRequest(DayOff dayOff, String status) throws MessagingException, AccountNotFoundException {
@@ -136,13 +160,19 @@ public class DayOffServiceImpl implements DayOffService {
         sendMailUpdateForUser(dayOff);
     }
 
-    private DayOff checkIfRequestIsAnswered(long dayOffId, String token) throws DayOffIsAnsweredException{
-        DayOff dayOff = dayOffRepository.getById(dayOffId);
+    private DayOff checkIfRequestIsAnswered(long dayOffId, String token)
+            throws DayOffIsAnsweredException,
+                   DayOffIsNotExistException {
+        Optional<DayOff> dayOff = dayOffRepository.findById(dayOffId);
 
-        if (dayOff.getToken().trim().isEmpty()) {
+        if (!dayOff.isPresent()) {
+            throw new DayOffIsNotExistException(dayOffId);
+        }
+
+        if (dayOff.get().getToken().trim().isEmpty()) {
             throw new DayOffIsAnsweredException(dayOffId);
         }
-        return dayOff;
+        return dayOff.get();
     }
 
     private void validateDayOffType(DayOff dayOff) throws DayOffTypeIsNotValidException{
@@ -156,7 +186,6 @@ public class DayOffServiceImpl implements DayOffService {
                         createdYear);
 
         if (dayOffType == null) {
-            logger.info("Day off type null");
             dayOffType = dayOffTypeFactory.create(dayOff.getType());
             dayOffType.setAccountId(accountLogin.getId());
             dayOffType.setYear(createdYear);
@@ -173,7 +202,7 @@ public class DayOffServiceImpl implements DayOffService {
         dayOff.setCreatedAt(createdDate);
         dayOff.setUpdatedAt(createdDate);
         dayOff.setStatus(DayOffConstant.STATUS_PENDING);
-        dayOff.setToken(tokenService.generateToken(accountLogin.getId() + dayOff.getTitle()));
+        dayOff.setToken(tokenService.generateToken(accountLogin.getId() + dayOff.getComment()));
         dayOff.setAccountId(accountLogin.getId());
     }
 
@@ -186,7 +215,7 @@ public class DayOffServiceImpl implements DayOffService {
         String content = env.getProperty("content_email_create_day_off");
         content = content.replace("{day-off-id}", String.valueOf(dayOff.getId()));
         content = content.replace("{email}", accountLogin.getEmail());
-        content = content.replace("{title}", dayOff.getTitle());
+        content = content.replace("{title}", dayOff.getComment());
         content = content.replace("{status}", dayOff.getStatus());
         content = content.replace("{url-approve-day-off}", "http://localhost:8080/api/day-offs/" + dayOff.getId() + "/approve?token=" + dayOff.getToken());
         content = content.replace("{url-deny-day-off}", "http://localhost:8080/api/day-offs/" + dayOff.getId() + "/deny?token=" + dayOff.getToken());
@@ -212,7 +241,7 @@ public class DayOffServiceImpl implements DayOffService {
         String content = env.getProperty("content_email_update_day_off_account");
         content = content.replace("{day-off-id}", String.valueOf(dayOff.getId()));
         content = content.replace("{email}", account.getEmail());
-        content = content.replace("{title}", dayOff.getTitle());
+        content = content.replace("{title}", dayOff.getComment());
         content = content.replace("{status}", dayOff.getStatus());
         mail.setContent(content);
         mail.setEmailReceiving(new String[]{account.getEmail()});
@@ -236,7 +265,7 @@ public class DayOffServiceImpl implements DayOffService {
         String content = env.getProperty("content_email_delete_day_off");
         content = content.replace("{day-off-id}", String.valueOf(dayOff.getId()));
         content = content.replace("{email}", account.getEmail());
-        content = content.replace("{title}", dayOff.getTitle());
+        content = content.replace("{title}", dayOff.getComment());
         content = content.replace("{status}", dayOff.getStatus());
         mail.setContent(content);
 

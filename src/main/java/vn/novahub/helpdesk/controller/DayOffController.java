@@ -42,7 +42,7 @@ public class DayOffController {
         return new ResponseEntity<>(dayOffPage, HttpStatus.OK);
     }
 
-
+    @PreAuthorize("isAuthenticated()")
     @PostMapping(path = "/day-offs")
     public ResponseEntity<DayOff> create(@RequestBody DayOff dayOff)
             throws MessagingException, DayOffTypeIsNotValidException {
@@ -52,36 +52,44 @@ public class DayOffController {
         return new ResponseEntity<>(dayOff, HttpStatus.OK);
     }
 
-    @DeleteMapping(path = "/day-offs")
-    public ResponseEntity<String> delete(@RequestBody DayOff dayOff)
-            throws MessagingException, DayOffOverdueException, AccountNotFoundException {
 
-        dayOffService.delete(dayOff);
+    @PreAuthorize("isAuthenticated()")
+    @DeleteMapping(path = "/day-offs/{id}")
+    public ResponseEntity<DayOff> delete(@PathVariable long dayOffId)
+            throws MessagingException,
+            DayOffOverdueException,
+            DayOffIsNotExistException,
+            UnauthorizedException,
+            AccountNotFoundException {
 
-        return new ResponseEntity<>("Deleting day off request successful", HttpStatus.OK);
+        DayOff dayOff = dayOffService.delete(dayOffId);
+
+        return new ResponseEntity<>(dayOff, HttpStatus.OK);
     }
 
     @GetMapping(path = "/day-offs/{id}/approve")
-    public ResponseEntity<String> approve(@PathVariable("id") long dayOffId,
+    public ResponseEntity<DayOff> approve(@PathVariable("id") long dayOffId,
                                           @RequestParam("token") String token)
-            throws DayOffIsAnsweredException,
-            DayOffTokenIsNotMatchException,
-            MessagingException, AccountNotFoundException {
-        dayOffService.approve(dayOffId, token);
+                                             throws DayOffIsAnsweredException,
+                                                    DayOffTokenIsNotMatchException,
+                                                    DayOffIsNotExistException,
+                                                    MessagingException,
+                                                    AccountNotFoundException {
+        DayOff dayOff = dayOffService.approve(dayOffId, token);
 
-        return new ResponseEntity<>("The day off request with id = " + dayOffId + " has been approved",
-                                    HttpStatus.OK);
+
+        return new ResponseEntity<>(dayOff, HttpStatus.OK);
     }
 
     @GetMapping(path = "/day-offs/{id}/deny")
-    public ResponseEntity<String> deny(@PathVariable("id") long dayOffId,
+    public ResponseEntity<DayOff> deny(@PathVariable("id") long dayOffId,
                                        @RequestParam("token") String token)
-            throws DayOffIsAnsweredException,
-            DayOffTokenIsNotMatchException,
-            MessagingException, AccountNotFoundException {
-        dayOffService.deny(dayOffId, token);
-
-        return new ResponseEntity<>("The day off request with id = " + dayOffId + " has been denied",
-                HttpStatus.OK);
+                                            throws DayOffIsAnsweredException,
+                                                   DayOffTokenIsNotMatchException,
+                                                   DayOffIsNotExistException,
+                                                   MessagingException,
+                                                   AccountNotFoundException {
+       DayOff dayOff =  dayOffService.deny(dayOffId, token);
+        return new ResponseEntity<>(dayOff, HttpStatus.OK);
     }
 }

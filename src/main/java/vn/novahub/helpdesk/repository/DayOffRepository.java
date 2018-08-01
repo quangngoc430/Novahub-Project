@@ -12,8 +12,6 @@ import vn.novahub.helpdesk.model.DayOff;
 @Repository
 public interface DayOffRepository extends PagingAndSortingRepository<DayOff, Long>{
 
-    DayOff getById(long id);
-
     @Query("SELECT dayOff FROM DayOff dayOff WHERE " +
             "dayOff.accountId = :accountid AND " +
             "dayOff.type LIKE :typekeyword AND dayOff.status LIKE :statuskeyword")
