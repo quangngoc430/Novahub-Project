@@ -69,10 +69,9 @@ public class SkillController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping(path = "/users/me/skills", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Page<Skill>> getAllByAccountLogin(@RequestParam(value = "categoryId") long categoryId,
-                                                            @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
-                                                            Pageable pageable) throws CategoryNotFoundException {
-        return new ResponseEntity<>(accountSkillService.getAllByKeywordForAccountLogin(categoryId, keyword, pageable), HttpStatus.OK);
+    public ResponseEntity<Page<Skill>> getAllByAccountLogin(@RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
+                                                            Pageable pageable) {
+        return new ResponseEntity<>(accountSkillService.getAllByKeywordForAccountLogin(keyword, pageable), HttpStatus.OK);
     }
 
     @PreAuthorize("isAuthenticated()")
