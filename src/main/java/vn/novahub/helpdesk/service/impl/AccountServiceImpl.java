@@ -206,7 +206,7 @@ public class AccountServiceImpl implements AccountService {
         if(token == null)
             throw new TokenNotFoundException(accessToken);
 
-        tokenRepository.save(token);
+        tokenRepository.deleteById(token.getId());
     }
 
     @Override
