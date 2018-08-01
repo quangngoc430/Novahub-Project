@@ -255,7 +255,7 @@ public class AccountSkillServiceImpl implements AccountSkillService {
         Page<Skill> skills = skillRepository.getAllByAccountId(accountId, pageable);
 
         for(Skill skill : skills) {
-            skill.setLevel(levelRepository.getBySkillId(skill.getId()));
+            skill.setLevel(levelRepository.getByAccountIdAndSkillId(accountOptional.get().getId(), skill.getId()));
         }
 
         return skills;

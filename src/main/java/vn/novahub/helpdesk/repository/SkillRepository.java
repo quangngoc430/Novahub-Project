@@ -17,7 +17,7 @@ public interface SkillRepository extends PagingAndSortingRepository<Skill, Long>
     @Query("SELECT skill " +
            "FROM Skill skill " +
            "JOIN AccountHasSkill accountHasSkill ON accountHasSkill.skillId = skill.id " +
-           "JOIN Level level ON level.skillId = skill.id " +
+           "JOIN Level level ON level.skillId = skill.id AND level.accountId = accountHasSkill.accountId " +
            "WHERE accountHasSkill.accountId = :accountId AND skill.name LIKE CONCAT('%', :name, '%')")
     Page<Skill> getAllByNameContainingAndAccountId(@Param("name") String name,
                                                    @Param("accountId") long accountId,
@@ -45,7 +45,7 @@ public interface SkillRepository extends PagingAndSortingRepository<Skill, Long>
     @Query("SELECT skill " +
            "FROM Skill skill " +
            "JOIN AccountHasSkill accountHasSkill ON accountHasSkill.skillId = skill.id " +
-           "JOIN Level level ON level.skillId = skill.id " +
+           "JOIN Level level ON level.skillId = skill.id AND level.accountId = accountHasSkill.accountId " +
            "WHERE accountHasSkill.accountId = :accountId")
     Page<Skill> getAllByAccountId(@Param("accountId") long accountId,
                                   Pageable pageable);
