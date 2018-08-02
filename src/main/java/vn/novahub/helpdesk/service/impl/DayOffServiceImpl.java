@@ -5,23 +5,60 @@ import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import vn.novahub.helpdesk.constant.DayOffConstant;
+import vn.novahub.helpdesk.enums.DayOffEnum;
 import vn.novahub.helpdesk.enums.RoleEnum;
 import vn.novahub.helpdesk.exception.*;
 import vn.novahub.helpdesk.model.*;
 import vn.novahub.helpdesk.repository.AccountRepository;
+import vn.novahub.helpdesk.repository.CommonDayOffTypeRepository;
 import vn.novahub.helpdesk.repository.DayOffRepository;
 import vn.novahub.helpdesk.repository.DayOffTypeRepository;
 import vn.novahub.helpdesk.service.*;
 
 import javax.mail.MessagingException;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
 public class DayOffServiceImpl implements DayOffService {
+
+
+
+    @Autowired
+    private DayOffRepository dayOffRepository;
+
+    @Autowired
+    private DayOffTypeRepository dayOffTypeRepository;
+
+    @Autowired
+    private CommonDayOffTypeRepository commonDayOffTypeRepository;
+
+    @Autowired
+    private TokenService tokenService;
+
+    @Autowired
+    private AccountService accountService;
+
+    @Autowired
+    private AccountRepository accountRepository;
+
+    @Autowired
+    private Environment env;
+
+    @Autowired
+    private MailService mailService;
+
     @Override
-    public DayOff add(DayOff dayOff) throws MessagingException {
-        return null;
+    public DayOff add(DayOff dayOff) throws MessagingException, CommonTypeIsNotExistException {
+        Account accountLogin = accountService.getAccountLogin();
+
+        initialize(dayOff);
+
+        DayOff newDayOff = dayOffRepository.save(dayOff);
+
+        sendMailCreateDayOff(newDayOff, accountLogin);
+
+        return newDayOff;
     }
 
     @Override
@@ -43,29 +80,88 @@ public class DayOffServiceImpl implements DayOffService {
     public DayOff deny(long dayOffId, String token) throws DayOffIsAnsweredException, DayOffTokenIsNotMatchException, DayOffIsNotExistException, MessagingException, AccountNotFoundException {
         return null;
     }
-    //    @Autowired
-//    private DayOffRepository dayOffRepository;
-//
-//    @Autowired
-//    private DayOffTypeRepository dayOffTypeRepository;
-//
-//    @Autowired
-//    private TokenService tokenService;
-//
-//    @Autowired
-//    private AccountService accountService;
-//
-//    @Autowired
-//    private AccountRepository accountRepository;
-//
-//    @Autowired
-//    private Environment env;
-//
-//    @Autowired
-//    private MailService mailService;
-//
-//    @Autowired
-//    private DayOffTypeFactory dayOffTypeFactory;
+
+    private void initialize(DayOff dayOff) throws CommonTypeIsNotExistException {
+
+        CommonDayOffType commonDayOffType = checkIfCommonTypeIsExist(dayOff);
+
+        DayOffType dayOffType = updateOrCreateDayOffType(commonDayOffType, dayOff.getDayOffType().getYear());
+
+        setDefaultField(dayOff);
+
+        dayOff.setDayOffType(dayOffType);
+
+        dayOff.setTypeId(dayOffType.getId());
+
+    }
+
+    private CommonDayOffType checkIfCommonTypeIsExist(DayOff dayOff)
+                                            throws CommonTypeIsNotExistException {
+        Optional<CommonDayOffType> commonDayOffType =
+                commonDayOffTypeRepository.findById(dayOff.getDayOffType().getCommonTypeId());
+        if (!commonDayOffType.isPresent()) {
+            throw new CommonTypeIsNotExistException();
+        }
+        return commonDayOffType.get();
+    }
+
+    private DayOffType updateOrCreateDayOffType(CommonDayOffType commonDayOffType, int year) {
+        Account accountLogin = accountService.getAccountLogin();
+        return dayOffTypeRepository
+                .findByAccountIdAndCommonTypeIdAndYear(
+                        accountLogin.getId(),
+                        commonDayOffType.getId(),
+                        year);
+    }
+
+    private void setDefaultField(DayOff dayOff) {
+        Account accountLogin = accountService.getAccountLogin();
+        LocalDateTime createdDate = LocalDateTime.now();
+        dayOff.setCreatedAt(createdDate);
+        dayOff.setUpdatedAt(createdDate);
+        dayOff.setStatus(DayOffEnum.PENDING.name());
+        dayOff.setToken(tokenService.generateToken(accountLogin.getId() + dayOff.getComment()));
+        dayOff.setAccountId(accountLogin.getId());
+    }
+
+    private void sendMailCreateDayOff(DayOff dayOff, Account accountLogin) throws MessagingException {
+        Mail mail = new Mail();
+        String subject = env.getProperty("subject_email_create_day_off");
+        subject = subject.replace("{day-off-id}", String.valueOf(dayOff.getId()));
+        mail.setSubject(subject);
+        String content = env.getProperty("content_email_create_day_off");
+        content = content.replace("{day-off-id}", String.valueOf(dayOff.getId()));
+        content = content.replace("{email}", accountLogin.getEmail());
+        content = content.replace("{title}", dayOff.getComment());
+        content = content.replace("{status}", dayOff.getStatus());
+        content = content.replace("{url-approve-day-off}", "http://localhost:8080/api/day-offs/" + dayOff.getId() + "/approve?token=" + dayOff.getToken());
+        content = content.replace("{url-deny-day-off}", "http://localhost:8080/api/day-offs/" + dayOff.getId() + "/deny?token=" + dayOff.getToken());
+        mail.setContent(content);
+
+        mail.setEmailReceiving(getEmailListOfAdmin().toArray(new String[0]));
+
+        mailService.sendHTMLMail(mail);
+    }
+
+    private ArrayList<String> getEmailListOfAdmin() {
+        ArrayList<Account> adminList = (ArrayList<Account>)
+                (accountRepository.getAllByRoleName(RoleEnum.ADMIN.name()));
+        ArrayList<Account> clerkList = (ArrayList<Account>)
+                (accountRepository.getAllByRoleName(RoleEnum.CLERK.name()));
+
+        ArrayList<String> emails = new ArrayList<>();
+
+        if(adminList != null)
+            for (Account account : adminList)
+                emails.add(account.getEmail());
+
+        if(clerkList != null)
+            for (Account account : clerkList)
+                emails.add(account.getEmail());
+        return emails;
+    }
+
+
 //
 //    @Override
 //    public Page<DayOff> getAllByAccountIdAndTypeAndStatus(
@@ -91,20 +187,7 @@ public class DayOffServiceImpl implements DayOffService {
 //                pageable);
 //    }
 //
-//    @Override
-//    public DayOff add(DayOff dayOff) throws MessagingException, DayOffTypeIsNotValidException{
-//        Account accountLogin = accountService.getAccountLogin();
-//
-//        validateDayOffType(dayOff);
-//
-//        initialize(dayOff);
-//
-//        DayOff newDayOff = dayOffRepository.save(dayOff);
-//
-//        sendMailCreateDayOff(newDayOff, accountLogin);
-//
-//        return newDayOff;
-//    }
+
 //
 //    @Override
 //    public DayOff delete(long dayOffId)
@@ -230,24 +313,7 @@ public class DayOffServiceImpl implements DayOffService {
 //    }
 //
 //
-//    private void sendMailCreateDayOff(DayOff dayOff, Account accountLogin) throws MessagingException {
-//        Mail mail = new Mail();
-//        String subject = env.getProperty("subject_email_create_day_off");
-//        subject = subject.replace("{day-off-id}", String.valueOf(dayOff.getId()));
-//        mail.setSubject(subject);
-//        String content = env.getProperty("content_email_create_day_off");
-//        content = content.replace("{day-off-id}", String.valueOf(dayOff.getId()));
-//        content = content.replace("{email}", accountLogin.getEmail());
-//        content = content.replace("{title}", dayOff.getComment());
-//        content = content.replace("{status}", dayOff.getStatus());
-//        content = content.replace("{url-approve-day-off}", "http://localhost:8080/api/day-offs/" + dayOff.getId() + "/approve?token=" + dayOff.getToken());
-//        content = content.replace("{url-deny-day-off}", "http://localhost:8080/api/day-offs/" + dayOff.getId() + "/deny?token=" + dayOff.getToken());
-//        mail.setContent(content);
 //
-//        mail.setEmailReceiving(getEmailListOfAdmin().toArray(new String[0]));
-//
-//        mailService.sendHTMLMail(mail);
-//    }
 //
 //    private void sendMailUpdateForUser(DayOff dayOff) throws MessagingException, AccountNotFoundException {
 //        Optional<Account> accountOptional = accountRepository.findById(dayOff.getAccountId());
@@ -297,23 +363,7 @@ public class DayOffServiceImpl implements DayOffService {
 //        mailService.sendHTMLMail(mail);
 //    }
 //
-//    private ArrayList<String> getEmailListOfAdmin() {
-//        ArrayList<Account> adminList = (ArrayList<Account>)
-//                (accountRepository.getAllByRoleName(RoleEnum.ADMIN.name()));
-//        ArrayList<Account> clerkList = (ArrayList<Account>)
-//                (accountRepository.getAllByRoleName(RoleEnum.CLERK.name()));
-//
-//        ArrayList<String> emails = new ArrayList<>();
-//
-//        if(adminList != null)
-//            for (Account account : adminList)
-//                emails.add(account.getEmail());
-//
-//        if(clerkList != null)
-//            for (Account account : clerkList)
-//                emails.add(account.getEmail());
-//        return emails;
-//    }
+
 //
 //    private int getCreatedYear(Date createdDate) {
 //        Calendar calendar = new GregorianCalendar();

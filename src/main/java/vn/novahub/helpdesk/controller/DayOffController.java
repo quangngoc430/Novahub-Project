@@ -18,8 +18,18 @@ import javax.mail.MessagingException;
 @RequestMapping(path = "/api", produces = {MediaType.APPLICATION_JSON_VALUE})
 public class DayOffController {
 
-//    @Autowired
-//    private DayOffService dayOffService;
+    @Autowired
+    private DayOffService dayOffService;
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping(path = "/day-offs")
+    public ResponseEntity<DayOff> create(@RequestBody DayOff dayOff)
+            throws MessagingException, CommonTypeIsNotExistException {
+
+        dayOff = dayOffService.add(dayOff);
+
+        return new ResponseEntity<>(dayOff, HttpStatus.OK);
+    }
 //
 //    @PreAuthorize("hasRole('ROLE_ADMIN')")
 //    @GetMapping(path = "/day-offs", produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -42,15 +52,7 @@ public class DayOffController {
 //        return new ResponseEntity<>(dayOffPage, HttpStatus.OK);
 //    }
 //
-//    @PreAuthorize("isAuthenticated()")
-//    @PostMapping(path = "/day-offs")
-//    public ResponseEntity<DayOff> create(@RequestBody DayOff dayOff)
-//            throws MessagingException, DayOffTypeIsNotValidException {
-//
-//        dayOff = dayOffService.add(dayOff);
-//
-//        return new ResponseEntity<>(dayOff, HttpStatus.OK);
-//    }
+
 //
 //
 //    @PreAuthorize("isAuthenticated()")
