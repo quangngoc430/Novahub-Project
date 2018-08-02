@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 @Service
-public class MailServiceImpl implements MailService {
+public class    MailServiceImpl implements MailService {
 
     @Autowired
     private JavaMailSender mailSender;

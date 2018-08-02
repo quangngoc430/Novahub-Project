@@ -22,6 +22,16 @@ public class CommonDayOffTypeServiceImpl implements CommonDayOffTypeService{
     }
 
     @Override
+    public CommonDayOffType getById(int id) throws CommonTypeIsNotExistException {
+        Optional<CommonDayOffType> commonDayOffType = commonDayOffTypeRepository.findById(id);
+
+        if (!commonDayOffType.isPresent()) {
+            throw new CommonTypeIsNotExistException();
+        }
+        return commonDayOffType.get();
+    }
+
+    @Override
     public CommonDayOffType create(CommonDayOffType commonDayOffType) {
         return commonDayOffTypeRepository.save(commonDayOffType);
     }

@@ -9,6 +9,4 @@ import vn.novahub.helpdesk.model.CommonDayOffType;
 public interface CommonDayOffTypeRepository
         extends JpaRepository<CommonDayOffType, Integer> {
 
-    CommonDayOffType findByType(String type);
-
 }

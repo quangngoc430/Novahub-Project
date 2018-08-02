@@ -9,6 +9,8 @@ public interface CommonDayOffTypeService {
 
     List<CommonDayOffType> getAllCommonType();
 
+    CommonDayOffType getById(int id) throws CommonTypeIsNotExistException;
+
     CommonDayOffType create(CommonDayOffType commonDayOffType);
 
     CommonDayOffType update(CommonDayOffType commonDayOffType) throws CommonTypeIsNotExistException;

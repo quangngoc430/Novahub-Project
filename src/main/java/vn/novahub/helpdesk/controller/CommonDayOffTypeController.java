@@ -28,6 +28,13 @@ public class CommonDayOffTypeController {
         return new ResponseEntity<>(commonDayOffTypes, HttpStatus.OK);
     }
 
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping(path = "/common-day-off-types/{id}")
+    public ResponseEntity<CommonDayOffType> getTypeById(@PathVariable("id") int id)
+                                            throws CommonTypeIsNotExistException {
+        return new ResponseEntity<>(commonDayOffTypeService.getById(id), HttpStatus.OK);
+    }
+
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping(path = "/admin/common-day-off-types")
     public ResponseEntity<CommonDayOffType> create(@RequestBody CommonDayOffType newCommonDayOffType) {
