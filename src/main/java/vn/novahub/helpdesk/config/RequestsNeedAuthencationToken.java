@@ -37,15 +37,15 @@ public class RequestsNeedAuthencationToken {
             requestArrayList.add(new Request("\\/api\\/skills", new String[]{Method.GET.name(), Method.POST.name()}));
             requestArrayList.add(new Request("\\/api\\/skills\\/(\\d+)", new String[]{Method.GET.name(), Method.PUT.name(), Method.DELETE.name()}));
             requestArrayList.add(new Request("\\/api\\/skills\\/(\\d+)\\/users", new String[]{Method.GET.name()}));
-            requestArrayList.add(new Request("\\/api\\/users\\/me\\/skills", new String[]{Method.GET.name(), Method.POST.name()}));
-            requestArrayList.add(new Request("\\/api\\/users\\/me\\/skills\\/(\\d+)", new String[]{Method.GET.name(), Method.PUT.name(), Method.DELETE.name()}));
+            requestArrayList.add(new Request("\\/api\\/skills\\/me", new String[]{Method.GET.name(), Method.POST.name()}));
+            requestArrayList.add(new Request("\\/api\\/skills\\/me\\/(\\d+)", new String[]{Method.GET.name(), Method.PUT.name(), Method.DELETE.name()}));
             requestArrayList.add(new Request("\\/api\\/users\\/(\\d+)\\/skills", new String[]{Method.GET.name()}));
 
             // issues
             requestArrayList.add(new Request("\\/api\\/issues", new String[]{Method.GET.name(), Method.POST.name()}));
             requestArrayList.add(new Request("\\/api\\/issues\\/(\\d+)", new String[]{Method.GET.name(), Method.PUT.name(), Method.DELETE.name()}));
-            requestArrayList.add(new Request("\\/api\\/users\\/me\\/issues", new String[]{Method.GET.name(), Method.POST.name()}));
-            requestArrayList.add(new Request("\\/api\\/users\\/me\\/issues\\/(\\d+)", new String[]{Method.GET.name(), Method.PUT.name(), Method.DELETE.name()}));
+            requestArrayList.add(new Request("\\/api\\/issues\\/me", new String[]{Method.GET.name(), Method.POST.name()}));
+            requestArrayList.add(new Request("\\/api\\/issues\\/me\\/(\\d+)", new String[]{Method.GET.name(), Method.PUT.name(), Method.DELETE.name()}));
 
             // day-off
             requestArrayList.add(new Request("\\/api\\/day-offs", new String[]{Method.GET.name(), Method.POST.name()}));
