@@ -59,6 +59,9 @@ $ mvn spring-boot:run
 
 ### Guide login via normal or google account
 
-
-
-
+### Guide use api
+URL: /api/users/me
+Method: GET
+Parameters:
+    - header: 
+      access_token: "ya29.GlwCBq8sw1QANaeE-gryVxOa-6JTD58Hk1wHANuvSYDJ0-j-_DsJ9n0AwmoLDMdbt5B4oYW8nR8coesOvZuAcMtje9wi6S17aDXE5gmA6oqSTXtVRGoUIDRwKLeo1A"
