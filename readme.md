@@ -93,6 +93,16 @@ $ mvn spring-boot:run
 ```
 
 ### Guide login via normal or google account
+##### Normal login:
+![image](https://i.imgur.com/l1cybAil.png)
+
+* Enter email and password to login.
+
+##### Login with google:
+* Click google icon on the login page
+* Then you will be redirected to the login page of Google
+
+![image](https://i.imgur.com/gIGd4hGl.png)
 
 ### Guide use api
 * URL: 
@@ -102,3 +112,24 @@ $ mvn spring-boot:run
 * Parameters:
     * header: 
     * access_token: "ya29.GlwCBq8sw1QANaeE-gryVxOa-6JTD58Hk1wHANuvSYDJ0-j-_DsJ9n0AwmoLDMdbt5B4oYW8nR8coesOvZuAcMtje9wi6S17aDXE5gmA6oqSTXtVRGoUIDRwKLeo1A"
+
+## Guide use swagger (document)
+
+Get swagger ui
+```sh
+$ git clone https://github.com/swagger-api/swagger-ui.git
+```
+
+Open file index.html into swagger ui
+/swagger-ui-master/dist/index.html
+
+![image](https://i.imgur.com/zOlWcPol.png)
+
+Run project:
+```sh
+$ mvn spring-boot:run
+```
+
+Enter URL "http://localhost:8080/swagger/openapi.json" into the text box in the left of Explore button
+
+
