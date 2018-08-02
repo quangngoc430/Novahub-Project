@@ -21,10 +21,22 @@ Features of the website:
     * Allow users to add skills to their profile which follow the categories were created by admin.
     * Allow users to search, filer skills.
     * Allow the user to see all of the skills of other users.
+* Day-offs support:
     * Allow the managers to edit the number of days of users.
     * Displays the remaining number of annual leave days
     * Allow users to create day-off request and email to admin (helpdesk@novahub.vn). Having more types of day-off, you can see more on the policy website of the company:
     https://confluence.novahub.vn/pages/viewpage.action?spaceKey=POL&title=Policy
+    * The manager can approve or deny requests,  an email will send back to the user requested
+    * In a situation, the request was approved, the website will send an email to notify the clerk
+
+*  Issues support:
+    * Allow users to suggest an issue to admin, such as:
+        * Salary advance  
+        * Request company to sponsor for organizing a party
+        * Request to go to the company be late/ leave early
+        * Request to refund Insurance money
+        * ........
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and run on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
@@ -90,5 +102,3 @@ $ mvn spring-boot:run
 * Parameters:
     * header: 
     * access_token: "ya29.GlwCBq8sw1QANaeE-gryVxOa-6JTD58Hk1wHANuvSYDJ0-j-_DsJ9n0AwmoLDMdbt5B4oYW8nR8coesOvZuAcMtje9wi6S17aDXE5gmA6oqSTXtVRGoUIDRwKLeo1A"
-
-
