@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -55,7 +54,6 @@ public class DayOff {
     @JoinColumn(name = "type_id", insertable = false, updatable = false)
     private DayOffType dayOffType;
 
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = Account.class)
     @JoinColumn(name = "account_id", insertable = false, updatable = false)
     private Account account;

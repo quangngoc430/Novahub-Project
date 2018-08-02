@@ -37,8 +37,8 @@ public class DayOffTypeController {
                 HttpStatus.OK);
     }
 
-    @PreAuthorize("isAuthenticated()")
-    @PostMapping(path = "/day-off-types")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping(path = "/admin/day-off-types")
     public ResponseEntity<DayOffType> create(@RequestBody DayOffType dayOffType)
             throws DayOffTypeIsExistException, CommonTypeIsNotExistException {
 
@@ -66,55 +66,13 @@ public class DayOffTypeController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping(path = "/admin/day-off-types")
-    public ResponseEntity<DayOffType> update(@RequestBody DayOffType dayOffType,
-                                                       Pageable pageable)
+                                public ResponseEntity<DayOffType> update(@RequestBody DayOffType dayOffType)
                                                       throws DayOffTypeNotFoundException {
 
         dayOffType = dayOffTypeService.update(dayOffType);
 
         return new ResponseEntity<>(dayOffType, HttpStatus.OK);
     }
-
-//
-//    @GetMapping(path = "/day-off-types/{account-id}")
-//    public ResponseEntity<Page<DayOffType>> getByAccountId(@PathVariable("account-id") long accountId,
-//                                                           Pageable pageable)
-//                                                                  throws DayOffTypeNotFoundException {
-//
-//        Page<DayOffType> dayOffTypes = dayOffTypeService.findByAccountId(accountId, pageable);
-//
-//        return new ResponseEntity<>(dayOffTypes, HttpStatus.OK);
-//    }
-//
-//    @PostMapping(path = "/day-off-types")
-//    public ResponseEntity<String> create(@RequestBody DayOffType dayOffType)
-//            throws DayOffTypeIsExistException, DayOffTypeIsNotValidException {
-//
-//        dayOffTypeService.add(dayOffType);
-//
-//        return new ResponseEntity<>("Adding new Day off type successful", HttpStatus.OK);
-//
-//    }
-//
-//    @PutMapping(path = "/day-off-types")
-//    public ResponseEntity<String> update(@RequestBody DayOffType dayOffType,
-//                                                   HttpServletRequest request)
-//                                                   throws DayOffTypeNotFoundException {
-//
-//        dayOffTypeService.update(dayOffType);
-//
-//        return new ResponseEntity<>("Updating day off type successful", HttpStatus.OK);
-//    }
-//
-//    @DeleteMapping(path = "/day-off-types/{type-id}")
-//    public ResponseEntity<String> delete(@PathVariable("type-id") long typeId) throws DayOffTypeNotFoundException {
-//
-//        DayOffType dayOffType = dayOffTypeService.getById(typeId);
-//
-//        dayOffTypeService.delete(dayOffType);
-//
-//        return new ResponseEntity<>("Deleting day off type successful", HttpStatus.OK);
-//    }
 
 
 }
