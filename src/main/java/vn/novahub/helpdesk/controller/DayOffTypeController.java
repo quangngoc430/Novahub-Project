@@ -8,7 +8,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import vn.novahub.helpdesk.exception.CommonTypeIsNotExistException;
+import vn.novahub.helpdesk.exception.DayOffIsNotExistException;
 import vn.novahub.helpdesk.exception.DayOffTypeIsExistException;
+import vn.novahub.helpdesk.exception.DayOffTypeNotFoundException;
 import vn.novahub.helpdesk.model.Account;
 import vn.novahub.helpdesk.model.DayOffType;
 import vn.novahub.helpdesk.service.AccountService;
@@ -37,8 +40,39 @@ public class DayOffTypeController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping(path = "/day-off-types")
     public ResponseEntity<DayOffType> create(@RequestBody DayOffType dayOffType)
-            throws DayOffTypeIsExistException {
+            throws DayOffTypeIsExistException, CommonTypeIsNotExistException {
+
         return new ResponseEntity<>(dayOffTypeService.add(dayOffType), HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping(path = "/admin/day-off-types")
+    public ResponseEntity<Page<DayOffType>> getAllDayOffType(
+         @RequestParam(name = "accountId", required = false, defaultValue = "0") String accountIdString,
+         Pageable pageable) {
+
+        long accountId = Long.parseLong(accountIdString);
+
+        if (accountId != 0) {
+            return new ResponseEntity<>(
+                    dayOffTypeService.findByAccountId(accountId, pageable),
+                    HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(
+                dayOffTypeService.getAll(pageable),
+                HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping(path = "/admin/day-off-types")
+    public ResponseEntity<DayOffType> update(@RequestBody DayOffType dayOffType,
+                                                       Pageable pageable)
+                                                      throws DayOffTypeNotFoundException {
+
+        dayOffType = dayOffTypeService.update(dayOffType);
+
+        return new ResponseEntity<>(dayOffType, HttpStatus.OK);
     }
 
 //

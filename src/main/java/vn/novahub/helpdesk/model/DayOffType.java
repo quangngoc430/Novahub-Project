@@ -20,7 +20,7 @@ public class DayOffType {
     private int privateQuota;
 
     @Column(name = "remaining_time")
-    private long remainingTime;
+    private int remainingTime;
 
     @Column(name = "common_type_id")
     private int commonTypeId;
@@ -28,7 +28,7 @@ public class DayOffType {
     @Column(name = "account_id")
     private long accountId;
 
-    @ManyToOne(fetch = FetchType.LAZY, targetEntity = CommonDayOffType.class)
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = CommonDayOffType.class)
     @JoinColumn(name = "common_type_id", insertable = false, updatable = false)
     private CommonDayOffType commonDayOffType;
 
@@ -37,7 +37,7 @@ public class DayOffType {
     @JoinColumn(name = "account_id", insertable = false, updatable = false)
     private Account account;
 
-    public void subtractRemainingTime(long numberOfDayOff) {
+    public void subtractRemainingTime(int numberOfDayOff) {
         this.remainingTime = this.remainingTime - numberOfDayOff;
     }
 
@@ -49,11 +49,11 @@ public class DayOffType {
         this.id = id;
     }
 
-    public long getRemainingTime() {
+    public int getRemainingTime() {
         return remainingTime;
     }
 
-    public void setRemainingTime(long remainingTime) {
+    public void setRemainingTime(int remainingTime) {
         this.remainingTime = remainingTime;
     }
 
