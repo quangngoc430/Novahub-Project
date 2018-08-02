@@ -1,10 +1,13 @@
 package vn.novahub.helpdesk.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import vn.novahub.helpdesk.enums.RoleEnum;
+import vn.novahub.helpdesk.seeding.AccountSeeding;
+import vn.novahub.helpdesk.seeding.CategorySeeding;
 
 import javax.annotation.security.PermitAll;
 import javax.servlet.http.HttpServletRequest;
@@ -13,6 +16,19 @@ import javax.servlet.http.HttpServletRequest;
 public class HomeController {
 
     private static String PREFIX = "ROLE_";
+
+    @Autowired
+    private AccountSeeding accountSeeding;
+
+    @Autowired
+    private CategorySeeding categorySeeding;
+
+    @PermitAll
+    @RequestMapping("/")
+    public void home() {
+        categorySeeding.generateData();
+        accountSeeding.generateData(50);
+    }
 
     @PermitAll
     @RequestMapping("/login")
