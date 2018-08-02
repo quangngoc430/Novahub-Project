@@ -99,6 +99,7 @@ public class DayOffTypeServiceImpl implements DayOffTypeService {
         return dayOffTypeRepository.findAll(pageable);
     }
 
+
     @Override
     public Page<DayOffType> findByAccountId(long accountId, Pageable pageable) {
         return dayOffTypeRepository.findByAccountId(accountId, pageable);
