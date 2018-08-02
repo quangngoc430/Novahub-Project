@@ -5071,7 +5071,7 @@
         }
       }
     },
-    "/users/me/skills": {
+    "/skills/me": {
       "get": {
         "tags": [
           "Skill"
@@ -5548,7 +5548,7 @@
         }
       }
     },
-    "/users/me/skills/{id}": {
+    "/skills/me/{id}": {
       "get": {
         "tags": [
           "Skill"
@@ -7428,7 +7428,7 @@
         }
       }
     },
-    "/users/me/issues": {
+    "/issues/me": {
       "get": {
         "tags": [
           "Issue"
@@ -7794,7 +7794,7 @@
         }
       }
     },
-    "/users/me/issues/{id}": {
+    "/issues/me/{id}": {
       "get": {
         "tags": [
           "Issue"
