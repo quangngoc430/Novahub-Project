@@ -13,8 +13,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.novahub.helpdesk.exception.*;
 import vn.novahub.helpdesk.model.Account;
+import vn.novahub.helpdesk.model.Skill;
 import vn.novahub.helpdesk.model.Token;
 import vn.novahub.helpdesk.service.AccountService;
+import vn.novahub.helpdesk.service.AccountSkillService;
 
 import javax.annotation.security.PermitAll;
 import javax.mail.MessagingException;
@@ -31,6 +33,9 @@ public class AccountController {
 
     @Autowired
     private AccountService accountService;
+
+    @Autowired
+    private AccountSkillService accountSkillService;
 
     @GetMapping(path = "/authentication-token")
     public void authenticationToken(HttpServletRequest request,
@@ -183,6 +188,11 @@ public class AccountController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping(path = "/users/{id}/skills", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Page<Skill>> getAllByAccountId(@PathVariable("id") long accountId,
+                                                         Pageable pageable) throws AccountNotFoundException {
+        return new ResponseEntity<>(accountSkillService.getAllByAccountId(accountId, pageable), HttpStatus.OK);
+    }
 
 }

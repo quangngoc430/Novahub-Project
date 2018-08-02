@@ -14,7 +14,7 @@ public interface AccountSkillService {
 
     Page<Skill> getAllByKeyword(long categoryId, String keyword, Pageable pageable) throws CategoryNotFoundException;
 
-    Page<Skill> getAllByKeywordForAccountLogin(long categoryId, String keyword, Pageable pageable) throws CategoryNotFoundException;
+    Page<Skill> getAllByKeywordForAccountLogin(String keyword, Pageable pageable);
 
     Skill create(Skill skill) throws SkillValidationException, SkillIsExistException, CategoryNotFoundException, LevelValidationException;
 

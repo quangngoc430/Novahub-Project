@@ -80,7 +80,7 @@ public class IssueController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping(path = "/users/me/issues", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(path = "/issues/me", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Page<Issue>> getAll(@RequestParam(name = "keyword", required = false, defaultValue = "") String keyword,
                                               @RequestParam(name = "status", required = false, defaultValue = "") String status,
                                               Pageable pageable){
@@ -90,7 +90,7 @@ public class IssueController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @PostMapping(path = "/users/me/issues", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(path = "/issues/me", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Issue> create(@RequestBody Issue issue) throws IssueValidationException, MessagingException, IOException, AccountNotFoundException {
         issue = accountIssueService.create(issue);
 
@@ -98,13 +98,13 @@ public class IssueController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping(path = "/users/me/issues/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(path = "/issues/me/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Issue> findOne(@PathVariable("issueId") long issueId) throws IssueNotFoundException {
         return new ResponseEntity<>(accountIssueService.findOne(issueId), HttpStatus.OK);
     }
 
     @PreAuthorize("isAuthenticated()")
-    @PutMapping(path = "/users/me/issues/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PutMapping(path = "/issues/me/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Issue> update(@RequestBody Issue issue,
                                         @PathVariable(name = "issueId") long issueId) throws IssueNotFoundException, IssueValidationException, MessagingException, IOException, IssueIsClosedException, AccountNotFoundException {
         issue = accountIssueService.update(issueId, issue);
@@ -113,7 +113,7 @@ public class IssueController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @DeleteMapping(path = "/users/me/issues/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @DeleteMapping(path = "/issues/me/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Void> delete(@PathVariable(name = "issueId") long issueId) throws IssueNotFoundException {
         accountIssueService.delete(issueId);
 
