@@ -52,6 +52,7 @@ public class Skill implements Serializable {
 
     @JsonIgnore
     @OneToMany
+    @Transient
     private List<AccountHasSkill> accountHasSkillList;
 
     @ManyToOne(targetEntity = Category.class)
