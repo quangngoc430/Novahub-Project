@@ -42,9 +42,6 @@ public class DayOffServiceImpl implements DayOffService {
     private AccountService accountService;
 
     @Autowired
-    private AccountRepository accountRepository;
-
-    @Autowired
     private Environment env;
 
     @Autowired
@@ -55,13 +52,13 @@ public class DayOffServiceImpl implements DayOffService {
             throws MessagingException,
             CommonTypeIsNotExistException,
             IOException {
-        Account accountLogin = accountService.getAccountLogin();
 
         initialize(dayOff);
 
         DayOff newDayOff = dayOffRepository.save(dayOff);
 
-        sendEmailDayOff(dayOff, accountLogin, getEmailListOfAdmin().toArray(new String[0]));
+        sendEmailDayOff(dayOff, true,
+                mailService.getEmailsOfAdminAndClerk().toArray(new String[0]));
 
         return newDayOff;
     }
@@ -75,6 +72,16 @@ public class DayOffServiceImpl implements DayOffService {
         } else {
             return dayOffRepository.findByAccountIdAndStatus(accountId, status, pageable);
         }
+    }
+
+    @Override
+    public DayOff getById(long id) throws DayOffIsNotExistException {
+        Optional<DayOff> dayOffOptional = dayOffRepository.findById(id);
+
+        if (!dayOffOptional.isPresent()) {
+            throw new DayOffIsNotExistException(id);
+        }
+        return dayOffOptional.get();
     }
 
     @Override
@@ -93,8 +100,22 @@ public class DayOffServiceImpl implements DayOffService {
             DayOffTokenIsNotMatchException,
             DayOffIsNotExistException,
             MessagingException,
-            AccountNotFoundException {
-        return null;
+            AccountNotFoundException,
+            IOException {
+
+        DayOff dayOff = checkIfRequestIsAnswered(dayOffId, token);
+
+        if (dayOff.getToken().equals(token)) {
+            dayOff.getDayOffType().subtractRemainingTime(dayOff.getNumberOfHours());
+            answerDayOffRequest(dayOff, DayOffEnum.APPROVED.name());
+        } else {
+            throw new DayOffTokenIsNotMatchException();
+        }
+
+        sendEmailDayOff(dayOff, false,
+                new String[]{dayOff.getDayOffType().getAccount().getEmail()});
+
+        return dayOff;
     }
 
     @Override
@@ -103,8 +124,20 @@ public class DayOffServiceImpl implements DayOffService {
             DayOffTokenIsNotMatchException,
             DayOffIsNotExistException,
             MessagingException,
-            AccountNotFoundException {
-        return null;
+            AccountNotFoundException,
+            IOException {
+        DayOff dayOff = checkIfRequestIsAnswered(dayOffId, token);
+
+        if (dayOff.getToken().equals(token)) {
+            answerDayOffRequest(dayOff, DayOffEnum.DENIED.name());
+        } else {
+            throw new DayOffTokenIsNotMatchException();
+        }
+
+        sendEmailDayOff(dayOff, false,
+                new String[]{dayOff.getDayOffType().getAccount().getEmail()});
+
+        return dayOff;
     }
 
     private void initialize(DayOff dayOff) throws CommonTypeIsNotExistException {
@@ -150,7 +183,7 @@ public class DayOffServiceImpl implements DayOffService {
         dayOff.setAccountId(accountLogin.getId());
     }
 
-    private void sendEmailDayOff(DayOff dayOff, Account account, String[] emailList)
+    private void sendEmailDayOff(DayOff dayOff, boolean isSentToAdmin, String[] emailList)
             throws MessagingException, IOException {
         Account accountLogin = accountService.getAccountLogin();
         Mail mail = new Mail();
@@ -161,7 +194,11 @@ public class DayOffServiceImpl implements DayOffService {
         String subject = "Day off request of " + accountLogin.getEmail() + " has been " + dayOff.getStatus();
         mail.setSubject(subject);
         String content = mailService.getContentMail(dayOffMailName);
-        content = content.replace("{email}", account.getEmail());
+        if (!isSentToAdmin) {
+            content = content.replace("{email}", "Admin");
+        } else {
+            content = content.replace("{email}", accountLogin.getEmail());
+        }
         content = content.replace("{type}", dayOff.getDayOffType().getCommonDayOffType().getType());
         content = content.replace("{start-date}", dayOff.getStartDate().format(formatter));
         content = content.replace("{end-date}", dayOff.getEndDate().format(formatter));
@@ -178,22 +215,25 @@ public class DayOffServiceImpl implements DayOffService {
         mailService.sendHTMLMail(mail);
     }
 
-    private ArrayList<String> getEmailListOfAdmin() {
-        ArrayList<Account> adminList = (ArrayList<Account>)
-                (accountRepository.getAllByRoleName(RoleEnum.ADMIN.name()));
-        ArrayList<Account> clerkList = (ArrayList<Account>)
-                (accountRepository.getAllByRoleName(RoleEnum.CLERK.name()));
+    private void answerDayOffRequest(DayOff dayOff, String status) {
+        dayOff.setToken("");
+        dayOff.setStatus(status);
+        dayOffRepository.save(dayOff);
+    }
 
-        ArrayList<String> emails = new ArrayList<>();
+    private DayOff checkIfRequestIsAnswered(long dayOffId, String token)
+            throws DayOffIsAnsweredException,
+                   DayOffIsNotExistException {
+        Optional<DayOff> dayOff = dayOffRepository.findById(dayOffId);
 
-        if(adminList != null)
-            for (Account account : adminList)
-                emails.add(account.getEmail());
+        if (!dayOff.isPresent()) {
+            throw new DayOffIsNotExistException(dayOffId);
+        }
 
-        if(clerkList != null)
-            for (Account account : clerkList)
-                emails.add(account.getEmail());
-        return emails;
+        if (dayOff.get().getToken().trim().isEmpty()) {
+            throw new DayOffIsAnsweredException(dayOffId);
+        }
+        return dayOff.get();
     }
 
 
@@ -262,17 +302,7 @@ public class DayOffServiceImpl implements DayOffService {
 //            DayOffIsNotExistException,
 //            MessagingException,
 //            AccountNotFoundException {
-//
-//        DayOff dayOff = checkIfRequestIsAnswered(dayOffId, token);
-//
-//        if (dayOff.getToken().equals(token)) {
-//            dayOff.getDayOffType().subtractRemainingTime(dayOff.getNumberOfHours());
-//            answerDayOffRequest(dayOff, DayOffConstant.STATUS_APPROVE);
-//        } else {
-//            throw new DayOffTokenIsNotMatchException();
-//        }
-//
-//        return dayOff;
+
 //    }
 //
 //    @Override
@@ -293,28 +323,7 @@ public class DayOffServiceImpl implements DayOffService {
 //        return dayOff;
 //    }
 //
-//    private void answerDayOffRequest(DayOff dayOff, String status) throws MessagingException, AccountNotFoundException {
-//        dayOff.setToken("");
-//        dayOff.setStatus(status);
-//        dayOffRepository.save(dayOff);
-//
-//        sendMailUpdateForUser(dayOff);
-//    }
-//
-//    private DayOff checkIfRequestIsAnswered(long dayOffId, String token)
-//            throws DayOffIsAnsweredException,
-//                   DayOffIsNotExistException {
-//        Optional<DayOff> dayOff = dayOffRepository.findById(dayOffId);
-//
-//        if (!dayOff.isPresent()) {
-//            throw new DayOffIsNotExistException(dayOffId);
-//        }
-//
-//        if (dayOff.get().getToken().trim().isEmpty()) {
-//            throw new DayOffIsAnsweredException(dayOffId);
-//        }
-//        return dayOff.get();
-//    }
+
 //
 //    private void validateDayOffType(DayOff dayOff) throws DayOffTypeIsNotValidException{
 //        int createdYear = getCreatedYear(new Date());

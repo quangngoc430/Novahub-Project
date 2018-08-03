@@ -38,6 +38,15 @@ public class DayOffController {
     }
 
     @PreAuthorize("isAuthenticated()")
+    @GetMapping(path = "/day-offs/{id}")
+    public ResponseEntity<DayOff> getById(@PathVariable("id") long id)
+                                               throws DayOffIsNotExistException {
+        return new ResponseEntity<>(
+                dayOffService.getById(id),
+                HttpStatus.OK);
+    }
+
+    @PreAuthorize("isAuthenticated()")
     @PostMapping(path = "/day-offs")
     public ResponseEntity<DayOff> create(@RequestBody DayOff dayOff)
             throws MessagingException,
@@ -48,6 +57,36 @@ public class DayOffController {
 
         return new ResponseEntity<>(dayOff, HttpStatus.OK);
     }
+
+    @GetMapping(path = "/day-offs/{id}/approve")
+    public ResponseEntity<DayOff> approve(@PathVariable("id") long dayOffId,
+                                          @RequestParam("token") String token)
+                                             throws DayOffIsAnsweredException,
+                                                    DayOffTokenIsNotMatchException,
+                                                    DayOffIsNotExistException,
+                                                    MessagingException,
+                                                    AccountNotFoundException,
+                                                    IOException {
+        DayOff dayOff = dayOffService.approve(dayOffId, token);
+        return new ResponseEntity<>(dayOff, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/day-offs/{id}/deny")
+    public ResponseEntity<DayOff> deny(@PathVariable("id") long dayOffId,
+                                       @RequestParam("token") String token)
+                                            throws DayOffIsAnsweredException,
+                                                   DayOffTokenIsNotMatchException,
+                                                   DayOffIsNotExistException,
+                                                   MessagingException,
+                                                   AccountNotFoundException,
+                                                   IOException {
+       DayOff dayOff =  dayOffService.deny(dayOffId, token);
+        return new ResponseEntity<>(dayOff, HttpStatus.OK);
+    }
+
+
+
+
 //
 //    @PreAuthorize("hasRole('ROLE_ADMIN')")
 //    @GetMapping(path = "/day-offs", produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -87,29 +126,6 @@ public class DayOffController {
 //        return new ResponseEntity<>(dayOff, HttpStatus.OK);
 //    }
 //
-//    @GetMapping(path = "/day-offs/{id}/approve")
-//    public ResponseEntity<DayOff> approve(@PathVariable("id") long dayOffId,
-//                                          @RequestParam("token") String token)
-//                                             throws DayOffIsAnsweredException,
-//                                                    DayOffTokenIsNotMatchException,
-//                                                    DayOffIsNotExistException,
-//                                                    MessagingException,
-//                                                    AccountNotFoundException {
-//        DayOff dayOff = dayOffService.approve(dayOffId, token);
 //
-//
-//        return new ResponseEntity<>(dayOff, HttpStatus.OK);
-//    }
-//
-//    @GetMapping(path = "/day-offs/{id}/deny")
-//    public ResponseEntity<DayOff> deny(@PathVariable("id") long dayOffId,
-//                                       @RequestParam("token") String token)
-//                                            throws DayOffIsAnsweredException,
-//                                                   DayOffTokenIsNotMatchException,
-//                                                   DayOffIsNotExistException,
-//                                                   MessagingException,
-//                                                   AccountNotFoundException {
-//       DayOff dayOff =  dayOffService.deny(dayOffId, token);
-//        return new ResponseEntity<>(dayOff, HttpStatus.OK);
-//    }
+
 }

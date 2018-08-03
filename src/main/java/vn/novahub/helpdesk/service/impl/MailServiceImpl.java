@@ -8,7 +8,10 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import vn.novahub.helpdesk.enums.RoleEnum;
+import vn.novahub.helpdesk.model.Account;
 import vn.novahub.helpdesk.model.Mail;
+import vn.novahub.helpdesk.repository.AccountRepository;
 import vn.novahub.helpdesk.service.MailService;
 
 import javax.mail.MessagingException;
@@ -16,6 +19,7 @@ import javax.mail.internet.MimeMessage;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 @Service
 public class MailServiceImpl implements MailService {
@@ -25,6 +29,9 @@ public class MailServiceImpl implements MailService {
 
     @Autowired
     private ResourceLoader resourceLoader;
+
+    @Autowired
+    private AccountRepository accountRepository;
 
     @Override
     @Async
@@ -73,5 +80,24 @@ public class MailServiceImpl implements MailService {
             content += line;
         }
         return content;
+    }
+
+    @Override
+    public ArrayList<String> getEmailsOfAdminAndClerk() {
+        ArrayList<Account> adminList = (ArrayList<Account>)
+                (accountRepository.getAllByRoleName(RoleEnum.ADMIN.name()));
+        ArrayList<Account> clerkList = (ArrayList<Account>)
+                (accountRepository.getAllByRoleName(RoleEnum.CLERK.name()));
+
+        ArrayList<String> emails = new ArrayList<>();
+
+        if(adminList != null)
+            for (Account account : adminList)
+                emails.add(account.getEmail());
+
+        if(clerkList != null)
+            for (Account account : clerkList)
+                emails.add(account.getEmail());
+        return emails;
     }
 }

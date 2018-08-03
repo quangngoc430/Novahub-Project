@@ -20,6 +20,7 @@ public interface DayOffService {
             String status,
             Pageable pageable);
 
+    DayOff getById(long id) throws DayOffIsNotExistException;
 
 
     DayOff delete(long dayOffId)
@@ -35,7 +36,8 @@ public interface DayOffService {
             DayOffTokenIsNotMatchException,
             DayOffIsNotExistException,
             MessagingException,
-            AccountNotFoundException;
+            AccountNotFoundException,
+            IOException ;
 
 
     DayOff deny(long dayOffId, String token)
@@ -43,6 +45,7 @@ public interface DayOffService {
             DayOffTokenIsNotMatchException,
             DayOffIsNotExistException,
             MessagingException,
-            AccountNotFoundException;
+            AccountNotFoundException,
+            IOException;
 
 }
