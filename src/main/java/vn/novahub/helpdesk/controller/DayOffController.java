@@ -58,6 +58,8 @@ public class DayOffController {
         return new ResponseEntity<>(dayOff, HttpStatus.OK);
     }
 
+
+
     @GetMapping(path = "/day-offs/{id}/approve")
     public ResponseEntity<DayOff> approve(@PathVariable("id") long dayOffId,
                                           @RequestParam("token") String token)
@@ -81,6 +83,21 @@ public class DayOffController {
                                                    AccountNotFoundException,
                                                    IOException {
        DayOff dayOff =  dayOffService.deny(dayOffId, token);
+        return new ResponseEntity<>(dayOff, HttpStatus.OK);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping(path = "/day-offs/{id}/cancel")
+    public ResponseEntity<DayOff> cancel(@PathVariable("id") long dayOffId)
+            throws DayOffIsAnsweredException,
+            DayOffTokenIsNotMatchException,
+            DayOffIsNotExistException,
+            MessagingException,
+            AccountNotFoundException,
+            DayOffOverdueException,
+            IOException {
+
+        DayOff dayOff =  dayOffService.cancel(dayOffId);
         return new ResponseEntity<>(dayOff, HttpStatus.OK);
     }
 

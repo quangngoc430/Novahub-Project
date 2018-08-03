@@ -22,15 +22,6 @@ public interface DayOffService {
 
     DayOff getById(long id) throws DayOffIsNotExistException;
 
-
-    DayOff delete(long dayOffId)
-            throws MessagingException,
-                   DayOffOverdueException,
-                   DayOffIsNotExistException,
-                   UnauthorizedException,
-                   AccountNotFoundException;
-
-
     DayOff approve(long dayOffId, String token)
             throws DayOffIsAnsweredException,
             DayOffTokenIsNotMatchException,
@@ -46,6 +37,15 @@ public interface DayOffService {
             DayOffIsNotExistException,
             MessagingException,
             AccountNotFoundException,
+            IOException;
+
+    DayOff cancel(long dayOffId)
+            throws DayOffIsAnsweredException,
+            DayOffTokenIsNotMatchException,
+            DayOffIsNotExistException,
+            MessagingException,
+            AccountNotFoundException,
+            DayOffOverdueException,
             IOException;
 
 }
