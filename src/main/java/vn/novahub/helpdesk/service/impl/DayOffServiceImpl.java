@@ -73,12 +73,18 @@ public class DayOffServiceImpl implements DayOffService {
     }
 
     @Override
-    public DayOff getById(long id) throws DayOffIsNotExistException {
+    public DayOff getById(long id) throws DayOffIsNotExistException, AccountNotFoundException {
         Optional<DayOff> dayOffOptional = dayOffRepository.findById(id);
+        Account account = accountService.getAccountLogin();
 
         if (!dayOffOptional.isPresent()) {
             throw new DayOffIsNotExistException(id);
         }
+        if (dayOffOptional.get().getAccountId() != account.getId()
+                && !account.getRole().getName().equals("ADMIN")) {
+            throw new AccountNotFoundException("Account is not admin or not own this day off");
+        }
+
         return dayOffOptional.get();
     }
 

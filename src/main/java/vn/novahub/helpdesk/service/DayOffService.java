@@ -20,7 +20,9 @@ public interface DayOffService {
             String status,
             Pageable pageable);
 
-    DayOff getById(long id) throws DayOffIsNotExistException;
+    DayOff getById(long id)
+            throws DayOffIsNotExistException,
+            AccountNotFoundException;
 
     DayOff approve(long dayOffId, String token)
             throws DayOffIsAnsweredException,

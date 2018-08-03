@@ -40,10 +40,9 @@ public class DayOffController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping(path = "/day-offs/{id}")
     public ResponseEntity<DayOff> getById(@PathVariable("id") long id)
-                                               throws DayOffIsNotExistException {
-        return new ResponseEntity<>(
-                dayOffService.getById(id),
-                HttpStatus.OK);
+                                               throws DayOffIsNotExistException, AccountNotFoundException {
+        DayOff dayOff = dayOffService.getById(id);
+        return new ResponseEntity<>(dayOff, HttpStatus.OK);
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -100,49 +99,5 @@ public class DayOffController {
         DayOff dayOff =  dayOffService.cancel(dayOffId);
         return new ResponseEntity<>(dayOff, HttpStatus.OK);
     }
-
-
-
-
-//
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
-//    @GetMapping(path = "/day-offs", produces = {MediaType.APPLICATION_JSON_VALUE})
-//    public ResponseEntity<Page<DayOff>> getAllAccountIdAndTypeAndStatus(
-//            @RequestParam(name = "account-id", required = false, defaultValue = "") String accountIdString,
-//            @RequestParam(name = "type", required = false, defaultValue = "") String type,
-//            @RequestParam(name = "status", required = false, defaultValue = "") String status,
-//            Pageable pageable) {
-//
-//        long accountId;
-//
-//        if (accountIdString.equals("")) {
-//            accountId = 0;
-//        } else {
-//            accountId = Long.parseLong(accountIdString);
-//        }
-//
-//        Page<DayOff> dayOffPage = dayOffService.getAllByAccountIdAndTypeAndStatus(accountId, type, status, pageable);
-//
-//        return new ResponseEntity<>(dayOffPage, HttpStatus.OK);
-//    }
-//
-
-//
-//
-//    @PreAuthorize("isAuthenticated()")
-//    @DeleteMapping(path = "/day-offs/{id}")
-//    public ResponseEntity<DayOff> delete(@PathVariable long dayOffId)
-//            throws MessagingException,
-//            DayOffOverdueException,
-//            DayOffIsNotExistException,
-//            UnauthorizedException,
-//            AccountNotFoundException {
-//
-//        DayOff dayOff = dayOffService.delete(dayOffId);
-//
-//        return new ResponseEntity<>(dayOff, HttpStatus.OK);
-//    }
-//
-//
 
 }
