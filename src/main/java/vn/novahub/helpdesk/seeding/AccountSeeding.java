@@ -1,7 +1,6 @@
 package vn.novahub.helpdesk.seeding;
 
 import com.github.javafaker.Faker;
-import com.github.javafaker.Name;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -34,20 +33,24 @@ public class AccountSeeding {
         for(int i = 0; i < numberOfAccounts; i++) {
             String firstName = faker.name().firstName();
             String lastName = faker.name().lastName();
-            Account account = new Account();
-            account.setEmail(firstName.toLowerCase() + "." + lastName.toLowerCase() + "@novahub.vn");
-            account.setFirstName(firstName);
-            account.setLastName(lastName);
-            account.setPassword(bCryptPasswordEncoder.encode("password"));
-            account.setStatus(AccountEnum.ACTIVE.name());
-            account.setAddress(faker.address().fullAddress());
-            Date dayOfBirth = faker.date().birthday();
-            account.setDayOfBirth(new Date(dayOfBirth.getYear(), dayOfBirth.getMonth(), dayOfBirth.getDay()));
-            account.setRoleId(roleRepository.getByName(RoleEnum.USER.name()).getId());
-            account.setCreatedAt(new Date());
-            account.setUpdatedAt(new Date());
+            String email = firstName.toLowerCase() + "." + lastName.toLowerCase() + "@novahub.vn";
 
-            accountArrayList.add(accountRepository.save(account));
+            if(accountRepository.getByEmail(email) == null) {
+                Account account = new Account();
+                account.setEmail(email);
+                account.setFirstName(firstName);
+                account.setLastName(lastName);
+                account.setPassword(bCryptPasswordEncoder.encode("password"));
+                account.setStatus(AccountEnum.ACTIVE.name());
+                account.setAddress(faker.address().fullAddress());
+                Date dayOfBirth = faker.date().birthday();
+                account.setDayOfBirth(new Date(dayOfBirth.getYear(), dayOfBirth.getMonth(), dayOfBirth.getDay()));
+                account.setRoleId(roleRepository.getByName(RoleEnum.USER.name()).getId());
+                account.setCreatedAt(new Date());
+                account.setUpdatedAt(new Date());
+
+                accountArrayList.add(accountRepository.save(account));
+            }
         }
 
         return accountArrayList;

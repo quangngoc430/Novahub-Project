@@ -11,6 +11,7 @@ import vn.novahub.helpdesk.seeding.CategorySeeding;
 
 import javax.annotation.security.PermitAll;
 import javax.servlet.http.HttpServletRequest;
+import java.io.InputStream;
 
 @Controller
 public class HomeController {
@@ -26,6 +27,7 @@ public class HomeController {
     @PermitAll
     @RequestMapping("/")
     public void home() {
+        //InputStream inputStream = categorySeeding.findStream("data");
         categorySeeding.generateData();
         accountSeeding.generateData(50);
     }

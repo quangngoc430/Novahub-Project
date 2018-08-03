@@ -30,12 +30,14 @@ public class CategorySeeding {
         ArrayList<Category> categoryArrayList = new ArrayList<>();
 
         for (String name: categoryNames) {
-            Category category = new Category();
-            category.setName(name);
-            category.setCreatedAt(new Date());
-            category.setUpdatedAt(new Date());
+            if (!categoryRepository.existsByName(name)) {
+                Category category = new Category();
+                category.setName(name);
+                category.setCreatedAt(new Date());
+                category.setUpdatedAt(new Date());
 
-            categoryArrayList.add(categoryRepository.save(category));
+                categoryArrayList.add(categoryRepository.save(category));
+            }
         }
 
         return categoryArrayList;
