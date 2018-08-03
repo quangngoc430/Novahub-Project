@@ -6,17 +6,21 @@ import vn.novahub.helpdesk.exception.*;
 import vn.novahub.helpdesk.model.DayOff;
 
 import javax.mail.MessagingException;
+import java.io.IOException;
 
 public interface DayOffService {
 
     DayOff add(DayOff dayOff)
-            throws MessagingException, CommonTypeIsNotExistException;
+            throws MessagingException,
+            CommonTypeIsNotExistException,
+            IOException;
 
-    Page<DayOff> getAllByAccountIdAndTypeAndStatus(
+    Page<DayOff> getAllByAccountIdAndStatus(
             long accountId,
-            String type,
             String status,
             Pageable pageable);
+
+
 
     DayOff delete(long dayOffId)
             throws MessagingException,

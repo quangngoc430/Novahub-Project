@@ -16,9 +16,12 @@ public interface DayOffRepository extends PagingAndSortingRepository<DayOff, Lon
 
     Page<DayOff> findByAccountIdAndStatus(long accountId, String status, Pageable pageable);
 
-//    @Query("SELECT dayOff FROM DayOff dayOff WHERE " +
-//            "dayOff.accountId = :accountid AND " +
-//            "dayOff.type LIKE :typekeyword AND dayOff.status LIKE :statuskeyword")
+    @Query("SELECT dayOff FROM DayOff dayOff WHERE " +
+            "dayOff.accountId = :accountId AND " +
+            "dayOff.status <> 'CANCELLED'")
+    Page<DayOff> findNonCancelledByAccountId(@Param("accountId") long accountId, Pageable pageable);
+
+
 //    Page<DayOff> getAllByAccountIdAndTypeLikeAndStatusLike(
 //            @Param("accountid") long accountId,
 //            @Param("typekeyword") String typeKeyword,
