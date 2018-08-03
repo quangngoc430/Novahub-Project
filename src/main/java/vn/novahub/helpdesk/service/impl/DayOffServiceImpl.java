@@ -217,8 +217,8 @@ public class DayOffServiceImpl implements DayOffService {
         content = content.replace("{email}", accountLogin.getEmail());
         content = content.replace("{title}", dayOff.getComment());
         content = content.replace("{status}", dayOff.getStatus());
-        content = content.replace("{url-approve-day-off}", "http://localhost:8080/api/day-offs/" + dayOff.getId() + "/approve?token=" + dayOff.getToken());
-        content = content.replace("{url-deny-day-off}", "http://localhost:8080/api/day-offs/" + dayOff.getId() + "/deny?token=" + dayOff.getToken());
+        content = content.replace("{url-approve-day-off}", "https://helpdesk-develop.herokuapp.com/api/day-offs/" + dayOff.getId() + "/approve?token=" + dayOff.getToken());
+        content = content.replace("{url-deny-day-off}", "https://helpdesk-develop.herokuapp.com/api/day-offs/" + dayOff.getId() + "/deny?token=" + dayOff.getToken());
         mail.setContent(content);
 
         mail.setEmailReceiving(getEmailListOfAdmin().toArray(new String[0]));

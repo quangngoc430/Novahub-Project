@@ -255,7 +255,7 @@ public class AccountServiceImpl implements AccountService {
         Mail mail = new Mail();
         mail.setEmailReceiving(new String[]{account.getEmail()});
         mail.setSubject(env.getProperty("subject_email_sign_up"));
-        String urlAccountActive = "http://localhost:8080/api/users/" + account.getId() + "/active?token=" + account.getVerificationToken();
+        String urlAccountActive = "https://helpdesk-develop.herokuapp.com/api/users/" + account.getId() + "/active?token=" + account.getVerificationToken();
         String contentEmailSignUp = mailService.getContentMail("sign_up.html");
         contentEmailSignUp = contentEmailSignUp.replace("{url-activate-account}", urlAccountActive);
         mail.setContent(contentEmailSignUp);

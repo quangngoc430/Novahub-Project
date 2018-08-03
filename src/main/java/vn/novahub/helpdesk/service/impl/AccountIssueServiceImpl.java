@@ -161,8 +161,8 @@ public class AccountIssueServiceImpl implements AccountIssueService {
         content = content.replace("{content}", issue.getContent());
         content = content.replace("{status}", issue.getStatus());
         content = content.replace("{reply-message}", (issue.getReplyMessage() == null) ? IssueEnum.NONE.name() : issue.getReplyMessage());
-        content = content.replace("{url-approve-issue}", "http://localhost:8080/api/issues/" + issue.getId() + "/action?status=APPROVE&token=" + issue.getToken());
-        content = content.replace("{url-deny-issue}", "http://localhost:8080/api/issues/" + issue.getId() + "/action?status=DENY&token=" + issue.getToken());
+        content = content.replace("{url-approve-issue}", "https://helpdesk-develop.herokuapp.com/api/issues/" + issue.getId() + "/action?status=APPROVE&token=" + issue.getToken());
+        content = content.replace("{url-deny-issue}", "https://helpdesk-develop.herokuapp.com/api/issues/" + issue.getId() + "/action?status=DENY&token=" + issue.getToken());
         mail.setContent(content);
 
         mail.setEmailReceiving(getEmailsOfAdminAndClerk().toArray(new String[0]));
