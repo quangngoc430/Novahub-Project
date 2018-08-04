@@ -21,7 +21,8 @@ public interface DayOffRepository extends PagingAndSortingRepository<DayOff, Lon
             "dayOff.status <> 'CANCELLED'")
     Page<DayOff> findNonCancelledByAccountId(@Param("accountId") long accountId, Pageable pageable);
 
-    @Query("SELECT dayOff, account FROM DayOff dayOff JOIN dayOff.account account ON " +
+    @Query("SELECT dayOff, account FROM DayOff dayOff " +
+            "JOIN dayOff.account account ON " +
             "account.email LIKE CONCAT('%', :keyword, '%')")
     Page<DayOff> findByKeyword( @Param("keyword") String keyword,
                                                 Pageable pageable);
