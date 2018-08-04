@@ -41,6 +41,9 @@ public class DayOffServiceImpl implements DayOffService {
     private AccountService accountService;
 
     @Autowired
+    private DayOffTypeService dayOffTypeService;
+
+    @Autowired
     private Environment env;
 
     @Autowired
@@ -50,6 +53,7 @@ public class DayOffServiceImpl implements DayOffService {
     public DayOff add(DayOff dayOff)
             throws MessagingException,
             CommonTypeIsNotExistException,
+            DayOffTypeIsExistException,
             IOException {
 
         initialize(dayOff);
@@ -70,6 +74,14 @@ public class DayOffServiceImpl implements DayOffService {
         } else {
             return dayOffRepository.findByAccountIdAndStatus(accountId, status, pageable);
         }
+    }
+
+    @Override
+    public Page<DayOff> getAllByStatusAndKeyword(String status, String keyword, Pageable pageable) {
+        if (status.equals("NON-CANCELLED")) {
+            return dayOffRepository.findNonCancelledByKeyword(keyword, pageable);
+        }
+        return dayOffRepository.findByKeyword(keyword, pageable);
     }
 
     @Override
@@ -168,7 +180,7 @@ public class DayOffServiceImpl implements DayOffService {
     }
 
 
-    private void initialize(DayOff dayOff) throws CommonTypeIsNotExistException {
+    private void initialize(DayOff dayOff) throws CommonTypeIsNotExistException, DayOffTypeIsExistException {
 
         CommonDayOffType commonDayOffType = checkIfCommonTypeIsExist(dayOff);
 
@@ -192,13 +204,22 @@ public class DayOffServiceImpl implements DayOffService {
         return commonDayOffType.get();
     }
 
-    private DayOffType updateOrCreateDayOffType(CommonDayOffType commonDayOffType, int year) {
+    private DayOffType updateOrCreateDayOffType(CommonDayOffType commonDayOffType, int year)
+            throws DayOffTypeIsExistException,
+            CommonTypeIsNotExistException {
         Account accountLogin = accountService.getAccountLogin();
-        return dayOffTypeRepository
+        DayOffType dayOffType =  dayOffTypeRepository
                 .findByAccountIdAndCommonTypeIdAndYear(
                         accountLogin.getId(),
                         commonDayOffType.getId(),
                         year);
+        if (dayOffType == null) {
+            dayOffType = new DayOffType();
+            dayOffType.setCommonTypeId(commonDayOffType.getId());
+            dayOffType.setAccountId(accountLogin.getId());
+            return dayOffTypeService.add(dayOffType);
+        }
+        return dayOffType;
     }
 
     private void setDefaultField(DayOff dayOff) {

@@ -13,12 +13,15 @@ public interface DayOffService {
     DayOff add(DayOff dayOff)
             throws MessagingException,
             CommonTypeIsNotExistException,
+            DayOffTypeIsExistException,
             IOException;
 
     Page<DayOff> getAllByAccountIdAndStatus(
             long accountId,
             String status,
             Pageable pageable);
+
+    Page<DayOff> getAllByStatusAndKeyword(String status, String keyword, Pageable pageable);
 
     DayOff getById(long id)
             throws DayOffIsNotExistException,

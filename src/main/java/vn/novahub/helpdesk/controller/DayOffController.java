@@ -29,7 +29,7 @@ public class DayOffController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping(path = "/day-offs")
-    public ResponseEntity<Page<DayOff>> getUserLoginDayOff(@RequestParam(name = "status", required = false, defaultValue = "") String status,
+    public ResponseEntity<Page<DayOff>> getUserLoginDayOffs(@RequestParam(name = "status", required = false, defaultValue = "") String status,
                                                            Pageable pageable) {
         Account account = accountService.getAccountLogin();
         return new ResponseEntity<>(
@@ -45,11 +45,23 @@ public class DayOffController {
         return new ResponseEntity<>(dayOff, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping(path = "/admin/day-offs")
+    public ResponseEntity<Page<DayOff>> getAllDayOffs(
+            @RequestParam(name = "status", required = false, defaultValue = "") String status,
+            @RequestParam(name= "keyword", required = false, defaultValue = "") String keyword,
+                                                           Pageable pageable) {
+        return new ResponseEntity<>(
+                dayOffService.getAllByStatusAndKeyword(status, keyword ,pageable),
+                HttpStatus.OK);
+    }
+
     @PreAuthorize("isAuthenticated()")
     @PostMapping(path = "/day-offs")
     public ResponseEntity<DayOff> create(@RequestBody DayOff dayOff)
             throws MessagingException,
             IOException,
+            DayOffTypeIsExistException,
             CommonTypeIsNotExistException {
 
         dayOff = dayOffService.add(dayOff);

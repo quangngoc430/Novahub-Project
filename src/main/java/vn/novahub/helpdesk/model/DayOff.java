@@ -166,4 +166,11 @@ public class DayOff {
         this.dayOffType = dayOffType;
     }
 
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
 }
