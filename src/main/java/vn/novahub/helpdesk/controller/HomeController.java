@@ -8,10 +8,11 @@ import org.springframework.web.bind.annotation.*;
 import vn.novahub.helpdesk.enums.RoleEnum;
 import vn.novahub.helpdesk.seeding.AccountSeeding;
 import vn.novahub.helpdesk.seeding.CategorySeeding;
+import vn.novahub.helpdesk.seeding.Seeding;
 
 import javax.annotation.security.PermitAll;
 import javax.servlet.http.HttpServletRequest;
-import java.io.InputStream;
+import java.io.IOException;
 
 @Controller
 public class HomeController {
@@ -24,11 +25,14 @@ public class HomeController {
     @Autowired
     private CategorySeeding categorySeeding;
 
+    @Autowired
+    private Seeding seeding;
+
     @PermitAll
     @RequestMapping("/")
-    public void home() {
-        //InputStream inputStream = categorySeeding.findStream("data");
-        categorySeeding.generateData();
+    public void home() throws IOException {
+        seeding.readJsonWithObjectMapper();
+//        categorySeeding.generateData();
         accountSeeding.generateData(50);
     }
 

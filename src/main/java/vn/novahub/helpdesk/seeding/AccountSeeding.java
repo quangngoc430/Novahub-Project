@@ -33,24 +33,20 @@ public class AccountSeeding {
         for(int i = 0; i < numberOfAccounts; i++) {
             String firstName = faker.name().firstName();
             String lastName = faker.name().lastName();
-            String email = firstName.toLowerCase() + "." + lastName.toLowerCase() + "@novahub.vn";
+            Account account = new Account();
+            account.setEmail(firstName.toLowerCase() + "." + lastName.toLowerCase() + "@novahub.vn");
+            account.setFirstName(firstName);
+            account.setLastName(lastName);
+            account.setPassword(bCryptPasswordEncoder.encode("password"));
+            account.setStatus(AccountEnum.ACTIVE.name());
+            account.setAddress(faker.address().fullAddress());
+            Date dayOfBirth = faker.date().birthday();
+            account.setDayOfBirth(new Date(dayOfBirth.getYear(), dayOfBirth.getMonth(), dayOfBirth.getDay()));
+            account.setRoleId(roleRepository.getByName(RoleEnum.USER.name()).getId());
+            account.setCreatedAt(new Date());
+            account.setUpdatedAt(new Date());
 
-            if(accountRepository.getByEmail(email) == null) {
-                Account account = new Account();
-                account.setEmail(email);
-                account.setFirstName(firstName);
-                account.setLastName(lastName);
-                account.setPassword(bCryptPasswordEncoder.encode("password"));
-                account.setStatus(AccountEnum.ACTIVE.name());
-                account.setAddress(faker.address().fullAddress());
-                Date dayOfBirth = faker.date().birthday();
-                account.setDayOfBirth(new Date(dayOfBirth.getYear(), dayOfBirth.getMonth(), dayOfBirth.getDay()));
-                account.setRoleId(roleRepository.getByName(RoleEnum.USER.name()).getId());
-                account.setCreatedAt(new Date());
-                account.setUpdatedAt(new Date());
-
-                accountArrayList.add(accountRepository.save(account));
-            }
+            accountArrayList.add(accountRepository.save(account));
         }
 
         return accountArrayList;

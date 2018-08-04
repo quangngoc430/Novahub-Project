@@ -1,0 +1,128 @@
+{
+  "category": [
+    {
+      "name": "Industry Knowledge",
+      "skill": [
+        {
+          "name": "a"
+        },
+        {
+          "name": "b"
+        },
+        {
+          "name": "c"
+        }
+      ]
+    },
+    {
+      "name": "Tools & Technologies",
+      "skill": [
+        {
+          "name": "tools 1"
+        },
+        {
+          "name": "tools 2"
+        },
+        {
+          "name": "tools 3"
+        }
+      ]
+    },
+    {
+      "name": "Interpersonal Skills",
+      "skill": [
+        {
+          "name": "interpersonal skills 1"
+        },
+        {
+          "name": "interpersonal skills 2"
+        },
+        {
+          "name": "interpersonal skills 3"
+        },
+        {
+          "name": "interpersonal skills 4"
+        }
+      ]
+    },
+    {
+      "name": "Front-end Development",
+      "skill": [
+        {
+          "name": "Javascript"
+        },
+        {
+          "name": "ReactJS"
+        },
+        {
+          "name": "Angular"
+        },
+        {
+          "name": "VueJS"
+        }
+      ]
+    },
+    {
+      "name": "Back-end Development",
+      "skill": [
+        {
+          "name": "Rails"
+        },
+        {
+          "name": "Spring boot"
+        },
+        {
+          "name": "Java"
+        },
+        {
+          "name": "Javascript"
+        }
+      ]
+    },
+    {
+      "name": "Web Design",
+      "skill": [
+        {
+          "name": "Photoshop"
+        },
+        {
+          "name": "HTML"
+        },
+        {
+          "name": "CSS5"
+        }
+      ]
+    },
+    {
+      "name": "Mobile Development",
+      "skill": [
+        {
+          "name": "Android Studio"
+        },
+        {
+          "name": "Kotlin"
+        },
+        {
+          "name": "Swift"
+        }
+      ]
+    },
+    {
+      "name": "Programing Language",
+      "skill": [
+        {
+          "name": "Java"
+        },
+        {
+          "name": "Ruby"
+        },
+        {
+          "name": "C#"
+        },
+        {
+          "name": "PHP"
+        }
+      ]
+    }
+  ]
+}

@@ -14,32 +14,34 @@ public class CategorySeeding {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    private static String[] categoryNames = new String[] {
-            "Industry Knowledge",
-            "Tools & Technologies",
-            "Interpersonal Skills",
-            "Front-end Development",
-            "Back-end Development",
-            "Web Design",
-            "Mobile Development",
-            "Programing Language",
-            };
-
-    public ArrayList<Category> generateData() {
+    public ArrayList<Category> generateData(ArrayList<String> categoryNames) {
 
         ArrayList<Category> categoryArrayList = new ArrayList<>();
 
         for (String name: categoryNames) {
-            if (!categoryRepository.existsByName(name)) {
-                Category category = new Category();
-                category.setName(name);
-                category.setCreatedAt(new Date());
-                category.setUpdatedAt(new Date());
+            Category category = new Category();
+            category.setName(name);
+            category.setCreatedAt(new Date());
+            category.setUpdatedAt(new Date());
 
-                categoryArrayList.add(categoryRepository.save(category));
-            }
+            categoryArrayList.add(categoryRepository.save(category));
         }
 
         return categoryArrayList;
+    }
+
+    public Category createACategory(String categoryName) {
+        Category category = categoryRepository.getByName(categoryName);
+
+        if(category == null) {
+            category = new Category();
+            category.setName(categoryName);
+            category.setCreatedAt(new Date());
+            category.setUpdatedAt(new Date());
+
+            category = categoryRepository.save(category);
+        }
+
+        return category;
     }
 }
