@@ -61,6 +61,7 @@ public class DayOff {
     @JoinColumn(name = "type_id", insertable = false, updatable = false)
     private DayOffType dayOffType;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = Account.class)
     @JoinColumn(name = "account_id", insertable = false, updatable = false)
     private Account account;
@@ -172,5 +173,21 @@ public class DayOff {
 
     public void setAccount(Account account) {
         this.account = account;
+    }
+
+    @Override
+    public String toString() {
+        return "DayOff{" +
+                "id=" + id +
+                ", comment='" + comment + '\'' +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", numberOfHours=" + numberOfHours +
+                ", status='" + status + '\'' +
+                ", accountId=" + accountId +
+                ", typeId=" + typeId +
+                '}';
     }
 }

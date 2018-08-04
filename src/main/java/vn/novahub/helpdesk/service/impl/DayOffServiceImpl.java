@@ -81,7 +81,9 @@ public class DayOffServiceImpl implements DayOffService {
         if (status.equals("NON-CANCELLED")) {
             return dayOffRepository.findNonCancelledByKeyword(keyword, pageable);
         }
+
         return dayOffRepository.findByKeyword(keyword, pageable);
+
     }
 
     @Override

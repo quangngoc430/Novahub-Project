@@ -21,15 +21,30 @@ public interface DayOffRepository extends PagingAndSortingRepository<DayOff, Lon
             "dayOff.status <> 'CANCELLED'")
     Page<DayOff> findNonCancelledByAccountId(@Param("accountId") long accountId, Pageable pageable);
 
-    @Query("SELECT dayOff, account FROM DayOff dayOff " +
-            "JOIN dayOff.account account ON " +
-            "account.email LIKE CONCAT('%', :keyword, '%')")
-    Page<DayOff> findByKeyword( @Param("keyword") String keyword,
+    @Query("SELECT dayOff " +
+            "FROM DayOff dayOff " +
+            "JOIN Account account " +
+            "ON dayOff.accountId = account.id " +
+            "JOIN DayOffType dayOffType " +
+            "ON dayOff.typeId = dayOffType.id " +
+            "JOIN CommonDayOffType commonDayOffType " +
+            "ON dayOffType.commonTypeId = commonDayOffType.id " +
+            "WHERE commonDayOffType.type LIKE CONCAT('%', :keyword ,'%') " +
+            "OR account.email LIKE CONCAT('%', :keyword, '%')")
+    Page<DayOff> findByKeyword(@Param("keyword") String keyword,
                                                 Pageable pageable);
 
-    @Query("SELECT dayOff, account FROM DayOff dayOff JOIN dayOff.account account ON " +
-            "account.email LIKE CONCAT('%', :keyword, '%') AND " +
-            "dayOff.status <> 'CANCELLED'")
+    @Query("SELECT dayOff " +
+            "FROM DayOff dayOff " +
+            "JOIN Account account " +
+            "ON dayOff.accountId = account.id " +
+            "JOIN DayOffType dayOffType " +
+            "ON dayOff.typeId = dayOffType.id " +
+            "JOIN CommonDayOffType commonDayOffType " +
+            "ON dayOffType.commonTypeId = commonDayOffType.id " +
+            "WHERE (commonDayOffType.type LIKE CONCAT('%', :keyword ,'%') " +
+            "OR account.email LIKE CONCAT('%', :keyword, '%')) " +
+            "AND dayOff.status <> 'CANCELLED'")
     Page<DayOff> findNonCancelledByKeyword( @Param("keyword") String keyword,
                                 Pageable pageable);
 }
