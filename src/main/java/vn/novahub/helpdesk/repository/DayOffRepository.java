@@ -16,19 +16,35 @@ public interface DayOffRepository extends PagingAndSortingRepository<DayOff, Lon
 
     Page<DayOff> findByAccountIdAndStatus(long accountId, String status, Pageable pageable);
 
-//    @Query("SELECT dayOff FROM DayOff dayOff WHERE " +
-//            "dayOff.accountId = :accountid AND " +
-//            "dayOff.type LIKE :typekeyword AND dayOff.status LIKE :statuskeyword")
-//    Page<DayOff> getAllByAccountIdAndTypeLikeAndStatusLike(
-//            @Param("accountid") long accountId,
-//            @Param("typekeyword") String typeKeyword,
-//            @Param("statuskeyword") String statusKeyword,
-//            Pageable pageable);
-//
-//    @Query("FROM DayOff dayOff WHERE " +
-//            "dayOff.type LIKE :typekeyword AND dayOff.status LIKE :statuskeyword")
-//    Page<DayOff> getAllByTypeLikeAndStatusLike(
-//            @Param("typekeyword") String typeKeyword,
-//            @Param("statuskeyword") String statusKeyword,
-//            Pageable pageable);
+    @Query("SELECT dayOff FROM DayOff dayOff WHERE " +
+            "dayOff.accountId = :accountId AND " +
+            "dayOff.status <> 'CANCELLED'")
+    Page<DayOff> findNonCancelledByAccountId(@Param("accountId") long accountId, Pageable pageable);
+
+    @Query("SELECT dayOff " +
+            "FROM DayOff dayOff " +
+            "JOIN Account account " +
+            "ON dayOff.accountId = account.id " +
+            "JOIN DayOffType dayOffType " +
+            "ON dayOff.typeId = dayOffType.id " +
+            "JOIN CommonDayOffType commonDayOffType " +
+            "ON dayOffType.commonTypeId = commonDayOffType.id " +
+            "WHERE commonDayOffType.type LIKE CONCAT('%', :keyword ,'%') " +
+            "OR account.email LIKE CONCAT('%', :keyword, '%')")
+    Page<DayOff> findByKeyword(@Param("keyword") String keyword,
+                                                Pageable pageable);
+
+    @Query("SELECT dayOff " +
+            "FROM DayOff dayOff " +
+            "JOIN Account account " +
+            "ON dayOff.accountId = account.id " +
+            "JOIN DayOffType dayOffType " +
+            "ON dayOff.typeId = dayOffType.id " +
+            "JOIN CommonDayOffType commonDayOffType " +
+            "ON dayOffType.commonTypeId = commonDayOffType.id " +
+            "WHERE (commonDayOffType.type LIKE CONCAT('%', :keyword ,'%') " +
+            "OR account.email LIKE CONCAT('%', :keyword, '%')) " +
+            "AND dayOff.status <> 'CANCELLED'")
+    Page<DayOff> findNonCancelledByKeyword( @Param("keyword") String keyword,
+                                Pageable pageable);
 }
