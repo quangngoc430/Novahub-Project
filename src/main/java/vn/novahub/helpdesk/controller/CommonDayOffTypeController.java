@@ -55,8 +55,8 @@ public class CommonDayOffTypeController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @DeleteMapping(path = "/admin/common-day-off-types")
-    public ResponseEntity<CommonDayOffType> update(@RequestParam("id") int commonTypeId)
+    @DeleteMapping(path = "/admin/common-day-off-types/{id}")
+    public ResponseEntity<CommonDayOffType> delete(@PathVariable("id") int commonTypeId)
                                                     throws CommonTypeIsNotExistException{
 
         CommonDayOffType commonDayOffType = commonDayOffTypeService.delete(commonTypeId);

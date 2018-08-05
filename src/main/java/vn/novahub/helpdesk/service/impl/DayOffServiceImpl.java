@@ -23,8 +23,6 @@ import java.util.*;
 @Service
 public class DayOffServiceImpl implements DayOffService {
 
-
-
     @Autowired
     private DayOffRepository dayOffRepository;
 
@@ -71,7 +69,7 @@ public class DayOffServiceImpl implements DayOffService {
         if (status.equals("NON-CANCELLED")) {
             return dayOffRepository.findNonCancelledByAccountId(accountId, pageable);
         } else if (status.equals("")) {
-            return dayOffRepository.findByAccountId(accountId, pageable);
+            return dayOffRepository.findAllByAccountId(accountId, pageable);
         } else {
             return dayOffRepository.findByAccountIdAndStatus(accountId, status, pageable);
         }

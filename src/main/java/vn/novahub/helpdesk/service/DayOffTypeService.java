@@ -18,7 +18,4 @@ public interface DayOffTypeService {
 
     DayOffType update(DayOffType dayOffType) throws DayOffTypeNotFoundException;
 
-    void delete(DayOffType dayOffType);
-
-
 }

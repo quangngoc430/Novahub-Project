@@ -90,11 +90,6 @@ public class DayOffTypeServiceImpl implements DayOffTypeService {
     }
 
     @Override
-    public void delete(DayOffType dayOffType) {
-
-    }
-
-    @Override
     public Page<DayOffType> getAll(Pageable pageable) {
         return dayOffTypeRepository.findAll(pageable);
     }
@@ -102,7 +97,7 @@ public class DayOffTypeServiceImpl implements DayOffTypeService {
 
     @Override
     public Page<DayOffType> findByAccountId(long accountId, Pageable pageable) {
-        return dayOffTypeRepository.findByAccountId(accountId, pageable);
+        return dayOffTypeRepository.findAllByAccountId(accountId, pageable);
     }
 
    private int getCreatedYear(Date createdDate) {
