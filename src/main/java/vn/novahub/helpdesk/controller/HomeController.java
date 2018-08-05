@@ -6,15 +6,16 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import vn.novahub.helpdesk.enums.RoleEnum;
-import vn.novahub.helpdesk.seeding.AccountSeeding;
-import vn.novahub.helpdesk.seeding.CategorySeeding;
-import vn.novahub.helpdesk.seeding.Seeding;
-import vn.novahub.helpdesk.seeding.SkillSeeding;
+import vn.novahub.helpdesk.model.Account;
+import vn.novahub.helpdesk.model.Level;
+import vn.novahub.helpdesk.model.Skill;
+import vn.novahub.helpdesk.seeding.*;
 
 import javax.annotation.security.PermitAll;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.ArrayList;
 
 @Controller
 public class HomeController {
@@ -31,17 +32,20 @@ public class HomeController {
     private SkillSeeding skillSeeding;
 
     @Autowired
+    private LevelSeeding levelSeeding;
+
+    @Autowired
     private Seeding seeding;
 
     @PermitAll
     @RequestMapping("/")
     @ResponseBody
     public void home() throws IOException, ParseException {
-        //seeding.readJsonWithObjectMapper();
-//        categorySeeding.generateData();
-        accountSeeding.generateData("data.json");
+        ArrayList<Account> accountArrayList = accountSeeding.generateData("data.json");
         categorySeeding.generateData("data.json");
-        skillSeeding.generateData("data.json");
+        ArrayList<Skill> skillArrayList = skillSeeding.generateData("data.json");
+        ArrayList<Level> levelArrayList = levelSeeding.generateData(accountArrayList, skillArrayList);
+
     }
 
     @PermitAll
