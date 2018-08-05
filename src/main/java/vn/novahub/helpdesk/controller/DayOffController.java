@@ -62,7 +62,8 @@ public class DayOffController {
             throws MessagingException,
             IOException,
             DayOffTypeIsExistException,
-            CommonTypeIsNotExistException {
+            CommonTypeIsNotExistException,
+            AccountNotFoundException {
 
         dayOff = dayOffService.add(dayOff);
 

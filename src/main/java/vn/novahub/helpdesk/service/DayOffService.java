@@ -14,6 +14,7 @@ public interface DayOffService {
             throws MessagingException,
             CommonTypeIsNotExistException,
             DayOffTypeIsExistException,
+            AccountNotFoundException,
             IOException;
 
     Page<DayOff> getAllByAccountIdAndStatus(

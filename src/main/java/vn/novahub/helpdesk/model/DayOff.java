@@ -62,7 +62,7 @@ public class DayOff {
     private DayOffType dayOffType;
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Account.class)
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Account.class)
     @JoinColumn(name = "account_id", insertable = false, updatable = false)
     private Account account;
 
