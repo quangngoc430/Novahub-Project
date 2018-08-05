@@ -1,127 +1,204 @@
 {
-  "category": [
+  "account": [
     {
-      "name": "Industry Knowledge",
-      "skill": [
-        {
-          "name": "a"
-        },
-        {
-          "name": "b"
-        },
-        {
-          "name": "c"
-        }
+      "email": "gaylor.grace@novahub.vn",
+      "password": "password",
+      "firstname": "Grace",
+      "lastname": "Gaylor",
+      "dayOfBirth": "1988-04-30T00:00:00.000Z",
+      "address": "291 Muller Trail, West Devonborough, NC 82339-4773",
+      "status": "ACTIVE",
+      "joiningDate": "2015-08-09T00:00:00.000Z",
+      "role": "USER"
+    },
+    {
+      "email": "pfeffer.willy@novahub.vn",
+      "password": "password",
+      "firstname": "Willy",
+      "lastname": "Pfeffer",
+      "dayOfBirth": "1985-01-03T00:00:00.000Z",
+      "address": "3425 Wilbert Avenue, East Nyasiaview, IL 16822-7973",
+      "status": "ACTIVE",
+      "joiningDate": "2015-09-01T00:00:00.000Z",
+      "role": "USER"
+    },
+    {
+      "email": "breitenberg.ottilie@novahub.vn",
+      "password": "password",
+      "firstname": "Ottilie",
+      "lastname": "Breitenberg",
+      "dayOfBirth": "1954-11-06T00:00:00.000Z",
+      "address": "492 Elinor Path, East Samland, MN 14304",
+      "status": "ACTIVE",
+      "joiningDate": "2016-01-01T00:00:00.000Z",
+      "role": "USER"
+    },
+    {
+      "email": "turner.hettinger@novahub.vn",
+      "password": "password",
+      "firstname": "Hettinger",
+      "lastname": "Turner",
+      "dayOfBirth": "1980-09-06T00:00:00.000Z",
+      "address": "92059 Buckridge Avenue, Dagmarmouth, SC 46680-1042",
+      "status": "ACTIVE",
+      "joiningDate": "2016-04-01T00:00:00.000Z",
+      "role": "USER"
+    },
+    {
+      "email": "herman.schuyler@novahub.vn",
+      "password": "password",
+      "firstname": "Schuyler",
+      "lastname": "Herman",
+      "dayOfBirth": "1961-10-01T00:00:00.000Z",
+      "address": "Apt. 057 10617 Rempel Cape, Bricefort, MN 04917-2418",
+      "status": "ACTIVE",
+      "joiningDate": "2015-11-21T00:00:00.000Z",
+      "role": "USER"
+    },
+    {
+      "email": "brad.rodriguez@novahub.vn",
+      "password": "password",
+      "firstname": "Rodriguez",
+      "lastname": "Brad",
+      "dayOfBirth": "1989-11-05T00:00:00.000Z",
+      "address": "Suite 291 30613 Dietrich Manors, Kenyamouth, SC 35158",
+      "status": "ACTIVE",
+      "joiningDate": "2016-11-21T00:00:00.000Z",
+      "role": "USER"
+    },
+    {
+      "email": "bertrand.reichel@novahub.vn",
+      "password": "password",
+      "firstname": "Reichel",
+      "lastname": "Bertrand",
+      "dayOfBirth": "1960-07-05T00:00:00.000Z",
+      "address": "Apt. 325 07864 Vandervort Valley, Beahanhaven, TN 76522-5139",
+      "status": "ACTIVE",
+      "joiningDate": "2014-07-09T00:00:00.000Z",
+      "role": "USER"
+    },
+    {
+      "email": "granville.wiegand@novahub.vn",
+      "password": "password",
+      "firstname": "Wiegand",
+      "lastname": "Granville",
+      "dayOfBirth": "192-07-31",
+      "address": "377 Gorczany Fort, Oberbrunnerland, ME 18984",
+      "status": "ACTIVE",
+      "joiningDate": "2017-07-11T00:00:00.000Z",
+      "role": "USER"
+    },
+    {
+      "email": "gabriel.kovacek@novahub.vn",
+      "password": "password",
+      "firstname": "Kovacek",
+      "lastname": "Gabriel",
+      "dayOfBirth": "1988-12-05T00:00:00.000Z",
+      "address": "897 Frederik Overpass, Camilabury, TX 14695-1057",
+      "status": "ACTIVE",
+      "joiningDate": "2014-07-09T00:00:00.000Z",
+      "role": "USER"
+    },
+    {
+      "email": "abigail.huels@novahub.vn",
+      "password": "password",
+      "firstname": "Huels",
+      "lastname": "Abigail",
+      "dayOfBirth": "1973-07-04T00:00:00.000Z",
+      "address": "Suite 309 969 Alberta Divide, Boyleview, ID 38023-1053",
+      "status": "ACTIVE",
+      "joiningDate": "2018-03-05T00:00:00.000Z",
+      "role": "USER"
+    }
+  ],
+  "category": {
+    "name": [
+      "Industry Knowledge",
+      "Tools & Technologies",
+      "Interpersonal Skills",
+      "Front-end Development",
+      "Back-end Development",
+      "Web Design",
+      "Mobile Development",
+      "Programing Language"
+    ]
+  },
+  "skill": [
+    {
+      "category": "Industry knowledge",
+      "name": [
+        "Android Development",
+        "IOS Development",
+        "Research",
+        "Machine Learning",
+        "Infrastructure"
       ]
     },
     {
-      "name": "Tools & Technologies",
-      "skill": [
-        {
-          "name": "tools 1"
-        },
-        {
-          "name": "tools 2"
-        },
-        {
-          "name": "tools 3"
-        }
+      "category": "Tools & Technologies",
+      "name": [
+        "Microsoft Office",
+        "Microsoft Word",
+        "Microsoft Excel",
+        "PostgreSQL",
+        "Blockchain"
       ]
     },
     {
-      "name": "Interpersonal Skills",
-      "skill": [
-        {
-          "name": "interpersonal skills 1"
-        },
-        {
-          "name": "interpersonal skills 2"
-        },
-        {
-          "name": "interpersonal skills 3"
-        },
-        {
-          "name": "interpersonal skills 4"
-        }
+      "category": "Interpersonal Skills",
+      "name": [
+        "Time Management Skills",
+        "Critical Thinking and Problem Solving",
+        "interpersonal skills 3",
+        "Flexibility",
+        "Communication"
       ]
     },
     {
-      "name": "Front-end Development",
-      "skill": [
-        {
-          "name": "Javascript"
-        },
-        {
-          "name": "ReactJS"
-        },
-        {
-          "name": "Angular"
-        },
-        {
-          "name": "VueJS"
-        }
+      "category": "Front-end Development",
+      "name": [
+        "AngularJS",
+        "ReactJS",
+        "Javascript"
       ]
     },
     {
-      "name": "Back-end Development",
-      "skill": [
-        {
-          "name": "Rails"
-        },
-        {
-          "name": "Spring boot"
-        },
-        {
-          "name": "Java"
-        },
-        {
-          "name": "Javascript"
-        }
+      "category": "Back-end Development",
+      "name": [
+        "Spring Framework",
+        "Ruby On Rails",
+        "NodeJS",
+        "Python"
       ]
     },
     {
-      "name": "Web Design",
-      "skill": [
-        {
-          "name": "Photoshop"
-        },
-        {
-          "name": "HTML"
-        },
-        {
-          "name": "CSS5"
-        }
+      "category": "Web Design",
+      "name": [
+        "Photoshop",
+        "CSS3",
+        "HTML5"
       ]
     },
     {
-      "name": "Mobile Development",
-      "skill": [
-        {
-          "name": "Android Studio"
-        },
-        {
-          "name": "Kotlin"
-        },
-        {
-          "name": "Swift"
-        }
+      "category": "Mobile Development",
+      "name": [
+        "Java",
+        "Kotlin",
+        "Swift",
+        "Object C",
+        "React Native",
+        "Xamarin"
       ]
     },
     {
-      "name": "Programing Language",
-      "skill": [
-        {
-          "name": "Java"
-        },
-        {
-          "name": "Ruby"
-        },
-        {
-          "name": "C#"
-        },
-        {
-          "name": "PHP"
-        }
+      "category": "Programing Language",
+      "name": [
+        "Java",
+        "Javascript",
+        "C++",
+        "C#",
+        "Python",
+        "Ruby"
       ]
     }
   ]

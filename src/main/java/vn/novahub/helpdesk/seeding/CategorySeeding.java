@@ -1,10 +1,15 @@
 package vn.novahub.helpdesk.seeding;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 import vn.novahub.helpdesk.model.Category;
 import vn.novahub.helpdesk.repository.CategoryRepository;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -14,34 +19,34 @@ public class CategorySeeding {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    public ArrayList<Category> generateData(ArrayList<String> categoryNames) {
+    @Autowired
+    private ResourceLoader resourceLoader;
+
+    public ArrayList<Category> generateData(String fileName) throws IOException {
 
         ArrayList<Category> categoryArrayList = new ArrayList<>();
 
-        for (String name: categoryNames) {
-            Category category = new Category();
-            category.setName(name);
-            category.setCreatedAt(new Date());
-            category.setUpdatedAt(new Date());
+        ObjectMapper objectMapper = new ObjectMapper();
+        Resource res = resourceLoader.getResource("classpath:" + fileName);
+        JsonNode jsonNodeRoot = objectMapper.readValue(res.getFile(), JsonNode.class);
+        JsonNode jsonNodeCategory = jsonNodeRoot.get("category").get("name");
 
-            categoryArrayList.add(categoryRepository.save(category));
+        for (int categoryIndex = 0; categoryIndex < jsonNodeCategory.size(); categoryIndex++) {
+            String categoryName = jsonNodeCategory.get(categoryIndex).textValue();
+
+            Category category = categoryRepository.getByName(categoryName);
+
+            if(category == null) {
+                category = new Category();
+                category.setName(categoryName);
+                category.setCreatedAt(new Date());
+                category.setUpdatedAt(new Date());
+                category = categoryRepository.save(category);
+            }
+
+            categoryArrayList.add(category);
         }
 
         return categoryArrayList;
-    }
-
-    public Category createACategory(String categoryName) {
-        Category category = categoryRepository.getByName(categoryName);
-
-        if(category == null) {
-            category = new Category();
-            category.setName(categoryName);
-            category.setCreatedAt(new Date());
-            category.setUpdatedAt(new Date());
-
-            category = categoryRepository.save(category);
-        }
-
-        return category;
     }
 }

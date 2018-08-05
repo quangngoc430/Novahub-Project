@@ -34,7 +34,7 @@ public class Seeding {
         JsonNode jsonNodeCategory = jsonRoot.get("category");
 
         for(int categoryIndex = 0; categoryIndex < jsonNodeCategory.size(); categoryIndex++) {
-            Category category = categorySeeding.createACategory(jsonNodeCategory.get(categoryIndex).get("name").textValue());
+            //Category category = categorySeeding.createACategory(jsonNodeCategory.get(categoryIndex).get("name").textValue());
 
 
         }

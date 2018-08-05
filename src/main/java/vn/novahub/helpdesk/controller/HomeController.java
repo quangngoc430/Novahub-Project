@@ -9,10 +9,12 @@ import vn.novahub.helpdesk.enums.RoleEnum;
 import vn.novahub.helpdesk.seeding.AccountSeeding;
 import vn.novahub.helpdesk.seeding.CategorySeeding;
 import vn.novahub.helpdesk.seeding.Seeding;
+import vn.novahub.helpdesk.seeding.SkillSeeding;
 
 import javax.annotation.security.PermitAll;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.text.ParseException;
 
 @Controller
 public class HomeController {
@@ -26,14 +28,20 @@ public class HomeController {
     private CategorySeeding categorySeeding;
 
     @Autowired
+    private SkillSeeding skillSeeding;
+
+    @Autowired
     private Seeding seeding;
 
     @PermitAll
     @RequestMapping("/")
-    public void home() throws IOException {
-        seeding.readJsonWithObjectMapper();
+    @ResponseBody
+    public void home() throws IOException, ParseException {
+        //seeding.readJsonWithObjectMapper();
 //        categorySeeding.generateData();
-        accountSeeding.generateData(50);
+        accountSeeding.generateData("data.json");
+        categorySeeding.generateData("data.json");
+        skillSeeding.generateData("data.json");
     }
 
     @PermitAll
