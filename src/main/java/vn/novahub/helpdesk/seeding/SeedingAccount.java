@@ -42,7 +42,6 @@ public class SeedingAccount {
 
         for(int accountIndex = 0; accountIndex < jsonNodeAccount.size(); accountIndex++) {
             JsonNode currentJsonNode = jsonNodeAccount.get(accountIndex);
-            System.out.println(accountIndex);
             String email = currentJsonNode.get("email").textValue();
 
             Account account = accountRepository.getByEmail(email);
