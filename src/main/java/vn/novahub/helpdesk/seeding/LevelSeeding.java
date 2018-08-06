@@ -25,10 +25,10 @@ public class LevelSeeding {
     public ArrayList<Level> generateData(ArrayList<Account> accountArrayList, ArrayList<Skill> skillArrayList) {
         ArrayList<Level> levelArrayList = new ArrayList<>();
 
+        Random random = new Random();
         for(Account account : accountArrayList) {
             for(Skill skill : skillArrayList) {
-                Random random = new Random();
-                if(random.nextBoolean() == true) {
+                if(random.nextBoolean()) {
                     Level level = levelRepository.getByAccountIdAndSkillId(account.getId(), skill.getId());
 
                     if(level == null) {
@@ -55,5 +55,4 @@ public class LevelSeeding {
 
         return levelArrayList;
     }
-
 }
