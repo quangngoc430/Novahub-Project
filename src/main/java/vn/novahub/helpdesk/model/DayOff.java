@@ -57,9 +57,9 @@ public class DayOff {
     @Column(name = "type_id")
     private long typeId;
 
-    @ManyToOne(fetch = FetchType.EAGER, targetEntity = DayOffType.class)
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = AccountHasDayOffType.class)
     @JoinColumn(name = "type_id", insertable = false, updatable = false)
-    private DayOffType dayOffType;
+    private AccountHasDayOffType accountHasDayOffType;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER, targetEntity = Account.class)
@@ -159,12 +159,12 @@ public class DayOff {
         this.typeId = typeId;
     }
 
-    public DayOffType getDayOffType() {
-        return dayOffType;
+    public AccountHasDayOffType getAccountHasDayOffType() {
+        return accountHasDayOffType;
     }
 
-    public void setDayOffType(DayOffType dayOffType) {
-        this.dayOffType = dayOffType;
+    public void setAccountHasDayOffType(AccountHasDayOffType accountHasDayOffType) {
+        this.accountHasDayOffType = accountHasDayOffType;
     }
 
     public Account getAccount() {

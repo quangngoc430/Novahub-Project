@@ -12,8 +12,8 @@ public interface DayOffService {
 
     DayOff add(DayOff dayOff)
             throws MessagingException,
-            CommonTypeIsNotExistException,
-            DayOffTypeIsExistException,
+            DayOffTypeIsNotExistException,
+            AccountHasDayOffTypeIsExistException,
             AccountNotFoundException,
             IOException;
 

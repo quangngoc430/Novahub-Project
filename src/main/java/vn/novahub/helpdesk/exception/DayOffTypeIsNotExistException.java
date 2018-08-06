@@ -4,9 +4,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(code = HttpStatus.NOT_FOUND, reason = "Common type is not exist")
-public class CommonTypeIsNotExistException extends Exception{
+public class DayOffTypeIsNotExistException extends Exception{
 
-    public CommonTypeIsNotExistException(){
+    public DayOffTypeIsNotExistException(){
         super("Common type is not exist");
     }
 }

@@ -3,6 +3,7 @@ CREATE DATABASE helpdesk;
 \c helpdesk;
 
 DROP TABLE IF EXISTS day_off;
+DROP TABLE IF EXISTS account_has_day_off_type;
 DROP TABLE IF EXISTS day_off_type;
 DROP TABLE IF EXISTS issue;
 DROP TABLE IF EXISTS account_has_skill;
@@ -58,18 +59,18 @@ CREATE TABLE account_has_skill (
   updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
 );
 
-CREATE TABLE common_day_off_type (
+CREATE TABLE day_off_type (
   id SERIAL PRIMARY KEY,
   type VARCHAR(20) NOT NULL,
-  quota INT NOT NULL
+  defaultQuota INT NOT NULL
 );
 
-CREATE TABLE day_off_type (
+CREATE TABLE account_has_day_off_type (
   id BIGSERIAL PRIMARY KEY,
   year INT NOT NULL,
   remaining_time INT NOT NULL,
   private_quota INT NOT NULL,
-  common_type_id INT REFERENCES common_day_off_type(id),
+  day_off_type_id INT REFERENCES day_off_type(id),
   account_id INT REFERENCES account(id)
 );
 
@@ -85,7 +86,7 @@ CREATE TABLE day_off (
   status VARCHAR(45) NOT NULL,
   token VARCHAR(255) NOT NULL,
   account_id BIGINT REFERENCES account(id),
-  type_id BIGINT REFERENCES day_off_type(id)
+  type_id BIGINT REFERENCES account_has_day_off_type(id)
 );
 
 CREATE TABLE issue (

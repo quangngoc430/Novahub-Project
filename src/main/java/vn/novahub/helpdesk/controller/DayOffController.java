@@ -63,8 +63,8 @@ public class DayOffController {
     public ResponseEntity<DayOff> create(@RequestBody DayOff dayOff)
             throws MessagingException,
             IOException,
-            DayOffTypeIsExistException,
-            CommonTypeIsNotExistException,
+            AccountHasDayOffTypeIsExistException,
+            DayOffTypeIsNotExistException,
             AccountNotFoundException {
 
         dayOff = dayOffService.add(dayOff);

@@ -1,23 +1,13 @@
 package vn.novahub.helpdesk.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import vn.novahub.helpdesk.exception.CommonTypeIsNotExistException;
-import vn.novahub.helpdesk.exception.DayOffTypeIsExistException;
-import vn.novahub.helpdesk.exception.DayOffTypeNotFoundException;
-import vn.novahub.helpdesk.model.Account;
-import vn.novahub.helpdesk.model.CommonDayOffType;
+import vn.novahub.helpdesk.exception.DayOffTypeIsNotExistException;
 import vn.novahub.helpdesk.model.DayOffType;
-import vn.novahub.helpdesk.repository.CommonDayOffTypeRepository;
 import vn.novahub.helpdesk.repository.DayOffTypeRepository;
-import vn.novahub.helpdesk.service.AccountService;
 import vn.novahub.helpdesk.service.DayOffTypeService;
 
-import java.util.Date;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -26,83 +16,60 @@ public class DayOffTypeServiceImpl implements DayOffTypeService {
     @Autowired
     private DayOffTypeRepository dayOffTypeRepository;
 
-    @Autowired
-    private CommonDayOffTypeRepository commonDayOffTypeRepository;
-
-    @Autowired
-    private AccountService accountService;
+    @Override
+    public List<DayOffType> getAllDayOffType() {
+        return dayOffTypeRepository.findAll();
+    }
 
     @Override
-    public DayOffType add(DayOffType dayOffType)
-            throws DayOffTypeIsExistException,
-                    CommonTypeIsNotExistException {
+    public DayOffType getById(int id) throws DayOffTypeIsNotExistException {
+        Optional<DayOffType> dayOffTypeOptional = dayOffTypeRepository.findById(id);
 
-        Account account = accountService.getAccountLogin();
-
-        Optional<CommonDayOffType> commonDayOffType =
-                commonDayOffTypeRepository.findById(dayOffType.getCommonTypeId());
-
-        if (!commonDayOffType.isPresent()) {
-            throw new CommonTypeIsNotExistException();
+        if (!dayOffTypeOptional.isPresent()) {
+            throw new DayOffTypeIsNotExistException();
         }
+        return dayOffTypeOptional.get();
+    }
 
-        dayOffType.setPrivateQuota(commonDayOffType.get().getQuota());
-        dayOffType.setRemainingTime(dayOffType.getPrivateQuota());
-        dayOffType.setYear(getCreatedYear(new Date()));
-        dayOffType.setCommonDayOffType(commonDayOffType.get());
-
-        if (dayOffType.getAccountId() == 0) {
-            dayOffType.setAccountId(account.getId());
-        }
-
-        DayOffType existingDayOffType =
-                dayOffTypeRepository
-                        .findByAccountIdAndCommonTypeIdAndYear(
-                                dayOffType.getAccountId(),
-                                dayOffType.getCommonTypeId(),
-                                dayOffType.getYear());
-
-        if (existingDayOffType != null) {
-            throw new DayOffTypeIsExistException(dayOffType.getCommonTypeId());
-        }
-
+    @Override
+    public DayOffType create(DayOffType dayOffType) {
         return dayOffTypeRepository.save(dayOffType);
     }
 
     @Override
-    public DayOffType update(DayOffType dayOffType) throws DayOffTypeNotFoundException {
-        Optional<DayOffType> currentDayOffType = dayOffTypeRepository.findById(dayOffType.getId());
+    public DayOffType update(DayOffType dayOffType)
+                                   throws DayOffTypeIsNotExistException {
+
+        Optional<DayOffType> currentDayOffType
+                = dayOffTypeRepository.findById(dayOffType.getId());
+
         if (!currentDayOffType.isPresent()) {
-            throw new DayOffTypeNotFoundException(dayOffType.getId());
+            throw new DayOffTypeIsNotExistException();
         }
 
-        if (dayOffType.getRemainingTime() == 0) {
-            int newRemainingTime = currentDayOffType.get().getRemainingTime()
-                    + dayOffType.getPrivateQuota() - currentDayOffType.get().getPrivateQuota();
-            currentDayOffType.get().setRemainingTime(newRemainingTime);
-        } else {
-            currentDayOffType.get().setRemainingTime(dayOffType.getRemainingTime());
+        if (dayOffType.getType() != null) {
+            currentDayOffType.get().setType(dayOffType.getType());
         }
 
-        currentDayOffType.get().setPrivateQuota(dayOffType.getPrivateQuota());
+        if (dayOffType.getDefaultQuota() > 0) {
+            currentDayOffType.get().setDefaultQuota(dayOffType.getDefaultQuota());
+        }
 
         return dayOffTypeRepository.save(currentDayOffType.get());
     }
 
     @Override
-    public Page<DayOffType> getAll(Pageable pageable) {
-        return dayOffTypeRepository.findAll(pageable);
+    public DayOffType delete(int id) throws DayOffTypeIsNotExistException {
+
+        Optional<DayOffType> currentDayOffType
+                = dayOffTypeRepository.findById(id);
+
+        if (!currentDayOffType.isPresent()) {
+            throw new DayOffTypeIsNotExistException();
+        }
+
+        dayOffTypeRepository.delete(currentDayOffType.get());
+
+        return currentDayOffType.get();
     }
-
-
-    @Override
-    public Page<DayOffType> findByAccountId(long accountId, Pageable pageable) {
-        return dayOffTypeRepository.findAllByAccountId(accountId, pageable);
-    }
-
-   private int getCreatedYear(Date createdDate) {
-       Calendar calendar = new GregorianCalendar();
-       calendar.setTime(createdDate);
-       return calendar.get(Calendar.YEAR);
-  }
 }

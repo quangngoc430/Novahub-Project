@@ -22,8 +22,8 @@ tags:
     description: Category apis
   - name: Issue
     description: Issue apis
-  - name: CommonDayOffType
-    description: CommonDayOffType apis
+  - name: DayOffType
+    description: DayOffType apis
 paths:
   /login:
     post:
@@ -5722,8 +5722,8 @@ paths:
   /common-day-off-types:
       get:
         tags:
-          - CommonDayOffType
-        summary: User get all CommonDayOffType
+          - DayOffType
+        summary: User get all DayOffType
         description: User get all CommomDayOffType
         parameters:
           - in: header
@@ -5821,9 +5821,9 @@ paths:
   /common-day-off-type/{id}':
       get:
         tags:
-          - CommonDayOffType
-        summary: User CommonDayOffType by id
-        description: User CommonDayOffType by id
+          - DayOffType
+        summary: User DayOffType by id
+        description: User DayOffType by id
         parameters:
           - in: header
             name: access_token
