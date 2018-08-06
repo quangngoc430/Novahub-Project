@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 @Component
-public class SkillSeeding {
+public class SeedingSkill {
 
     @Autowired
     private SkillRepository skillRepository;
