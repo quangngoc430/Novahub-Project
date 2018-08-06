@@ -60,8 +60,9 @@ public class RequestsNeedAuthencationToken {
             requestArrayList.add(new Request("\\/api\\/admin\\/day-off-types", new String[]{Method.POST.name(), Method.PUT.name(), Method.GET.name()}));
 
             // common-day-off-type
+            requestArrayList.add(new Request("\\/api\\/common-day-off-types", new String[]{Method.GET.name(), Method.DELETE.name()}));
             requestArrayList.add(new Request("\\/api\\/common-day-off-types\\/(\\d+)", new String[]{Method.GET.name(), Method.DELETE.name()}));
-            requestArrayList.add(new Request("\\/api\\/admin\\/common-day-off-types", new String[]{Method.POST.name(), Method.PUT.name()}));
+            requestArrayList.add(new Request("\\/api\\/admin\\/common-day-off-types", new String[]{Method.POST.name(), Method.PUT.name(), Method.GET.name()}));
 
 
         }

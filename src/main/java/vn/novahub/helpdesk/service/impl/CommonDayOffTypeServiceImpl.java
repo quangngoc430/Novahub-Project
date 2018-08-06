@@ -47,7 +47,13 @@ public class CommonDayOffTypeServiceImpl implements CommonDayOffTypeService{
             throw new CommonTypeIsNotExistException();
         }
 
-        currentCommonDayOffType.get().setQuota(commonDayOffType.getQuota());
+        if (commonDayOffType.getType() != null) {
+            currentCommonDayOffType.get().setType(commonDayOffType.getType());
+        }
+
+        if (commonDayOffType.getQuota() > 0) {
+            currentCommonDayOffType.get().setQuota(commonDayOffType.getQuota());
+        }
 
         return commonDayOffTypeRepository.save(currentCommonDayOffType.get());
     }

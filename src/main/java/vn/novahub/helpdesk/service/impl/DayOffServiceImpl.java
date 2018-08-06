@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import vn.novahub.helpdesk.enums.DayOffEnum;
+import vn.novahub.helpdesk.enums.RoleEnum;
 import vn.novahub.helpdesk.exception.*;
 import vn.novahub.helpdesk.model.*;
 import vn.novahub.helpdesk.repository.CommonDayOffTypeRepository;
@@ -66,7 +67,7 @@ public class DayOffServiceImpl implements DayOffService {
 
     @Override
     public Page<DayOff> getAllByAccountIdAndStatus(long accountId, String status, Pageable pageable) {
-        if (status.equals("NON-CANCELLED")) {
+        if (status.equals(DayOffEnum.NONCANCELLED.name())) {
             return dayOffRepository.findNonCancelledByAccountId(accountId, pageable);
         } else if (status.equals("")) {
             return dayOffRepository.findAllByAccountId(accountId, pageable);
@@ -77,7 +78,7 @@ public class DayOffServiceImpl implements DayOffService {
 
     @Override
     public Page<DayOff> getAllByStatusAndKeyword(String status, String keyword, Pageable pageable) {
-        if (status.equals("NON-CANCELLED")) {
+        if (status.equals(DayOffEnum.NONCANCELLED.name())) {
             return dayOffRepository.findNonCancelledByKeyword(keyword, pageable);
         }
 
@@ -94,7 +95,7 @@ public class DayOffServiceImpl implements DayOffService {
             throw new DayOffIsNotExistException(id);
         }
         if (dayOffOptional.get().getAccountId() != account.getId()
-                && !account.getRole().getName().equals("ADMIN")) {
+                && !account.getRole().getName().equals(RoleEnum.ADMIN.name())) {
             throw new AccountNotFoundException("Account is not admin or not own this day off");
         }
 
@@ -162,11 +163,11 @@ public class DayOffServiceImpl implements DayOffService {
         }
 
         if (dayOffOptional.get().getAccountId() != account.getId()
-                && !account.getRole().getName().equals("ADMIN")) {
+                && !account.getRole().getName().equals(RoleEnum.ADMIN.name())) {
             throw new AccountNotFoundException("Account is not admin or not own this day off");
         }
 
-        if (dayOffOptional.get().getStatus().equals("CANCELLED")) {
+        if (dayOffOptional.get().getStatus().equals(DayOffEnum.CANCELLED.name())) {
             throw new DayOffIsAnsweredException(dayOffId);
         }
 
@@ -176,7 +177,7 @@ public class DayOffServiceImpl implements DayOffService {
 
         returnTheRemainingTime(dayOffOptional.get(), dayOffOptional.get().getDayOffType());
 
-        DayOff dayOff = answerDayOffRequest(dayOffOptional.get(), "CANCELLED");
+        DayOff dayOff = answerDayOffRequest(dayOffOptional.get(), DayOffEnum.CANCELLED.name());
 
         sendEmailDayOff(dayOff, true);
 
@@ -251,7 +252,7 @@ public class DayOffServiceImpl implements DayOffService {
         mail.setSubject(subject);
         String content = mailService.getContentMail(dayOffMailName);
         if (!isSentToAdmin) {
-            content = content.replace("{email}", "Admin");
+            content = content.replace("{email}", RoleEnum.ADMIN.name());
             emailList = new String[]{account.getEmail()};
         } else {
             content = content.replace("{email}", account.getEmail());
@@ -263,8 +264,16 @@ public class DayOffServiceImpl implements DayOffService {
         content = content.replace("{number-of-hours}", dayOff.getNumberOfHours()+"");
         content = content.replace("{comment}", dayOff.getComment());
         content = content.replace("{remaining-hours}", dayOff.getDayOffType().getRemainingTime() + "");
-        content = content.replace("{url-approve-day-off}", hostUrl+"/api/day-offs/" + dayOff.getId() + "/approve?token=" + dayOff.getToken());
-        content = content.replace("{url-deny-day-off}", hostUrl+"/api/day-offs/" + dayOff.getId() + "/deny?token=" + dayOff.getToken());
+        content = content.replace("{url-approve-day-off}", hostUrl +
+                                                                                "/api/day-offs/" +
+                                                                                dayOff.getId() +
+                                                                                "/answer?status=" + DayOffEnum.APPROVED.name() +
+                                                                                "&token=" + dayOff.getToken());
+        content = content.replace("{url-deny-day-off}", hostUrl +
+                                                                             "/api/day-offs/" +
+                                                                             dayOff.getId() +
+                                                                             "/answer?status=" + DayOffEnum.DENIED.name() +
+                                                                             "&token=" + dayOff.getToken());
 
         mail.setContent(content);
 
