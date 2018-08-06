@@ -1,6 +1,50 @@
 {
   "account": [
     {
+      "email": "helpdesk@novahub.vn",
+      "password": "password",
+      "firstname": "Desk",
+      "lastname": "Help",
+      "dayOfBirth": "1990-01-01T00:00:00.000Z",
+      "address": "Đà Nẵng",
+      "status": "ACTIVE",
+      "joiningDate": "2015-08-05T00:00:00.000Z",
+      "role": "ADMIN"
+    },
+    {
+      "email": "ngocbui@novahub.vn",
+      "password": "password",
+      "firstname": "Bùi Lâm",
+      "lastname": "Quang Ngọc",
+      "dayOfBirth": "1997-09-01T00:00:00.000Z",
+      "address": "Lô 14, An Thượng 32 street, Đà Nẵng city",
+      "status": "ACTIVE",
+      "joiningDate": "2017-11-07T00:00:00.000Z",
+      "role": "CLERK"
+    },
+    {
+      "email": "linhtran@novahub.vn",
+      "password": "password",
+      "firstname": "Trần",
+      "lastname": "Mạnh Linh",
+      "dayOfBirth": "1990-01-01T00:00:00.000Z",
+      "address": "Đà Nẵng",
+      "status": "ACTIVE",
+      "joiningDate": "2015-08-05T00:00:00.000Z",
+      "role": "USER"
+    },
+    {
+      "email": "vutran@novahub.vn",
+      "password": "password",
+      "firstname": "Trần",
+      "lastname": "Long Vũ",
+      "dayOfBirth": "1997-08-15T00:00:00.000Z",
+      "address": "Đà Nẵng",
+      "status": "ACTIVE",
+      "joiningDate": "2015-08-05T00:00:00.000Z",
+      "role": "USER"
+    },
+    {
       "email": "gaylor.grace@novahub.vn",
       "password": "password",
       "firstname": "Grace",
