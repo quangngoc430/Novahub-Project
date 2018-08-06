@@ -14,7 +14,7 @@ import java.util.Date;
 import java.util.Random;
 
 @Component
-public class LevelSeeding {
+public class SeedingLevel {
 
     @Autowired
     private LevelRepository levelRepository;
