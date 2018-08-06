@@ -12,25 +12,25 @@ import java.util.ArrayList;
 public class SeedingData {
 
     @Autowired
-    private AccountSeeding accountSeeding;
+    private SeedingAccount seedingAccount;
 
     @Autowired
-    private CategorySeeding categorySeeding;
+    private SeedingCategory seedingCategory;
 
     @Autowired
-    private SkillSeeding skillSeeding;
+    private SeedingSkill seedingSkill;
 
     @Autowired
-    private LevelSeeding levelSeeding;
+    private SeedingLevel seedingLevel;
 
     @Autowired
-    private IssueSeeding issueSeeding;
+    private SeedingIssue seedingIssue;
 
     public void generateData() throws IOException, ParseException {
-        ArrayList<Account> accountArrayList = accountSeeding.generateData("data.json");
-        ArrayList<Category> categoryArrayList = categorySeeding.generateData("data.json");
-        ArrayList<Skill> skillArrayList = skillSeeding.generateData("data.json");
-        ArrayList<Level> levelArrayList = levelSeeding.generateData(accountArrayList, skillArrayList);
-        ArrayList<Issue> issueArrayList = issueSeeding.generateData("data.json", accountArrayList);
+        ArrayList<Account> accountArrayList = seedingAccount.generateData("data.json");
+        ArrayList<Category> categoryArrayList = seedingCategory.generateData("data.json");
+        ArrayList<Skill> skillArrayList = seedingSkill.generateData("data.json");
+        ArrayList<Level> levelArrayList = seedingLevel.generateData(accountArrayList, skillArrayList);
+        ArrayList<Issue> issueArrayList = seedingIssue.generateData("data.json", accountArrayList);
     }
 }
