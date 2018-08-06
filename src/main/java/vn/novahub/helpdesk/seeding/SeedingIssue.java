@@ -13,13 +13,12 @@ import vn.novahub.helpdesk.repository.IssueRepository;
 import vn.novahub.helpdesk.service.TokenService;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
 
 @Component
-public class IssueSeeding {
+public class SeedingIssue {
 
     @Autowired
     private ResourceLoader resourceLoader;
