@@ -31,14 +31,8 @@ import java.io.IOException;
 @RequestMapping(path = "/api")
 public class AccountController {
 
-//    @Autowired
-//    private AccountService accountService;
-
-    private final AccountService accountService;
-
-    public AccountController(AccountService accountService) {
-        this.accountService = accountService;
-    }
+    @Autowired
+    private AccountService accountService;
 
     @Autowired
     private AccountSkillService accountSkillService;
@@ -46,7 +40,6 @@ public class AccountController {
     @GetMapping(path = "/authentication-token")
     public void authenticationToken(HttpServletRequest request,
                                                        HttpServletResponse response) throws ServletException, IOException, TokenIsExpiredException, UnauthorizedException {
-        System.out.println("/authentication-token");
         handleAuthenticationToken(request, response);
     }
 
