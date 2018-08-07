@@ -5,8 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "account_has_day_off_type")
-public class AccountHasDayOffType {
+@Table(name = "day_off_account")
+public class DayOffAccount {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -107,7 +107,7 @@ public class AccountHasDayOffType {
 
     @Override
     public String toString() {
-        return "AccountHasDayOffType{" +
+        return "DayOffAccount{" +
                 "id=" + id +
                 ", year=" + year +
                 ", remainingTime=" + remainingTime +

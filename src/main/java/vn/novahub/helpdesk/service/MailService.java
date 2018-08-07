@@ -15,4 +15,7 @@ public interface MailService {
     String getContentMail(String fileName) throws IOException;
 
     ArrayList<String> getEmailsOfAdminAndClerk();
+
+    ArrayList<String> getEmails(String role);
+
 }

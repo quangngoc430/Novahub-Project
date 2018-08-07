@@ -15,7 +15,7 @@ public class DayOffTypeExceptionHandler {
 
     private ApiError apiError;
 
-    @ExceptionHandler(value = AccountHasDayOffTypeNotFoundException.class)
+    @ExceptionHandler(value = DayOffAccountNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<ApiError> handleDayOffTypeNotFoundException(HttpServletRequest request, Exception ex){
         String message = "Day off type not found";
@@ -30,7 +30,7 @@ public class DayOffTypeExceptionHandler {
         return new ResponseEntity<>(this.apiError, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(value = AccountHasDayOffTypeIsExistException.class)
+    @ExceptionHandler(value = DayOffAccountIsExistException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public ResponseEntity<ApiError> handleDayOffTypeIsExistException(HttpServletRequest request, Exception ex){
         String message = "Day off type is already exist";

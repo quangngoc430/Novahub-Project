@@ -47,23 +47,12 @@ public class DayOffController {
         return new ResponseEntity<>(dayOff, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping(path = "/admin/day-offs")
-    public ResponseEntity<Page<DayOff>> getAllDayOffs(
-            @RequestParam(name = "status", required = false, defaultValue = "") String status,
-            @RequestParam(name= "keyword", required = false, defaultValue = "") String keyword,
-                                                           Pageable pageable) {
-        return new ResponseEntity<>(
-                dayOffService.getAllByStatusAndKeyword(status, keyword ,pageable),
-                HttpStatus.OK);
-    }
-
     @PreAuthorize("isAuthenticated()")
     @PostMapping(path = "/day-offs")
     public ResponseEntity<DayOff> create(@RequestBody DayOff dayOff)
             throws MessagingException,
             IOException,
-            AccountHasDayOffTypeIsExistException,
+            DayOffAccountIsExistException,
             DayOffTypeIsNotExistException,
             AccountNotFoundException {
 
@@ -108,4 +97,16 @@ public class DayOffController {
 
         return new ResponseEntity<>(dayOffService.cancel(dayOffId), HttpStatus.OK);
     }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping(path = "/admin/day-offs")
+    public ResponseEntity<Page<DayOff>> getAllDayOffs(
+            @RequestParam(name = "status", required = false, defaultValue = "") String status,
+            @RequestParam(name= "keyword", required = false, defaultValue = "") String keyword,
+            Pageable pageable) {
+        return new ResponseEntity<>(
+                dayOffService.getAllByStatusAndKeyword(status, keyword ,pageable),
+                HttpStatus.OK);
+    }
+
 }

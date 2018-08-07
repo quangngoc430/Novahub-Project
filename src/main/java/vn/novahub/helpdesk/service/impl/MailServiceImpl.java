@@ -84,20 +84,31 @@ public class    MailServiceImpl implements MailService {
 
     @Override
     public ArrayList<String> getEmailsOfAdminAndClerk() {
-        ArrayList<Account> adminList = (ArrayList<Account>)
-                (accountRepository.getAllByRoleName(RoleEnum.ADMIN.name()));
-        ArrayList<Account> clerkList = (ArrayList<Account>)
-                (accountRepository.getAllByRoleName(RoleEnum.CLERK.name()));
-
         ArrayList<String> emails = new ArrayList<>();
 
-        if(adminList != null)
-            for (Account account : adminList)
-                emails.add(account.getEmail());
+        if (getEmails(RoleEnum.ADMIN.name()) != null) {
+            emails.addAll(getEmails(RoleEnum.ADMIN.name()));
+        }
 
-        if(clerkList != null)
-            for (Account account : clerkList)
+        if (getEmails(RoleEnum.CLERK.name()) != null) {
+            emails.addAll(getEmails(RoleEnum.CLERK.name()));
+        }
+
+        return emails;
+    }
+
+    @Override
+    public ArrayList<String> getEmails(String role) {
+        ArrayList<String> emails = new ArrayList<>();
+        ArrayList<Account> accounts = (ArrayList<Account>)
+                (accountRepository.getAllByRoleName(role));
+
+        if (accounts != null) {
+            for (Account account: accounts) {
                 emails.add(account.getEmail());
+            }
+        }
+
         return emails;
     }
 }

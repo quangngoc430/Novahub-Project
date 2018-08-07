@@ -14,7 +14,7 @@ public class DayOffType {
     @Column(name = "type")
     private String type;
 
-    @Column(name = "defaultQuota")
+    @Column(name = "default_quota")
     private int defaultQuota;
 
     public int getId() {
