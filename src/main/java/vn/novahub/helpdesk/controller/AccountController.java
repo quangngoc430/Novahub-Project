@@ -15,6 +15,7 @@ import vn.novahub.helpdesk.exception.*;
 import vn.novahub.helpdesk.model.Account;
 import vn.novahub.helpdesk.model.Skill;
 import vn.novahub.helpdesk.model.Token;
+import vn.novahub.helpdesk.seeding.SeedingData;
 import vn.novahub.helpdesk.service.AccountService;
 import vn.novahub.helpdesk.service.AccountSkillService;
 
@@ -26,6 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.text.ParseException;
 
 @RestController
 @RequestMapping(path = "/api")
@@ -73,10 +75,12 @@ public class AccountController {
         requestDispatcher.forward(request, response);
     }
 
+    @Autowired
+    private SeedingData seedingData;
+
     @PermitAll
     @PostMapping(path = "/login", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Token> login(@RequestBody Account account) throws AccountInvalidException, AccountLockedException, AccountValidationException, AccountInactiveException {
-
+    public ResponseEntity<Token> login(@RequestBody Account account) throws AccountInvalidException, AccountLockedException, AccountValidationException, AccountInactiveException, IOException, ParseException {
         Token accessToken = accountService.login(account);
 
         return new ResponseEntity<>(accessToken, HttpStatus.OK);

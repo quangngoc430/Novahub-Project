@@ -27,10 +27,10 @@ public class SeedingData {
     private SeedingIssue seedingIssue;
 
     public void generateData() throws IOException, ParseException {
-        ArrayList<Account> accountArrayList = seedingAccount.generateData("data.json");
-        ArrayList<Category> categoryArrayList = seedingCategory.generateData("data.json");
-        ArrayList<Skill> skillArrayList = seedingSkill.generateData("data.json");
+        ArrayList<Account> accountArrayList = seedingAccount.generateData("account-data.json");
+        ArrayList<Category> categoryArrayList = seedingCategory.generateData("category-data.json");
+        ArrayList<Skill> skillArrayList = seedingSkill.generateData("skill-data.json");
         ArrayList<Level> levelArrayList = seedingLevel.generateData(accountArrayList, skillArrayList);
-        ArrayList<Issue> issueArrayList = seedingIssue.generateData("data.json", accountArrayList);
+        ArrayList<Issue> issueArrayList = seedingIssue.generateData("issue-data.json", accountArrayList);
     }
 }

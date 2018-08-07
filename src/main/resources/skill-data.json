@@ -1,0 +1,81 @@
+{
+  "skill": [
+    {
+      "category": "Industry knowledge",
+      "name": [
+        "Android Development",
+        "IOS Development",
+        "Research",
+        "Machine Learning",
+        "Infrastructure"
+      ]
+    },
+    {
+      "category": "Tools & Technologies",
+      "name": [
+        "Microsoft Office",
+        "Microsoft Word",
+        "Microsoft Excel",
+        "PostgreSQL",
+        "Blockchain"
+      ]
+    },
+    {
+      "category": "Interpersonal Skills",
+      "name": [
+        "Time Management Skills",
+        "Critical Thinking and Problem Solving",
+        "interpersonal skills 3",
+        "Flexibility",
+        "Communication"
+      ]
+    },
+    {
+      "category": "Front-end Development",
+      "name": [
+        "AngularJS",
+        "ReactJS",
+        "Javascript"
+      ]
+    },
+    {
+      "category": "Back-end Development",
+      "name": [
+        "Spring Framework",
+        "Ruby On Rails",
+        "NodeJS",
+        "Python"
+      ]
+    },
+    {
+      "category": "Web Design",
+      "name": [
+        "Photoshop",
+        "CSS3",
+        "HTML5"
+      ]
+    },
+    {
+      "category": "Mobile Development",
+      "name": [
+        "Java",
+        "Kotlin",
+        "Swift",
+        "Object C",
+        "React Native",
+        "Xamarin"
+      ]
+    },
+    {
+      "category": "Programing Language",
+      "name": [
+        "Java",
+        "Javascript",
+        "C++",
+        "C#",
+        "Python",
+        "Ruby"
+      ]
+    }
+  ]
+}
