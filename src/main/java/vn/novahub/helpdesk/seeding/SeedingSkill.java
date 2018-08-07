@@ -35,8 +35,8 @@ public class SeedingSkill {
         JsonNode jsonNodeRoot = objectMapper.readValue(res.getFile(), JsonNode.class);
         JsonNode jsonNodeSkill = jsonNodeRoot.get("skill");
 
-        for(int categoryIndex = 0; categoryIndex < jsonNodeSkill.size(); categoryIndex++) {
-            JsonNode currentJsonNode = jsonNodeSkill.get(categoryIndex);
+        for(int i = 0; i < jsonNodeSkill.size(); i++) {
+            JsonNode currentJsonNode = jsonNodeSkill.get(i);
 
             String categoryName = currentJsonNode.get("category").textValue();
 

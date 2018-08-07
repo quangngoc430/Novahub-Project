@@ -38,8 +38,8 @@ public class SeedingIssue {
         JsonNode jsonNodeRoot = objectMapper.readValue(res.getFile(), JsonNode.class);
         JsonNode jsonNodeIssue = jsonNodeRoot.get("issue");
 
-        for(int issueIndex = 0; issueIndex < jsonNodeIssue.size(); issueIndex++) {
-            JsonNode currentJsonNode = jsonNodeIssue.get(issueIndex);
+        for(int i = 0; i < jsonNodeIssue.size(); i++) {
+            JsonNode currentJsonNode = jsonNodeIssue.get(i);
 
             Issue issue = new Issue();
             issue.setTitle(currentJsonNode.get("title").textValue());

@@ -75,12 +75,10 @@ public class AccountController {
         requestDispatcher.forward(request, response);
     }
 
-    @Autowired
-    private SeedingData seedingData;
-
     @PermitAll
     @PostMapping(path = "/login", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Token> login(@RequestBody Account account) throws AccountInvalidException, AccountLockedException, AccountValidationException, AccountInactiveException, IOException, ParseException {
+    public ResponseEntity<Token> login(@RequestBody Account account) throws AccountInvalidException, AccountLockedException, AccountValidationException, AccountInactiveException {
+
         Token accessToken = accountService.login(account);
 
         return new ResponseEntity<>(accessToken, HttpStatus.OK);

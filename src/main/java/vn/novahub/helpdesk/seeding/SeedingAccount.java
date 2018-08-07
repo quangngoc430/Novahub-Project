@@ -40,8 +40,8 @@ public class SeedingAccount {
         JsonNode jsonNodeRoot = objectMapper.readValue(res.getFile(), JsonNode.class);
         JsonNode jsonNodeAccount = jsonNodeRoot.get("account");
 
-        for(int accountIndex = 0; accountIndex < jsonNodeAccount.size(); accountIndex++) {
-            JsonNode currentJsonNode = jsonNodeAccount.get(accountIndex);
+        for(int i = 0; i < jsonNodeAccount.size(); i++) {
+            JsonNode currentJsonNode = jsonNodeAccount.get(i);
             String email = currentJsonNode.get("email").textValue();
 
             Account account = accountRepository.getByEmail(email);

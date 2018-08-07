@@ -31,8 +31,8 @@ public class SeedingCategory {
         JsonNode jsonNodeRoot = objectMapper.readValue(res.getFile(), JsonNode.class);
         JsonNode jsonNodeCategory = jsonNodeRoot.get("category").get("name");
 
-        for (int categoryIndex = 0; categoryIndex < jsonNodeCategory.size(); categoryIndex++) {
-            String categoryName = jsonNodeCategory.get(categoryIndex).textValue();
+        for (int i = 0; i < jsonNodeCategory.size(); i++) {
+            String categoryName = jsonNodeCategory.get(i).textValue();
 
             Category category = categoryRepository.getByName(categoryName);
 
