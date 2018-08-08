@@ -1,6 +1,7 @@
 package vn.novahub.helpdesk.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
@@ -34,6 +35,9 @@ import java.util.Optional;
 @Service
 @PropertySource("classpath:email.properties")
 public class AccountIssueServiceImpl implements AccountIssueService {
+
+    @Value("${host_url}")
+    private String hostUrl;
 
     @Autowired
     private Environment env;
@@ -161,8 +165,8 @@ public class AccountIssueServiceImpl implements AccountIssueService {
         content = content.replace("{content}", issue.getContent());
         content = content.replace("{status}", issue.getStatus());
         content = content.replace("{reply-message}", (issue.getReplyMessage() == null) ? IssueEnum.NONE.name() : issue.getReplyMessage());
-        content = content.replace("{url-approve-issue}", "http://localhost:8080/api/issues/" + issue.getId() + "/action?status=APPROVE&token=" + issue.getToken());
-        content = content.replace("{url-deny-issue}", "http://localhost:8080/api/issues/" + issue.getId() + "/action?status=DENY&token=" + issue.getToken());
+        content = content.replace("{url-approve-issue}", hostUrl + "/api/issues/" + issue.getId() + "/action?status=APPROVE&token=" + issue.getToken());
+        content = content.replace("{url-deny-issue}", hostUrl + "/api/issues/" + issue.getId() + "/action?status=DENY&token=" + issue.getToken());
         mail.setContent(content);
 
         mail.setEmailReceiving(getEmailsOfAdminAndClerk().toArray(new String[0]));

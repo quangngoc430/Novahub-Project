@@ -808,6 +808,18 @@
                     "type": "string",
                     "example": "14 An Thuong 32 street, Da Nang city"
                   },
+                  "phone": {
+                    "type": "string",
+                    "example": "0905123456"
+                  },
+                  "title": {
+                    "type": "string",
+                    "example": "Back-end Developer"
+                  },
+                  "introduction": {
+                    "type": "string",
+                    "example": "I work as a back-end developer"
+                  },
                   "avatar_url": {
                     "type": "string",
                     "example": "http://localhost:8080/avatar.png"
@@ -1142,6 +1154,18 @@
                   "address": {
                     "type": "string",
                     "example": "14 An Thuong 32 street, Da Nang city"
+                  },
+                  "phone": {
+                    "type": "string",
+                    "example": "0905123456"
+                  },
+                  "title": {
+                    "type": "string",
+                    "example": "Back-end Developer"
+                  },
+                  "introduction": {
+                    "type": "string",
+                    "example": "I work as a back-end developer"
                   },
                   "avatar_url": {
                     "type": "string",
@@ -1582,6 +1606,18 @@
                   "address": {
                     "type": "string",
                     "example": "14 An Thuong 32 street, Da Nang city"
+                  },
+                  "phone": {
+                    "type": "string",
+                    "example": "0905123456"
+                  },
+                  "title": {
+                    "type": "string",
+                    "example": "Back-end Developer"
+                  },
+                  "introduction": {
+                    "type": "string",
+                    "example": "I work as a back-end developer"
                   },
                   "avatar_url": {
                     "type": "string",
@@ -2203,7 +2239,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Get all roles successfully",
+            "description": "Get a role successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -8436,6 +8472,18 @@
           "address": {
             "type": "string",
             "example": "14 An Thuong 32 street, Da Nang city"
+          },
+          "phone": {
+            "type": "string",
+            "example": 20725
+          },
+          "title": {
+            "type": "string",
+            "example": "Junior Front-end"
+          },
+          "introduction": {
+            "type": "string",
+            "example": "My name is Than Quang Minh. I come from Vietnam. Currently I work as a web developer. I have more than 15 years programming and more than 5 years of work experience in Software & web development using .NET, PHP, RoR, Java Spring Framework and adequate tutoring & on-job training experience, as well as strong background in Computer Science, computer system, database modeling & information architecture, and fluent in algorithmic & OOP programming and web-related technologies."
           },
           "avatar_url": {
             "type": "string",
