@@ -35,43 +35,4 @@ public class DayOffAccountController {
                 dayOffAccountService.findByAccountId(account.getId(), pageable),
                 HttpStatus.OK);
     }
-
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping(path = "/admin/day-off-accounts")
-    public ResponseEntity<DayOffAccount> create(@RequestBody DayOffAccount dayOffAccount)
-            throws DayOffAccountIsExistException, DayOffTypeIsNotExistException {
-
-        return new ResponseEntity<>(dayOffAccountService.add(dayOffAccount), HttpStatus.OK);
-    }
-
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping(path = "/admin/day-off-accounts")
-    public ResponseEntity<Page<DayOffAccount>> adminGet(
-         @RequestParam(name = "accountId", required = false, defaultValue = "0") String accountIdString,
-         Pageable pageable) {
-
-        long accountId = Long.parseLong(accountIdString);
-
-        if (accountId != 0) {
-            return new ResponseEntity<>(
-                    dayOffAccountService.findByAccountId(accountId, pageable),
-                    HttpStatus.OK);
-        }
-
-        return new ResponseEntity<>(
-                dayOffAccountService.getAll(pageable),
-                HttpStatus.OK);
-    }
-
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PutMapping(path = "/admin/day-off-accounts")
-                                public ResponseEntity<DayOffAccount> update(@RequestBody DayOffAccount dayOffAccount)
-                                                      throws DayOffAccountNotFoundException {
-
-        dayOffAccount = dayOffAccountService.update(dayOffAccount);
-
-        return new ResponseEntity<>(dayOffAccount, HttpStatus.OK);
-    }
-
-
 }

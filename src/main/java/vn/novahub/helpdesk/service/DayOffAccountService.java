@@ -16,6 +16,8 @@ public interface DayOffAccountService {
 
     Page<DayOffAccount> getAll(Pageable pageable);
 
+    DayOffAccount getById(long id) throws DayOffAccountNotFoundException;
+
     DayOffAccount update(DayOffAccount dayOffAccount) throws DayOffAccountNotFoundException;
 
 }

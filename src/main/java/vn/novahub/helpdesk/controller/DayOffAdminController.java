@@ -11,9 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.novahub.helpdesk.enums.DayOffStatus;
 import vn.novahub.helpdesk.exception.*;
-import vn.novahub.helpdesk.model.Account;
 import vn.novahub.helpdesk.model.DayOff;
-import vn.novahub.helpdesk.service.AccountService;
 import vn.novahub.helpdesk.service.DayOffService;
 
 import javax.annotation.security.PermitAll;
@@ -21,14 +19,14 @@ import javax.mail.MessagingException;
 import java.io.IOException;
 
 @RestController
-@RequestMapping(path = "/api", produces = {MediaType.APPLICATION_JSON_VALUE})
+@RequestMapping(path = "/api/admin/day-offs/", produces = {MediaType.APPLICATION_JSON_VALUE})
 public class DayOffAdminController {
 
     @Autowired
     private DayOffService dayOffService;
 
     @PermitAll
-    @GetMapping(path = "/admin/day-offs/{id}/answer-token")
+    @GetMapping("{id}/answer-token")
     public ResponseEntity<DayOff> answerWithToken(@PathVariable("id") long dayOffId,
                                           @RequestParam("status") String status,
                                           @RequestParam(name = "token") String token)
@@ -54,7 +52,7 @@ public class DayOffAdminController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping(path = "/admin/day-offs/{id}/answer")
+    @GetMapping("{id}/answer")
     public ResponseEntity<DayOff> answerWithoutToken(@PathVariable("id") long dayOffId,
                                                   @RequestParam("status") String status)
             throws DayOffIsAnsweredException,
@@ -83,7 +81,7 @@ public class DayOffAdminController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping(path = "/admin/day-offs")
+    @GetMapping
     public ResponseEntity<Page<DayOff>> getAllDayOffs(
             @RequestParam(name = "status", required = false, defaultValue = "") String status,
             @RequestParam(name= "keyword", required = false, defaultValue = "") String keyword,

@@ -35,33 +35,4 @@ public class DayOffTypeController {
         return new ResponseEntity<>(dayOffTypeService.getById(id), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping(path = "/admin/day-off-types")
-    public ResponseEntity<DayOffType> create(@RequestBody DayOffType newDayOffType) {
-
-        DayOffType dayOffType = dayOffTypeService.create(newDayOffType);
-
-        return new ResponseEntity<>(dayOffType, HttpStatus.OK);
-    }
-
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PutMapping(path = "/admin/day-off-types")
-    public ResponseEntity<DayOffType> update(@RequestBody DayOffType newDayOffType)
-                                                    throws DayOffTypeIsNotExistException {
-
-        DayOffType dayOffType = dayOffTypeService.update(newDayOffType);
-
-        return new ResponseEntity<>(dayOffType, HttpStatus.OK);
-    }
-
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @DeleteMapping(path = "/admin/day-off-types/{id}")
-    public ResponseEntity<DayOffType> delete(@PathVariable("id") int id)
-                                                    throws DayOffTypeIsNotExistException {
-
-        DayOffType dayOffType = dayOffTypeService.delete(id);
-
-        return new ResponseEntity<>(dayOffType, HttpStatus.OK);
-    }
-
 }

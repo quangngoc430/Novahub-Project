@@ -21,7 +21,7 @@ import javax.mail.MessagingException;
 import java.io.IOException;
 
 @RestController
-@RequestMapping(path = "/api", produces = {MediaType.APPLICATION_JSON_VALUE})
+@RequestMapping(path = "/api/day-offs/", produces = {MediaType.APPLICATION_JSON_VALUE})
 public class DayOffController {
 
     @Autowired
@@ -31,7 +31,7 @@ public class DayOffController {
     private AccountService accountService;
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping(path = "/day-offs")
+    @GetMapping
     public ResponseEntity<Page<DayOff>> getUserLoginDayOffs(@RequestParam(name = "status", required = false, defaultValue = "") String status,
                                                            Pageable pageable) {
         Account account = accountService.getAccountLogin();
@@ -41,7 +41,7 @@ public class DayOffController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping(path = "/day-offs/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<DayOff> getById(@PathVariable("id") long id)
                                                throws DayOffIsNotExistException, AccountNotFoundException {
         DayOff dayOff = dayOffService.getById(id);
@@ -49,7 +49,7 @@ public class DayOffController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @PostMapping(path = "/day-offs")
+    @PostMapping
     public ResponseEntity<DayOff> create(@RequestBody DayOff dayOff)
             throws MessagingException,
             IOException,

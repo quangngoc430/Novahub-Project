@@ -94,6 +94,16 @@ public class DayOffAccountServiceImpl implements DayOffAccountService {
         return dayOffAccountRepository.findAll(pageable);
     }
 
+    @Override
+    public DayOffAccount getById(long id) throws DayOffAccountNotFoundException {
+        Optional<DayOffAccount> dayOffAccountOptional = dayOffAccountRepository.findById(id);
+
+        if (!dayOffAccountOptional.isPresent()) {
+            throw new DayOffAccountNotFoundException(id);
+        }
+
+        return dayOffAccountOptional.get();
+    }
 
     @Override
     public Page<DayOffAccount> findByAccountId(long accountId, Pageable pageable) {
