@@ -22,7 +22,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 @Service
-public class    MailServiceImpl implements MailService {
+public class MailServiceImpl implements MailService {
 
     @Autowired
     private JavaMailSender mailSender;
