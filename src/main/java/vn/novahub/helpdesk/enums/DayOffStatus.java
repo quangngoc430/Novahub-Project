@@ -1,7 +1,7 @@
 package vn.novahub.helpdesk.enums;
 
-public enum DayOffEnum {
-    PENDING,
+public enum DayOffStatus {
+    PENDING ,
     APPROVED,
     DENIED,
     CANCELLED,

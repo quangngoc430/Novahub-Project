@@ -45,6 +45,23 @@ public interface DayOffService {
             AccountNotFoundException,
             IOException;
 
+    DayOff approve(long dayOffId)
+            throws DayOffIsAnsweredException,
+            DayOffTokenIsNotMatchException,
+            DayOffIsNotExistException,
+            MessagingException,
+            AccountNotFoundException,
+            IOException ;
+
+
+    DayOff deny(long dayOffId)
+            throws DayOffIsAnsweredException,
+            DayOffTokenIsNotMatchException,
+            DayOffIsNotExistException,
+            MessagingException,
+            AccountNotFoundException,
+            IOException;
+
     DayOff cancel(long dayOffId)
             throws DayOffIsAnsweredException,
             DayOffTokenIsNotMatchException,

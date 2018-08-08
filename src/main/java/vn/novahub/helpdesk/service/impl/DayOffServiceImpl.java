@@ -5,7 +5,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import vn.novahub.helpdesk.enums.DayOffEnum;
+import vn.novahub.helpdesk.enums.DayOffStatus;
 import vn.novahub.helpdesk.enums.RoleEnum;
 import vn.novahub.helpdesk.exception.*;
 import vn.novahub.helpdesk.model.*;
@@ -69,7 +69,7 @@ public class DayOffServiceImpl implements DayOffService {
 
     @Override
     public Page<DayOff> getAllByAccountIdAndStatus(long accountId, String status, Pageable pageable) {
-        if (status.equals(DayOffEnum.NONCANCELLED.name())) {
+        if (status.equals(DayOffStatus.NONCANCELLED.name())) {
             return dayOffRepository.findNonCancelledByAccountId(accountId, pageable);
         } else if (status.equals("")) {
             return dayOffRepository.findAllByAccountId(accountId, pageable);
@@ -80,7 +80,7 @@ public class DayOffServiceImpl implements DayOffService {
 
     @Override
     public Page<DayOff> getAllByStatusAndKeyword(String status, String keyword, Pageable pageable) {
-        if (status.equals(DayOffEnum.NONCANCELLED.name())) {
+        if (status.equals(DayOffStatus.NONCANCELLED.name())) {
             return dayOffRepository.findNonCancelledByKeyword(keyword, pageable);
         }
 
@@ -117,7 +117,7 @@ public class DayOffServiceImpl implements DayOffService {
 
         if (dayOff.getToken().equals(token)) {
             dayOff.getDayOffAccount().subtractRemainingTime(dayOff.getNumberOfHours());
-            answerDayOffRequest(dayOff, DayOffEnum.APPROVED.name());
+            answerDayOffRequest(dayOff, DayOffStatus.APPROVED.name());
             sendEmailDayOff(dayOff, RoleEnum.USER.name());
             sendEmailDayOff(dayOff, RoleEnum.CLERK.name());
         } else {
@@ -138,10 +138,51 @@ public class DayOffServiceImpl implements DayOffService {
         DayOff dayOff = checkIfRequestIsAnswered(dayOffId);
 
         if (dayOff.getToken().equals(token)) {
-            answerDayOffRequest(dayOff, DayOffEnum.DENIED.name());
+            answerDayOffRequest(dayOff, DayOffStatus.DENIED.name());
         } else {
             throw new DayOffTokenIsNotMatchException();
         }
+
+        sendEmailDayOff(dayOff, RoleEnum.USER.name());
+
+        sendEmailDayOff(dayOff, RoleEnum.CLERK.name());
+
+        return dayOff;
+    }
+
+    @Override
+    public DayOff approve(long dayOffId)
+            throws DayOffIsAnsweredException,
+            DayOffTokenIsNotMatchException,
+            DayOffIsNotExistException,
+            MessagingException,
+            AccountNotFoundException,
+            IOException {
+
+        DayOff dayOff = checkIfRequestIsAnswered(dayOffId);
+
+        answerDayOffRequest(dayOff, DayOffStatus.APPROVED.name());
+
+        sendEmailDayOff(dayOff, RoleEnum.USER.name());
+
+        sendEmailDayOff(dayOff, RoleEnum.CLERK.name());
+
+        return dayOff;
+    }
+
+    @Override
+    public DayOff deny(long dayOffId)
+            throws
+            DayOffIsAnsweredException,
+            DayOffTokenIsNotMatchException,
+            DayOffIsNotExistException,
+            MessagingException,
+            AccountNotFoundException,
+            IOException {
+
+        DayOff dayOff = checkIfRequestIsAnswered(dayOffId);
+
+        answerDayOffRequest(dayOff, DayOffStatus.DENIED.name());
 
         sendEmailDayOff(dayOff, RoleEnum.USER.name());
 
@@ -161,18 +202,12 @@ public class DayOffServiceImpl implements DayOffService {
             IOException {
 
         Optional<DayOff> dayOffOptional = dayOffRepository.findById(dayOffId);
-        Account account = accountService.getAccountLogin();
 
         if (!dayOffOptional.isPresent()) {
             throw new DayOffIsNotExistException(dayOffId);
         }
 
-        if (dayOffOptional.get().getAccountId() != account.getId()
-                && !account.getRole().getName().equals(RoleEnum.ADMIN.name())) {
-            throw new AccountNotFoundException("Account is not admin or not own this day off");
-        }
-
-        if (dayOffOptional.get().getStatus().equals(DayOffEnum.CANCELLED.name())) {
+        if (dayOffOptional.get().getStatus().equals(DayOffStatus.CANCELLED.name())) {
             throw new DayOffIsAnsweredException(dayOffId);
         }
 
@@ -182,9 +217,9 @@ public class DayOffServiceImpl implements DayOffService {
 
         returnTheRemainingTime(dayOffOptional.get(), dayOffOptional.get().getDayOffAccount());
 
-        DayOff dayOff = answerDayOffRequest(dayOffOptional.get(), DayOffEnum.CANCELLED.name());
+        DayOff dayOff = answerDayOffRequest(dayOffOptional.get(), DayOffStatus.CANCELLED.name());
 
-        sendEmailDayOff(dayOff, RoleEnum.ADMIN.name());
+        sendEmailDayOff(dayOff, RoleEnum.USER.name());
 
         sendEmailDayOff(dayOff, RoleEnum.CLERK.name());
 
@@ -239,7 +274,7 @@ public class DayOffServiceImpl implements DayOffService {
         LocalDateTime createdDate = LocalDateTime.now();
         dayOff.setCreatedAt(createdDate);
         dayOff.setUpdatedAt(createdDate);
-        dayOff.setStatus(DayOffEnum.PENDING.name());
+        dayOff.setStatus(DayOffStatus.PENDING.name());
         dayOff.setToken(tokenService.generateToken(accountLogin.getId() + dayOff.getComment()));
         dayOff.setAccountId(accountLogin.getId());
     }
@@ -278,12 +313,12 @@ public class DayOffServiceImpl implements DayOffService {
             content = content.replace("{url-approve-day-off}", hostUrl +
                     "/api/day-offs/" +
                     dayOff.getId() +
-                    "/answer?status=" + DayOffEnum.APPROVED.name() +
+                    "/answer?status=" + DayOffStatus.APPROVED.name() +
                     "&token=" + dayOff.getToken());
             content = content.replace("{url-deny-day-off}", hostUrl +
                     "/api/day-offs/" +
                     dayOff.getId() +
-                    "/answer?status=" + DayOffEnum.DENIED.name() +
+                    "/answer?status=" + DayOffStatus.DENIED.name() +
                     "&token=" + dayOff.getToken());
         }
 

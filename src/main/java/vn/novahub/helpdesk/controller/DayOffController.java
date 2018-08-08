@@ -9,13 +9,14 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import vn.novahub.helpdesk.enums.DayOffEnum;
+import vn.novahub.helpdesk.enums.DayOffStatus;
 import vn.novahub.helpdesk.exception.*;
 import vn.novahub.helpdesk.model.Account;
 import vn.novahub.helpdesk.model.DayOff;
 import vn.novahub.helpdesk.service.AccountService;
 import vn.novahub.helpdesk.service.DayOffService;
 
+import javax.annotation.security.PermitAll;
 import javax.mail.MessagingException;
 import java.io.IOException;
 
@@ -59,54 +60,6 @@ public class DayOffController {
         dayOff = dayOffService.add(dayOff);
 
         return new ResponseEntity<>(dayOff, HttpStatus.OK);
-    }
-
-
-
-    @GetMapping(path = "/day-offs/{id}/answer")
-    public ResponseEntity<DayOff> answer(@PathVariable("id") long dayOffId,
-                                          @RequestParam("status") String status,
-                                          @RequestParam(name = "token") String token)
-                                             throws DayOffIsAnsweredException,
-                                                    DayOffTokenIsNotMatchException,
-                                                    DayOffIsNotExistException,
-                                                    MessagingException,
-                                                    AccountNotFoundException,
-                                                    IOException {
-        DayOff dayOff;
-        if (status.equals(DayOffEnum.APPROVED.name())) {
-            dayOff = dayOffService.approve(dayOffId, token);
-        } else if (status.equals(DayOffEnum.DENIED.name())) {
-            dayOff = dayOffService.deny(dayOffId, token);
-        } else {
-            throw new RequestAbortedException("The parameter \'status\' is not valid");
-        }
-        return new ResponseEntity<>(dayOff, HttpStatus.OK);
-    }
-
-    @PreAuthorize("isAuthenticated()")
-    @GetMapping(path = "/day-offs/{id}/cancel")
-    public ResponseEntity<DayOff> cancel(@PathVariable("id") long dayOffId)
-                                            throws DayOffIsAnsweredException,
-                                            DayOffTokenIsNotMatchException,
-                                            DayOffIsNotExistException,
-                                            MessagingException,
-                                            AccountNotFoundException,
-                                            DayOffOverdueException,
-                                            IOException {
-
-        return new ResponseEntity<>(dayOffService.cancel(dayOffId), HttpStatus.OK);
-    }
-
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping(path = "/admin/day-offs")
-    public ResponseEntity<Page<DayOff>> getAllDayOffs(
-            @RequestParam(name = "status", required = false, defaultValue = "") String status,
-            @RequestParam(name= "keyword", required = false, defaultValue = "") String keyword,
-            Pageable pageable) {
-        return new ResponseEntity<>(
-                dayOffService.getAllByStatusAndKeyword(status, keyword ,pageable),
-                HttpStatus.OK);
     }
 
 }
