@@ -1,16 +1,29 @@
 package vn.novahub.helpdesk.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
+import vn.novahub.helpdesk.enums.RoleEnum;
+import vn.novahub.helpdesk.exception.AccountInactiveException;
+import vn.novahub.helpdesk.exception.AccountInvalidException;
+import vn.novahub.helpdesk.exception.AccountLockedException;
+import vn.novahub.helpdesk.exception.AccountValidationException;
+import vn.novahub.helpdesk.model.Account;
+import vn.novahub.helpdesk.model.Role;
 import vn.novahub.helpdesk.model.Token;
+import vn.novahub.helpdesk.service.AccountService;
+import vn.novahub.helpdesk.service.impl.AccountServiceImpl;
 
 import java.io.IOException;
 
@@ -26,48 +39,63 @@ public class RoleRestControllerTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    private static Token token;
+    private Token token;
+    private String url;
+
+    @InjectMocks
+    private AccountServiceImpl accountServiceImpl;
 
     @Before
-    public void setup() throws IOException {
-        if(token == null) {
+    public void before() throws IOException {
+        url = "http://localhost:" + port;
 
-            ObjectMapper objectMapper = new ObjectMapper();
+        ObjectMapper objectMapper = new ObjectMapper();
 
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
 
-            String email = "helpdesk@novahub.vn";
-            String password = "password";
-            String requestBodyJson = "{\"email\":\"" + email + "\", \"password\":\"" + password + "\"}";
+        String email = "helpdesk@novahub.vn";
+        String password = "password";
+        String requestBodyJson = "{\"email\":\"" + email + "\", \"password\":\"" + password + "\"}";
 
+        HttpEntity<String> entity = new HttpEntity<>(requestBodyJson, headers);
+        ResponseEntity<?> responseEntity = restTemplate.exchange(url + "/api/login", HttpMethod.POST, entity, Object.class);
 
-            HttpEntity<String> entity = new HttpEntity<>(requestBodyJson, headers);
-            ResponseEntity<?> responseEntity = restTemplate.exchange("http://localhost:" + port + "/api/login", HttpMethod.POST, entity, Object.class);
-
-
-            token = objectMapper.convertValue(responseEntity.getBody(), Token.class);
-            System.out.println(token);
-        }
+        token = objectMapper.convertValue(responseEntity.getBody(), Token.class);
     }
 
     @Test
-    public void getARole_shouldReturnNotFound() throws Exception {
+    public void testGetARole() throws AccountLockedException, AccountValidationException, AccountInvalidException, AccountInactiveException {
+        Account account = new Account();
+        account.setEmail("helpdesk@novahub.vn");
+        account.setPassword("password");
+        Token token1 = accountServiceImpl.login(account);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("access_token", token.getAccessToken());
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        HttpEntity entity = new HttpEntity(headers);
+
+        ResponseEntity<?> responseEntity = restTemplate.exchange(url + "/api/roles/1", HttpMethod.GET, entity, Object.class);
+        Role role = objectMapper.convertValue(responseEntity.getBody(), Role.class);
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(RoleEnum.ADMIN.name(), role.getName());
+
+        responseEntity = restTemplate.exchange(url + "/api/roles/4", HttpMethod.GET, entity, Object.class);
+        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+    }
+
+    @After
+    public void after() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("access_token", token.getAccessToken());
 
         HttpEntity entity = new HttpEntity(headers);
 
-
-        ResponseEntity<?> responseEntity = restTemplate.exchange("http://localhost:" + port + "/api/roles/4", HttpMethod.GET, entity, Object.class);
-        System.out.println(responseEntity.getBody());
-        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
-    }
-
-    @Test
-    public void a() {
-
+        restTemplate.exchange(url + "/api/logout", HttpMethod.GET, entity, Object.class);
     }
 
 }
