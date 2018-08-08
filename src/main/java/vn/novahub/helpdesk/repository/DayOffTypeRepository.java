@@ -8,4 +8,7 @@ import vn.novahub.helpdesk.model.DayOffType;
 @Repository
 public interface DayOffTypeRepository
         extends JpaRepository<DayOffType, Integer> {
+
+    DayOffType findByType(String type);
+
 }

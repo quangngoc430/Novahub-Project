@@ -51,7 +51,7 @@ public class DayOffServiceImpl implements DayOffService {
     @Override
     public DayOff add(DayOff dayOff)
             throws MessagingException,
-            DayOffTypeIsNotExistException,
+            DayOffTypeNotFoundException,
             DayOffAccountIsExistException,
             AccountNotFoundException,
             IOException {
@@ -227,7 +227,7 @@ public class DayOffServiceImpl implements DayOffService {
     }
 
 
-    private void initialize(DayOff dayOff) throws DayOffTypeIsNotExistException, DayOffAccountIsExistException {
+    private void initialize(DayOff dayOff) throws DayOffTypeNotFoundException, DayOffAccountIsExistException {
 
         DayOffType dayOffType = checkIfDayOffTypeIsExist(dayOff);
 
@@ -242,18 +242,18 @@ public class DayOffServiceImpl implements DayOffService {
     }
 
     private DayOffType checkIfDayOffTypeIsExist(DayOff dayOff)
-                                            throws DayOffTypeIsNotExistException {
+                                            throws DayOffTypeNotFoundException {
         Optional<DayOffType> commonDayOffType =
                 dayOffTypeRepository.findById(dayOff.getDayOffAccount().getDayOffTypeId());
         if (!commonDayOffType.isPresent()) {
-            throw new DayOffTypeIsNotExistException();
+            throw new DayOffTypeNotFoundException();
         }
         return commonDayOffType.get();
     }
 
     private DayOffAccount updateOrCreateDayOffAccount(DayOffType dayOffType, int year)
             throws DayOffAccountIsExistException,
-            DayOffTypeIsNotExistException {
+            DayOffTypeNotFoundException {
         Account accountLogin = accountService.getAccountLogin();
         DayOffAccount dayOffAccount =  dayOffAccountRepository
                 .findByAccountIdAndDayOffTypeIdAndYear(

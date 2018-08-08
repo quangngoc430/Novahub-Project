@@ -12,7 +12,7 @@ public interface DayOffService {
 
     DayOff add(DayOff dayOff)
             throws MessagingException,
-            DayOffTypeIsNotExistException,
+            DayOffTypeNotFoundException,
             DayOffAccountIsExistException,
             AccountNotFoundException,
             IOException;

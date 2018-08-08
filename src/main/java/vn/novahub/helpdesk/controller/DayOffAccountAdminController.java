@@ -10,10 +10,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.novahub.helpdesk.exception.DayOffAccountIsExistException;
 import vn.novahub.helpdesk.exception.DayOffAccountNotFoundException;
-import vn.novahub.helpdesk.exception.DayOffTypeIsNotExistException;
-import vn.novahub.helpdesk.model.Account;
+import vn.novahub.helpdesk.exception.DayOffTypeNotFoundException;
 import vn.novahub.helpdesk.model.DayOffAccount;
-import vn.novahub.helpdesk.service.AccountService;
 import vn.novahub.helpdesk.service.DayOffAccountService;
 
 @RestController
@@ -27,7 +25,7 @@ public class DayOffAccountAdminController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
     public ResponseEntity<DayOffAccount> create(@RequestBody DayOffAccount dayOffAccount)
-            throws DayOffAccountIsExistException, DayOffTypeIsNotExistException {
+            throws DayOffAccountIsExistException, DayOffTypeNotFoundException {
 
         return new ResponseEntity<>(dayOffAccountService.add(dayOffAccount), HttpStatus.OK);
     }

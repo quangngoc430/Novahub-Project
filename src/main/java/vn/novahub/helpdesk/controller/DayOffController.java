@@ -1,6 +1,5 @@
 package vn.novahub.helpdesk.controller;
 
-import org.apache.http.impl.execchain.RequestAbortedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -9,14 +8,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import vn.novahub.helpdesk.enums.DayOffStatus;
 import vn.novahub.helpdesk.exception.*;
 import vn.novahub.helpdesk.model.Account;
 import vn.novahub.helpdesk.model.DayOff;
 import vn.novahub.helpdesk.service.AccountService;
 import vn.novahub.helpdesk.service.DayOffService;
 
-import javax.annotation.security.PermitAll;
 import javax.mail.MessagingException;
 import java.io.IOException;
 
@@ -54,7 +51,7 @@ public class DayOffController {
             throws MessagingException,
             IOException,
             DayOffAccountIsExistException,
-            DayOffTypeIsNotExistException,
+            DayOffTypeNotFoundException,
             AccountNotFoundException {
 
         dayOff = dayOffService.add(dayOff);

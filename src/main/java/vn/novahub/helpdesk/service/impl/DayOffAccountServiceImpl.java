@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import vn.novahub.helpdesk.exception.DayOffAccountIsExistException;
 import vn.novahub.helpdesk.exception.DayOffAccountNotFoundException;
-import vn.novahub.helpdesk.exception.DayOffTypeIsNotExistException;
+import vn.novahub.helpdesk.exception.DayOffTypeNotFoundException;
 import vn.novahub.helpdesk.model.Account;
 import vn.novahub.helpdesk.model.DayOffAccount;
 import vn.novahub.helpdesk.model.DayOffType;
@@ -35,7 +35,7 @@ public class DayOffAccountServiceImpl implements DayOffAccountService {
     @Override
     public DayOffAccount add(DayOffAccount dayOffAccount)
             throws DayOffAccountIsExistException,
-            DayOffTypeIsNotExistException {
+            DayOffTypeNotFoundException {
 
         Account account = accountService.getAccountLogin();
 
@@ -43,7 +43,7 @@ public class DayOffAccountServiceImpl implements DayOffAccountService {
                 dayOffTypeRepository.findById(dayOffAccount.getDayOffTypeId());
 
         if (!commonDayOffType.isPresent()) {
-            throw new DayOffTypeIsNotExistException();
+            throw new DayOffTypeNotFoundException();
         }
 
         dayOffAccount.setPrivateQuota(commonDayOffType.get().getDefaultQuota());

@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import vn.novahub.helpdesk.exception.DayOffTypeIsNotExistException;
+import vn.novahub.helpdesk.exception.DayOffTypeNotFoundException;
 import vn.novahub.helpdesk.model.DayOffType;
 import vn.novahub.helpdesk.service.DayOffTypeService;
 import java.util.List;
@@ -31,7 +31,7 @@ public class DayOffTypeController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}")
     public ResponseEntity<DayOffType> getTypeById(@PathVariable("id") int id)
-                                            throws DayOffTypeIsNotExistException {
+                                            throws DayOffTypeNotFoundException {
         return new ResponseEntity<>(dayOffTypeService.getById(id), HttpStatus.OK);
     }
 

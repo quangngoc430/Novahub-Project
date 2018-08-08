@@ -6,11 +6,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import vn.novahub.helpdesk.exception.DayOffTypeIsNotExistException;
+import vn.novahub.helpdesk.exception.DayOffTypeExistException;
+import vn.novahub.helpdesk.exception.DayOffTypeNotFoundException;
 import vn.novahub.helpdesk.model.DayOffType;
 import vn.novahub.helpdesk.service.DayOffTypeService;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(path = "/api/admin/day-off-types", produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -22,7 +21,8 @@ public class DayOffTypeAdminController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
-    public ResponseEntity<DayOffType> create(@RequestBody DayOffType newDayOffType) {
+    public ResponseEntity<DayOffType> create(@RequestBody DayOffType newDayOffType)
+                                                                    throws DayOffTypeExistException {
 
         DayOffType dayOffType = dayOffTypeService.create(newDayOffType);
 
@@ -32,7 +32,7 @@ public class DayOffTypeAdminController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping
     public ResponseEntity<DayOffType> update(@RequestBody DayOffType newDayOffType)
-                                                    throws DayOffTypeIsNotExistException {
+                                                    throws DayOffTypeNotFoundException {
 
         DayOffType dayOffType = dayOffTypeService.update(newDayOffType);
 
@@ -42,7 +42,7 @@ public class DayOffTypeAdminController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<DayOffType> delete(@PathVariable("id") int id)
-                                                    throws DayOffTypeIsNotExistException {
+                                                    throws DayOffTypeNotFoundException {
 
         DayOffType dayOffType = dayOffTypeService.delete(id);
 
