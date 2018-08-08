@@ -40,7 +40,7 @@ public class DayOffTypeAdminController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<DayOffType> delete(@PathVariable("id") int id)
                                                     throws DayOffTypeIsNotExistException {
 

@@ -19,14 +19,14 @@ import javax.mail.MessagingException;
 import java.io.IOException;
 
 @RestController
-@RequestMapping(path = "/api/admin/day-offs/", produces = {MediaType.APPLICATION_JSON_VALUE})
+@RequestMapping(path = "/api/admin/day-offs", produces = {MediaType.APPLICATION_JSON_VALUE})
 public class DayOffAdminController {
 
     @Autowired
     private DayOffService dayOffService;
 
     @PermitAll
-    @GetMapping("{id}/answer-token")
+    @GetMapping("/{id}/answer-token")
     public ResponseEntity<DayOff> answerWithToken(@PathVariable("id") long dayOffId,
                                           @RequestParam("status") String status,
                                           @RequestParam(name = "token") String token)
@@ -52,7 +52,7 @@ public class DayOffAdminController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping("{id}/answer")
+    @GetMapping("/{id}/answer")
     public ResponseEntity<DayOff> answerWithoutToken(@PathVariable("id") long dayOffId,
                                                   @RequestParam("status") String status)
             throws DayOffIsAnsweredException,

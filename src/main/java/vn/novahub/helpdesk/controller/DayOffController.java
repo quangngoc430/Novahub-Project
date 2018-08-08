@@ -21,7 +21,7 @@ import javax.mail.MessagingException;
 import java.io.IOException;
 
 @RestController
-@RequestMapping(path = "/api/day-offs/", produces = {MediaType.APPLICATION_JSON_VALUE})
+@RequestMapping(path = "/api/day-offs", produces = {MediaType.APPLICATION_JSON_VALUE})
 public class DayOffController {
 
     @Autowired
@@ -41,7 +41,7 @@ public class DayOffController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<DayOff> getById(@PathVariable("id") long id)
                                                throws DayOffIsNotExistException, AccountNotFoundException {
         DayOff dayOff = dayOffService.getById(id);

@@ -14,7 +14,7 @@ import vn.novahub.helpdesk.service.AccountService;
 import vn.novahub.helpdesk.service.DayOffAccountService;
 
 @RestController
-@RequestMapping(path = "/api", produces = {MediaType.APPLICATION_JSON_VALUE})
+@RequestMapping(path = "/api/day-off-accounts", produces = {MediaType.APPLICATION_JSON_VALUE})
 public class DayOffAccountController {
 
     @Autowired
@@ -24,7 +24,7 @@ public class DayOffAccountController {
     private AccountService accountService;
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping(path = "/day-off-accounts")
+    @GetMapping
     public ResponseEntity<Page<DayOffAccount>> userGet(Pageable pageable) {
         Account account = accountService.getAccountLogin();
 

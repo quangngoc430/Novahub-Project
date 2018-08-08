@@ -52,7 +52,7 @@ public class DayOffAccountAdminController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PutMapping("{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<DayOffAccount> update(@RequestBody DayOffAccount dayOffAccount,
                                                 @PathVariable("id") long id)
                                                       throws DayOffAccountNotFoundException {

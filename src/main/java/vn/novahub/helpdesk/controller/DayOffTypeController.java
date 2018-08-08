@@ -13,14 +13,14 @@ import vn.novahub.helpdesk.service.DayOffTypeService;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/api", produces = {MediaType.APPLICATION_JSON_VALUE})
+@RequestMapping(path = "/api/day-off-types", produces = {MediaType.APPLICATION_JSON_VALUE})
 public class DayOffTypeController {
 
     @Autowired
     private DayOffTypeService dayOffTypeService;
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping(path = "/day-off-types")
+    @GetMapping
     public ResponseEntity<List<DayOffType>> getAllType() {
 
         List<DayOffType> dayOffTypes = dayOffTypeService.getAllDayOffType();
@@ -29,7 +29,7 @@ public class DayOffTypeController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping(path = "/day-off-types/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<DayOffType> getTypeById(@PathVariable("id") int id)
                                             throws DayOffTypeIsNotExistException {
         return new ResponseEntity<>(dayOffTypeService.getById(id), HttpStatus.OK);
