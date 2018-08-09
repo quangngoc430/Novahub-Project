@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 @Component
-public class SeedingCategory {
+public class CategoriesSeeder {
 
     @Autowired
     private CategoryRepository categoryRepository;
