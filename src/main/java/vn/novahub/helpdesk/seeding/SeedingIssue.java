@@ -18,7 +18,7 @@ import java.util.Date;
 import java.util.Random;
 
 @Component
-public class SeedingIssue {
+public class IssuesSeeder {
 
     @Autowired
     private ResourceLoader resourceLoader;
