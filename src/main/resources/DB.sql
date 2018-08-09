@@ -13,11 +13,14 @@ CREATE TABLE `role` (
 DROP TABLE IF EXISTS `account`;
 CREATE TABLE `account` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `email` varchar(45) NOT NULL,
+  `email` varchar(45) UNIQUE NOT NULL,
   `first_name` varchar(45) DEFAULT NULL,
   `last_name` varchar(45) DEFAULT NULL,
   `birth_day` datetime,
   `address` varchar(250),
+  `phone` varchar(20),
+  `title` varchar(250),
+  `introduction` varchar(1000),
   `avatar_url` varchar(500) DEFAULT NULL,
   `password` varchar(200),
   `status` varchar(100) NOT NULL,
