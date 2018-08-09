@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 @Component
-public class SeedingAccount {
+public class AccountsSeeder {
 
     @Autowired
     private ResourceLoader resourceLoader;
