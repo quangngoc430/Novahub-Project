@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 public class HomeController {
 
     private static String PREFIX = "ROLE_";
-
+    
     @PermitAll
     @RequestMapping("/login")
     public String login() {
