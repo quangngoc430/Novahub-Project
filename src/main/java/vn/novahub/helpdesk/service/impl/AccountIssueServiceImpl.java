@@ -70,7 +70,7 @@ public class AccountIssueServiceImpl implements AccountIssueService {
     public Issue findOne(long issueId) throws IssueNotFoundException {
         Account accountLogin = accountService.getAccountLogin();
 
-        Issue issue = issueRepository.getByIdAndAccountId(issueId, accountLogin.getId());
+        Issue issue = issueRepository.getByIdAndAccountIdAndStatusIsNot(issueId, accountLogin.getId(), IssueEnum.CANCELLED.name());
 
         if (issue == null)
             throw new IssueNotFoundException(issueId, accountLogin.getId());
@@ -143,10 +143,14 @@ public class AccountIssueServiceImpl implements AccountIssueService {
     public void delete(long issueId) throws IssueNotFoundException {
         Account accountLogin = accountService.getAccountLogin();
 
-        if (!issueRepository.existsByIdAndAccountId(issueId, accountLogin.getId()))
+        Issue issue = issueRepository.getByIdAndAccountIdAndStatusIsNot(issueId, accountLogin.getId(), IssueEnum.CANCELLED.name());
+
+        if (issue == null)
             throw new IssueNotFoundException(issueId, accountLogin.getId());
 
-        issueRepository.deleteByIdAndAccountId(issueId, accountLogin.getId());
+        issue.setStatus(IssueEnum.CANCELLED.name());
+
+        issueRepository.save(issue);
     }
 
     private void sendMailCreateIssueForAdmin(Issue issue, Account accountLogin) throws MessagingException, IOException {
