@@ -9,28 +9,28 @@ import java.text.ParseException;
 import java.util.ArrayList;
 
 @Component
-public class SeedingData {
+public class ApplicationSeeder {
 
     @Autowired
-    private SeedingAccount seedingAccount;
+    private AccountsSeeder accountsSeeder;
 
     @Autowired
-    private SeedingCategory seedingCategory;
+    private CategoriesSeeder categoriesSeeder;
 
     @Autowired
-    private SeedingSkill seedingSkill;
+    private SkillsSeeder skillsSeeder;
 
     @Autowired
-    private SeedingLevel seedingLevel;
+    private LevelsSeeder levelsSeeder;
 
     @Autowired
-    private SeedingIssue seedingIssue;
+    private IssuesSeeder issuesSeeder;
 
     public void generateData() throws IOException, ParseException {
-        ArrayList<Account> accountArrayList = seedingAccount.generateData("seeding/account-data.json");
-        ArrayList<Category> categoryArrayList = seedingCategory.generateData("seeding/category-data.json");
-        ArrayList<Skill> skillArrayList = seedingSkill.generateData("seeding/skill-data.json");
-        ArrayList<Level> levelArrayList = seedingLevel.generateData(accountArrayList, skillArrayList);
-        ArrayList<Issue> issueArrayList = seedingIssue.generateData("seeding/issue-data.json", accountArrayList);
+        ArrayList<Account> accountArrayList = accountsSeeder.generateData("seeding/account-data.json");
+        ArrayList<Category> categoryArrayList = categoriesSeeder.generateData("seeding/category-data.json");
+        ArrayList<Skill> skillArrayList = skillsSeeder.generateData("seeding/skill-data.json");
+        ArrayList<Level> levelArrayList = levelsSeeder.generateData(accountArrayList, skillArrayList);
+        ArrayList<Issue> issueArrayList = issuesSeeder.generateData("seeding/issue-data.json", accountArrayList);
     }
 }
