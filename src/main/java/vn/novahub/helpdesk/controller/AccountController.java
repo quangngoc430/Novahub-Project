@@ -100,17 +100,6 @@ public class AccountController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping(path = "/users", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Page<Account>> getAll(@RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
-                                                @RequestParam(value = "status", required = false, defaultValue = "") String status,
-                                                @RequestParam(value = "role", required = false, defaultValue = "") String role,
-                                                Pageable pageable){
-        Page<Account> accounts = accountService.getAll(keyword, status, role, pageable);
-
-        return new ResponseEntity<>(accounts, HttpStatus.OK);
-    }
-
     @PermitAll
     @PostMapping(path = "/users", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Account> create(@RequestBody Account account) throws AccountIsExistException, RoleNotFoundException, AccountValidationException, MessagingException, IOException {
@@ -156,24 +145,6 @@ public class AccountController {
         Account account = accountService.get(accountId);
 
         return new ResponseEntity<>(account, HttpStatus.OK);
-    }
-
-    @PreAuthorize("(hasRole('ROLE_ADMIN') and (@accountServiceImpl.isAccountLogin(#accountId) == false))")
-    @PutMapping(path = "/users/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Account> updateForAdmin(@PathVariable("id") long accountId,
-                                                  @RequestBody Account account) throws AccountValidationException, AccountNotFoundException {
-
-        Account accountUpdated = accountService.updatedForAdmin(accountId, account);
-
-        return new ResponseEntity<>(accountUpdated, HttpStatus.OK);
-    }
-
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @DeleteMapping(path = "/users/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Void> delete(@PathVariable(value = "id") long accountId) throws AccountNotFoundException {
-        accountService.delete(accountId);
-
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PermitAll

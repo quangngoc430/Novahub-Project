@@ -27,6 +27,7 @@ import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.groups.Default;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Optional;
 
@@ -36,6 +37,9 @@ public class AccountServiceImpl implements AccountService {
 
     @Value("${subject_email_sign_up}")
     private String subjectEmailSignUp;
+
+    @Value("${host_url}")
+    private String hostUrl;
 
     @Autowired
     private Environment env;
@@ -255,7 +259,7 @@ public class AccountServiceImpl implements AccountService {
         Mail mail = new Mail();
         mail.setEmailReceiving(new String[]{account.getEmail()});
         mail.setSubject(env.getProperty("subject_email_sign_up"));
-        String urlAccountActive = "http://localhost:8080/api/users/" + account.getId() + "/active?token=" + account.getVerificationToken();
+        String urlAccountActive = hostUrl + "/api/users/" + account.getId() + "/active?token=" + account.getVerificationToken();
         String contentEmailSignUp = mailService.getContentMail("sign_up.html");
         contentEmailSignUp = contentEmailSignUp.replace("{url-activate-account}", urlAccountActive);
         mail.setContent(contentEmailSignUp);
@@ -287,16 +291,23 @@ public class AccountServiceImpl implements AccountService {
             }
         }
 
-        if(account.getFirstName() != null)
+        if(account.getFirstName() != null && !account.getFirstName().isEmpty())
             oldAccount.setFirstName(account.getFirstName());
-        if(account.getLastName() != null)
+        if(account.getLastName() != null && !account.getLastName().isEmpty())
             oldAccount.setLastName(account.getLastName());
         if(account.getDayOfBirth() != null)
             oldAccount.setDayOfBirth(account.getDayOfBirth());
-        if(account.getAddress() != null)
+        if(account.getAddress() != null && !account.getAddress().isEmpty())
             oldAccount.setAddress(account.getAddress());
-        if(account.getAvatarUrl() != null)
+        if(account.getAvatarUrl() != null && !account.getAvatarUrl().isEmpty())
             oldAccount.setAvatarUrl(account.getAvatarUrl());
+        if(account.getTitle() != null && !account.getTitle().isEmpty())
+            oldAccount.setTitle(account.getTitle());
+        if(account.getPhone() != null && !account.getPhone().isEmpty())
+            oldAccount.setPhone(account.getPhone());
+        if(account.getIntroduction() != null && !account.getIntroduction().isEmpty())
+            oldAccount.setIntroduction(account.getIntroduction());
+
         oldAccount.setUpdatedAt(new Date());
 
         accountValidation.validate(oldAccount, Default.class);
@@ -319,16 +330,22 @@ public class AccountServiceImpl implements AccountService {
             oldAccount.setPassword(bCryptPasswordEncoder.encode(account.getPassword()));
         }
 
-        if(account.getFirstName() != null)
+        if(account.getFirstName() != null && !account.getFirstName().isEmpty())
             oldAccount.setFirstName(account.getFirstName());
-        if(account.getLastName() != null)
+        if(account.getLastName() != null && !account.getLastName().isEmpty())
             oldAccount.setLastName(account.getLastName());
         if(account.getDayOfBirth() != null)
             oldAccount.setDayOfBirth(account.getDayOfBirth());
-        if(account.getAddress() != null)
+        if(account.getAddress() != null && !account.getAddress().isEmpty())
             oldAccount.setAddress(account.getAddress());
-        if(account.getAvatarUrl() != null)
+        if(account.getAvatarUrl() != null && !account.getAvatarUrl().isEmpty())
             oldAccount.setAvatarUrl(account.getAvatarUrl());
+        if(account.getTitle() != null && !account.getTitle().isEmpty())
+            oldAccount.setTitle(account.getTitle());
+        if(account.getPhone() != null && !account.getPhone().isEmpty())
+            oldAccount.setPhone(account.getPhone());
+        if(account.getIntroduction() != null && !account.getIntroduction().isEmpty())
+            oldAccount.setIntroduction(account.getIntroduction());
         if(account.getStatus() != null) {
             if(oldAccount.getStatus().equals(AccountEnum.INACTIVE.name())
                     && account.getStatus().equals(AccountEnum.ACTIVE.name()))
@@ -343,6 +360,32 @@ public class AccountServiceImpl implements AccountService {
 
         oldAccount.setUpdatedAt(new Date());
         return accountRepository.save(oldAccount);
+    }
+
+    @Override
+    public ArrayList<String> getAllEmailsOfAdmin() {
+        ArrayList<Account> adminList = (ArrayList<Account>) (accountRepository.getAllByRoleName(RoleEnum.ADMIN.name()));
+
+        ArrayList<String> emails = new ArrayList<>();
+
+        if(adminList != null)
+            for (Account account : adminList)
+                emails.add(account.getEmail());
+
+        return emails;
+    }
+
+    @Override
+    public ArrayList<String> getAllEmailsOfClerk() {
+        ArrayList<Account> clerkList = (ArrayList<Account>) (accountRepository.getAllByRoleName(RoleEnum.CLERK.name()));
+
+        ArrayList<String> emails = new ArrayList<>();
+
+        if(clerkList != null)
+            for (Account account : clerkList)
+                emails.add(account.getEmail());
+
+        return emails;
     }
 
     @Override

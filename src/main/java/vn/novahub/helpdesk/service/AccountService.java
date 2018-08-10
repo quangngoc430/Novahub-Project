@@ -9,6 +9,7 @@ import vn.novahub.helpdesk.model.Token;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public interface AccountService {
 
@@ -37,6 +38,10 @@ public interface AccountService {
     Account update(Account account) throws AccountValidationException, AccountPasswordNotEqualException;
 
     Account updatedForAdmin(long accountId, Account account) throws AccountValidationException, AccountNotFoundException;
+
+    ArrayList<String> getAllEmailsOfAdmin();
+
+    ArrayList<String> getAllEmailsOfClerk();
 
     void delete(long accountId) throws AccountNotFoundException;
 }

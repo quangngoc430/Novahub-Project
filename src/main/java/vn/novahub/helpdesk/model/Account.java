@@ -48,6 +48,17 @@ public class Account implements Serializable {
     @Column(name = "address")
     private String address;
 
+    @Pattern(regexp = "^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\\s\\./0-9]*$", message = "phone have the wrong pattern",
+             groups = {GroupCreateAccount.class})
+    @Column(name = "phone")
+    private String phone;
+
+    @Column(name = "title")
+    private String title;
+
+    @Column(name = "introduction")
+    private String introduction;
+
     @JsonProperty(value = "avatar_url")
     @Column(name = "avatar_url")
     private String avatarUrl;
@@ -157,6 +168,30 @@ public class Account implements Serializable {
         this.address = address;
     }
 
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getIntroduction() {
+        return introduction;
+    }
+
+    public void setIntroduction(String introduction) {
+        this.introduction = introduction;
+    }
+
     public String getAvatarUrl() {
         return avatarUrl;
     }
@@ -263,13 +298,16 @@ public class Account implements Serializable {
                 ", lastName='" + lastName + '\'' +
                 ", dayOfBirth=" + dayOfBirth +
                 ", address='" + address + '\'' +
+                ", phone='" + phone + '\'' +
+                ", title='" + title + '\'' +
+                ", introduction='" + introduction + '\'' +
                 ", avatarUrl='" + avatarUrl + '\'' +
                 ", password='" + password + '\'' +
                 ", status='" + status + '\'' +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 ", joiningDate=" + joiningDate +
-                ", vertificationToken='" + verificationToken + '\'' +
+                ", verificationToken='" + verificationToken + '\'' +
                 ", roleId=" + roleId +
                 ", newPassword='" + newPassword + '\'' +
                 ", role=" + role +

@@ -25,59 +25,7 @@ import java.io.IOException;
 public class IssueController {
 
     @Autowired
-    private AdminIssueService adminIssueService;
-
-    @Autowired
     private AccountIssueService accountIssueService;
-
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping(path = "/issues", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Page<Issue>> getAllByAdmin(@RequestParam(name = "keyword", required = false, defaultValue = "") String keyword,
-                                                     @RequestParam(name = "status", required = false, defaultValue = "") String status,
-                                                     Pageable pageable){
-        Page<Issue> issuePage = adminIssueService.getAllByKeywordAndStatus(keyword, status, pageable);
-
-        return new ResponseEntity<>(issuePage, HttpStatus.OK);
-    }
-
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping(path = "/issues/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Issue> findOneByAdmin(@PathVariable(name = "issueId") long issueId) throws IssueNotFoundException {
-        return new ResponseEntity<>(adminIssueService.findOne(issueId), HttpStatus.OK);
-    }
-
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PutMapping(path = "/issues/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Issue> updateForAdmin(@PathVariable(name = "issueId") long issueId,
-                                                @RequestBody Issue issue) throws IssueValidationException, IssueNotFoundException, MessagingException, IOException {
-        Issue issueUpdated = adminIssueService.update(issueId, issue);
-
-        return new ResponseEntity<>(issueUpdated, HttpStatus.OK);
-    }
-
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @DeleteMapping(path = "/issues/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Void> deleteByAdmin(@PathVariable(name = "issueId") long issueId) throws IssueNotFoundException {
-        adminIssueService.delete(issueId);
-
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @PermitAll
-    @GetMapping(path = "/issues/{issueId}/action", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Void> action(@RequestParam(name = "status", required = false, defaultValue = "") String status,
-                                       @RequestParam(name = "token", required = false, defaultValue = "") String token,
-                                       @PathVariable(name = "issueId") long issueId) throws IssueNotFoundException, IssueIsClosedException, MessagingException, IOException {
-        if(status.equals(IssueEnum.APPROVE.name())) {
-            adminIssueService.approve(issueId, token);
-        } else if(status.equals(IssueEnum.DENY.name())){
-            adminIssueService.deny(issueId, token);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-        }
-
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping(path = "/issues/me", produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -116,6 +64,22 @@ public class IssueController {
     @DeleteMapping(path = "/issues/me/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Void> delete(@PathVariable(name = "issueId") long issueId) throws IssueNotFoundException {
         accountIssueService.delete(issueId);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PermitAll
+    @GetMapping(path = "/issues/{issueId}/action", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Void> action(@RequestParam(name = "status", required = false, defaultValue = "") String status,
+                                       @RequestParam(name = "token", required = false, defaultValue = "") String token,
+                                       @PathVariable(name = "issueId") long issueId) throws IssueNotFoundException, IssueIsClosedException, MessagingException, IOException {
+        if(status.equals(IssueEnum.APPROVE.name())) {
+            accountIssueService.approve(issueId, token);
+        } else if(status.equals(IssueEnum.DENY.name())){
+            accountIssueService.deny(issueId, token);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        }
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

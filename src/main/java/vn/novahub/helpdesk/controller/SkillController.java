@@ -39,27 +39,6 @@ public class SkillController {
         return new ResponseEntity<>(adminSkillService.findOne(skillId), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping(path = "/skills", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Skill> createByAdmin(@RequestBody Skill skill) throws SkillIsExistException, SkillValidationException, CategoryNotFoundException {
-        return new ResponseEntity<>(adminSkillService.create(skill), HttpStatus.OK);
-    }
-
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PutMapping(path = "/skills/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Skill> updateByAdmin(@PathVariable("id") long skillId,
-                                               @RequestBody Skill skill) throws SkillIsExistException, SkillValidationException, SkillNotFoundException, CategoryNotFoundException {
-        return new ResponseEntity<>(adminSkillService.update(skillId, skill), HttpStatus.OK);
-    }
-
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @DeleteMapping(path = "/skills/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Void> deleteByAdmin(@PathVariable("id") long skillId) throws SkillNotFoundException {
-        adminSkillService.delete(skillId);
-
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
     @PreAuthorize("isAuthenticated()")
     @GetMapping(path = "/skills/{id}/users", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Page<Account>> getAllUsersBySkillId(@PathVariable("id") long skillId,
