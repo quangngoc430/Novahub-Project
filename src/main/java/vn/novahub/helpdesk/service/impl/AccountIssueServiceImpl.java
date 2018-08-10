@@ -204,24 +204,5 @@ public class AccountIssueServiceImpl implements AccountIssueService {
         mailService.sendHTMLMail(mail);
     }
 
-<<<<<<< HEAD
 }
-=======
-    private ArrayList<String> getEmailsOfAdminAndClerk(){
-        ArrayList<Account> adminList = (ArrayList<Account>) (accountRepository.getAllByRoleName(RoleEnum.ADMIN.name()));
-        ArrayList<Account> clerkList = (ArrayList<Account>) (accountRepository.getAllByRoleName(RoleEnum.CLERK.name()));
 
-        ArrayList<String> emails = new ArrayList<>();
-
-        if(adminList != null)
-            for (Account account : adminList)
-                emails.add(account.getEmail());
-
-        if(clerkList != null)
-            for (Account account : clerkList)
-                emails.add(account.getEmail());
-
-        return emails;
-    }
-}
->>>>>>> develop
