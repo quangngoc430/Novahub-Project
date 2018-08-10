@@ -38,7 +38,9 @@ public class DayOffAdminController {
                                                     IOException {
         DayOff dayOff;
 
-        switch (DayOffStatus.valueOf(status)) {
+        DayOffStatus dayOffStatus = DayOffStatus.valueOf(status);
+
+        switch (dayOffStatus) {
             case APPROVED:
                 dayOff = dayOffService.approve(dayOffId, token);
                 break;
@@ -62,9 +64,11 @@ public class DayOffAdminController {
             AccountNotFoundException,
             DayOffOverdueException,
             IOException {
-        DayOff dayOff;
 
-        switch (DayOffStatus.valueOf(status)) {
+        DayOff dayOff;
+        DayOffStatus dayOffStatus = DayOffStatus.valueOf(status);
+
+        switch (dayOffStatus) {
             case APPROVED:
                 dayOff = dayOffService.approve(dayOffId);
                 break;

@@ -65,6 +65,7 @@ public class DayOff {
     @Column(name = "day_off_account_id")
     private long dayOffAccountId;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER, targetEntity = DayOffAccount.class)
     @JoinColumn(name = "day_off_account_id", insertable = false, updatable = false)
     private DayOffAccount dayOffAccount;
