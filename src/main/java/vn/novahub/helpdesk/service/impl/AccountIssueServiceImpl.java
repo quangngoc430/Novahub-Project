@@ -1,6 +1,7 @@
 package vn.novahub.helpdesk.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
@@ -34,6 +35,9 @@ import java.util.Optional;
 @Service
 @PropertySource("classpath:email.properties")
 public class AccountIssueServiceImpl implements AccountIssueService {
+
+    @Value("${host_url}")
+    private String hostUrl;
 
     @Autowired
     private Environment env;
@@ -70,7 +74,7 @@ public class AccountIssueServiceImpl implements AccountIssueService {
     public Issue findOne(long issueId) throws IssueNotFoundException {
         Account accountLogin = accountService.getAccountLogin();
 
-        Issue issue = issueRepository.getByIdAndAccountId(issueId, accountLogin.getId());
+        Issue issue = issueRepository.getByIdAndAccountIdAndStatusIsNot(issueId, accountLogin.getId(), IssueEnum.CANCELLED.name());
 
         if (issue == null)
             throw new IssueNotFoundException(issueId, accountLogin.getId());
@@ -143,10 +147,14 @@ public class AccountIssueServiceImpl implements AccountIssueService {
     public void delete(long issueId) throws IssueNotFoundException {
         Account accountLogin = accountService.getAccountLogin();
 
-        if (!issueRepository.existsByIdAndAccountId(issueId, accountLogin.getId()))
+        Issue issue = issueRepository.getByIdAndAccountIdAndStatusIsNot(issueId, accountLogin.getId(), IssueEnum.CANCELLED.name());
+
+        if (issue == null)
             throw new IssueNotFoundException(issueId, accountLogin.getId());
 
-        issueRepository.deleteByIdAndAccountId(issueId, accountLogin.getId());
+        issue.setStatus(IssueEnum.CANCELLED.name());
+
+        issueRepository.save(issue);
     }
 
     private void sendMailCreateIssueForAdmin(Issue issue, Account accountLogin) throws MessagingException, IOException {
@@ -161,8 +169,8 @@ public class AccountIssueServiceImpl implements AccountIssueService {
         content = content.replace("{content}", issue.getContent());
         content = content.replace("{status}", issue.getStatus());
         content = content.replace("{reply-message}", (issue.getReplyMessage() == null) ? IssueEnum.NONE.name() : issue.getReplyMessage());
-        content = content.replace("{url-approve-issue}", "http://localhost:8080/api/issues/" + issue.getId() + "/action?status=APPROVE&token=" + issue.getToken());
-        content = content.replace("{url-deny-issue}", "http://localhost:8080/api/issues/" + issue.getId() + "/action?status=DENY&token=" + issue.getToken());
+        content = content.replace("{url-approve-issue}", hostUrl + "/api/issues/" + issue.getId() + "/action?status=APPROVE&token=" + issue.getToken());
+        content = content.replace("{url-deny-issue}", hostUrl + "/api/issues/" + issue.getId() + "/action?status=DENY&token=" + issue.getToken());
         mail.setContent(content);
 
         mail.setEmailReceiving(mailService.getEmailsOfAdminAndClerk().toArray(new String[0]));
@@ -196,4 +204,24 @@ public class AccountIssueServiceImpl implements AccountIssueService {
         mailService.sendHTMLMail(mail);
     }
 
+<<<<<<< HEAD
 }
+=======
+    private ArrayList<String> getEmailsOfAdminAndClerk(){
+        ArrayList<Account> adminList = (ArrayList<Account>) (accountRepository.getAllByRoleName(RoleEnum.ADMIN.name()));
+        ArrayList<Account> clerkList = (ArrayList<Account>) (accountRepository.getAllByRoleName(RoleEnum.CLERK.name()));
+
+        ArrayList<String> emails = new ArrayList<>();
+
+        if(adminList != null)
+            for (Account account : adminList)
+                emails.add(account.getEmail());
+
+        if(clerkList != null)
+            for (Account account : clerkList)
+                emails.add(account.getEmail());
+
+        return emails;
+    }
+}
+>>>>>>> develop
