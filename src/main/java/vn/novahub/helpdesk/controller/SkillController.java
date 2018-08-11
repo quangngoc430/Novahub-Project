@@ -79,4 +79,11 @@ public class SkillController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping(path = "/users/{id}/skills", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Page<Skill>> getAllByAccountId(@PathVariable("id") long accountId,
+                                                         Pageable pageable) throws AccountNotFoundException {
+        return new ResponseEntity<>(accountSkillService.getAllByAccountId(accountId, pageable), HttpStatus.OK);
+    }
 }

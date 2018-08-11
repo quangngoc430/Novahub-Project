@@ -1,9 +1,6 @@
 package vn.novahub.helpdesk.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -30,14 +27,7 @@ import java.util.Date;
 import java.util.Optional;
 
 @Service
-@PropertySource("classpath:email.properties")
 public class AccountIssueServiceImpl implements AccountIssueService {
-
-    @Value("${host_url}")
-    private String hostUrl;
-
-    @Autowired
-    private Environment env;
 
     @Autowired
     private AccountRepository accountRepository;

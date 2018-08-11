@@ -13,10 +13,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.novahub.helpdesk.exception.*;
 import vn.novahub.helpdesk.model.Account;
-import vn.novahub.helpdesk.model.Skill;
 import vn.novahub.helpdesk.model.Token;
 import vn.novahub.helpdesk.service.AccountService;
-import vn.novahub.helpdesk.service.AccountSkillService;
 
 import javax.annotation.security.PermitAll;
 import javax.mail.MessagingException;
@@ -33,9 +31,6 @@ public class AccountController {
 
     @Autowired
     private AccountService accountService;
-
-    @Autowired
-    private AccountSkillService accountSkillService;
 
     @GetMapping(path = "/authentication-token")
     public void authenticationToken(HttpServletRequest request,
@@ -100,6 +95,17 @@ public class AccountController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping(path = "/users", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Page<Account>> getAll(@RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
+                                                @RequestParam(value = "status", required = false, defaultValue = "") String status,
+                                                @RequestParam(value = "role", required = false, defaultValue = "") String role,
+                                                Pageable pageable){
+        Page<Account> accounts = accountService.getAll(keyword, status, role, pageable);
+
+        return new ResponseEntity<>(accounts, HttpStatus.OK);
+    }
+
     @PermitAll
     @PostMapping(path = "/users", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Account> create(@RequestBody Account account) throws AccountIsExistException, RoleNotFoundException, AccountValidationException, MessagingException, IOException {
@@ -150,20 +156,12 @@ public class AccountController {
     @PermitAll
     @GetMapping(path = "/users/{id}/active", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Void> activate(@PathVariable(value = "id") long accountId,
-                                         @RequestParam(value = "token", defaultValue = "") String verificationToken){
+                                         @RequestParam(value = "token", defaultValue = "") String verificationToken) {
         boolean result = accountService.activateAccount(accountId, verificationToken);
 
-        if(!result)
+        if (!result)
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
-    @PreAuthorize("isAuthenticated()")
-    @GetMapping(path = "/users/{id}/skills", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Page<Skill>> getAllByAccountId(@PathVariable("id") long accountId,
-                                                         Pageable pageable) throws AccountNotFoundException {
-        return new ResponseEntity<>(accountSkillService.getAllByAccountId(accountId, pageable), HttpStatus.OK);
-    }
-
 }

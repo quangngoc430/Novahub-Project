@@ -1,8 +1,6 @@
 package vn.novahub.helpdesk.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -23,11 +21,7 @@ import java.util.Date;
 import java.util.Optional;
 
 @Service
-@PropertySource("classpath:email.properties")
 public class AdminIssueServiceImpl implements AdminIssueService {
-
-    @Autowired
-    private Environment env;
 
     @Autowired
     private IssueRepository issueRepository;
@@ -106,7 +100,6 @@ public class AdminIssueServiceImpl implements AdminIssueService {
         if (issue.getToken() == null || issue.getStatus().equals(IssueEnum.APPROVE.name()) || issue.getStatus().equals(IssueEnum.DENY.name()))
             throw new IssueIsClosedException(issueId);
 
-        issue.setToken(null);
         issue.setStatus(IssueEnum.APPROVE.name());
         issue = issueRepository.save(issue);
 
@@ -124,7 +117,6 @@ public class AdminIssueServiceImpl implements AdminIssueService {
         if (issue.getToken() == null || issue.getStatus().equals(IssueEnum.APPROVE.name()) || issue.getStatus().equals(IssueEnum.DENY.name()))
             throw new IssueIsClosedException(issueId);
 
-        issue.setToken(null);
         issue.setStatus(IssueEnum.DENY.name());
         issue = issueRepository.save(issue);
 
