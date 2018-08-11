@@ -43,7 +43,7 @@ public interface IssueRepository extends PagingAndSortingRepository<Issue, Long>
                                                                                  @Param("status") String status,
                                                                                  Pageable pageable);
 
-    Issue getByIdAndTokenAndStatusIsNot(long issueId, String token, String status);
+    Issue getByIdAndToken(long issueId, String token);
 
     Issue getByIdAndStatusIsNot(long issueId, String status);
 

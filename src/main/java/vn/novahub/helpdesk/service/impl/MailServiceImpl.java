@@ -99,6 +99,7 @@ public class MailServiceImpl implements MailService {
     }
 
     @Override
+    @Async
     public void sendMailCreateIssueForAdminAndClerk(Issue issue, Account accountLogin) throws MessagingException, IOException {
         Mail mailForAdmin = new Mail();
         String subjectForAdmin = env.getProperty("subject_email_create_issue");
@@ -137,6 +138,7 @@ public class MailServiceImpl implements MailService {
     }
 
     @Override
+    @Async
     public void sendMailUpdateIssueForAdmin(Issue issue) throws MessagingException, IOException, AccountNotFoundException {
         Optional<Account> accountOptional = accountRepository.findById(issue.getAccountId());
 
@@ -164,6 +166,7 @@ public class MailServiceImpl implements MailService {
     }
 
     @Override
+    @Async
     public void sendMailUpdateIssueForUser(Issue issue) throws MessagingException, IOException {
         Optional<Account> accountOptional = accountRepository.findById(issue.getAccountId());
 
@@ -187,6 +190,7 @@ public class MailServiceImpl implements MailService {
     }
 
     @Override
+    @Async
     public void sendMailUpdateIssueForClerk(Issue issue) throws IOException, MessagingException {
         Optional<Account> accountOptional = accountRepository.findById(issue.getAccountId());
 

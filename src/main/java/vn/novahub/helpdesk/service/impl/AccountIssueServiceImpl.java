@@ -81,15 +81,20 @@ public class AccountIssueServiceImpl implements AccountIssueService {
 
     @Override
     public void approve(long issueId, String token) throws IssueNotFoundException, IssueIsClosedException, MessagingException, IOException {
-        Issue issue = issueRepository.getByIdAndTokenAndStatusIsNot(issueId, token, IssueEnum.CANCELLED.name());
+        Optional<Issue> issueOptional = issueRepository.findById(issueId);
 
-        if (issue == null)
+        if (!issueOptional.isPresent()
+                || (!token.equals(issueOptional.get().getToken()))
+                || issueOptional.get().getStatus().equals(IssueEnum.CANCELLED.name()))
             throw new IssueNotFoundException(issueId);
 
-        if (issue.getToken() == null)
+        Issue issue = issueOptional.get();
+
+        if (issue.getToken() == null
+                || issue.getStatus().equals(IssueEnum.APPROVE.name())
+                || issue.getStatus().equals(IssueEnum.DENY.name()))
             throw new IssueIsClosedException(issueId);
 
-        issue.setToken(null);
         issue.setStatus(IssueEnum.APPROVE.name());
         issue = issueRepository.save(issue);
 
@@ -99,15 +104,20 @@ public class AccountIssueServiceImpl implements AccountIssueService {
 
     @Override
     public void deny(long issueId, String token) throws IssueNotFoundException, IssueIsClosedException, MessagingException, IOException {
-        Issue issue = issueRepository.getByIdAndTokenAndStatusIsNot(issueId, token, IssueEnum.CANCELLED.name());
+        Optional<Issue> issueOptional = issueRepository.findById(issueId);
 
-        if (issue == null)
+        if (!issueOptional.isPresent()
+                || (!token.equals(issueOptional.get().getToken()))
+                || issueOptional.get().getStatus().equals(IssueEnum.CANCELLED.name()))
             throw new IssueNotFoundException(issueId);
 
-        if (issue.getToken() == null)
+        Issue issue = issueOptional.get();
+
+        if (issue.getToken() == null
+                || issue.getStatus().equals(IssueEnum.APPROVE.name())
+                || issue.getStatus().equals(IssueEnum.DENY.name()))
             throw new IssueIsClosedException(issueId);
 
-        issue.setToken(null);
         issue.setStatus(IssueEnum.DENY.name());
         issue = issueRepository.save(issue);
 
@@ -189,5 +199,4 @@ public class AccountIssueServiceImpl implements AccountIssueService {
 
         issueRepository.save(issue);
     }
-
 }
