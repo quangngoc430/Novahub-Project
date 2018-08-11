@@ -96,7 +96,7 @@ public class DayOffServiceImpl implements DayOffService {
         if (!dayOffOptional.isPresent()) {
             throw new DayOffIsNotExistException(id);
         }
-        if (dayOffOptional.get().getAccountId() != account.getId()
+        if (dayOffOptional.get().getDayOffAccount().getAccountId() != account.getId()
                 && !account.getRole().getName().equals(RoleEnum.ADMIN.name())) {
             throw new AccountNotFoundException("Account is not admin or not own this day off");
         }
@@ -243,12 +243,12 @@ public class DayOffServiceImpl implements DayOffService {
 
     private DayOffType checkIfDayOffTypeIsExist(DayOff dayOff)
                                             throws DayOffTypeNotFoundException {
-        Optional<DayOffType> commonDayOffType =
+        Optional<DayOffType> dayOffTypeOptional =
                 dayOffTypeRepository.findById(dayOff.getDayOffAccount().getDayOffTypeId());
-        if (!commonDayOffType.isPresent()) {
+        if (!dayOffTypeOptional.isPresent()) {
             throw new DayOffTypeNotFoundException();
         }
-        return commonDayOffType.get();
+        return dayOffTypeOptional.get();
     }
 
     private DayOffAccount updateOrCreateDayOffAccount(DayOffType dayOffType, int year)
@@ -276,7 +276,6 @@ public class DayOffServiceImpl implements DayOffService {
         dayOff.setUpdatedAt(createdDate);
         dayOff.setStatus(DayOffStatus.PENDING.name());
         dayOff.setToken(tokenService.generateToken(accountLogin.getId() + dayOff.getComment()));
-        dayOff.setAccountId(accountLogin.getId());
     }
 
     private void sendEmailDayOff(DayOff dayOff, String receiversRole)
@@ -286,7 +285,7 @@ public class DayOffServiceImpl implements DayOffService {
         String dayOffMailName = env.getProperty("day_off_mail_name");
         String hostUrl = env.getProperty("host_url");
         String[] emailList;
-        Account account = accountService.get(dayOff.getAccountId());
+        Account account = accountService.get(dayOff.getDayOffAccount().getAccountId());
 
         String subject = "Day off request of " +
                account.getEmail() +
@@ -311,14 +310,14 @@ public class DayOffServiceImpl implements DayOffService {
              content = content.replace("<a href=\"{url-deny-day-off}\" style=\"margin-left: 10px;\" class=\"btn btn-deny\">Deny</a>", "");
         } else {
             content = content.replace("{url-approve-day-off}", hostUrl +
-                    "/api/day-offs/" +
+                    "/api/admin/day-offs/" +
                     dayOff.getId() +
-                    "/answer?status=" + DayOffStatus.APPROVED.name() +
+                    "/answer-token?status=" + DayOffStatus.APPROVED.name() +
                     "&token=" + dayOff.getToken());
             content = content.replace("{url-deny-day-off}", hostUrl +
-                    "/api/day-offs/" +
+                    "/api/admin/day-offs/" +
                     dayOff.getId() +
-                    "/answer?status=" + DayOffStatus.DENIED.name() +
+                    "/answer-token?status=" + DayOffStatus.DENIED.name() +
                     "&token=" + dayOff.getToken());
         }
 

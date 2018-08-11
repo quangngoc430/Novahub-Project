@@ -3,6 +3,7 @@ package vn.novahub.helpdesk.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "day_off_account")
@@ -28,14 +29,18 @@ public class DayOffAccount {
     @Column(name = "account_id")
     private long accountId;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER, targetEntity = DayOffType.class)
     @JoinColumn(name = "day_off_type_id", insertable = false, updatable = false)
     private DayOffType dayOffType;
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Account.class)
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Account.class)
     @JoinColumn(name = "account_id", insertable = false, updatable = false)
     private Account account;
+
+    @OneToMany(mappedBy = "dayOffAccount")
+    private Set<DayOff> dayOffs;
 
     public void subtractRemainingTime(int numberOfDayOff) {
         this.remainingTime = this.remainingTime - numberOfDayOff;
@@ -105,6 +110,14 @@ public class DayOffAccount {
         this.accountId = accountId;
     }
 
+    public Set<DayOff> getDayOffs() {
+        return dayOffs;
+    }
+
+    public void setDayOffs(Set<DayOff> dayOffs) {
+        this.dayOffs = dayOffs;
+    }
+
     @Override
     public String toString() {
         return "DayOffAccount{" +
@@ -114,4 +127,5 @@ public class DayOffAccount {
                 ", accountId=" + accountId +
                 '}';
     }
+
 }

@@ -12,6 +12,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "account")
@@ -119,6 +120,9 @@ public class Account implements Serializable {
 
     @Transient
     private Token accessToken;
+
+    @OneToMany(mappedBy = "account")
+    private Set<DayOffAccount> dayOffAccounts;
 
     public long getId() {
         return id;
@@ -278,6 +282,14 @@ public class Account implements Serializable {
 
     public void setAccessToken(Token accessToken) {
         this.accessToken = accessToken;
+    }
+
+    public Set<DayOffAccount> getDayOffAccounts() {
+        return dayOffAccounts;
+    }
+
+    public void setDayOffAccounts(Set<DayOffAccount> dayOffAccounts) {
+        this.dayOffAccounts = dayOffAccounts;
     }
 
     @Transient

@@ -2,6 +2,7 @@ package vn.novahub.helpdesk.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
@@ -59,21 +60,13 @@ public class DayOff {
     @Column(name = "token")
     private String token;
 
-    @Column(name = "account_id")
-    private long accountId;
-
     @Column(name = "day_off_account_id")
     private long dayOffAccountId;
 
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ManyToOne(fetch = FetchType.EAGER, targetEntity = DayOffAccount.class)
     @JoinColumn(name = "day_off_account_id", insertable = false, updatable = false)
     private DayOffAccount dayOffAccount;
-
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Account.class)
-    @JoinColumn(name = "account_id", insertable = false, updatable = false)
-    private Account account;
 
     public DayOff() {
         createdAt = LocalDateTime.now();
@@ -152,14 +145,6 @@ public class DayOff {
         this.token = token;
     }
 
-    public long getAccountId() {
-        return accountId;
-    }
-
-    public void setAccountId(long accountId) {
-        this.accountId = accountId;
-    }
-
     public long getDayOffAccountId() {
         return dayOffAccountId;
     }
@@ -176,13 +161,6 @@ public class DayOff {
         this.dayOffAccount = dayOffAccount;
     }
 
-    public Account getAccount() {
-        return account;
-    }
-
-    public void setAccount(Account account) {
-        this.account = account;
-    }
 
     @Override
     public String toString() {
@@ -195,7 +173,6 @@ public class DayOff {
                 ", updatedAt=" + updatedAt +
                 ", numberOfHours=" + numberOfHours +
                 ", status='" + status + '\'' +
-                ", accountId=" + accountId +
                 ", dayOffAccountId=" + dayOffAccountId +
                 '}';
     }
