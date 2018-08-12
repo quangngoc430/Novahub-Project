@@ -4,6 +4,7 @@ import vn.novahub.helpdesk.model.Mail;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public interface MailService {
 
@@ -12,4 +13,9 @@ public interface MailService {
     void sendHTMLMail(Mail mail) throws MessagingException;
 
     String getContentMail(String fileName) throws IOException;
+
+    ArrayList<String> getEmailsOfAdminAndClerk();
+
+    ArrayList<String> getEmails(String role);
+
 }
