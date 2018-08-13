@@ -19,14 +19,14 @@ import javax.mail.MessagingException;
 import java.io.IOException;
 
 @RestController
-@RequestMapping(path = "/api/admin")
+@RequestMapping(path = "/api/admin/issues")
 public class IssueAdminController {
 
     @Autowired
     private AdminIssueService adminIssueService;
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping(path = "/issues", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Page<Issue>> getAllByAdmin(@RequestParam(name = "keyword", required = false, defaultValue = "") String keyword,
                                                      @RequestParam(name = "status", required = false, defaultValue = "") String status,
                                                      Pageable pageable){
@@ -36,13 +36,13 @@ public class IssueAdminController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping(path = "/issues/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(path = "/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Issue> findOneByAdmin(@PathVariable(name = "issueId") long issueId) throws IssueNotFoundException {
         return new ResponseEntity<>(adminIssueService.findOne(issueId), HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PutMapping(path = "/issues/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PutMapping(path = "/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Issue> updateForAdmin(@PathVariable(name = "issueId") long issueId,
                                                 @RequestBody Issue issue) throws IssueValidationException, IssueNotFoundException, MessagingException, IOException {
         Issue issueUpdated = adminIssueService.update(issueId, issue);
@@ -51,7 +51,7 @@ public class IssueAdminController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @DeleteMapping(path = "/issues/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @DeleteMapping(path = "/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Void> deleteByAdmin(@PathVariable(name = "issueId") long issueId) throws IssueNotFoundException {
         adminIssueService.delete(issueId);
 
@@ -59,7 +59,7 @@ public class IssueAdminController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping(path = "/issues/{issueId}/action", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(path = "/{issueId}/action", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Void> actionForAdmin(@RequestParam(name = "status", required = false, defaultValue = "") String status,
                                                @PathVariable(value = "issueId") long issueId) throws MessagingException, IOException, IssueNotFoundException, IssueIsClosedException {
         if(status.equals(IssueEnum.APPROVE.name())) {
