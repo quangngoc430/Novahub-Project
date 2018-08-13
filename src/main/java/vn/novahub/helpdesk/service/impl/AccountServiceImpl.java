@@ -169,7 +169,7 @@ public class AccountServiceImpl implements AccountService {
             account.setVerificationToken(null);
             account.setPassword(null);
             account.setStatus(AccountEnum.ACTIVE.name());
-            Role role = roleService.getByName(RoleEnum.USER.name());
+            Role role = roleService.getByName(RoleEnum.EMPLOYEE.name());
             account.setRoleId(role.getId());
             account.setCreatedAt(new Date());
             account.setUpdatedAt(new Date());
@@ -250,7 +250,7 @@ public class AccountServiceImpl implements AccountService {
         account.setPassword(bCryptPasswordEncoder.encode(account.getPassword()));
         account.setStatus(AccountEnum.INACTIVE.name());
         account.setVerificationToken(tokenService.generateToken(account.getEmail() + account.getEmail()));
-        account.setRoleId(roleService.getByName(RoleEnum.USER.name()).getId());
+        account.setRoleId(roleService.getByName(RoleEnum.EMPLOYEE.name()).getId());
         account.setCreatedAt(new Date());
         account.setUpdatedAt(new Date());
 
