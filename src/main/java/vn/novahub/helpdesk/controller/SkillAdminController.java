@@ -14,27 +14,27 @@ import vn.novahub.helpdesk.model.Skill;
 import vn.novahub.helpdesk.service.AdminSkillService;
 
 @RestController
-@RequestMapping(path = "/api/admin")
+@RequestMapping(path = "/api/admin/skills")
 public class SkillAdminController {
 
     @Autowired
     private AdminSkillService adminSkillService;
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping(path = "/skills", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Skill> createByAdmin(@RequestBody Skill skill) throws SkillIsExistException, SkillValidationException, CategoryNotFoundException {
         return new ResponseEntity<>(adminSkillService.create(skill), HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PutMapping(path = "/skills/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PutMapping(path = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Skill> updateByAdmin(@PathVariable("id") long skillId,
                                                @RequestBody Skill skill) throws SkillIsExistException, SkillValidationException, SkillNotFoundException, CategoryNotFoundException {
         return new ResponseEntity<>(adminSkillService.update(skillId, skill), HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @DeleteMapping(path = "/skills/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @DeleteMapping(path = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Void> deleteByAdmin(@PathVariable("id") long skillId) throws SkillNotFoundException {
         adminSkillService.delete(skillId);
 
