@@ -2,6 +2,6 @@
   "role": [
     "ADMIN",
     "CLERK",
-    "USER"
+    "EMPLOYEE"
   ]
 }
