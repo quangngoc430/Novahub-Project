@@ -14,7 +14,7 @@ import vn.novahub.helpdesk.model.Skill;
 import vn.novahub.helpdesk.service.*;
 
 @RestController
-@RequestMapping(path = "/api")
+@RequestMapping(path = "/api/categories")
 public class CategoryController {
 
     @Autowired
@@ -24,7 +24,7 @@ public class CategoryController {
     private AccountSkillService accountSkillService;
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping(path = "/categories", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Page<Category>> getAll(@RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
                                                  Pageable pageable) {
         Page<Category> categoryPage = categoryService.getAllByName(keyword, pageable);
@@ -33,7 +33,7 @@ public class CategoryController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping(path = "/categories/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(path = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Category> get(@PathVariable("id") long categoryId) throws CategoryNotFoundException {
         Category category = categoryService.get(categoryId);
 
@@ -41,7 +41,7 @@ public class CategoryController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping(path = "/categories/{id}/skills", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(path = "/{id}/skills", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Page<Skill>> getAllSkillsByCategoryId(@PathVariable("id") long categoryId,
                                                                 @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
                                                                 Pageable pageable) throws CategoryNotFoundException {
@@ -51,7 +51,7 @@ public class CategoryController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping(path = "/categories/{id}/skills/{skill_id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(path = "/{id}/skills/{skill_id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Skill> getASkill(@PathVariable("id") long categoryId,
                                            @PathVariable("skill_id") long skillId) throws SkillNotFoundException {
         Skill skill = accountSkillService.getByCategoryIdAndSkillId(categoryId, skillId);
