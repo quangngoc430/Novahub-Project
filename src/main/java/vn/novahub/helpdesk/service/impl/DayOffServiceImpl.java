@@ -118,7 +118,7 @@ public class DayOffServiceImpl implements DayOffService {
         if (dayOff.getToken().equals(token)) {
             dayOff.getDayOffAccount().subtractRemainingTime(dayOff.getNumberOfHours());
             answerDayOffRequest(dayOff, DayOffStatus.APPROVED.name());
-            sendEmailDayOff(dayOff, RoleEnum.USER.name());
+            sendEmailDayOff(dayOff, RoleEnum.EMPLOYEE.name());
             sendEmailDayOff(dayOff, RoleEnum.CLERK.name());
         } else {
             throw new DayOffTokenIsNotMatchException();
@@ -143,7 +143,7 @@ public class DayOffServiceImpl implements DayOffService {
             throw new DayOffTokenIsNotMatchException();
         }
 
-        sendEmailDayOff(dayOff, RoleEnum.USER.name());
+        sendEmailDayOff(dayOff, RoleEnum.EMPLOYEE.name());
 
         sendEmailDayOff(dayOff, RoleEnum.CLERK.name());
 
@@ -163,7 +163,7 @@ public class DayOffServiceImpl implements DayOffService {
 
         answerDayOffRequest(dayOff, DayOffStatus.APPROVED.name());
 
-        sendEmailDayOff(dayOff, RoleEnum.USER.name());
+        sendEmailDayOff(dayOff, RoleEnum.EMPLOYEE.name());
 
         sendEmailDayOff(dayOff, RoleEnum.CLERK.name());
 
@@ -184,7 +184,7 @@ public class DayOffServiceImpl implements DayOffService {
 
         answerDayOffRequest(dayOff, DayOffStatus.DENIED.name());
 
-        sendEmailDayOff(dayOff, RoleEnum.USER.name());
+        sendEmailDayOff(dayOff, RoleEnum.EMPLOYEE.name());
 
         sendEmailDayOff(dayOff, RoleEnum.CLERK.name());
 
@@ -219,7 +219,7 @@ public class DayOffServiceImpl implements DayOffService {
 
         DayOff dayOff = answerDayOffRequest(dayOffOptional.get(), DayOffStatus.CANCELLED.name());
 
-        sendEmailDayOff(dayOff, RoleEnum.USER.name());
+        sendEmailDayOff(dayOff, RoleEnum.EMPLOYEE.name());
 
         sendEmailDayOff(dayOff, RoleEnum.CLERK.name());
 
@@ -292,7 +292,7 @@ public class DayOffServiceImpl implements DayOffService {
                 " has been " + dayOff.getStatus();
         mail.setSubject(subject);
         String content = mailService.getContentMail(dayOffMailName);
-        if (receiversRole.equals(RoleEnum.USER.name())) {
+        if (receiversRole.equals(RoleEnum.EMPLOYEE.name())) {
             content = content.replace("{email}", RoleEnum.ADMIN.name());
             emailList = new String[]{account.getEmail()};
         } else {
