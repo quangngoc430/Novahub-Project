@@ -3,6 +3,7 @@ CREATE DATABASE helpdesk;
 \c helpdesk;
 
 DROP TABLE IF EXISTS day_off;
+DROP TABLE IF EXISTS day_off_account;
 DROP TABLE IF EXISTS day_off_type;
 DROP TABLE IF EXISTS issue;
 DROP TABLE IF EXISTS account_has_skill;
@@ -59,11 +60,17 @@ CREATE TABLE account_has_skill (
 );
 
 CREATE TABLE day_off_type (
-  id BIGSERIAL PRIMARY KEY,
+  id SERIAL PRIMARY KEY,
   type VARCHAR(20) NOT NULL,
+  default_quota INT NOT NULL
+);
+
+CREATE TABLE day_off_account (
+  id BIGSERIAL PRIMARY KEY,
   year INT NOT NULL,
-  quota INT NOT NULL,
   remaining_time INT NOT NULL,
+  private_quota INT NOT NULL,
+  day_off_type_id INT REFERENCES day_off_type(id),
   account_id INT REFERENCES account(id)
 );
 
@@ -79,8 +86,7 @@ CREATE TABLE day_off (
   status VARCHAR(45) NOT NULL,
   token VARCHAR(255) NOT NULL,
   account_id BIGINT REFERENCES account(id),
-  type VARCHAR(100) NOT NULL,
-  type_id BIGINT REFERENCES day_off_type(type)
+  day_off_account_id BIGINT REFERENCES day_off_account(id)
 );
 
 CREATE TABLE issue (
@@ -106,7 +112,7 @@ VALUES('helpdesk@novahub.vn', 'help', 'desk', '$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KO
 INSERT INTO account(email, first_name, last_name, password, status, role_id)
 VALUES('ngocbui@novahub.vn', 'ngoc', 'bui', '$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja', 'ACTIVE', 3);
 INSERT INTO account(email, first_name, last_name, password, status, role_id)
-VALUES('linhtran@novahub.vn', 'linh', 'tran', '$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja', 'ACTIVE', 3);
+VALUES('linhtran@novahub.vn', 'linh', 'tran', '$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja', 'ACTIVE', 2);
 
 
 INSERT INTO category(name) VALUES
