@@ -13,7 +13,7 @@ import vn.novahub.helpdesk.service.AdminSkillService;
 import vn.novahub.helpdesk.service.CategoryService;
 
 @RestController
-@RequestMapping(path = "/api/admin")
+@RequestMapping(path = "/api/admin/categories")
 public class CategoryAdminController {
 
     @Autowired
@@ -23,7 +23,7 @@ public class CategoryAdminController {
     private CategoryService categoryService;
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping(path = "/categories", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Category> create(@RequestBody Category category) throws CategoryIsExistException, CategoryValidationException {
         Category newCategory = categoryService.create(category);
 
@@ -31,7 +31,7 @@ public class CategoryAdminController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PutMapping(path = "/categories/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PutMapping(path = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Category> update(@PathVariable("id") long categoryId,
                                            @RequestBody Category category) throws CategoryValidationException, CategoryIsExistException, CategoryNotFoundException {
         Category categoryUpdated = categoryService.update(category, categoryId);
@@ -40,7 +40,7 @@ public class CategoryAdminController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @DeleteMapping(path = "/categories/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @DeleteMapping(path = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Void> delete(@PathVariable("id") long categoryId) throws CategoryNotFoundException {
         categoryService.delete(categoryId);
 
@@ -48,7 +48,7 @@ public class CategoryAdminController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping(path = "/categories/{id}/skills", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(path = "/{id}/skills", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Skill> createASkill(@PathVariable("id") long categoryId,
                                               @RequestBody Skill skill) throws SkillIsExistException, SkillValidationException, CategoryNotFoundException {
         Skill newSkill = adminSkillService.createByCategoryId(skill, categoryId);
@@ -57,7 +57,7 @@ public class CategoryAdminController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PutMapping(path = "/categories/{id}/skills/{skill_id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PutMapping(path = "/{id}/skills/{skill_id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Skill> updateASkill(@PathVariable("id") long categoryId,
                                               @PathVariable("skill_id") long skillId,
                                               @RequestBody Skill skill) throws SkillNotFoundException, SkillValidationException, SkillIsExistException {
@@ -68,7 +68,7 @@ public class CategoryAdminController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @DeleteMapping(path = "/categories/{id}/skills/{skill_id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @DeleteMapping(path = "/{id}/skills/{skill_id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Void> deleteASkill(@PathVariable("id") long categoryId,
                                              @PathVariable("skill_id") long skillId) throws SkillNotFoundException {
         adminSkillService.deleteByCategoryIdAndSkillId(categoryId, skillId);
