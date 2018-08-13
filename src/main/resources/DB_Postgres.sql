@@ -2,17 +2,17 @@ DROP DATABASE IF EXISTS helpdesk;
 CREATE DATABASE helpdesk;
 \c helpdesk;
 
-DROP TABLE IF EXISTS role;
-DROP TABLE IF EXISTS account;
-DROP TABLE IF EXISTS day_off;
-DROP TABLE IF EXISTS day_off_account;
-DROP TABLE IF EXISTS day_off_type;
-DROP TABLE IF EXISTS issue;
-DROP TABLE IF EXISTS account_has_skill;
-DROP TABLE IF EXISTS skill;
-DROP TABLE IF EXISTS level;
-DROP TABLE IF EXISTS category;
-DROP TABLE IF EXISTS token;
+DROP TABLE IF EXISTS role CASCADE;
+DROP TABLE IF EXISTS account CASCADE ;
+DROP TABLE IF EXISTS day_off CASCADE ;
+DROP TABLE IF EXISTS day_off_account CASCADE ;
+DROP TABLE IF EXISTS day_off_type CASCADE ;
+DROP TABLE IF EXISTS issue CASCADE ;
+DROP TABLE IF EXISTS account_has_skill CASCADE ;
+DROP TABLE IF EXISTS skill CASCADE ;
+DROP TABLE IF EXISTS level CASCADE ;
+DROP TABLE IF EXISTS category CASCADE ;
+DROP TABLE IF EXISTS token CASCADE ;
 
 CREATE TABLE role (
   id BIGSERIAL PRIMARY KEY,
@@ -123,34 +123,45 @@ CREATE TABLE issue (
 );
 
 
+INSERT INTO role(name) VALUES ('ADMIN');
+INSERT INTO role(name) VALUES ('CLERK');
+INSERT INTO role(name) VALUES ('USER');
 
-INSERT INTO role(name) VALUES (''ADMIN'');
-INSERT INTO role(name) VALUES (''CLERK'');
-INSERT INTO role(name) VALUES (''USER'');
-
 INSERT INTO account(email, first_name, last_name, password, status, role_id)
-VALUES(''helpdesk@novahub.vn'', ''help'', ''desk'', ''$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja'', ''ACTIVE'', 1);
+VALUES('helpdesk@novahub.vn', 'help', 'desk', '$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja', 'ACTIVE', 1);
 INSERT INTO account(email, first_name, last_name, password, status, role_id)
-VALUES(''ngocbui@novahub.vn'', ''ngoc'', ''bui'', ''$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja'', ''ACTIVE'', 3);
+VALUES('ngocbui@novahub.vn', 'ngoc', 'bui', '$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja', 'ACTIVE', 3);
 INSERT INTO account(email, first_name, last_name, password, status, role_id)
-VALUES(''linhtran@novahub.vn'', ''linh'', ''tran'', ''$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja'', ''ACTIVE'', 2);
+VALUES('linhtran@novahub.vn', 'linh', 'tran', '$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja', 'ACTIVE', 2);
 
 
 INSERT INTO category(name) VALUES
-(''Programming Language''),
-(''Backend Framework''),
-(''Frontend Framework''),
-(''Web Design'');
+('Programming Language'),
+('Backend Framework'),
+('Frontend Framework'),
+('Web Design');
 
-INSERT INTO skill(name, category_id, level) VALUES
-(''Java'', 1, 7),
-(''Ruby'', 1, 6),
-(''C#'', 1, 5),
-(''Python'', 1, 2),
-(''Spring'', 2, 3),
-(''Rails'', 2, 5),
-(''Angular'', 3, 10),
-(''Reactjs'', 3, 6);
+INSERT INTO skill(name, category_id) VALUES
+('Java', 1),
+('Ruby', 1),
+('C#', 1),
+('Python', 1),
+('Spring', 2),
+('Rails', 2),
+('Angular', 3),
+('Reactjs', 3);
+
+INSERT INTO level(value, skill_id, account_id) VALUES
+(7, 1, 1),
+(6, 1, 2),
+(7, 2, 1),
+(7, 2, 3),
+(5, 3, 1),
+(4, 3, 2),
+(6, 3, 3),
+(5, 4, 1),
+(6, 5, 1),
+(6, 5, 2);
 
 INSERT INTO account_has_skill(account_id, skill_id) VALUES
 (1, 1),
@@ -162,14 +173,14 @@ INSERT INTO account_has_skill(account_id, skill_id) VALUES
 (2, 6);
 
 INSERT INTO issue(title, content, status, account_id)
-VALUES(''title'', ''content'', ''PENDING'', 1);
+VALUES('title', 'content', 'PENDING', 1);
 INSERT INTO issue(title, content, status, account_id)
-VALUES(''title1'', ''content1'', ''PENDING'', 1);
+VALUES('title1', 'content1', 'PENDING', 1);
 INSERT INTO issue(title, content, status, account_id)
-VALUES(''title'', ''content'', ''PENDING'', 2);
+VALUES('title', 'content', 'PENDING', 2);
 INSERT INTO issue(title, content, status, account_id)
-VALUES(''title1'', ''content1'', ''PENDING'', 2);
+VALUES('title1', 'content1', 'PENDING', 2);
 INSERT INTO issue(title, content, status, account_id)
-VALUES(''title'', ''content'', ''PENDING'', 3);
+VALUES('title', 'content', 'PENDING', 3);
 INSERT INTO issue(title, content, status, account_id)
-VALUES(''title1'', ''content1'', ''PENDING'', 3);
+VALUES('title1', 'content1', 'PENDING', 3);
