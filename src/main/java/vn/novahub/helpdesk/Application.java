@@ -1,5 +1,7 @@
 package vn.novahub.helpdesk;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,6 +19,8 @@ import java.text.ParseException;
 @EnableAsync
 public class Application {
 
+	private final static Logger logger = LoggerFactory.getLogger(Application.class);
+
 	@Autowired
 	private ApplicationSeeder applicationSeeder;
 
@@ -27,7 +31,7 @@ public class Application {
 	@Bean
 	@Profile("dev")
 	public String dev() throws IOException, ParseException {
-		System.out.println("-------------------------- DEV ENVIRONMENT --------------------------");
+		logger.info("\n-------------------------- DEV ENVIRONMENT --------------------------");
 		applicationSeeder.generateData();
 		return "dev";
 	}
@@ -35,14 +39,14 @@ public class Application {
 	@Bean
 	@Profile("prod")
 	public String prod() {
-		System.out.println("-------------------------- PROD ENVIRONMENT --------------------------");
+		logger.info("\n-------------------------- PROD ENVIRONMENT --------------------------");
 		return "prod";
 	}
 
 	@Bean
 	@Profile("test")
 	public String test() {
-		System.out.println("-------------------------- TEST ENVIRONMENT --------------------------");
+		logger.info("\n-------------------------- TEST ENVIRONMENT --------------------------");
 		return "test";
 	}
 }
