@@ -4,5 +4,6 @@ public enum IssueEnum {
     NONE,
     APPROVE,
     DENY,
-    PENDING
+    PENDING,
+    CANCELLED
 }

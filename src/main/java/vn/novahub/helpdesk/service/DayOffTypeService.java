@@ -1,21 +1,20 @@
 package vn.novahub.helpdesk.service;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import vn.novahub.helpdesk.exception.DayOffTypeIsExistException;
-import vn.novahub.helpdesk.exception.DayOffTypeIsNotValidException;
+import vn.novahub.helpdesk.exception.DayOffTypeExistException;
 import vn.novahub.helpdesk.exception.DayOffTypeNotFoundException;
 import vn.novahub.helpdesk.model.DayOffType;
 
+import java.util.List;
+
 public interface DayOffTypeService {
 
-    DayOffType add(DayOffType dayOffType) throws DayOffTypeIsExistException, DayOffTypeIsNotValidException;
+    List<DayOffType> getAllDayOffType();
 
-    void update(DayOffType dayOffType) throws DayOffTypeNotFoundException;
+    DayOffType getById(int id) throws DayOffTypeNotFoundException;
 
-    void delete(DayOffType dayOffType);
+    DayOffType create(DayOffType dayOffType) throws DayOffTypeExistException;
 
-    DayOffType getById(long typeId) throws DayOffTypeNotFoundException;
+    DayOffType update(DayOffType dayOffType) throws DayOffTypeNotFoundException;
 
-    Page<DayOffType> findByAccountId(long accountId, Pageable pageable);
+    DayOffType delete(int id) throws DayOffTypeNotFoundException;
 }

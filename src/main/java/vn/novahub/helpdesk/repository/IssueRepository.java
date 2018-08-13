@@ -26,22 +26,25 @@ public interface IssueRepository extends PagingAndSortingRepository<Issue, Long>
     @Query("FROM Issue issue " +
            "WHERE issue.accountId = :accountId " +
            "AND (issue.title LIKE CONCAT('%', :keyword, '%') " +
-            "OR issue.content LIKE CONCAT('%', :keyword, '%'))")
+           "OR issue.content LIKE CONCAT('%', :keyword, '%')) " +
+           "AND issue.status <> 'CANCELLED'")
     Page<Issue> getAllByAccountIdAndTitleContainingOrContentContaining(@Param("accountId") long accountId,
                                                                        @Param("keyword") String keyword,
                                                                        Pageable pageable);
 
     @Query("FROM Issue issue " +
-           "WHERE issue.status = :status " +
+           "WHERE issue.status = :status AND issue.status <> 'CANCELLED' " +
            "AND issue.accountId = :accountId " +
            "AND (issue.title LIKE CONCAT('%', :keyword, '%') " +
-            "OR issue.content LIKE CONCAT('%', :keyword, '%'))")
+           "OR issue.content LIKE CONCAT('%', :keyword, '%'))")
     Page<Issue> getAllByAccountIdAndStatusAndTitleContainingAndContentContaining(@Param("accountId") long accountId,
                                                                                  @Param("keyword") String keyword,
                                                                                  @Param("status") String status,
                                                                                  Pageable pageable);
 
     Issue findByIdAndToken(long id, String token);
+
+    Issue getByIdAndAccountIdAndStatusIsNot(long issueId, long accountId, String status);
 
     boolean existsByIdAndAccountId(long issueId, long accountId);
 

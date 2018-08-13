@@ -1,6 +1,6 @@
 INSERT INTO `role`(name) VALUES ("ADMIN");
 INSERT INTO `role`(name) VALUES ("CLERK");
-INSERT INTO `role`(name) VALUES ("USER");
+INSERT INTO `role`(name) VALUES ("EMPLOYEE");
 
 INSERT INTO `account`(email, first_name, last_name, password, status, role_id)
 VALUES("helpdesk@novahub.vn", "help", "desk", "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja", "ACTIVE", 1);

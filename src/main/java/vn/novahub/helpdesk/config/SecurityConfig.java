@@ -42,7 +42,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity.sessionManagement().disable();
 
         httpSecurity.authorizeRequests()
-                        .antMatchers("/api**", "/login", "/api/login", "/login-google", "/register", "/user/update").permitAll()
+                        .antMatchers("/api**", "/login", "/api/login",
+                                "/login-google", "/register", "/user/update",
+                                "/api/day-offs/**/approve**", "/api/day-offs/**/deny**").permitAll()
                     .and()
                         .exceptionHandling().accessDeniedPage("/403")
                     .and()

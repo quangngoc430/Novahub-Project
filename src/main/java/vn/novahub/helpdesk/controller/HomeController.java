@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 public class HomeController {
 
     private static String PREFIX = "ROLE_";
-
+    
     @PermitAll
     @RequestMapping("/login")
     public String login() {
@@ -24,7 +24,7 @@ public class HomeController {
             return "redirect:/admin";
         else if(roleName.equals(PREFIX + RoleEnum.CLERK.name()))
             return "redirect:/clerk";
-        else if(roleName.equals(PREFIX + RoleEnum.USER.name()))
+        else if(roleName.equals(PREFIX + RoleEnum.EMPLOYEE.name()))
             return "redirect:/user";
 
         return "login";
