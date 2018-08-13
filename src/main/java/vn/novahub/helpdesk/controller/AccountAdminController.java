@@ -12,14 +12,14 @@ import vn.novahub.helpdesk.model.Account;
 import vn.novahub.helpdesk.service.AccountService;
 
 @RestController
-@RequestMapping(path = "/api/admin")
+@RequestMapping(path = "/api/admin/users")
 public class AccountAdminController {
 
     @Autowired
     private AccountService accountService;
 
     @PreAuthorize("(hasRole('ROLE_ADMIN') and (@accountServiceImpl.isAccountLogin(#accountId) == false))")
-    @PutMapping(path = "/users/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PutMapping(path = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Account> updateForAdmin(@PathVariable("id") long accountId,
                                                   @RequestBody Account account) throws AccountValidationException, AccountNotFoundException {
 
@@ -29,7 +29,7 @@ public class AccountAdminController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @DeleteMapping(path = "/users/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @DeleteMapping(path = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Void> delete(@PathVariable(value = "id") long accountId) throws AccountNotFoundException {
         accountService.delete(accountId);
 
