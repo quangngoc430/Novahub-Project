@@ -8519,7 +8519,7 @@
             "enum": [
               "ADMIN",
               "CLERK",
-              "USER"
+              "EMPLOYEE"
             ],
             "example": "ADMIN"
           }
