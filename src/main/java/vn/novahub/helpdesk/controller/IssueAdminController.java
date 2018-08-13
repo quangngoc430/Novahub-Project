@@ -62,12 +62,16 @@ public class IssueAdminController {
     @GetMapping(path = "/{issueId}/action", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Void> actionForAdmin(@RequestParam(name = "status", required = false, defaultValue = "") String status,
                                                @PathVariable(value = "issueId") long issueId) throws MessagingException, IOException, IssueNotFoundException, IssueIsClosedException {
-        if(status.equals(IssueEnum.APPROVE.name())) {
-            adminIssueService.approve(issueId);
-        } else if (status.equals(IssueEnum.DENY.name())) {
-            adminIssueService.deny(issueId);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        IssueEnum issueEnum = IssueEnum.valueOf(status);
+        switch (issueEnum) {
+            case APPROVE:
+                adminIssueService.approve(issueId);
+                break;
+            case DENY:
+                adminIssueService.deny(issueId);
+                break;
+            default:
+                return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
 
         return new ResponseEntity<>(HttpStatus.OK);
