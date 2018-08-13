@@ -7,6 +7,7 @@ import vn.novahub.helpdesk.model.Mail;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public interface MailService {
 
@@ -23,4 +24,9 @@ public interface MailService {
     void sendMailUpdateIssueForUser(Issue issue) throws MessagingException, IOException;
 
     void sendMailUpdateIssueForClerk(Issue issue) throws IOException, MessagingException;
+
+    ArrayList<String> getEmailsOfAdminAndClerk();
+
+    ArrayList<String> getEmails(String role);
+
 }

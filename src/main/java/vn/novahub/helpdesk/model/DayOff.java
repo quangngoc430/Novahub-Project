@@ -2,10 +2,17 @@ package vn.novahub.helpdesk.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 @Table(name = "day_off")
@@ -19,21 +26,29 @@ public class DayOff {
     @Column(name = "comment")
     private String comment;
 
-    @JsonFormat(pattern = "yyyy-mm-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
     @Column(name = "start_date")
-    private Date startDate;
+    private LocalDate startDate;
 
-    @JsonFormat(pattern = "yyyy-mm-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
     @Column(name = "end_date")
-    private Date endDate;
+    private LocalDate endDate;
 
-    @JsonFormat(pattern = "yyyy-mm-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     @Column(name = "created_at")
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
-    @JsonFormat(pattern = "yyyy-mm-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     @Column(name = "updated_at")
-    private Date updatedAt;
+    private LocalDateTime updatedAt;
 
     @Column(name = "number_of_hours")
     private int numberOfHours;
@@ -45,27 +60,17 @@ public class DayOff {
     @Column(name = "token")
     private String token;
 
-    @Column(name = "account_id")
-    private long accountId;
+    @Column(name = "day_off_account_id")
+    private long dayOffAccountId;
 
-    @Column(name = "type")
-    private String type;
-
-    @Column(name = "type_id")
-    private long typeId;
-
-    @ManyToOne(fetch = FetchType.EAGER, targetEntity = DayOffType.class)
-    @JoinColumn(name = "type_id", insertable = false, updatable = false)
-    private DayOffType dayOffType;
-
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Account.class)
-    @JoinColumn(name = "account_id", insertable = false, updatable = false)
-    private Account account;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = DayOffAccount.class)
+    @JoinColumn(name = "day_off_account_id", insertable = false, updatable = false)
+    private DayOffAccount dayOffAccount;
 
     public DayOff() {
-        createdAt = new Date();
-        updatedAt = new Date();
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
     }
 
     public long getId() {
@@ -84,35 +89,35 @@ public class DayOff {
         this.comment = comment;
     }
 
-    public Date getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
 
-    public Date getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Date getUpdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Date updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 
@@ -140,36 +145,35 @@ public class DayOff {
         this.token = token;
     }
 
-    public long getAccountId() {
-        return accountId;
+    public long getDayOffAccountId() {
+        return dayOffAccountId;
     }
 
-    public void setAccountId(long accountId) {
-        this.accountId = accountId;
+    public void setDayOffAccountId(long dayOffAccountId) {
+        this.dayOffAccountId = dayOffAccountId;
     }
 
-    public String getType() {
-        return type;
+    public DayOffAccount getDayOffAccount() {
+        return dayOffAccount;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setDayOffAccount(DayOffAccount dayOffAccount) {
+        this.dayOffAccount = dayOffAccount;
     }
 
-    public long getTypeId() {
-        return typeId;
-    }
 
-    public void setTypeId(long typeId) {
-        this.typeId = typeId;
+    @Override
+    public String toString() {
+        return "DayOff{" +
+                "id=" + id +
+                ", comment='" + comment + '\'' +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", numberOfHours=" + numberOfHours +
+                ", status='" + status + '\'' +
+                ", dayOffAccountId=" + dayOffAccountId +
+                '}';
     }
-
-    public DayOffType getDayOffType() {
-        return dayOffType;
-    }
-
-    public void setDayOffType(DayOffType dayOffType) {
-        this.dayOffType = dayOffType;
-    }
-
 }

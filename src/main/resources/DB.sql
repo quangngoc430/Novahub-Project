@@ -96,7 +96,7 @@ CREATE TABLE `day_off_type` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `type` varchar(20) NOT NULL,
   `year` int(11) NOT NULL,
-  `quota` int(11) NOT NULL,
+  `defaultQuota` int(11) NOT NULL,
   `remaining_time` int(11) NOT NULL,
   `account_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),

@@ -12,19 +12,57 @@ import vn.novahub.helpdesk.model.DayOff;
 @Repository
 public interface DayOffRepository extends PagingAndSortingRepository<DayOff, Long>{
 
-    @Query("SELECT dayOff FROM DayOff dayOff WHERE " +
-            "dayOff.accountId = :accountid AND " +
-            "dayOff.type LIKE :typekeyword AND dayOff.status LIKE :statuskeyword")
-    Page<DayOff> getAllByAccountIdAndTypeLikeAndStatusLike(
-            @Param("accountid") long accountId,
-            @Param("typekeyword") String typeKeyword,
-            @Param("statuskeyword") String statusKeyword,
-            Pageable pageable);
+    @Query("SELECT dayOff " +
+            "FROM DayOff dayOff " +
+            "JOIN DayOffAccount dayOffAccount " +
+            "ON dayOff.dayOffAccountId = dayOffAccount.id " +
+            "WHERE dayOffAccount.accountId = :accountId")
+    Page<DayOff> findAllByAccountId(@Param("accountId") long accountId,
+                                    Pageable pageable);
 
-    @Query("FROM DayOff dayOff WHERE " +
-            "dayOff.type LIKE :typekeyword AND dayOff.status LIKE :statuskeyword")
-    Page<DayOff> getAllByTypeLikeAndStatusLike(
-            @Param("typekeyword") String typeKeyword,
-            @Param("statuskeyword") String statusKeyword,
-            Pageable pageable);
+    @Query("SELECT dayOff " +
+            "FROM DayOff dayOff " +
+            "JOIN DayOffAccount dayOffAccount " +
+            "ON dayOff.dayOffAccountId = dayOffAccount.id " +
+            "WHERE dayOffAccount.accountId = :accountId " +
+            "AND dayOff.status = :status")
+    Page<DayOff> findByAccountIdAndStatus(@Param("accountId") long accountId,
+                                           @Param("status") String status,
+                                            Pageable pageable);
+
+    @Query("SELECT dayOff " +
+            "FROM DayOff dayOff " +
+            "JOIN DayOffAccount dayOffAccount " +
+            "ON dayOff.dayOffAccountId = dayOffAccount.id " +
+            "WHERE dayOffAccount.accountId = :accountId " +
+            "AND dayOff.status <> 'CANCELLED'")
+    Page<DayOff> findNonCancelledByAccountId(@Param("accountId") long accountId, Pageable pageable);
+
+    @Query("SELECT dayOff " +
+            "FROM DayOff dayOff " +
+            "JOIN DayOffAccount dayOffAccount " +
+            "ON dayOff.dayOffAccountId = dayOffAccount.id " +
+            "JOIN DayOffType dayOffType " +
+            "ON dayOffAccount.dayOffTypeId = dayOffType.id " +
+            "JOIN Account account " +
+            "ON dayOffAccount.accountId = account.id " +
+            "WHERE dayOffType.type LIKE CONCAT('%', :keyword ,'%') " +
+            "OR account.email LIKE CONCAT('%', :keyword, '%')")
+    Page<DayOff> findByKeyword(@Param("keyword") String keyword,
+                                                Pageable pageable);
+
+
+    @Query("SELECT dayOff " +
+            "FROM DayOff dayOff " +
+            "JOIN DayOffAccount dayOffAccount " +
+            "ON dayOff.dayOffAccountId = dayOffAccount.id " +
+            "JOIN DayOffType dayOffType " +
+            "ON dayOffAccount.dayOffTypeId = dayOffType.id " +
+            "JOIN Account account " +
+            "ON dayOffAccount.accountId = account.id " +
+            "WHERE (dayOffType.type LIKE CONCAT('%', :keyword ,'%') " +
+            "OR account.email LIKE CONCAT('%', :keyword, '%')) " +
+            "AND dayOff.status <> 'CANCELLED'")
+    Page<DayOff> findNonCancelledByKeyword( @Param("keyword") String keyword,
+                                Pageable pageable);
 }

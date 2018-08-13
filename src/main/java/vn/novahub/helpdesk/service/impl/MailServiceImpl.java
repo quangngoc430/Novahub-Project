@@ -18,6 +18,7 @@ import vn.novahub.helpdesk.model.Issue;
 import vn.novahub.helpdesk.model.Mail;
 import vn.novahub.helpdesk.repository.AccountRepository;
 import vn.novahub.helpdesk.service.AccountService;
+import vn.novahub.helpdesk.enums.RoleEnum;
 import vn.novahub.helpdesk.service.MailService;
 
 import javax.mail.MessagingException;
@@ -26,6 +27,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Optional;
+import java.util.ArrayList;
 
 @Service
 @PropertySource("classpath:email.properties")
@@ -211,5 +213,34 @@ public class MailServiceImpl implements MailService {
         mail.setEmailReceiving(accountService.getAllEmailsOfClerk().toArray(new String[0]));
 
         sendHTMLMail(mail);
+    }
+
+    public ArrayList<String> getEmailsOfAdminAndClerk() {
+        ArrayList<String> emails = new ArrayList<>();
+
+        if (getEmails(RoleEnum.ADMIN.name()) != null) {
+            emails.addAll(getEmails(RoleEnum.ADMIN.name()));
+        }
+
+        if (getEmails(RoleEnum.CLERK.name()) != null) {
+            emails.addAll(getEmails(RoleEnum.CLERK.name()));
+        }
+
+        return emails;
+    }
+
+    @Override
+    public ArrayList<String> getEmails(String role) {
+        ArrayList<String> emails = new ArrayList<>();
+        ArrayList<Account> accounts = (ArrayList<Account>)
+                (accountRepository.getAllByRoleName(role));
+
+        if (accounts != null) {
+            for (Account account : accounts) {
+                emails.add(account.getEmail());
+            }
+        }
+
+        return emails;
     }
 }
