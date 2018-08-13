@@ -21,14 +21,14 @@ import javax.mail.MessagingException;
 import java.io.IOException;
 
 @RestController
-@RequestMapping(path = "/api")
+@RequestMapping(path = "/api/issues")
 public class IssueController {
 
     @Autowired
     private AccountIssueService accountIssueService;
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping(path = "/issues/me", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(path = "/me", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Page<Issue>> getAll(@RequestParam(name = "keyword", required = false, defaultValue = "") String keyword,
                                               @RequestParam(name = "status", required = false, defaultValue = "") String status,
                                               Pageable pageable){
@@ -38,7 +38,7 @@ public class IssueController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @PostMapping(path = "/issues/me", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(path = "/me", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Issue> create(@RequestBody Issue issue) throws IssueValidationException, MessagingException, IOException, AccountNotFoundException {
         issue = accountIssueService.create(issue);
 
@@ -46,13 +46,13 @@ public class IssueController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping(path = "/issues/me/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(path = "/me/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Issue> findOne(@PathVariable("issueId") long issueId) throws IssueNotFoundException {
         return new ResponseEntity<>(accountIssueService.findOne(issueId), HttpStatus.OK);
     }
 
     @PreAuthorize("isAuthenticated()")
-    @PutMapping(path = "/issues/me/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PutMapping(path = "/me/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Issue> update(@RequestBody Issue issue,
                                         @PathVariable(name = "issueId") long issueId) throws IssueNotFoundException, IssueValidationException, MessagingException, IOException, IssueIsClosedException, AccountNotFoundException {
         issue = accountIssueService.update(issueId, issue);
@@ -61,7 +61,7 @@ public class IssueController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @DeleteMapping(path = "/issues/me/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @DeleteMapping(path = "/me/{issueId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Void> delete(@PathVariable(name = "issueId") long issueId) throws IssueNotFoundException {
         accountIssueService.delete(issueId);
 
@@ -69,18 +69,22 @@ public class IssueController {
     }
 
     @PermitAll
-    @GetMapping(path = "/issues/{issueId}/action", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(path = "/{issueId}/action", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Void> action(@RequestParam(name = "status", required = false, defaultValue = "") String status,
                                        @RequestParam(name = "token", required = false, defaultValue = "") String token,
                                        @PathVariable(name = "issueId") long issueId) throws IssueNotFoundException, IssueIsClosedException, MessagingException, IOException {
-        if(status.equals(IssueEnum.APPROVE.name())) {
-            accountIssueService.approve(issueId, token);
-        } else if(status.equals(IssueEnum.DENY.name())){
-            accountIssueService.deny(issueId, token);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        IssueEnum issueEnum = IssueEnum.valueOf(status);
+        switch (issueEnum) {
+            case APPROVE: 
+                accountIssueService.approve(issueId, token);
+                break;
+            case DENY:
+                accountIssueService.deny(issueId, token);
+                break;
+            default:
+                return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
-
+        
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
