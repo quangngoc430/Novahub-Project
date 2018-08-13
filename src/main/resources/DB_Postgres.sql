@@ -2,18 +2,20 @@ DROP DATABASE IF EXISTS helpdesk;
 CREATE DATABASE helpdesk;
 \c helpdesk;
 
+DROP TABLE IF EXISTS role;
+DROP TABLE IF EXISTS account;
 DROP TABLE IF EXISTS day_off;
 DROP TABLE IF EXISTS day_off_account;
 DROP TABLE IF EXISTS day_off_type;
 DROP TABLE IF EXISTS issue;
 DROP TABLE IF EXISTS account_has_skill;
 DROP TABLE IF EXISTS skill;
+DROP TABLE IF EXISTS level;
 DROP TABLE IF EXISTS category;
-DROP TABLE IF EXISTS account;
-DROP TABLE IF EXISTS role;
+DROP TABLE IF EXISTS token;
 
 CREATE TABLE role (
-  id SERIAL PRIMARY KEY,
+  id BIGSERIAL PRIMARY KEY,
   name VARCHAR(80) NOT NULL
 );
 
@@ -24,6 +26,9 @@ CREATE TABLE account (
   last_name VARCHAR(45) DEFAULT NULL,
   birth_day TIMESTAMP WITH TIME ZONE,
   address VARCHAR(250),
+  phone VARCHAR(20),
+  title VARCHAR(250),
+  introduction VARCHAR(1000),
   avatar_url VARCHAR(500) DEFAULT NULL,
   password VARCHAR(200),
   status VARCHAR(100) NOT NULL,
@@ -31,24 +36,41 @@ CREATE TABLE account (
   updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
   joiningDate TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
   vertification_token VARCHAR(255),
-  token VARCHAR(255),
-  role_id INT REFERENCES role(id)
+  role_id BIGINT REFERENCES role(id)
+);
+
+CREATE TABLE token (
+  id BIGSERIAL PRIMARY KEY,
+  access_token VARCHAR(256) NOT NULL,
+  expired_in INT NOT NULL,
+  expired_at TIMESTAMP WITH TIME ZONE NOT NULL,
+  account_id BIGINT REFERENCES account(id),
+  created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+  updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
 );
 
 CREATE TABLE category (
-  id SERIAL PRIMARY KEY,
+  id BIGSERIAL PRIMARY KEY,
   name VARCHAR(100) DEFAULT NULL,
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
   updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
 );
 
 CREATE TABLE skill (
-  id SERIAL PRIMARY KEY,
+  id BIGSERIAL PRIMARY KEY,
   name VARCHAR(45) DEFAULT NULL,
-  level INT NOT NULL,
+  category_id BIGINT REFERENCES category(id),
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
-  updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
-  category_id INT REFERENCES category(id)
+  updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
+);
+
+CREATE TABLE level (
+  id BIGSERIAL PRIMARY KEY,
+  value INT NOT NULL,
+  skill_id BIGINT REFERENCES skill(id),
+  account_id BIGINT REFERENCES account(id),
+  created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+  updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
 );
 
 CREATE TABLE account_has_skill (
@@ -71,9 +93,8 @@ CREATE TABLE day_off_account (
   remaining_time INT NOT NULL,
   private_quota INT NOT NULL,
   day_off_type_id INT REFERENCES day_off_type(id),
-  account_id INT REFERENCES account(id)
+  account_id BIGINT REFERENCES account(id)
 );
-
 
 CREATE TABLE day_off (
   id BIGSERIAL PRIMARY KEY,
@@ -103,33 +124,33 @@ CREATE TABLE issue (
 
 
 
-INSERT INTO role(name) VALUES ('ADMIN');
-INSERT INTO role(name) VALUES ('CLERK');
-INSERT INTO role(name) VALUES ('USER');
+INSERT INTO role(name) VALUES (''ADMIN'');
+INSERT INTO role(name) VALUES (''CLERK'');
+INSERT INTO role(name) VALUES (''USER'');
 
 INSERT INTO account(email, first_name, last_name, password, status, role_id)
-VALUES('helpdesk@novahub.vn', 'help', 'desk', '$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja', 'ACTIVE', 1);
+VALUES(''helpdesk@novahub.vn'', ''help'', ''desk'', ''$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja'', ''ACTIVE'', 1);
 INSERT INTO account(email, first_name, last_name, password, status, role_id)
-VALUES('ngocbui@novahub.vn', 'ngoc', 'bui', '$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja', 'ACTIVE', 3);
+VALUES(''ngocbui@novahub.vn'', ''ngoc'', ''bui'', ''$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja'', ''ACTIVE'', 3);
 INSERT INTO account(email, first_name, last_name, password, status, role_id)
-VALUES('linhtran@novahub.vn', 'linh', 'tran', '$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja', 'ACTIVE', 2);
+VALUES(''linhtran@novahub.vn'', ''linh'', ''tran'', ''$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja'', ''ACTIVE'', 2);
 
 
 INSERT INTO category(name) VALUES
-('Programming Language'),
-('Backend Framework'),
-('Frontend Framework'),
-('Web Design');
+(''Programming Language''),
+(''Backend Framework''),
+(''Frontend Framework''),
+(''Web Design'');
 
 INSERT INTO skill(name, category_id, level) VALUES
-('Java', 1, 7),
-('Ruby', 1, 6),
-('C#', 1, 5),
-('Python', 1, 2),
-('Spring', 2, 3),
-('Rails', 2, 5),
-('Angular', 3, 10),
-('Reactjs', 3, 6);
+(''Java'', 1, 7),
+(''Ruby'', 1, 6),
+(''C#'', 1, 5),
+(''Python'', 1, 2),
+(''Spring'', 2, 3),
+(''Rails'', 2, 5),
+(''Angular'', 3, 10),
+(''Reactjs'', 3, 6);
 
 INSERT INTO account_has_skill(account_id, skill_id) VALUES
 (1, 1),
@@ -141,14 +162,14 @@ INSERT INTO account_has_skill(account_id, skill_id) VALUES
 (2, 6);
 
 INSERT INTO issue(title, content, status, account_id)
-VALUES('title', 'content', 'PENDING', 1);
+VALUES(''title'', ''content'', ''PENDING'', 1);
 INSERT INTO issue(title, content, status, account_id)
-VALUES('title1', 'content1', 'PENDING', 1);
+VALUES(''title1'', ''content1'', ''PENDING'', 1);
 INSERT INTO issue(title, content, status, account_id)
-VALUES('title', 'content', 'PENDING', 2);
+VALUES(''title'', ''content'', ''PENDING'', 2);
 INSERT INTO issue(title, content, status, account_id)
-VALUES('title1', 'content1', 'PENDING', 2);
+VALUES(''title1'', ''content1'', ''PENDING'', 2);
 INSERT INTO issue(title, content, status, account_id)
-VALUES('title', 'content', 'PENDING', 3);
+VALUES(''title'', ''content'', ''PENDING'', 3);
 INSERT INTO issue(title, content, status, account_id)
-VALUES('title1', 'content1', 'PENDING', 3);
+VALUES(''title1'', ''content1'', ''PENDING'', 3);
