@@ -1,5 +1,6 @@
 package vn.novahub.helpdesk.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.After;
 import org.junit.Before;
@@ -12,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.data.domain.Page;
 import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
 import vn.novahub.helpdesk.enums.RoleEnum;
@@ -65,12 +67,7 @@ public class RoleRestControllerTest {
     }
 
     @Test
-    public void testGetARole() throws AccountLockedException, AccountValidationException, AccountInvalidException, AccountInactiveException {
-        Account account = new Account();
-        account.setEmail("helpdesk@novahub.vn");
-        account.setPassword("password");
-        Token token1 = accountServiceImpl.login(account);
-
+    public void testGetARole() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("access_token", token.getAccessToken());
@@ -85,6 +82,19 @@ public class RoleRestControllerTest {
 
         responseEntity = restTemplate.exchange(url + "/api/roles/4", HttpMethod.GET, entity, Object.class);
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+    }
+
+    @Test
+    public void testGetAllRoles() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("access_token", token.getAccessToken());
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        HttpEntity entity = new HttpEntity(headers);
+
+        ResponseEntity<?> responseEntity = restTemplate.exchange(url + "/api/roles", HttpMethod.GET, entity, Object.class);
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     }
 
     @After
