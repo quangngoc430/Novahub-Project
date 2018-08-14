@@ -124,6 +124,9 @@ public class Account implements Serializable {
     @OneToMany(mappedBy = "account")
     private Set<DayOffAccount> dayOffAccounts;
 
+    @Transient
+    private List<Skill> skills;
+
     public long getId() {
         return id;
     }
@@ -290,6 +293,14 @@ public class Account implements Serializable {
 
     public void setDayOffAccounts(Set<DayOffAccount> dayOffAccounts) {
         this.dayOffAccounts = dayOffAccounts;
+    }
+
+    public List<Skill> getSkills() {
+        return skills;
+    }
+
+    public void setSkills(List<Skill> skills) {
+        this.skills = skills;
     }
 
     @Transient

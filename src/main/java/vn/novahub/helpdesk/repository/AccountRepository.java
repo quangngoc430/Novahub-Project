@@ -15,13 +15,15 @@ public interface AccountRepository extends PagingAndSortingRepository<Account, L
 
     Account getByEmail(String email);
 
-    @Query("FROM Account account " +
+    @Query( "SELECT account " +
+            "FROM Account account " +
             "WHERE account.email LIKE CONCAT('%', :keyword, '%') " +
             "or account.firstName LIKE CONCAT('%', :keyword, '%') " +
             "or account.lastName LIKE CONCAT('%' ,:keyword, '%')")
     Page<Account> getAllByEmailContainingOrFirstNameContainingOrLastNameContaining(@Param("keyword") String keyword, Pageable pageable);
 
-    @Query("FROM Account account " +
+    @Query( "SELECT account " +
+            "FROM Account account " +
             "WHERE (account.email LIKE CONCAT('%', :keyword, '%') " +
             "OR account.firstName LIKE CONCAT('%', :keyword, '%') " +
             "OR account.lastName LIKE CONCAT('%' ,:keyword, '%')) " +

@@ -59,6 +59,8 @@ public class Skill implements Serializable {
     @JoinColumn(name = "category_id", insertable = false, updatable = false)
     private Category category;
 
+    public Skill() {}
+
     public long getId() {
         return id;
     }
