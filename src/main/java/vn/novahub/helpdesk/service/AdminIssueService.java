@@ -20,7 +20,7 @@ public interface AdminIssueService{
 
     void delete(long issueId) throws IssueNotFoundException;
 
-    void approve(long issueId, String token) throws IssueNotFoundException, IssueIsClosedException, MessagingException, IOException;
+    void approve(long issueId) throws IssueNotFoundException, IssueIsClosedException, MessagingException, IOException;
 
-    void deny(long issueId, String token) throws IssueNotFoundException, IssueIsClosedException, MessagingException, IOException;
+    void deny(long issueId) throws IssueNotFoundException, IssueIsClosedException, MessagingException, IOException;
 }

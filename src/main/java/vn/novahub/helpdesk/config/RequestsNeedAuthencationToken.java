@@ -24,26 +24,34 @@ public class RequestsNeedAuthencationToken {
 
             // users
             requestArrayList.add(new Request("\\/api\\/users", new String[]{Method.GET.name()}));
-            requestArrayList.add(new Request("\\/api\\/users\\/(\\d+)", new String[]{Method.GET.name(), Method.PUT.name(), Method.DELETE.name()}));
+            requestArrayList.add(new Request("\\/api\\/admin\\/users\\/(\\d+)", new String[]{Method.PUT.name(), Method.DELETE.name()}));
+            requestArrayList.add(new Request("\\/api\\/users\\/(\\d+)", new String[]{Method.GET.name()}));
             requestArrayList.add(new Request("\\/api\\/users\\/me", new String[]{Method.GET.name(), Method.PUT.name()}));
 
             // categories
-            requestArrayList.add(new Request("\\/api\\/categories", new String[]{Method.GET.name(), Method.POST.name()}));
-            requestArrayList.add(new Request("\\/api\\/categories\\/(\\d+)", new String[]{Method.GET.name(), Method.PUT.name(), Method.DELETE.name()}));
-            requestArrayList.add(new Request("\\/api\\/categories\\/(\\d+)\\/skills", new String[]{Method.GET.name(), Method.POST.name()}));
-            requestArrayList.add(new Request("\\/api\\/categories\\/(\\d+)\\/skills\\/(\\d+)", new String[]{Method.GET.name(), Method.PUT.name(), Method.DELETE.name()}));
+            requestArrayList.add(new Request("\\/api\\/categories", new String[]{Method.GET.name()}));
+            requestArrayList.add(new Request("\\/api\\/admin\\/categories", new String[]{Method.POST.name()}));
+            requestArrayList.add(new Request("\\/api\\/categories\\/(\\d+)", new String[]{Method.GET.name()}));
+            requestArrayList.add(new Request("\\/api\\/admin\\/categories\\/(\\d+)", new String[]{Method.PUT.name(), Method.DELETE.name()}));
+            requestArrayList.add(new Request("\\/api\\/categories\\/(\\d+)\\/skills", new String[]{Method.GET.name()}));
+            requestArrayList.add(new Request("\\/api\\/admin\\/categories\\/(\\d+)\\/skills", new String[]{Method.POST.name()}));
+            requestArrayList.add(new Request("\\/api\\/categories\\/(\\d+)\\/skills\\/(\\d+)", new String[]{Method.GET.name()}));
+            requestArrayList.add(new Request("\\/api\\/admin\\/categories\\/(\\d+)\\/skills\\/(\\d+)", new String[]{Method.PUT.name(), Method.DELETE.name()}));
 
             // skills
-            requestArrayList.add(new Request("\\/api\\/skills", new String[]{Method.GET.name(), Method.POST.name()}));
-            requestArrayList.add(new Request("\\/api\\/skills\\/(\\d+)", new String[]{Method.GET.name(), Method.PUT.name(), Method.DELETE.name()}));
+            requestArrayList.add(new Request("\\/api\\/skills", new String[]{Method.GET.name()}));
+            requestArrayList.add(new Request("\\/api\\/admin\\/skills", new String[]{Method.POST.name()}));
+            requestArrayList.add(new Request("\\/api\\/skills\\/(\\d+)", new String[]{Method.GET.name()}));
+            requestArrayList.add(new Request("\\/api\\/admin\\/skills\\/(\\d+)", new String[]{Method.PUT.name(), Method.DELETE.name()}));
             requestArrayList.add(new Request("\\/api\\/skills\\/(\\d+)\\/users", new String[]{Method.GET.name()}));
             requestArrayList.add(new Request("\\/api\\/skills\\/me", new String[]{Method.GET.name(), Method.POST.name()}));
             requestArrayList.add(new Request("\\/api\\/skills\\/me\\/(\\d+)", new String[]{Method.GET.name(), Method.PUT.name(), Method.DELETE.name()}));
             requestArrayList.add(new Request("\\/api\\/users\\/(\\d+)\\/skills", new String[]{Method.GET.name()}));
 
             // issues
-            requestArrayList.add(new Request("\\/api\\/issues", new String[]{Method.GET.name(), Method.POST.name()}));
-            requestArrayList.add(new Request("\\/api\\/issues\\/(\\d+)", new String[]{Method.GET.name(), Method.PUT.name(), Method.DELETE.name()}));
+            requestArrayList.add(new Request("\\/api\\/admin\\/issues", new String[]{Method.GET.name()}));
+            requestArrayList.add(new Request("\\/api\\/admin\\/issues\\/(\\d+)", new String[]{Method.GET.name(), Method.PUT.name(), Method.DELETE.name()}));
+            requestArrayList.add(new Request("\\/api\\/admin\\/issues\\/(\\d+)\\/action", new String[]{Method.GET.name()}));
             requestArrayList.add(new Request("\\/api\\/issues\\/me", new String[]{Method.GET.name(), Method.POST.name()}));
             requestArrayList.add(new Request("\\/api\\/issues\\/me\\/(\\d+)", new String[]{Method.GET.name(), Method.PUT.name(), Method.DELETE.name()}));
 

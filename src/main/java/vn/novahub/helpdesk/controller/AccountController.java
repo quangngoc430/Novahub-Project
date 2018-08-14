@@ -13,8 +13,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.novahub.helpdesk.exception.*;
 import vn.novahub.helpdesk.model.Account;
-import vn.novahub.helpdesk.model.Skill;
 import vn.novahub.helpdesk.model.Token;
+import vn.novahub.helpdesk.model.Skill;
 import vn.novahub.helpdesk.service.AccountService;
 import vn.novahub.helpdesk.service.AccountSkillService;
 
@@ -33,7 +33,7 @@ public class AccountController {
 
     @Autowired
     private AccountService accountService;
-
+    
     @Autowired
     private AccountSkillService accountSkillService;
 
@@ -100,7 +100,7 @@ public class AccountController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     @GetMapping(path = "/users", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Page<Account>> getAll(@RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
                                                 @RequestParam(value = "status", required = false, defaultValue = "") String status,
@@ -158,41 +158,22 @@ public class AccountController {
         return new ResponseEntity<>(account, HttpStatus.OK);
     }
 
-    @PreAuthorize("(hasRole('ROLE_ADMIN') and (@accountServiceImpl.isAccountLogin(#accountId) == false))")
-    @PutMapping(path = "/users/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Account> updateForAdmin(@PathVariable("id") long accountId,
-                                                  @RequestBody Account account) throws AccountValidationException, AccountNotFoundException {
-
-        Account accountUpdated = accountService.updatedForAdmin(accountId, account);
-
-        return new ResponseEntity<>(accountUpdated, HttpStatus.OK);
-    }
-
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @DeleteMapping(path = "/users/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Void> delete(@PathVariable(value = "id") long accountId) throws AccountNotFoundException {
-        accountService.delete(accountId);
-
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
     @PermitAll
     @GetMapping(path = "/users/{id}/active", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Void> activate(@PathVariable(value = "id") long accountId,
-                                         @RequestParam(value = "token", defaultValue = "") String verificationToken){
+                                         @RequestParam(value = "token", defaultValue = "") String verificationToken) {
         boolean result = accountService.activateAccount(accountId, verificationToken);
 
-        if(!result)
+        if (!result)
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
+    
     @PreAuthorize("isAuthenticated()")
     @GetMapping(path = "/users/{id}/skills", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Page<Skill>> getAllByAccountId(@PathVariable("id") long accountId,
                                                          Pageable pageable) throws AccountNotFoundException {
         return new ResponseEntity<>(accountSkillService.getAllByAccountId(accountId, pageable), HttpStatus.OK);
     }
-
 }

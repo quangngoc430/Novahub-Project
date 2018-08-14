@@ -33,7 +33,8 @@ public interface IssueRepository extends PagingAndSortingRepository<Issue, Long>
                                                                        Pageable pageable);
 
     @Query("FROM Issue issue " +
-           "WHERE issue.status = :status AND issue.status <> 'CANCELLED' " +
+           "WHERE issue.status = :status " +
+           "AND issue.status <> 'CANCELLED' " +
            "AND issue.accountId = :accountId " +
            "AND (issue.title LIKE CONCAT('%', :keyword, '%') " +
            "OR issue.content LIKE CONCAT('%', :keyword, '%'))")
@@ -42,7 +43,9 @@ public interface IssueRepository extends PagingAndSortingRepository<Issue, Long>
                                                                                  @Param("status") String status,
                                                                                  Pageable pageable);
 
-    Issue findByIdAndToken(long id, String token);
+    Issue getByIdAndToken(long issueId, String token);
+
+    Issue getByIdAndStatusIsNot(long issueId, String status);
 
     Issue getByIdAndAccountIdAndStatusIsNot(long issueId, long accountId, String status);
 

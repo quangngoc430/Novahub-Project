@@ -562,8 +562,8 @@
         "tags": [
           "User"
         ],
-        "summary": "Get all users (ADMIN)",
-        "description": "Get all users (ADMIN)",
+        "summary": "Get all users",
+        "description": "Get all users",
         "parameters": [
           {
             "in": "header",
@@ -1551,7 +1551,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/admin/users/{id}": {
       "put": {
         "tags": [
           "User"
@@ -1674,7 +1676,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/users/{id}"
+                      "example": "/admin/users/{id}"
                     }
                   }
                 }
@@ -1712,7 +1714,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/users/{id}"
+                      "example": "/admin/users/{id}"
                     }
                   }
                 }
@@ -1750,7 +1752,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/users/{id}"
+                      "example": "/admin/users/{id}"
                     }
                   }
                 }
@@ -1787,7 +1789,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/users/{id}"
+                      "example": "/admin/users/{id}"
                     }
                   }
                 }
@@ -1828,7 +1830,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/users/{id}"
+                      "example": "/admin/users/{id}"
                     }
                   }
                 }
@@ -1898,7 +1900,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/users/{id}"
+                      "example": "/admin/users/{id}"
                     }
                   }
                 }
@@ -1936,7 +1938,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/users/{id}"
+                      "example": "/admin/users/{id}"
                     }
                   }
                 }
@@ -1974,7 +1976,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/users/{id}"
+                      "example": "/admin/users/{id}"
                     }
                   }
                 }
@@ -2011,7 +2013,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/users/{id}"
+                      "example": "/admin/users/{id}"
                     }
                   }
                 }
@@ -2588,7 +2590,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/admin/categories": {
       "post": {
         "tags": [
           "Category"
@@ -2662,7 +2666,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/categories"
+                      "example": "/admin/categories"
                     }
                   }
                 }
@@ -2700,7 +2704,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/categories"
+                      "example": "/admin/categories"
                     }
                   }
                 }
@@ -2738,7 +2742,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/categories"
+                      "example": "/admin/categories"
                     }
                   }
                 }
@@ -2779,7 +2783,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/categories"
+                      "example": "/admin/categories"
                     }
                   }
                 }
@@ -2817,7 +2821,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/categories"
+                      "example": "/admin/categories"
                     }
                   }
                 }
@@ -2832,8 +2836,8 @@
         "tags": [
           "Category"
         ],
-        "summary": "Get a category by id (ADMIN)",
-        "description": "Get a category by id (ADMIN)",
+        "summary": "Get a category by id",
+        "description": "Get a category by id",
         "parameters": [
           {
             "in": "header",
@@ -3016,7 +3020,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/admin/categories/{id}": {
       "put": {
         "tags": [
           "Category"
@@ -3099,7 +3105,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/categories/{id}"
+                      "example": "/admin/categories/{id}"
                     }
                   }
                 }
@@ -3137,7 +3143,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/categories/{id}"
+                      "example": "/admin/categories/{id}"
                     }
                   }
                 }
@@ -3175,7 +3181,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/categories/{id}"
+                      "example": "/admin/categories/{id}"
                     }
                   }
                 }
@@ -3212,7 +3218,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/categories/{id}"
+                      "example": "/admin/categories/{id}"
                     }
                   }
                 }
@@ -3253,7 +3259,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/categories/{id}"
+                      "example": "/admin/categories/{id}"
                     }
                   }
                 }
@@ -3291,7 +3297,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/categories/{id}"
+                      "example": "/admin/categories/{id}"
                     }
                   }
                 }
@@ -3360,7 +3366,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/categories/{id}"
+                      "example": "/admin/categories/{id}"
                     }
                   }
                 }
@@ -3398,7 +3404,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/categories/{id}"
+                      "example": "/admin/categories/{id}"
                     }
                   }
                 }
@@ -3436,7 +3442,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/categories/{id}"
+                      "example": "/admin/categories/{id}"
                     }
                   }
                 }
@@ -3473,251 +3479,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/categories/{id}"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/categories/{id}/skills": {
-      "get": {
-        "tags": [
-          "Category"
-        ],
-        "summary": "Get all skills by category id",
-        "description": "Get all skills by category id",
-        "parameters": [
-          {
-            "in": "header",
-            "name": "access_token",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "dff4d0d4891bfd8bafdb859dac4cbccb218bcf5adc9887a627c6c159f76ef0b9"
-            }
-          },
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "example": 1
-            }
-          },
-          {
-            "in": "query",
-            "name": "keyword",
-            "schema": {
-              "type": "string",
-              "example": "Java"
-            }
-          },
-          {
-            "in": "query",
-            "name": "page",
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "in": "query",
-            "name": "size",
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "in": "query",
-            "name": "sort",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "id,asc",
-                "id,desc",
-                "name,asc",
-                "name,desc",
-                "createdAt,asc",
-                "createdAt,desc",
-                "updatedAt,asc",
-                "updatedAt,desc"
-              ],
-              "example": "name,desc"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Get all skills successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Sort",
-                  "properties": {
-                    "content": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/Skill",
-                        "properties": {
-                          "category": {
-                            "$ref": "#/components/schemas/Category"
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Token is expired",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "timestamp": {
-                      "type": "string",
-                      "example": 1532589762.947
-                    },
-                    "status": {
-                      "type": "integer",
-                      "example": 400
-                    },
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "message": {
-                          "type": "string",
-                          "example": "Token is expired"
-                        }
-                      }
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "TokenIsExpiredException with token = 579989c508208d49c978e6cb99383688e6f1fedabfc22c27d3542ab0341d3b13"
-                    },
-                    "path": {
-                      "type": "string",
-                      "example": "/category/{id}/skills"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "timestamp": {
-                      "type": "string",
-                      "example": "1532506012.933"
-                    },
-                    "status": {
-                      "type": "integer",
-                      "format": "int64",
-                      "example": 401
-                    },
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "message": {
-                          "type": "string",
-                          "example": "Unauthorized"
-                        }
-                      }
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Invalid token"
-                    },
-                    "path": {
-                      "type": "string",
-                      "example": "/category/{id}/skills"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Access is denied",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "timestamp": {
-                      "type": "string",
-                      "example": "1532506012.933"
-                    },
-                    "status": {
-                      "type": "integer",
-                      "format": "int64",
-                      "example": 403
-                    },
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "message": {
-                          "type": "string",
-                          "example": "Access is denied"
-                        }
-                      }
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Access is denied"
-                    },
-                    "path": {
-                      "type": "string",
-                      "example": "/category/{id}/skills"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Category not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "timestamp": {
-                      "type": "string",
-                      "example": "1532462094.006"
-                    },
-                    "status": {
-                      "type": "integer",
-                      "example": 404
-                    },
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "message": {
-                          "type": "string",
-                          "example": "Category not found"
-                        }
-                      }
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "CategoryNotFoundException with id = 1"
-                    },
-                    "path": {
-                      "type": "string",
-                      "example": "/categories/{id}/skills"
+                      "example": "/admin/categories/{id}"
                     }
                   }
                 }
@@ -3932,7 +3694,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/admin/skills": {
       "post": {
         "tags": [
           "Skill"
@@ -4017,7 +3781,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/skills"
+                      "example": "/admin/skills"
                     }
                   }
                 }
@@ -4055,7 +3819,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/skills"
+                      "example": "/admin/skills"
                     }
                   }
                 }
@@ -4092,7 +3856,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/skills"
+                      "example": "/admin/skills"
                     }
                   }
                 }
@@ -4133,7 +3897,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/skills"
+                      "example": "/admin/skills"
                     }
                   }
                 }
@@ -4171,7 +3935,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/skills"
+                      "example": "/admin/skills"
                     }
                   }
                 }
@@ -4186,8 +3950,8 @@
         "tags": [
           "Skill"
         ],
-        "summary": "Get a skill by id (ADMIN)",
-        "description": "Get a skill by id (ADMIN)",
+        "summary": "Get a skill by id",
+        "description": "Get a skill by id",
         "parameters": [
           {
             "in": "header",
@@ -4376,7 +4140,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/admin/skills/{id}": {
       "put": {
         "tags": [
           "Skill"
@@ -4470,7 +4236,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/skills/{id}"
+                      "example": "/admin/skills/{id}"
                     }
                   }
                 }
@@ -4508,7 +4274,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/skills/{id}"
+                      "example": "/admin/skills/{id}"
                     }
                   }
                 }
@@ -4546,7 +4312,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/skills/{id}"
+                      "example": "/admin/skills/{id}"
                     }
                   }
                 }
@@ -4591,7 +4357,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/skills/{id}"
+                      "example": "/admin/skills/{id}"
                     }
                   }
                 }
@@ -4632,7 +4398,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/skills/{id}"
+                      "example": "/admin/skills/{id}"
                     }
                   }
                 }
@@ -4673,7 +4439,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/skills/{id}"
+                      "example": "/admin/skills/{id}"
                     }
                   }
                 }
@@ -4743,7 +4509,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/skills/{id}"
+                      "example": "/admin/skills/{id}"
                     }
                   }
                 }
@@ -4781,7 +4547,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/skills/{id}"
+                      "example": "/admin/skills/{id}"
                     }
                   }
                 }
@@ -4819,7 +4585,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/skills/{id}"
+                      "example": "/admin/skills/{id}"
                     }
                   }
                 }
@@ -4856,7 +4622,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/skills/{id}"
+                      "example": "/admin/skills/{id}"
                     }
                   }
                 }
@@ -6476,7 +6242,251 @@
         }
       }
     },
-    "/issues": {
+    "/categories/{id}/skills": {
+      "get": {
+        "tags": [
+          "Skill"
+        ],
+        "summary": "Get all skills by category id",
+        "description": "Get all skills by category id",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "access_token",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "dff4d0d4891bfd8bafdb859dac4cbccb218bcf5adc9887a627c6c159f76ef0b9"
+            }
+          },
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          },
+          {
+            "in": "query",
+            "name": "keyword",
+            "schema": {
+              "type": "string",
+              "example": "Java"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "size",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "id,asc",
+                "id,desc",
+                "name,asc",
+                "name,desc",
+                "createdAt,asc",
+                "createdAt,desc",
+                "updatedAt,asc",
+                "updatedAt,desc"
+              ],
+              "example": "name,desc"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get all skills successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Sort",
+                  "properties": {
+                    "content": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Skill",
+                        "properties": {
+                          "category": {
+                            "$ref": "#/components/schemas/Category"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Token is expired",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": 1532589762.947
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Token is expired"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "TokenIsExpiredException with token = 579989c508208d49c978e6cb99383688e6f1fedabfc22c27d3542ab0341d3b13"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/category/{id}/skills"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": "1532506012.933"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 401
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Unauthorized"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid token"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/category/{id}/skills"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access is denied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": "1532506012.933"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 403
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Access is denied"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Access is denied"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/category/{id}/skills"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Category not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": "1532462094.006"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Category not found"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "CategoryNotFoundException with id = 1"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/categories/{id}/skills"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/issues": {
       "get": {
         "tags": [
           "Issue"
@@ -6603,7 +6613,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/issues"
+                      "example": "/admin/issues"
                     }
                   }
                 }
@@ -6641,7 +6651,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/issues"
+                      "example": "/admin/issues"
                     }
                   }
                 }
@@ -6679,7 +6689,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/issues"
+                      "example": "/admin/issues"
                     }
                   }
                 }
@@ -6689,7 +6699,7 @@
         }
       }
     },
-    "/issues/{id}": {
+    "/admin/issues/{id}": {
       "get": {
         "tags": [
           "Issue"
@@ -6768,7 +6778,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/issues/{id}"
+                      "example": "/admin/issues/{id}"
                     }
                   }
                 }
@@ -6806,7 +6816,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/issues/{id}"
+                      "example": "/admin/issues/{id}"
                     }
                   }
                 }
@@ -6844,7 +6854,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/issues/{id}"
+                      "example": "/admin/issues/{id}"
                     }
                   }
                 }
@@ -6880,7 +6890,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/issues/{id}"
+                      "example": "/admin/issues/{id}"
                     }
                   }
                 }
@@ -7000,7 +7010,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/issues/{id}"
+                      "example": "/admin/issues/{id}"
                     }
                   }
                 }
@@ -7038,7 +7048,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/issues/{id}"
+                      "example": "/admin/issues/{id}"
                     }
                   }
                 }
@@ -7076,7 +7086,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/issues/{id}"
+                      "example": "/admin/issues/{id}"
                     }
                   }
                 }
@@ -7112,7 +7122,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/issues/{id}"
+                      "example": "/admin/issues/{id}"
                     }
                   }
                 }
@@ -7148,7 +7158,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/issues/{id}"
+                      "example": "/admin/issues/{id}"
                     }
                   }
                 }
@@ -7217,7 +7227,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/issues/{id}"
+                      "example": "/admin/issues/{id}"
                     }
                   }
                 }
@@ -7255,7 +7265,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/issues/{id}"
+                      "example": "/admin/issues/{id}"
                     }
                   }
                 }
@@ -7293,7 +7303,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/issues/{id}"
+                      "example": "/admin/issues/{id}"
                     }
                   }
                 }
@@ -7329,7 +7339,237 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/issues/{id}"
+                      "example": "/admin/issues/{id}"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/issues/{id}/action": {
+      "get": {
+        "tags": [
+          "Issue"
+        ],
+        "summary": "APPROVE or DENY issue",
+        "description": "APPROVE or DENY issue with token",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "example": 1
+            }
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "APPROVE",
+                "DENY"
+              ],
+              "example": "APPROVE"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "APPROVE or DENY issue successfully"
+          },
+          "400": {
+            "description": "Token is expired",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": 1532589762.947
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Token is expired"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "TokenIsExpiredException with token = 579989c508208d49c978e6cb99383688e6f1fedabfc22c27d3542ab0341d3b13"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/admin/issues/{id}/action"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": "1532506012.933"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 401
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Unauthorized"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid token"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/admin/issues/{id}/action"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access is denied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": "1532506012.933"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 403
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Access is denied"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Access is denied"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/admin/issues/{id}/action"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "issue not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": "1532462094.006"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Issue not found"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "IssueNotFoundException with id = 1"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/admin/issues/1/action"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "406": {
+            "description": "Not acceptable (Status != [APPROVE|DENY])"
+          },
+          "423": {
+            "description": "Issue is closed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": 1532601270.69
+                    },
+                    "status": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 423
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Issue is closed"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "IssueIsClosedException with issueId = 2"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/admin/issues/{id}/action"
                     }
                   }
                 }
