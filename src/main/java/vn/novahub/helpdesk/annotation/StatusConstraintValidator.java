@@ -32,19 +32,19 @@ public class StatusConstraintValidator implements ConstraintValidator<Status, St
     }
 
     private boolean checkIssueStatus(String status) {
-        if(IssueEnum.APPROVE.name().equals(status) ||
-           IssueEnum.DENY.name().equals(status) ||
-           IssueEnum.PENDING.name().equals(status))
-            return true;
+        for(IssueEnum issueEnum : IssueEnum.values()) {
+            if(issueEnum.name().equals(status))
+                return true;
+        }
 
         return false;
     }
 
     private boolean checkAccountStatus(String status) {
-        if(AccountEnum.ACTIVE.name().equals(status) ||
-           AccountEnum.INACTIVE.name().equals(status) ||
-           AccountEnum.LOCKED.name().equals(status))
-            return true;
+        for(AccountEnum accountEnum : AccountEnum.values()) {
+            if(accountEnum.name().equals(status))
+                return true;
+        }
 
         return false;
     }

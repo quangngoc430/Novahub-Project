@@ -30,6 +30,7 @@ public class GoogleServiceImpl implements GoogleService {
         }
 
         ObjectMapper mapper = new ObjectMapper();
+
         GooglePojo googlePojo = new GooglePojo();
         googlePojo.setEmail(mapper.readTree(response).get("email").textValue());
 

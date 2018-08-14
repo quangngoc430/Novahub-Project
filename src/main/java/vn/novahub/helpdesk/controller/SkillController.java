@@ -16,7 +16,7 @@ import vn.novahub.helpdesk.service.AccountSkillService;
 import vn.novahub.helpdesk.service.AdminSkillService;
 
 @RestController
-@RequestMapping(path = "/api")
+@RequestMapping(path = "/api/skills")
 public class SkillController {
 
     @Autowired
@@ -26,7 +26,7 @@ public class SkillController {
     private AdminSkillService adminSkillService;
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping(path = "/skills", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Page<Skill>> getAll(@RequestParam(value = "categoryId") long categoryId,
                                               @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
                                               Pageable pageable) throws CategoryNotFoundException {
@@ -34,67 +34,46 @@ public class SkillController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping(path = "/skills/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(path = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Skill> getById(@PathVariable("id") long skillId) throws SkillNotFoundException {
         return new ResponseEntity<>(adminSkillService.findOne(skillId), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping(path = "/skills", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Skill> createByAdmin(@RequestBody Skill skill) throws SkillIsExistException, SkillValidationException, CategoryNotFoundException {
-        return new ResponseEntity<>(adminSkillService.create(skill), HttpStatus.OK);
-    }
-
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PutMapping(path = "/skills/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Skill> updateByAdmin(@PathVariable("id") long skillId,
-                                               @RequestBody Skill skill) throws SkillIsExistException, SkillValidationException, SkillNotFoundException, CategoryNotFoundException {
-        return new ResponseEntity<>(adminSkillService.update(skillId, skill), HttpStatus.OK);
-    }
-
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @DeleteMapping(path = "/skills/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Void> deleteByAdmin(@PathVariable("id") long skillId) throws SkillNotFoundException {
-        adminSkillService.delete(skillId);
-
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
     @PreAuthorize("isAuthenticated()")
-    @GetMapping(path = "/skills/{id}/users", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(path = "/{id}/users", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Page<Account>> getAllUsersBySkillId(@PathVariable("id") long skillId,
                                                               Pageable pageable) throws SkillNotFoundException {
         return new ResponseEntity<>(accountSkillService.getAllUsersBySkillId(skillId, pageable), HttpStatus.OK);
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping(path = "/skills/me", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(path = "/me", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Page<Skill>> getAllByAccountLogin(@RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
                                                             Pageable pageable) {
         return new ResponseEntity<>(accountSkillService.getAllByKeywordForAccountLogin(keyword, pageable), HttpStatus.OK);
     }
 
     @PreAuthorize("isAuthenticated()")
-    @PostMapping(path = "/skills/me", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(path = "/me", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Skill> create(@RequestBody Skill skill) throws SkillIsExistException, SkillValidationException, CategoryNotFoundException, LevelValidationException {
         return new ResponseEntity<>(accountSkillService.create(skill), HttpStatus.OK);
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping(path = "/skills/me/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(path = "/me/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Skill> get(@PathVariable("id") long skillId) throws SkillNotFoundException {
         return new ResponseEntity<>(accountSkillService.findOne(skillId), HttpStatus.OK);
     }
 
     @PreAuthorize("isAuthenticated()")
-    @PutMapping(path = "/skills/me/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PutMapping(path = "/me/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Skill> update(@PathVariable("id") long skillId,
                                         @RequestBody Skill skill) throws SkillNotFoundException, LevelValidationException, SkillValidationException, SkillIsExistException {
         return new ResponseEntity<>(accountSkillService.update(skillId, skill), HttpStatus.OK);
     }
 
     @PreAuthorize("isAuthenticated()")
-    @DeleteMapping(path = "/skills/me/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @DeleteMapping(path = "/me/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Void> delete(@PathVariable("id") long skillId) throws SkillNotFoundException {
         accountSkillService.delete(skillId);
 

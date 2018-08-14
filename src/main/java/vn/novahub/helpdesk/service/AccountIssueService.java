@@ -17,6 +17,10 @@ public interface AccountIssueService {
 
     Issue findOne(long issueId) throws IssueNotFoundException;
 
+    void approve(long issueId, String token) throws IssueNotFoundException, IssueIsClosedException, MessagingException, IOException;
+
+    void deny(long issueId, String token) throws IssueNotFoundException, IssueIsClosedException, MessagingException, IOException;
+
     Issue create(Issue issue) throws IssueValidationException, MessagingException, IOException, AccountNotFoundException;
 
     Issue update(long issueId, Issue issue) throws IssueNotFoundException, IssueValidationException, MessagingException, IOException, IssueIsClosedException, AccountNotFoundException;

@@ -27,6 +27,7 @@ import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.groups.Default;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Optional;
 
@@ -168,7 +169,7 @@ public class AccountServiceImpl implements AccountService {
             account.setVerificationToken(null);
             account.setPassword(null);
             account.setStatus(AccountEnum.ACTIVE.name());
-            Role role = roleService.getByName(RoleEnum.USER.name());
+            Role role = roleService.getByName(RoleEnum.EMPLOYEE.name());
             account.setRoleId(role.getId());
             account.setCreatedAt(new Date());
             account.setUpdatedAt(new Date());
@@ -249,7 +250,7 @@ public class AccountServiceImpl implements AccountService {
         account.setPassword(bCryptPasswordEncoder.encode(account.getPassword()));
         account.setStatus(AccountEnum.INACTIVE.name());
         account.setVerificationToken(tokenService.generateToken(account.getEmail() + account.getEmail()));
-        account.setRoleId(roleService.getByName(RoleEnum.USER.name()).getId());
+        account.setRoleId(roleService.getByName(RoleEnum.EMPLOYEE.name()).getId());
         account.setCreatedAt(new Date());
         account.setUpdatedAt(new Date());
 
@@ -359,6 +360,32 @@ public class AccountServiceImpl implements AccountService {
 
         oldAccount.setUpdatedAt(new Date());
         return accountRepository.save(oldAccount);
+    }
+
+    @Override
+    public ArrayList<String> getAllEmailsOfAdmin() {
+        ArrayList<Account> adminList = (ArrayList<Account>) (accountRepository.getAllByRoleName(RoleEnum.ADMIN.name()));
+
+        ArrayList<String> emails = new ArrayList<>();
+
+        if(adminList != null)
+            for (Account account : adminList)
+                emails.add(account.getEmail());
+
+        return emails;
+    }
+
+    @Override
+    public ArrayList<String> getAllEmailsOfClerk() {
+        ArrayList<Account> clerkList = (ArrayList<Account>) (accountRepository.getAllByRoleName(RoleEnum.CLERK.name()));
+
+        ArrayList<String> emails = new ArrayList<>();
+
+        if(clerkList != null)
+            for (Account account : clerkList)
+                emails.add(account.getEmail());
+
+        return emails;
     }
 
     @Override
