@@ -1,0 +1,16 @@
+[{
+      "type" : "Vacation",
+      "defaultQuota" : 88
+    },
+    {
+      "type" : "Public Holiday",
+      "defaultQuota" : 8
+    },
+    {
+      "type" : "STD Wellness Day",
+      "defaultQuota" : 16
+    },
+    {
+      "type" : "Pregnant",
+      "defaultQuota" : 24
+    } ]
