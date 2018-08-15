@@ -45,12 +45,27 @@ public class ApplicationSeeder {
     @Autowired
     private IssueRepository issueRepository;
 
-    public void generateData() throws IOException, ParseException {
+    @Autowired
+    private DayOffTypeRepository dayOffTypeRepository;
+
+    @Autowired
+    private DayOffAccountRepository dayOffAccountRepository;
+
+    @Autowired
+    private DayOffRepository dayOffRepository;
+
+    @Autowired
+    private Seeder seeder;
+
+    public void generateData() throws IOException, ParseException, ClassNotFoundException {
         roleRepository.deleteAll();
         accountRepository.deleteAll();
         categoryRepository.deleteAll();
         levelRepository.deleteAll();
         issueRepository.deleteAll();
+        dayOffRepository.deleteAll();
+        dayOffAccountRepository.deleteAll();
+        dayOffTypeRepository.deleteAll();
 
         ArrayList<Role> roleArrayList = rolesSeeder.generateData("seeding/roles.json");
         ArrayList<Account> accountArrayList = accountsSeeder.generateData("seeding/accounts.json");
@@ -58,5 +73,9 @@ public class ApplicationSeeder {
         ArrayList<Skill> skillArrayList = skillsSeeder.generateData("seeding/skills.json");
         ArrayList<Level> levelArrayList = levelsSeeder.generateData(accountArrayList, skillArrayList);
         ArrayList<Issue> issueArrayList = issuesSeeder.generateData("seeding/issues.json", accountArrayList);
+
+        dayOffRepository.saveAll(seeder.generate("seeding/day_off.json", DayOff.class));
+        dayOffAccountRepository.saveAll(seeder.generate("seeing/day_off_account.json", DayOffAccount.class));
+        dayOffAccountRepository.saveAll(seeder.generate("seeing/day_off_type.json", DayOffAccount.class));
     }
 }
