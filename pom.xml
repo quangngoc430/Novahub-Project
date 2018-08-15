@@ -95,12 +95,6 @@
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>fluent-hc</artifactId>
 		</dependency>
-        <dependency>
-            <groupId>org.jetbrains</groupId>
-            <artifactId>annotations</artifactId>
-            <version>RELEASE</version>
-            <scope>compile</scope>
-        </dependency>
     </dependencies>
 
 	<build>
