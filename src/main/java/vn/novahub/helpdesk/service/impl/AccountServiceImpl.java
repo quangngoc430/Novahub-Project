@@ -256,8 +256,9 @@ public class AccountServiceImpl implements AccountService {
                     }
                 }
             }
-        }
 
+            account.setTotalSkills((Long.valueOf(account.getSkills().size())));
+        }
 
         return accounts;
     }

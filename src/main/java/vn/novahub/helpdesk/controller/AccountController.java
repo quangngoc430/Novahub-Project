@@ -1,5 +1,6 @@
 package vn.novahub.helpdesk.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -17,6 +18,7 @@ import vn.novahub.helpdesk.model.Token;
 import vn.novahub.helpdesk.model.Skill;
 import vn.novahub.helpdesk.service.AccountService;
 import vn.novahub.helpdesk.service.AccountSkillService;
+import vn.novahub.helpdesk.view.View;
 
 import javax.annotation.security.PermitAll;
 import javax.mail.MessagingException;
@@ -101,6 +103,7 @@ public class AccountController {
     }
 
     @PreAuthorize("isAuthenticated()")
+    @JsonView(View.AccountWithSkills.class)
     @GetMapping(path = "/users", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Page<Account>> getAll(@RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
                                                 @RequestParam(value = "status", required = false, defaultValue = "") String status,
@@ -112,6 +115,7 @@ public class AccountController {
     }
 
     @PermitAll
+    @JsonView(View.Public.class)
     @PostMapping(path = "/users", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Account> create(@RequestBody Account account) throws AccountIsExistException, RoleNotFoundException, AccountValidationException, MessagingException, IOException {
         Account newAccount = accountService.create(account);
@@ -120,6 +124,7 @@ public class AccountController {
     }
 
     @PreAuthorize("isAuthenticated()")
+    @JsonView(View.Public.class)
     @GetMapping(path = "/users/me", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<JsonNode> getAccountLogin(@RequestParam(value = "checkPasswordNull", defaultValue = "false") String checkPasswordNull){
         Account account = accountService.getAccountLogin();
@@ -135,6 +140,7 @@ public class AccountController {
     }
 
     @PreAuthorize("isAuthenticated()")
+    @JsonView(View.Public.class)
     @PutMapping(path = "/users/me", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<JsonNode> updateForAccountLogin(@RequestParam(value = "checkPasswordNull", defaultValue = "false") String checkPasswordNull,
                                                           @RequestBody Account account) throws AccountPasswordNotEqualException, AccountValidationException {
@@ -151,6 +157,7 @@ public class AccountController {
     }
 
     @PreAuthorize("isAuthenticated()")
+    @JsonView(View.Public.class)
     @GetMapping(path = "/users/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Account> get(@PathVariable(value = "id") long accountId) throws AccountNotFoundException {
         Account account = accountService.get(accountId);
