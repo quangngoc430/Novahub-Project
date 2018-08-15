@@ -23,10 +23,7 @@ public class Application {
 	private final static Logger logger = LoggerFactory.getLogger(Application.class);
 
 	@Autowired
-	private static ApplicationSeeder applicationSeeder;
-
-	@Autowired
-	private static Seeder seeder;
+	private ApplicationSeeder applicationSeeder;
 
 	public static void main(String[] args) throws IOException, ParseException, ClassNotFoundException {
 		SpringApplication.run(Application.class, args);
