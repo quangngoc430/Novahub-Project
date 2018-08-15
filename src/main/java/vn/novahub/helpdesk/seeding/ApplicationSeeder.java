@@ -37,6 +37,12 @@ public class ApplicationSeeder {
     private AccountRepository accountRepository;
 
     @Autowired
+    private TokenRepository tokenRepository;
+
+    @Autowired
+    private AccountHasSkillRepository accountHasSkillRepository;
+
+    @Autowired
     private CategoryRepository categoryRepository;
 
     @Autowired
@@ -44,6 +50,9 @@ public class ApplicationSeeder {
 
     @Autowired
     private IssueRepository issueRepository;
+
+    @Autowired
+    private SkillRepository skillRepository;
 
     @Autowired
     private DayOffTypeRepository dayOffTypeRepository;
@@ -58,14 +67,18 @@ public class ApplicationSeeder {
     private Seeder seeder;
 
     public void generateData() throws IOException, ParseException, ClassNotFoundException {
-        roleRepository.deleteAll();
-        accountRepository.deleteAll();
+
+        accountHasSkillRepository.deleteAll();
+        skillRepository.deleteAll();
         categoryRepository.deleteAll();
         levelRepository.deleteAll();
         issueRepository.deleteAll();
         dayOffRepository.deleteAll();
         dayOffAccountRepository.deleteAll();
         dayOffTypeRepository.deleteAll();
+        tokenRepository.deleteAll();
+        accountRepository.deleteAll();
+        roleRepository.deleteAll();
 
         ArrayList<Role> roleArrayList = rolesSeeder.generateData("seeding/roles.json");
         ArrayList<Account> accountArrayList = accountsSeeder.generateData("seeding/accounts.json");
