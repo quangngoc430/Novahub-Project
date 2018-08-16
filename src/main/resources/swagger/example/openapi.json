@@ -1101,8 +1101,8 @@
         "tags": [
           "User"
         ],
-        "summary": "Get profile of user login",
-        "description": "Get profile of user login",
+        "summary": "Update profile of user login",
+        "description": "Update profile of user login",
         "parameters": [
           {
             "in": "header",
