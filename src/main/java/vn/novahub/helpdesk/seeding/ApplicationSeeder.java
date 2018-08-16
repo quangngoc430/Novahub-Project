@@ -31,30 +31,6 @@ public class ApplicationSeeder {
     private IssuesSeeder issuesSeeder;
 
     @Autowired
-    private RoleRepository roleRepository;
-
-    @Autowired
-    private AccountRepository accountRepository;
-
-    @Autowired
-    private TokenRepository tokenRepository;
-
-    @Autowired
-    private AccountHasSkillRepository accountHasSkillRepository;
-
-    @Autowired
-    private CategoryRepository categoryRepository;
-
-    @Autowired
-    private LevelRepository levelRepository;
-
-    @Autowired
-    private IssueRepository issueRepository;
-
-    @Autowired
-    private SkillRepository skillRepository;
-
-    @Autowired
     private DayOffTypeRepository dayOffTypeRepository;
 
     @Autowired
@@ -68,17 +44,7 @@ public class ApplicationSeeder {
 
     public void generateData() throws IOException, ParseException, ClassNotFoundException {
 
-//        accountHasSkillRepository.deleteAll();
-//        skillRepository.deleteAll();
-//        categoryRepository.deleteAll();
-//        levelRepository.deleteAll();
-//        issueRepository.deleteAll();
-//        dayOffRepository.deleteAll();
-//        dayOffAccountRepository.deleteAll();
-//        dayOffTypeRepository.deleteAll();
-//        tokenRepository.deleteAll();
-//        accountRepository.deleteAll();
-//        roleRepository.deleteAll();
+
 
         ArrayList<Role> roleArrayList = rolesSeeder.generateData("seeding/roles.json");
         ArrayList<Account> accountArrayList = accountsSeeder.generateData("seeding/accounts.json");
@@ -87,8 +53,8 @@ public class ApplicationSeeder {
         ArrayList<Level> levelArrayList = levelsSeeder.generateData(accountArrayList, skillArrayList);
         ArrayList<Issue> issueArrayList = issuesSeeder.generateData("seeding/issues.json", accountArrayList);
 
+        dayOffTypeRepository.saveAll(seeder.generate("seeding/day_off_type.json", DayOffType.class));
+        dayOffAccountRepository.saveAll(seeder.generate("seeding/day_off_account.json", DayOffAccount.class));
         dayOffRepository.saveAll(seeder.generate("seeding/day_off.json", DayOff.class));
-        dayOffAccountRepository.saveAll(seeder.generate("seeing/day_off_account.json", DayOffAccount.class));
-        dayOffAccountRepository.saveAll(seeder.generate("seeing/day_off_type.json", DayOffAccount.class));
     }
 }
