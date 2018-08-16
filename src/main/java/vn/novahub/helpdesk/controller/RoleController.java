@@ -22,6 +22,7 @@ public class RoleController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping(path = "/roles/{id}")
     public ResponseEntity<Role> get(@PathVariable("id") long roleId) throws RoleNotFoundException {
+
         Role role = roleService.getById(roleId);
 
         return new ResponseEntity<>(role, HttpStatus.OK);

@@ -725,7 +725,7 @@
                           "example": "Unauthorized"
                         }
                       }
-                    },
+                    },u
                     "message": {
                       "type": "string",
                       "example": "Invalid token"

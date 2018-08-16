@@ -17,7 +17,6 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Role getById(long roleId) throws RoleNotFoundException {
-
         Role role = roleRepository.getById(roleId);
 
         if (role == null)
@@ -28,10 +27,9 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Role getByName(String roleName) throws RoleNotFoundException {
-
         Role role = roleRepository.getByName(roleName);
 
-        if(role == null)
+        if (role == null)
             throw new RoleNotFoundException(roleName);
 
         return role;
@@ -39,7 +37,6 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Page<Role> getAll(String roleName, Pageable pageable) {
-
         return roleRepository.getAllByNameContaining(roleName, pageable);
     }
 

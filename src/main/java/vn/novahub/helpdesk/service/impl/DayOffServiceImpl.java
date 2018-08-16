@@ -220,7 +220,6 @@ public class DayOffServiceImpl implements DayOffService {
         DayOff dayOff = answerDayOffRequest(dayOffOptional.get(), DayOffStatus.CANCELLED.name());
 
         sendEmailDayOff(dayOff, RoleEnum.EMPLOYEE.name());
-
         sendEmailDayOff(dayOff, RoleEnum.CLERK.name());
 
         return dayOff;
