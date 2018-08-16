@@ -8,7 +8,7 @@
   ],
   "info": {
     "description": "This is a simple example API for Helpdesk",
-    "version": "1.0.0",
+    "version": "1.0.0-oas3",
     "title": "Simple Helpdesk API",
     "contact": {
       "email": "mentor@novahub.vn"
@@ -38,6 +38,14 @@
     {
       "name": "Issue",
       "description": "Issue apis"
+    },
+    {
+      "name": "DayOffType",
+      "description": "DayOffType apis"
+    },
+    {
+      "name": "DayOffAccount",
+      "description": "DayOffAccount apis"
     }
   ],
   "paths": {
@@ -562,8 +570,8 @@
         "tags": [
           "User"
         ],
-        "summary": "Get all users",
-        "description": "Get all users",
+        "summary": "Get all users (ADMIN)",
+        "description": "Get all users (ADMIN)",
         "parameters": [
           {
             "in": "header",
@@ -717,7 +725,7 @@
                           "example": "Unauthorized"
                         }
                       }
-                    },
+                    },u
                     "message": {
                       "type": "string",
                       "example": "Invalid token"
@@ -807,18 +815,6 @@
                   "address": {
                     "type": "string",
                     "example": "14 An Thuong 32 street, Da Nang city"
-                  },
-                  "phone": {
-                    "type": "string",
-                    "example": "0905123456"
-                  },
-                  "title": {
-                    "type": "string",
-                    "example": "Back-end Developer"
-                  },
-                  "introduction": {
-                    "type": "string",
-                    "example": "I work as a back-end developer"
                   },
                   "avatar_url": {
                     "type": "string",
@@ -1154,18 +1150,6 @@
                   "address": {
                     "type": "string",
                     "example": "14 An Thuong 32 street, Da Nang city"
-                  },
-                  "phone": {
-                    "type": "string",
-                    "example": "0905123456"
-                  },
-                  "title": {
-                    "type": "string",
-                    "example": "Back-end Developer"
-                  },
-                  "introduction": {
-                    "type": "string",
-                    "example": "I work as a back-end developer"
                   },
                   "avatar_url": {
                     "type": "string",
@@ -1551,9 +1535,7 @@
             }
           }
         }
-      }
-    },
-    "/admin/users/{id}": {
+      },
       "put": {
         "tags": [
           "User"
@@ -1608,18 +1590,6 @@
                   "address": {
                     "type": "string",
                     "example": "14 An Thuong 32 street, Da Nang city"
-                  },
-                  "phone": {
-                    "type": "string",
-                    "example": "0905123456"
-                  },
-                  "title": {
-                    "type": "string",
-                    "example": "Back-end Developer"
-                  },
-                  "introduction": {
-                    "type": "string",
-                    "example": "I work as a back-end developer"
                   },
                   "avatar_url": {
                     "type": "string",
@@ -1676,7 +1646,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/users/{id}"
+                      "example": "/users/{id}"
                     }
                   }
                 }
@@ -1714,7 +1684,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/users/{id}"
+                      "example": "/users/{id}"
                     }
                   }
                 }
@@ -1752,7 +1722,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/users/{id}"
+                      "example": "/users/{id}"
                     }
                   }
                 }
@@ -1789,7 +1759,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/users/{id}"
+                      "example": "/users/{id}"
                     }
                   }
                 }
@@ -1830,7 +1800,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/users/{id}"
+                      "example": "/users/{id}"
                     }
                   }
                 }
@@ -1900,7 +1870,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/users/{id}"
+                      "example": "/users/{id}"
                     }
                   }
                 }
@@ -1938,7 +1908,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/users/{id}"
+                      "example": "/users/{id}"
                     }
                   }
                 }
@@ -1976,7 +1946,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/users/{id}"
+                      "example": "/users/{id}"
                     }
                   }
                 }
@@ -2013,7 +1983,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/users/{id}"
+                      "example": "/users/{id}"
                     }
                   }
                 }
@@ -2241,7 +2211,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Get a role successfully",
+            "description": "Get all roles successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -2590,9 +2560,7 @@
             }
           }
         }
-      }
-    },
-    "/admin/categories": {
+      },
       "post": {
         "tags": [
           "Category"
@@ -2666,7 +2634,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/categories"
+                      "example": "/categories"
                     }
                   }
                 }
@@ -2704,7 +2672,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/categories"
+                      "example": "/categories"
                     }
                   }
                 }
@@ -2742,7 +2710,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/categories"
+                      "example": "/categories"
                     }
                   }
                 }
@@ -2783,7 +2751,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/categories"
+                      "example": "/categories"
                     }
                   }
                 }
@@ -2821,7 +2789,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/categories"
+                      "example": "/categories"
                     }
                   }
                 }
@@ -2836,8 +2804,8 @@
         "tags": [
           "Category"
         ],
-        "summary": "Get a category by id",
-        "description": "Get a category by id",
+        "summary": "Get a category by id (ADMIN)",
+        "description": "Get a category by id (ADMIN)",
         "parameters": [
           {
             "in": "header",
@@ -3020,9 +2988,7 @@
             }
           }
         }
-      }
-    },
-    "/admin/categories/{id}": {
+      },
       "put": {
         "tags": [
           "Category"
@@ -3105,7 +3071,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/categories/{id}"
+                      "example": "/categories/{id}"
                     }
                   }
                 }
@@ -3143,7 +3109,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/categories/{id}"
+                      "example": "/categories/{id}"
                     }
                   }
                 }
@@ -3181,7 +3147,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/categories/{id}"
+                      "example": "/categories/{id}"
                     }
                   }
                 }
@@ -3218,7 +3184,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/categories/{id}"
+                      "example": "/categories/{id}"
                     }
                   }
                 }
@@ -3259,7 +3225,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/categories/{id}"
+                      "example": "/categories/{id}"
                     }
                   }
                 }
@@ -3297,7 +3263,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/categories/{id}"
+                      "example": "/categories/{id}"
                     }
                   }
                 }
@@ -3366,7 +3332,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/categories/{id}"
+                      "example": "/categories/{id}"
                     }
                   }
                 }
@@ -3404,7 +3370,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/categories/{id}"
+                      "example": "/categories/{id}"
                     }
                   }
                 }
@@ -3442,7 +3408,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/categories/{id}"
+                      "example": "/categories/{id}"
                     }
                   }
                 }
@@ -3479,7 +3445,251 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/categories/{id}"
+                      "example": "/categories/{id}"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/categories/{id}/skills": {
+      "get": {
+        "tags": [
+          "Category"
+        ],
+        "summary": "Get all skills by category id",
+        "description": "Get all skills by category id",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "access_token",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "dff4d0d4891bfd8bafdb859dac4cbccb218bcf5adc9887a627c6c159f76ef0b9"
+            }
+          },
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          },
+          {
+            "in": "query",
+            "name": "keyword",
+            "schema": {
+              "type": "string",
+              "example": "Java"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "size",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "id,asc",
+                "id,desc",
+                "name,asc",
+                "name,desc",
+                "createdAt,asc",
+                "createdAt,desc",
+                "updatedAt,asc",
+                "updatedAt,desc"
+              ],
+              "example": "name,desc"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get all skills successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Sort",
+                  "properties": {
+                    "content": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Skill",
+                        "properties": {
+                          "category": {
+                            "$ref": "#/components/schemas/Category"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Token is expired",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": 1532589762.947
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Token is expired"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "TokenIsExpiredException with token = 579989c508208d49c978e6cb99383688e6f1fedabfc22c27d3542ab0341d3b13"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/category/{id}/skills"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": "1532506012.933"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 401
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Unauthorized"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid token"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/category/{id}/skills"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access is denied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": "1532506012.933"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 403
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Access is denied"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Access is denied"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/category/{id}/skills"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Category not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": "1532462094.006"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Category not found"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "CategoryNotFoundException with id = 1"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/categories/{id}/skills"
                     }
                   }
                 }
@@ -3694,9 +3904,7 @@
             }
           }
         }
-      }
-    },
-    "/admin/skills": {
+      },
       "post": {
         "tags": [
           "Skill"
@@ -3781,7 +3989,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/skills"
+                      "example": "/skills"
                     }
                   }
                 }
@@ -3819,7 +4027,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/skills"
+                      "example": "/skills"
                     }
                   }
                 }
@@ -3856,7 +4064,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/skills"
+                      "example": "/skills"
                     }
                   }
                 }
@@ -3897,7 +4105,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/skills"
+                      "example": "/skills"
                     }
                   }
                 }
@@ -3935,7 +4143,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/skills"
+                      "example": "/skills"
                     }
                   }
                 }
@@ -3950,8 +4158,8 @@
         "tags": [
           "Skill"
         ],
-        "summary": "Get a skill by id",
-        "description": "Get a skill by id",
+        "summary": "Get a skill by id (ADMIN)",
+        "description": "Get a skill by id (ADMIN)",
         "parameters": [
           {
             "in": "header",
@@ -4140,9 +4348,7 @@
             }
           }
         }
-      }
-    },
-    "/admin/skills/{id}": {
+      },
       "put": {
         "tags": [
           "Skill"
@@ -4236,7 +4442,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/skills/{id}"
+                      "example": "/skills/{id}"
                     }
                   }
                 }
@@ -4274,7 +4480,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/skills/{id}"
+                      "example": "/skills/{id}"
                     }
                   }
                 }
@@ -4312,7 +4518,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/skills/{id}"
+                      "example": "/skills/{id}"
                     }
                   }
                 }
@@ -4357,7 +4563,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/skills/{id}"
+                      "example": "/skills/{id}"
                     }
                   }
                 }
@@ -4398,7 +4604,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/skills/{id}"
+                      "example": "/skills/{id}"
                     }
                   }
                 }
@@ -4439,7 +4645,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/skills/{id}"
+                      "example": "/skills/{id}"
                     }
                   }
                 }
@@ -4509,7 +4715,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/skills/{id}"
+                      "example": "/skills/{id}"
                     }
                   }
                 }
@@ -4547,7 +4753,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/skills/{id}"
+                      "example": "/skills/{id}"
                     }
                   }
                 }
@@ -4585,7 +4791,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/skills/{id}"
+                      "example": "/skills/{id}"
                     }
                   }
                 }
@@ -4622,7 +4828,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/skills/{id}"
+                      "example": "/skills/{id}"
                     }
                   }
                 }
@@ -6242,251 +6448,7 @@
         }
       }
     },
-    "/categories/{id}/skills": {
-      "get": {
-        "tags": [
-          "Skill"
-        ],
-        "summary": "Get all skills by category id",
-        "description": "Get all skills by category id",
-        "parameters": [
-          {
-            "in": "header",
-            "name": "access_token",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "dff4d0d4891bfd8bafdb859dac4cbccb218bcf5adc9887a627c6c159f76ef0b9"
-            }
-          },
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "example": 1
-            }
-          },
-          {
-            "in": "query",
-            "name": "keyword",
-            "schema": {
-              "type": "string",
-              "example": "Java"
-            }
-          },
-          {
-            "in": "query",
-            "name": "page",
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "in": "query",
-            "name": "size",
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "in": "query",
-            "name": "sort",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "id,asc",
-                "id,desc",
-                "name,asc",
-                "name,desc",
-                "createdAt,asc",
-                "createdAt,desc",
-                "updatedAt,asc",
-                "updatedAt,desc"
-              ],
-              "example": "name,desc"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Get all skills successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Sort",
-                  "properties": {
-                    "content": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/Skill",
-                        "properties": {
-                          "category": {
-                            "$ref": "#/components/schemas/Category"
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Token is expired",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "timestamp": {
-                      "type": "string",
-                      "example": 1532589762.947
-                    },
-                    "status": {
-                      "type": "integer",
-                      "example": 400
-                    },
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "message": {
-                          "type": "string",
-                          "example": "Token is expired"
-                        }
-                      }
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "TokenIsExpiredException with token = 579989c508208d49c978e6cb99383688e6f1fedabfc22c27d3542ab0341d3b13"
-                    },
-                    "path": {
-                      "type": "string",
-                      "example": "/category/{id}/skills"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "timestamp": {
-                      "type": "string",
-                      "example": "1532506012.933"
-                    },
-                    "status": {
-                      "type": "integer",
-                      "format": "int64",
-                      "example": 401
-                    },
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "message": {
-                          "type": "string",
-                          "example": "Unauthorized"
-                        }
-                      }
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Invalid token"
-                    },
-                    "path": {
-                      "type": "string",
-                      "example": "/category/{id}/skills"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Access is denied",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "timestamp": {
-                      "type": "string",
-                      "example": "1532506012.933"
-                    },
-                    "status": {
-                      "type": "integer",
-                      "format": "int64",
-                      "example": 403
-                    },
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "message": {
-                          "type": "string",
-                          "example": "Access is denied"
-                        }
-                      }
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Access is denied"
-                    },
-                    "path": {
-                      "type": "string",
-                      "example": "/category/{id}/skills"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Category not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "timestamp": {
-                      "type": "string",
-                      "example": "1532462094.006"
-                    },
-                    "status": {
-                      "type": "integer",
-                      "example": 404
-                    },
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "message": {
-                          "type": "string",
-                          "example": "Category not found"
-                        }
-                      }
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "CategoryNotFoundException with id = 1"
-                    },
-                    "path": {
-                      "type": "string",
-                      "example": "/categories/{id}/skills"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/admin/issues": {
+    "/issues": {
       "get": {
         "tags": [
           "Issue"
@@ -6613,7 +6575,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/issues"
+                      "example": "/issues"
                     }
                   }
                 }
@@ -6651,7 +6613,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/issues"
+                      "example": "/issues"
                     }
                   }
                 }
@@ -6689,7 +6651,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/issues"
+                      "example": "/issues"
                     }
                   }
                 }
@@ -6699,7 +6661,7 @@
         }
       }
     },
-    "/admin/issues/{id}": {
+    "/issues/{id}": {
       "get": {
         "tags": [
           "Issue"
@@ -6778,7 +6740,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/issues/{id}"
+                      "example": "/issues/{id}"
                     }
                   }
                 }
@@ -6816,7 +6778,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/issues/{id}"
+                      "example": "/issues/{id}"
                     }
                   }
                 }
@@ -6854,7 +6816,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/issues/{id}"
+                      "example": "/issues/{id}"
                     }
                   }
                 }
@@ -6890,7 +6852,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/issues/{id}"
+                      "example": "/issues/{id}"
                     }
                   }
                 }
@@ -7010,7 +6972,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/issues/{id}"
+                      "example": "/issues/{id}"
                     }
                   }
                 }
@@ -7048,7 +7010,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/issues/{id}"
+                      "example": "/issues/{id}"
                     }
                   }
                 }
@@ -7086,7 +7048,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/issues/{id}"
+                      "example": "/issues/{id}"
                     }
                   }
                 }
@@ -7122,7 +7084,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/issues/{id}"
+                      "example": "/issues/{id}"
                     }
                   }
                 }
@@ -7158,7 +7120,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/issues/{id}"
+                      "example": "/issues/{id}"
                     }
                   }
                 }
@@ -7227,7 +7189,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/issues/{id}"
+                      "example": "/issues/{id}"
                     }
                   }
                 }
@@ -7265,7 +7227,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/issues/{id}"
+                      "example": "/issues/{id}"
                     }
                   }
                 }
@@ -7303,7 +7265,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/issues/{id}"
+                      "example": "/issues/{id}"
                     }
                   }
                 }
@@ -7339,237 +7301,7 @@
                     },
                     "path": {
                       "type": "string",
-                      "example": "/admin/issues/{id}"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/admin/issues/{id}/action": {
-      "get": {
-        "tags": [
-          "Issue"
-        ],
-        "summary": "APPROVE or DENY issue",
-        "description": "APPROVE or DENY issue with token",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64",
-              "example": 1
-            }
-          },
-          {
-            "in": "query",
-            "name": "status",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "enum": [
-                "APPROVE",
-                "DENY"
-              ],
-              "example": "APPROVE"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "APPROVE or DENY issue successfully"
-          },
-          "400": {
-            "description": "Token is expired",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "timestamp": {
-                      "type": "string",
-                      "example": 1532589762.947
-                    },
-                    "status": {
-                      "type": "integer",
-                      "example": 400
-                    },
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "message": {
-                          "type": "string",
-                          "example": "Token is expired"
-                        }
-                      }
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "TokenIsExpiredException with token = 579989c508208d49c978e6cb99383688e6f1fedabfc22c27d3542ab0341d3b13"
-                    },
-                    "path": {
-                      "type": "string",
-                      "example": "/admin/issues/{id}/action"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "timestamp": {
-                      "type": "string",
-                      "example": "1532506012.933"
-                    },
-                    "status": {
-                      "type": "integer",
-                      "format": "int64",
-                      "example": 401
-                    },
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "message": {
-                          "type": "string",
-                          "example": "Unauthorized"
-                        }
-                      }
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Invalid token"
-                    },
-                    "path": {
-                      "type": "string",
-                      "example": "/admin/issues/{id}/action"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Access is denied",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "timestamp": {
-                      "type": "string",
-                      "example": "1532506012.933"
-                    },
-                    "status": {
-                      "type": "integer",
-                      "format": "int64",
-                      "example": 403
-                    },
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "message": {
-                          "type": "string",
-                          "example": "Access is denied"
-                        }
-                      }
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Access is denied"
-                    },
-                    "path": {
-                      "type": "string",
-                      "example": "/admin/issues/{id}/action"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "issue not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "timestamp": {
-                      "type": "string",
-                      "example": "1532462094.006"
-                    },
-                    "status": {
-                      "type": "integer",
-                      "example": 404
-                    },
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "message": {
-                          "type": "string",
-                          "example": "Issue not found"
-                        }
-                      }
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "IssueNotFoundException with id = 1"
-                    },
-                    "path": {
-                      "type": "string",
-                      "example": "/admin/issues/1/action"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "406": {
-            "description": "Not acceptable (Status != [APPROVE|DENY])"
-          },
-          "423": {
-            "description": "Issue is closed",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "timestamp": {
-                      "type": "string",
-                      "example": 1532601270.69
-                    },
-                    "status": {
-                      "type": "integer",
-                      "format": "int64",
-                      "example": 423
-                    },
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "message": {
-                          "type": "string",
-                          "example": "Issue is closed"
-                        }
-                      }
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "IssueIsClosedException with issueId = 2"
-                    },
-                    "path": {
-                      "type": "string",
-                      "example": "/admin/issues/{id}/action"
+                      "example": "/issues/{id}"
                     }
                   }
                 }
@@ -8670,6 +8402,2637 @@
           }
         }
       }
+    },
+    "/day-off-types": {
+      "get": {
+        "tags": [
+          "DayOffType"
+        ],
+        "summary": "User get all DayOffType",
+        "description": "User get all DayOffType",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "access_token",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "dff4d0d4891bfd8bafdb859dac4cbccb218bcf5adc9887a627c6c159f76ef0b9"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get all dayofftypes successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DayOffType"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Token is expired",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": 1532589762.947
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Token is expired"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "TokenIsExpiredException with token = 579989c508208d49c978e6cb99383688e6f1fedabfc22c27d3542ab0341d3b13"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/api/day-off-types"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": "1532506012.933"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 401
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Unauthorized"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid token"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/api/day-off-types"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access is denied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": "1532506012.933"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 403
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Access is denied"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Access is denied"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/api/day-off-types"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/day-off-types/{id}": {
+      "get": {
+        "tags": [
+          "DayOffType"
+        ],
+        "summary": "User get DayOffType by id",
+        "description": "User get DayOffType by id",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "access_token",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "dff4d0d4891bfd8bafdb859dac4cbccb218bcf5adc9887a627c6c159f76ef0b9"
+            }
+          },
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get DayOffType by id successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DayOffType"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Token is expired",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": 1532589762.947
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Token is expired"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "TokenIsExpiredException with token = 579989c508208d49c978e6cb99383688e6f1fedabfc22c27d3542ab0341d3b13"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/api/day-off-types"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": "1532506012.933"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 401
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Unauthorized"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid token"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/api/day-off-types"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access is denied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": "1532506012.933"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 403
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Access is denied"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Access is denied"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/api/day-off-types"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "CommonDayOffType Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": "1532506012.933"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 404
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Not found"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "CommonType is not exist"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/day-off-types"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/day-off-types": {
+      "post": {
+        "tags": [
+          "DayOffType"
+        ],
+        "summary": "Create a dayoff type (ADMIN)",
+        "description": "Create a dayoff type (ADMIN)",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "access_token",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "dff4d0d4891bfd8bafdb859dac4cbccb218bcf5adc9887a627c6c159f76ef0b9"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "Yearly"
+                  },
+                  "defaultQuota": {
+                    "type": "integer",
+                    "format": "int32",
+                    "example": 80
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Create a dayoff type successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DayOffType"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Token is expired",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": 1532589762.947
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Token is expired"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "TokenIsExpiredException with token = 579989c508208d49c978e6cb99383688e6f1fedabfc22c27d3542ab0341d3b13"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/admin/day-off-types"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": "1532506012.933"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 401
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Unauthorized"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid token"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/admin/day-off-types"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access is denied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": "1532506012.933"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 403
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Access is denied"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Access is denied"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/admin/day-off-types"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": "1532506012.933"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 403
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Conflict"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Day off type was exist"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/admin/day-off-types"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/day-off-types/{id}": {
+      "put": {
+        "tags": [
+          "DayOffType"
+        ],
+        "summary": "Update a dayoff type (ADMIN)",
+        "description": "Update a dayoff type (ADMIN)",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "access_token",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "dff4d0d4891bfd8bafdb859dac4cbccb218bcf5adc9887a627c6c159f76ef0b9"
+            }
+          },
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "example": 1
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "format": "int32",
+                    "example": null
+                  },
+                  "type": {
+                    "type": "string",
+                    "example": "Yearly"
+                  },
+                  "defaultQuota": {
+                    "type": "integer",
+                    "format": "int32",
+                    "example": 80
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Update a dayoff type successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DayOffType"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Token is expired",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": 1532589762.947
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Token is expired"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "TokenIsExpiredException with token = 579989c508208d49c978e6cb99383688e6f1fedabfc22c27d3542ab0341d3b13"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/admin/day-off-types"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": "1532506012.933"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 401
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Unauthorized"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid token"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/admin/day-off-types"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access is denied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": "1532506012.933"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 403
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Access is denied"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Access is denied"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/admin/day-off-types"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "DayOffType Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": "1532506012.933"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 404
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Not found"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "DayOffType is not exist"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/admin/day-off-types"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "DayOffType"
+        ],
+        "summary": "Delete a dayoff type (ADMIN)",
+        "description": "Delete a dayoff type (ADMIN)",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "access_token",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "dff4d0d4891bfd8bafdb859dac4cbccb218bcf5adc9887a627c6c159f76ef0b9"
+            }
+          },
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Delete a dayoff type successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DayOffType"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Token is expired",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": 1532589762.947
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Token is expired"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "TokenIsExpiredException with token = 579989c508208d49c978e6cb99383688e6f1fedabfc22c27d3542ab0341d3b13"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/admin/day-off-types"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": "1532506012.933"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 401
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Unauthorized"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid token"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/admin/day-off-types"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access is denied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": "1532506012.933"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 403
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Access is denied"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Access is denied"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/admin/day-off-types"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "DayOffType Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": "1532506012.933"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 404
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Not found"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "DayOffType is not exist"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/admin/day-off-types"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/day-off-accounts": {
+      "get": {
+        "tags": [
+          "DayOffAccount"
+        ],
+        "summary": "User get all day off accounts",
+        "description": "User get all day off accounts",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "access_token",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "dff4d0d4891bfd8bafdb859dac4cbccb218bcf5adc9887a627c6c159f76ef0b9"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User get day off accounts successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DayOffAccount"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Token is expired",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": 1532589762.947
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Token is expired"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "TokenIsExpiredException with token = 579989c508208d49c978e6cb99383688e6f1fedabfc22c27d3542ab0341d3b13"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/day-off-accounts"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": "1532506012.933"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 401
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Unauthorized"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid token"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/day-off-accouts"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access is denied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": "1532506012.933"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 403
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Access is denied"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Access is denied"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/day-off-accouts"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/day-off-accounts": {
+      "post": {
+        "tags": [
+          "DayOffAccount"
+        ],
+        "summary": "Admin create new day off account",
+        "description": "Admin create new day off account",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "access_token",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "dff4d0d4891bfd8bafdb859dac4cbccb218bcf5adc9887a627c6c159f76ef0b9"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "dayOffTypeId": {
+                    "type": "integer",
+                    "format": "int32",
+                    "example": 1
+                  },
+                  "accountId": {
+                    "type": "integer",
+                    "format": "int64",
+                    "example": 2
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User get day off accounts successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DayOffAccount"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Token is expired",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": 1532589762.947
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Token is expired"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "TokenIsExpiredException with token = 579989c508208d49c978e6cb99383688e6f1fedabfc22c27d3542ab0341d3b13"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/admin/day-off-accouts"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": "1532506012.933"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 401
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Unauthorized"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid token"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/admin/day-off-accouts"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access is denied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": "1532506012.933"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 403
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Access is denied"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Access is denied"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/admin/day-off-accounts"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "DayOffAccount was exist in database",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": "1532506012.933"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 403
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Not found"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "DayOffAccountIsExistException with type id = 1"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/admin/day-off-accounts"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "DayOffAccount"
+        ],
+        "summary": "Admin get all DayOffAccounts or search DayOffAccount by accountId",
+        "description": "Admin get all DayOffAccounts or search DayOffAccount by accountId",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "access_token",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "dff4d0d4891bfd8bafdb859dac4cbccb218bcf5adc9887a627c6c159f76ef0b9"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User get day off accounts successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DayOffAccount"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Token is expired",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": 1532589762.947
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Token is expired"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "TokenIsExpiredException with token = 579989c508208d49c978e6cb99383688e6f1fedabfc22c27d3542ab0341d3b13"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/admin/day-off-accouts"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": "1532506012.933"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 401
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Unauthorized"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid token"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/admin/day-off-accouts"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access is denied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": "1532506012.933"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 403
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Access is denied"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Access is denied"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/admin/day-off-accounts"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Day off type not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": "1532506012.933"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 403
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Not found"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Day off type not found"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/admin/day-off-accounts"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/day-off-accounts/{id}": {
+      "put": {
+        "tags": [
+          "DayOffAccount"
+        ],
+        "summary": "Admin get all DayOffAccounts or search DayOffAccount by accountId",
+        "description": "Admin get all DayOffAccounts or search DayOffAccount by accountId",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "access_token",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "dff4d0d4891bfd8bafdb859dac4cbccb218bcf5adc9887a627c6c159f76ef0b9"
+            }
+          },
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "example": 1
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "privateQuota": {
+                    "type": "integer",
+                    "format": "int32",
+                    "example": 2
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User get day off accounts successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DayOffAccount"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Token is expired",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": 1532589762.947
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Token is expired"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "TokenIsExpiredException with token = 579989c508208d49c978e6cb99383688e6f1fedabfc22c27d3542ab0341d3b13"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/admin/day-off-accouts"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": "1532506012.933"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 401
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Unauthorized"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid token"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/admin/day-off-accouts"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access is denied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": "1532506012.933"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 403
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Access is denied"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Access is denied"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/admin/day-off-accounts"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Day off account not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": "1532506012.933"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 403
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Not found"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Day off account not found"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/admin/day-off-accounts"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/day-offs": {
+      "get": {
+        "tags": [
+          "DayOff"
+        ],
+        "summary": "User get DayOff by status (APPROVED, DENIED, CANCELLED)",
+        "description": "User get DayOff by status (APPROVED, DENIED, CANCELLED)",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "access_token",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "dff4d0d4891bfd8bafdb859dac4cbccb218bcf5adc9887a627c6c159f76ef0b9"
+            }
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "schema": {
+              "type": "string",
+              "example": "APPROVED"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "size",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "id,asc",
+                "id,desc",
+                "startDate,asc",
+                "startDate,desc",
+                "endDate,asc",
+                "endDate,desc",
+                "status,asc",
+                "status,desc"
+              ],
+              "example": "id,desc"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get all issues successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Sort",
+                  "properties": {
+                    "content": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/DayOff",
+                        "properties": {
+                          "account": {
+                            "$ref": "#/components/schemas/DayOffAccount",
+                            "properties": {
+                              "role": {
+                                "$ref": "#/components/schemas/DayOffType"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Token is expired",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": 1532589762.947
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Token is expired"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "TokenIsExpiredException with token = 579989c508208d49c978e6cb99383688e6f1fedabfc22c27d3542ab0341d3b13"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/admin/day-offs"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": "1532506012.933"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 401
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Unauthorized"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid token"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/admin/day-offs"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access is denied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": "1532506012.933"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 403
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Access is denied"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Access is denied"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/admin/day-offs"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "DayOff"
+        ],
+        "summary": "User create new day off",
+        "description": "User create new day off",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "access_token",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "dff4d0d4891bfd8bafdb859dac4cbccb218bcf5adc9887a627c6c159f76ef0b9"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "numberOfHours": {
+                    "type": "integer",
+                    "format": "int32",
+                    "example": 24
+                  },
+                  "startDate": {
+                    "type": "string",
+                    "format": "yyyy-MM-dd",
+                    "example": "2018-09-14"
+                  },
+                  "endDate": {
+                    "type": "string",
+                    "format": "yyyy-MM-dd",
+                    "example": "2018-09-14"
+                  },
+                  "comment": {
+                    "type": "string",
+                    "example": "Cho em nghi sang thu 7"
+                  },
+                  "dayOffAccount": {
+                    "type": "object",
+                    "properties": {
+                      "dayOffTypeId": {
+                        "type": "integer",
+                        "format": "int32",
+                        "example": 1
+                      },
+                      "year": {
+                        "type": "integer",
+                        "format": "int32",
+                        "example": 2018
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User get day off accounts successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DayOff"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Token is expired",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": 1532589762.947
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Token is expired"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "TokenIsExpiredException with token = 579989c508208d49c978e6cb99383688e6f1fedabfc22c27d3542ab0341d3b13"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/admin/day-off-accouts"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": "1532506012.933"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 401
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Unauthorized"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid token"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/admin/day-offs"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access is denied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": "1532506012.933"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 403
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Access is denied"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Access is denied"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/admin/day-offs"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "DayOffAccount was exist in database",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": "1532506012.933"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 403
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Not found"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "DayOffAccountIsExistException with type id = 1"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/admin/day-offs"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/day-offs/{id}": {
+      "get": {
+        "tags": [
+          "DayOff"
+        ],
+        "summary": "User get DayOff by status (APPROVED, DENIED, CANCELLED)",
+        "description": "User get DayOff by status (APPROVED, DENIED, CANCELLED)",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "access_token",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "dff4d0d4891bfd8bafdb859dac4cbccb218bcf5adc9887a627c6c159f76ef0b9"
+            }
+          },
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get all issues successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DayOff",
+                  "properties": {
+                    "dayOffAccount": {
+                      "$ref": "#/components/schemas/DayOffAccount",
+                      "properties": {
+                        "dayOffType": {
+                          "$ref": "#/components/schemas/DayOffType"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Token is expired",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": 1532589762.947
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Token is expired"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "TokenIsExpiredException with token = 579989c508208d49c978e6cb99383688e6f1fedabfc22c27d3542ab0341d3b13"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/admin/day-offs"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": "1532506012.933"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 401
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Unauthorized"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid token"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/admin/day-offs"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access is denied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": "1532506012.933"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 403
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Access is denied"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Access is denied"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/admin/day-offs"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/day-offs/{id}/answer": {
+      "get": {
+        "tags": [
+          "DayOff"
+        ],
+        "summary": "Admin answer user dayoff",
+        "description": "Admin answer user dayoff",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "access_token",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "dff4d0d4891bfd8bafdb859dac4cbccb218bcf5adc9887a627c6c159f76ef0b9"
+            }
+          },
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "example": 1
+            }
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "APPROVED",
+                "DENIED",
+                "CANCELLED"
+              ],
+              "example": "APPROVED"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Admin answer day off request successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DayOff",
+                  "properties": {
+                    "dayOffAccount": {
+                      "$ref": "#/components/schemas/DayOffAccount",
+                      "properties": {
+                        "dayOffType": {
+                          "$ref": "#/components/schemas/DayOffType"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Token is expired",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": 1532589762.947
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Token is expired"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "TokenIsExpiredException with token = 579989c508208d49c978e6cb99383688e6f1fedabfc22c27d3542ab0341d3b13"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/admin/day-offs/1/answer"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": "1532506012.933"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 401
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Unauthorized"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid token"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/admin/day-offs/1/answer"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access is denied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": "1532506012.933"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 403
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Access is denied"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Access is denied"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/admin/day-offs/1/answer"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/day-offs": {
+      "get": {
+        "tags": [
+          "DayOff"
+        ],
+        "summary": "Admin get day off by status and keyword",
+        "description": "User get DayOff by status (APPROVED, DENIED, CANCELLED)",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "access_token",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "dff4d0d4891bfd8bafdb859dac4cbccb218bcf5adc9887a627c6c159f76ef0b9"
+            }
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "APPROVED",
+                "DENIED",
+                "CANCELLED",
+                "NONCANCELLED"
+              ],
+              "example": "APPROVED"
+            }
+          },
+          {
+            "in": "query",
+            "name": "keyword",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "hepdesk@novahub.vn"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Admin answer day off request successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DayOff"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Token is expired",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": 1532589762.947
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Token is expired"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "TokenIsExpiredException with token = 579989c508208d49c978e6cb99383688e6f1fedabfc22c27d3542ab0341d3b13"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/admin/day-offs"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": "1532506012.933"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 401
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Unauthorized"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid token"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/admin/day-offs"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access is denied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": "1532506012.933"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 403
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Access is denied"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Access is denied"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/admin/day-offs"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -8713,18 +11076,6 @@
             "type": "string",
             "example": "14 An Thuong 32 street, Da Nang city"
           },
-          "phone": {
-            "type": "string",
-            "example": 20725
-          },
-          "title": {
-            "type": "string",
-            "example": "Junior Front-end"
-          },
-          "introduction": {
-            "type": "string",
-            "example": "My name is Than Quang Minh. I come from Vietnam. Currently I work as a web developer. I have more than 15 years programming and more than 5 years of work experience in Software & web development using .NET, PHP, RoR, Java Spring Framework and adequate tutoring & on-job training experience, as well as strong background in Computer Science, computer system, database modeling & information architecture, and fluent in algorithmic & OOP programming and web-related technologies."
-          },
           "avatar_url": {
             "type": "string",
             "example": "http://localhost:8080/avatar.png"
@@ -8759,7 +11110,7 @@
             "enum": [
               "ADMIN",
               "CLERK",
-              "EMPLOYEE"
+              "USER"
             ],
             "example": "ADMIN"
           }
@@ -9035,6 +11386,87 @@
             "type": "integer",
             "format": "int64",
             "example": 0
+          }
+        }
+      },
+      "DayOffType": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32",
+            "example": 1
+          },
+          "type": {
+            "type": "string",
+            "example": "Yearly"
+          },
+          "defaultQuota": {
+            "type": "integer",
+            "format": "int32",
+            "example": 80
+          }
+        }
+      },
+      "DayOffAccount": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 1
+          },
+          "year": {
+            "type": "integer",
+            "format": "int32",
+            "example": 2018
+          },
+          "privateQuota": {
+            "type": "integer",
+            "format": "int32",
+            "example": 80
+          },
+          "remainingTime": {
+            "type": "integer",
+            "format": "int32",
+            "example": 80
+          },
+          "accountId": {
+            "type": "integer",
+            "format": "int64",
+            "example": 1
+          }
+        }
+      },
+      "DayOff": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 1
+          },
+          "comment": {
+            "type": "string",
+            "example": "Sep cho em nghi ca ngay"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "yyyy-MM-dd",
+            "example": "2018-12-31"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "yyyy-MM-dd",
+            "example": "2018-12-31"
+          },
+          "createdAt": {
+            "type": "string",
+            "example": "2018-08-07T16:56:12.891"
+          },
+          "updatedAt": {
+            "type": "string",
+            "example": "2018-08-07T16:56:12.891"
           }
         }
       }
