@@ -41,7 +41,7 @@ public class RoleControllerTest extends BaseControllerTest {
 
         final Page<Role> rolePage = new PageImpl<>(roleArrayList);
 
-        given(service.getById(1l)).willReturn(role);
+        given(service.getById(1L)).willReturn(role);
         given(service.getAll("", PageRequest.of(0, 20))).willReturn(rolePage);
     }
 
