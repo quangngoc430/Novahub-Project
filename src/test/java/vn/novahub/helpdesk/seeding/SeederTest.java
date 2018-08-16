@@ -1,5 +1,6 @@
 package vn.novahub.helpdesk.seeding;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,19 +18,12 @@ public class SeederTest {
     public void generateDayOffType() throws Exception {
         Seeder seeder = new Seeder();
         List<DayOffType> dayOffTypeList
-                = seeder.generate("seeding/day_off_type.json", DayOffType.class);
+                = seeder.generate("seeding/day_off_type.json", new TypeReference<List<DayOffType>>() {});
         logger.info(dayOffTypeList.get(0).getType());
         logger.info(dayOffTypeList.get(1).getType());
         logger.info(dayOffTypeList.get(1).getDefaultQuota()+"");
     }
 
-    @Test
-    public void generateDayOff() throws Exception {
-        Seeder seeder = new Seeder();
-        List<DayOff> dayOffs
-                = seeder.generate("seeding/day_off.json", DayOff.class);
 
-        logger.info(dayOffs.get(1).getCreatedAt().toString());
-    }
 
 }
