@@ -139,7 +139,7 @@ public class Account implements Serializable {
     @Transient
     private Token accessToken;
 
-    @JsonView({View.Public.class, View.AccountWithSkills.class})
+    @JsonView({View.Public.class})
     @JsonIgnore
     @OneToMany(mappedBy = "account")
     private List<DayOffAccount> dayOffAccounts;
