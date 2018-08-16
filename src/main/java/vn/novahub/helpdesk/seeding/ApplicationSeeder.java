@@ -1,5 +1,6 @@
 package vn.novahub.helpdesk.seeding;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import vn.novahub.helpdesk.model.*;
@@ -8,6 +9,7 @@ import vn.novahub.helpdesk.repository.*;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class ApplicationSeeder {
@@ -53,8 +55,12 @@ public class ApplicationSeeder {
         ArrayList<Level> levelArrayList = levelsSeeder.generateData(accountArrayList, skillArrayList);
         ArrayList<Issue> issueArrayList = issuesSeeder.generateData("seeding/issues.json", accountArrayList);
 
-        dayOffTypeRepository.saveAll(seeder.generate("seeding/day_off_type.json", DayOffType.class));
-        dayOffAccountRepository.saveAll(seeder.generate("seeding/day_off_account.json", DayOffAccount.class));
-        dayOffRepository.saveAll(seeder.generate("seeding/day_off.json", DayOff.class));
+
+        dayOffTypeRepository.saveAll(
+                seeder.generate("seeding/day_off_type.json", new TypeReference<List<DayOffType>>() {}));
+        dayOffAccountRepository.saveAll(
+                seeder.generate("seeding/day_off_account.json", new TypeReference<List<DayOffAccount>>() {}));
+        dayOffRepository.saveAll(
+                seeder.generate("seeding/day_off.json", new TypeReference<List<DayOff>>() {}));
     }
 }
