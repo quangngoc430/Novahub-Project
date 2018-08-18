@@ -19,9 +19,7 @@ public class SeederTest {
         Seeder seeder = new Seeder();
         List<DayOffType> dayOffTypeList
                 = seeder.generate("seeding/day_off_type.json", new TypeReference<List<DayOffType>>() {});
-        logger.info(dayOffTypeList.get(0).getType());
-        logger.info(dayOffTypeList.get(1).getType());
-        logger.info(dayOffTypeList.get(1).getDefaultQuota()+"");
+
     }
 
 
