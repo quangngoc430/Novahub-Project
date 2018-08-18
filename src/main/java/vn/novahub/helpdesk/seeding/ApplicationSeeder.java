@@ -33,6 +33,21 @@ public class ApplicationSeeder {
     private IssuesSeeder issuesSeeder;
 
     @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
+    private AccountRepository accountRepository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    @Autowired
+    private LevelRepository levelRepository;
+
+    @Autowired
+    private IssueRepository issueRepository;
+
+    @Autowired
     private DayOffTypeRepository dayOffTypeRepository;
 
     @Autowired
@@ -46,7 +61,11 @@ public class ApplicationSeeder {
 
     public void generateData() throws IOException, ParseException, ClassNotFoundException {
 
-
+        roleRepository.deleteAll();
+        accountRepository.deleteAll();
+        categoryRepository.deleteAll();
+        levelRepository.deleteAll();
+        issueRepository.deleteAll();
 
         ArrayList<Role> roleArrayList = rolesSeeder.generateData("seeding/roles.json");
         ArrayList<Account> accountArrayList = accountsSeeder.generateData("seeding/accounts.json");
