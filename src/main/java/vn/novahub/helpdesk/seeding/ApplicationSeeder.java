@@ -61,6 +61,9 @@ public class ApplicationSeeder {
 
     public void generateData() throws IOException, ParseException, ClassNotFoundException {
 
+        dayOffRepository.deleteAll();
+        dayOffAccountRepository.deleteAll();
+        dayOffTypeRepository.deleteAll();
         roleRepository.deleteAll();
         accountRepository.deleteAll();
         categoryRepository.deleteAll();
@@ -73,7 +76,6 @@ public class ApplicationSeeder {
         ArrayList<Skill> skillArrayList = skillsSeeder.generateData("seeding/skills.json");
         ArrayList<Level> levelArrayList = levelsSeeder.generateData(accountArrayList, skillArrayList);
         ArrayList<Issue> issueArrayList = issuesSeeder.generateData("seeding/issues.json", accountArrayList);
-
 
         dayOffTypeRepository.saveAll(
                 seeder.generate("seeding/day_off_type.json", new TypeReference<List<DayOffType>>() {}));

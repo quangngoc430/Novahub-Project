@@ -93,7 +93,7 @@ $ <ctrl + C all content of two files data>
 ```sh
 $ mvn spring-boot:run
 ```
-### Run project with initial data
+### Run project with dev profile and auto seeding data
 ```sh 
 $ mvn spring-boot:run -Dspring-boot.run.profiles=dev
 ```
