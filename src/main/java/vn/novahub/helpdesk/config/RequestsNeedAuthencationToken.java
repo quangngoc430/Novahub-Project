@@ -40,6 +40,7 @@ public class RequestsNeedAuthencationToken {
 
             // skills
             requestArrayList.add(new Request("\\/api\\/skills", new String[]{Method.GET.name()}));
+            requestArrayList.add(new Request("\\/api\\/skills\\/search", new String[]{Method.GET.name()}));
             requestArrayList.add(new Request("\\/api\\/admin\\/skills", new String[]{Method.POST.name()}));
             requestArrayList.add(new Request("\\/api\\/skills\\/(\\d+)", new String[]{Method.GET.name()}));
             requestArrayList.add(new Request("\\/api\\/admin\\/skills\\/(\\d+)", new String[]{Method.PUT.name(), Method.DELETE.name()}));

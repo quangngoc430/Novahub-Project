@@ -34,6 +34,13 @@ public class SkillController {
     }
 
     @PreAuthorize("isAuthenticated()")
+    @GetMapping(path = "/search", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Void> search(@RequestParam(value = "categoryId", required = false) Long categoryId,
+                                              @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword) {
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PreAuthorize("isAuthenticated()")
     @GetMapping(path = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Skill> getById(@PathVariable("id") long skillId) throws SkillNotFoundException {
         return new ResponseEntity<>(adminSkillService.findOne(skillId), HttpStatus.OK);
