@@ -1,5 +1,6 @@
 package vn.novahub.helpdesk.repository;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +8,7 @@ import vn.novahub.helpdesk.model.DayOffType;
 
 import static org.junit.Assert.*;
 
-public class DayOffTypeRepositoryTest {
+public class DayOffTypeRepositoryTest extends BaseRepositoryTest{
 
     @Autowired
     private DayOffTypeRepository dayOffTypeRepository;
@@ -20,6 +21,11 @@ public class DayOffTypeRepositoryTest {
         dayOffType = new DayOffType();
         dayOffType.setType("Pregnant");
         dayOffType.setDefaultQuota(24);
+    }
+
+    @After
+    public void after() {
+        dayOffTypeRepository.deleteAll();
     }
 
     @Test
