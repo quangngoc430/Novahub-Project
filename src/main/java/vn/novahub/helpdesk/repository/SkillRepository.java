@@ -52,4 +52,10 @@ public interface SkillRepository extends PagingAndSortingRepository<Skill, Long>
 
     boolean deleteByIdAndCategoryId(long skillId, long categoryId);
 
+    @Query("SELECT level as skill.level " +
+           "FROM Skill skill " +
+           "JOIN Level level " +
+           "On skill.id = level.id")
+    Page<Skill> getAllByNameContaining(String name, Pageable pageable);
+
 }

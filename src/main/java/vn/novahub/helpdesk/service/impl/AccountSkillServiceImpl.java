@@ -261,4 +261,10 @@ public class AccountSkillServiceImpl implements AccountSkillService {
         return skills;
     }
 
+    @Override
+    public Page<Skill> searchByKeyword(String keyword, Pageable pageable) {
+        Page<Skill> skillPage = skillRepository.getAllByNameContaining(keyword, pageable);
+        return null;
+    }
+
 }
