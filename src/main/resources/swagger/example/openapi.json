@@ -7350,7 +7350,7 @@
       }
     },
     "/admin/issues/{id}/action": {
-      "get": {
+      "put": {
         "tags": [
           "Issue"
         ],

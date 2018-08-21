@@ -59,7 +59,7 @@ public class IssueAdminController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping(path = "/{issueId}/action", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PutMapping(path = "/{issueId}/action", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Void> actionForAdmin(@RequestParam(name = "status", required = false, defaultValue = "") String status,
                                                @PathVariable(value = "issueId") long issueId) throws MessagingException, IOException, IssueNotFoundException, IssueIsClosedException {
         IssueEnum issueEnum = IssueEnum.valueOf(status);
