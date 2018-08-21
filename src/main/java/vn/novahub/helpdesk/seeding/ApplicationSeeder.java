@@ -1,5 +1,6 @@
 package vn.novahub.helpdesk.seeding;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import vn.novahub.helpdesk.model.*;
@@ -8,6 +9,7 @@ import vn.novahub.helpdesk.repository.*;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class ApplicationSeeder {
@@ -45,7 +47,23 @@ public class ApplicationSeeder {
     @Autowired
     private IssueRepository issueRepository;
 
-    public void generateData() throws IOException, ParseException {
+    @Autowired
+    private DayOffTypeRepository dayOffTypeRepository;
+
+    @Autowired
+    private DayOffAccountRepository dayOffAccountRepository;
+
+    @Autowired
+    private DayOffRepository dayOffRepository;
+
+    @Autowired
+    private Seeder seeder;
+
+    public void generateData() throws IOException, ParseException, ClassNotFoundException {
+
+        dayOffRepository.deleteAll();
+        dayOffAccountRepository.deleteAll();
+        dayOffTypeRepository.deleteAll();
         roleRepository.deleteAll();
         accountRepository.deleteAll();
         categoryRepository.deleteAll();
@@ -58,5 +76,12 @@ public class ApplicationSeeder {
         ArrayList<Skill> skillArrayList = skillsSeeder.generateData("seeding/skills.json");
         ArrayList<Level> levelArrayList = levelsSeeder.generateData(accountArrayList, skillArrayList);
         ArrayList<Issue> issueArrayList = issuesSeeder.generateData("seeding/issues.json", accountArrayList);
+
+        dayOffTypeRepository.saveAll(
+                seeder.generate("seeding/day_off_type.json", new TypeReference<List<DayOffType>>() {}));
+        dayOffAccountRepository.saveAll(
+                seeder.generate("seeding/day_off_account.json", new TypeReference<List<DayOffAccount>>() {}));
+        dayOffRepository.saveAll(
+                seeder.generate("seeding/day_off.json", new TypeReference<List<DayOff>>() {}));
     }
 }

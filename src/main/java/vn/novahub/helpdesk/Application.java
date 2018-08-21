@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.EnableAsync;
 import vn.novahub.helpdesk.seeding.ApplicationSeeder;
+import vn.novahub.helpdesk.seeding.Seeder;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -24,13 +25,13 @@ public class Application {
 	@Autowired
 	private ApplicationSeeder applicationSeeder;
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException, ParseException, ClassNotFoundException {
 		SpringApplication.run(Application.class, args);
 	}
 
 	@Bean
 	@Profile("dev")
-	public String dev() throws IOException, ParseException {
+	public String dev() throws IOException, ParseException, ClassNotFoundException {
 		logger.info("\n-------------------------- DEV ENVIRONMENT --------------------------");
 		applicationSeeder.generateData();
 		return "dev";
