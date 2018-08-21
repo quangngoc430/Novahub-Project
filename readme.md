@@ -80,6 +80,7 @@ Run two files data into the project
 file 1: /src/main/resources/DB.sql
 file 2: /src/main/resources/data-int.sql
 
+
 Copy content into two files
 
 ```sh
@@ -92,7 +93,10 @@ $ <ctrl + C all content of two files data>
 ```sh
 $ mvn spring-boot:run
 ```
-
+### Run project with dev profile and auto seeding data
+```sh 
+$ mvn spring-boot:run -Dspring-boot.run.profiles=dev
+```
 ### Guide login via normal or google account
 ##### Normal login:
 ![image](https://i.imgur.com/l1cybAil.png)
