@@ -39,9 +39,9 @@ public interface AccountRepository extends PagingAndSortingRepository<Account, L
            "WHERE (account.email LIKE CONCAT('%', :keyword, '%') " +
            "OR account.firstName LIKE CONCAT('%', :keyword, '%') " +
            "OR account.lastName LIKE CONCAT('%', :keyword, '%')) " +
-           "AND role.name = :name")
+           "AND role.name = :role")
     Page<Account> getAllByEmailContainingOrFirstNameContainingOrLastNameContainingAndRole(@Param("keyword") String keyword,
-                                                                                          @Param("name") String name,
+                                                                                          @Param("role") String role,
                                                                                           Pageable pageable);
 
     @Query("SELECT account " +
@@ -52,16 +52,20 @@ public interface AccountRepository extends PagingAndSortingRepository<Account, L
             "OR account.firstName LIKE CONCAT('%', :keyword, '%') " +
             "OR account.lastName LIKE CONCAT('%', :keyword, '%')) " +
             "AND account.status = :status " +
-            "AND role.name = :name")
+            "AND role.name = :role")
     Page<Account> getAllByEmailContainingOrFirstNameContainingOrLastNameContainingAndStatusAndRole(@Param("keyword") String keyword,
                                                                                                    @Param("status") String status,
-                                                                                                   @Param("name") String name,
+                                                                                                   @Param("role") String role,
                                                                                                    Pageable pageable);
 
     Account getByIdAndVerificationToken(long accountId, String verificationToken);
 
-    @Query("SELECT account FROM Account account JOIN Role role ON account.roleId = role.id WHERE role.name = :name")
-    List<Account> getAllByRoleName(@Param("name") String roleName);
+    @Query("SELECT account " +
+           "FROM Account account " +
+           "JOIN Role role " +
+           "ON account.roleId = role.id " +
+           "WHERE role.name = :role")
+    List<Account> getAllByRoleName(@Param("role") String role);
 
     @Query("SELECT account " +
            "FROM Account account " +
