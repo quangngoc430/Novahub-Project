@@ -35,8 +35,12 @@ public class SkillController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping(path = "/search", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Void> search(@RequestParam(value = "categoryId", required = false) Long categoryId,
+    public ResponseEntity<Void> search(@RequestParam(value = "categoryId", required = false, defaultValue = "-1") long categoryId,
                                               @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword) {
+        System.out.println("--------------------------------------------------------");
+        System.out.println("------------------------- " + categoryId + " ----------------------------");
+        System.out.println("--------------------------------------------------------");
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
