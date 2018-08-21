@@ -70,7 +70,7 @@ public class Account implements Serializable {
     private String introduction;
 
     @JsonProperty(value = "avatar_url")
-    @JsonView({View.Public.class, View.AccountWithSkills.class})
+    @JsonView({View.Public.class})
     @Column(name = "avatar_url")
     private String avatarUrl;
 
@@ -117,7 +117,7 @@ public class Account implements Serializable {
 
     @JsonProperty("role_id")
     @NotNull(message = "role_id is not empty")
-    @JsonView({View.Public.class, View.AccountWithSkills.class})
+    @JsonView({View.Public.class})
     @Column(name = "role_id")
     private long roleId;
 
@@ -129,7 +129,7 @@ public class Account implements Serializable {
             groups = {GroupUpdatePasswordByAccount.class})
     private String newPassword;
 
-    @JsonView({View.Public.class, View.AccountWithSkills.class})
+    @JsonView({View.Public.class})
     @ManyToOne(fetch = FetchType.EAGER, targetEntity = Role.class)
     @JoinColumn(name = "role_id", insertable = false, updatable = false)
     private Role role;
