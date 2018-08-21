@@ -22,8 +22,8 @@ public class Application {
 
 	private final static Logger logger = LoggerFactory.getLogger(Application.class);
 
-	//@Autowired
-	//private ApplicationSeeder applicationSeeder;
+	@Autowired
+	private ApplicationSeeder applicationSeeder;
 
 	public static void main(String[] args) throws IOException, ParseException, ClassNotFoundException {
 		SpringApplication.run(Application.class, args);
@@ -33,7 +33,7 @@ public class Application {
 	@Profile("dev")
 	public String dev() throws IOException, ParseException, ClassNotFoundException {
 		logger.info("\n-------------------------- DEV ENVIRONMENT --------------------------");
-		//applicationSeeder.generateData();
+		applicationSeeder.generateData();
 		return "dev";
 	}
 
