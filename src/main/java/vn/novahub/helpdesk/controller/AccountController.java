@@ -104,17 +104,15 @@ public class AccountController {
     }
 
     @PreAuthorize("isAuthenticated()")
+    @JsonView(View.AccountWithSkills.class)
     @GetMapping(path = "/users", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<JsonNode> getAll(@RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
+    public ResponseEntity<Page<Account>> getAll(@RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
                                                 @RequestParam(value = "status", required = false, defaultValue = "") String status,
                                                 @RequestParam(value = "role", required = false, defaultValue = "") String role,
-                                                Pageable pageable) throws IOException {
+                                                Pageable pageable) {
         Page<Account> accounts = accountService.getAll(keyword, status, role, pageable);
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        String json = objectMapper.writerWithView(View.AccountWithSkills.class).writeValueAsString(accounts);
-
-        return new ResponseEntity<>(objectMapper.readTree(json), HttpStatus.OK);
+        return new ResponseEntity<>(accounts, HttpStatus.OK);
     }
 
     @PermitAll

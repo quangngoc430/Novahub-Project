@@ -13,7 +13,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "account")
@@ -48,7 +47,7 @@ public class Account implements Serializable {
     @JsonProperty(value = "birth_day")
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(pattern = "yyyy-MM-dd")
-    @JsonView({View.Public.class, View.AccountWithSkills.class})
+    @JsonView(View.Public.class)
     @Column(name = "birth_day")
     private Date dayOfBirth;
 
@@ -58,7 +57,7 @@ public class Account implements Serializable {
 
     @Pattern(regexp = "^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\\s\\./0-9]*$", message = "phone have the wrong pattern",
              groups = {GroupCreateAccount.class})
-    @JsonView({View.Public.class, View.AccountWithSkills.class})
+    @JsonView(View.Public.class)
     @Column(name = "phone")
     private String phone;
 
@@ -66,7 +65,7 @@ public class Account implements Serializable {
     @Column(name = "title")
     private String title;
 
-    @JsonView({View.Public.class, View.AccountWithSkills.class})
+    @JsonView(View.Public.class)
     @Column(name = "introduction")
     private String introduction;
 
@@ -87,34 +86,33 @@ public class Account implements Serializable {
 
     @Status(message = "status does not match any statuses", targetClass = Account.class)
     @NotEmpty(message = "status is not empty")
-    @JsonView({View.Public.class, View.AccountWithSkills.class})
+    @JsonView(View.Public.class)
     @Column(name = "status")
     private String status;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty(value = "created_at")
     @NotNull(message = "created_at is not null")
-    @JsonView({View.Public.class, View.AccountWithSkills.class})
+    @JsonView(View.Public.class)
     @Column(name = "created_at")
     private Date createdAt;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty(value = "updated_at")
     @NotNull(message = "updated_at is not null")
-    @JsonView({View.Public.class, View.AccountWithSkills.class})
+    @JsonView(View.Public.class)
     @Column(name = "updated_at")
     private Date updatedAt;
 
     @JsonProperty(value = "joining_date")
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(pattern = "yyyy-MM-dd")
-    @JsonView({View.Public.class, View.AccountWithSkills.class})
+    @JsonView(View.Public.class)
     @Column(name = "joiningDate")
     private Date joiningDate;
 
     @JsonIgnore
     @Column(name = "verification_token")
-    @JsonView({View.Public.class, View.AccountWithSkills.class})
     private String verificationToken;
 
     @JsonProperty("role_id")
@@ -139,7 +137,6 @@ public class Account implements Serializable {
     @Transient
     private Token accessToken;
 
-    @JsonView({View.Public.class})
     @JsonIgnore
     @OneToMany(mappedBy = "account")
     private List<DayOffAccount> dayOffAccounts;
@@ -150,7 +147,7 @@ public class Account implements Serializable {
 
     @JsonView(View.AccountWithSkills.class)
     @Transient
-    @JsonProperty(value = "totals_skills")
+    @JsonProperty(value = "total_skills")
     private Long totalSkills;
 
     public long getId() {
