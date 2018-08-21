@@ -3904,7 +3904,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/admin/skills": {
       "post": {
         "tags": [
           "Skill"
@@ -4158,8 +4160,8 @@
         "tags": [
           "Skill"
         ],
-        "summary": "Get a skill by id (ADMIN)",
-        "description": "Get a skill by id (ADMIN)",
+        "summary": "Get a skill by id",
+        "description": "Get a skill by id",
         "parameters": [
           {
             "in": "header",
@@ -4348,7 +4350,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/admin/skills/{id}": {
       "put": {
         "tags": [
           "Skill"

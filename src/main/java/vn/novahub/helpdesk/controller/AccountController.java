@@ -169,7 +169,8 @@ public class AccountController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
-    
+
+
     @PreAuthorize("isAuthenticated()")
     @GetMapping(path = "/users/{id}/skills", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Page<Skill>> getAllByAccountId(@PathVariable("id") long accountId,

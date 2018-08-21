@@ -16,6 +16,9 @@ public class AccountHasSkill implements Serializable {
     @Column(name = "id")
     private long id;
 
+    @Column(name = "level")
+    private long level;
+
     @JsonProperty(value = "account_id")
     @Column(name = "account_id")
     private long accountId;
@@ -42,12 +45,25 @@ public class AccountHasSkill implements Serializable {
     @JoinColumn(name = "skill_id", insertable = false, updatable = false)
     private Skill skill;
 
+    public AccountHasSkill() {
+        this.createdAt = new Date();
+        this.updatedAt = new Date();
+    }
+
     public long getId() {
         return id;
     }
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public long getLevel() {
+        return level;
+    }
+
+    public void setLevel(long level) {
+        this.level = level;
     }
 
     public long getAccountId() {
@@ -102,6 +118,7 @@ public class AccountHasSkill implements Serializable {
     public String toString() {
         return "AccountHasSkill{" +
                 "id=" + id +
+                ", level=" + level +
                 ", accountId=" + accountId +
                 ", skillId=" + skillId +
                 ", createdAt=" + createdAt +
