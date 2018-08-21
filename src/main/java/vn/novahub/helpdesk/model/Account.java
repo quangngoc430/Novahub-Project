@@ -145,11 +145,6 @@ public class Account implements Serializable {
     @Transient
     private List<Skill> skills;
 
-    @JsonView(View.AccountWithSkills.class)
-    @Transient
-    @JsonProperty(value = "total_skills")
-    private Long totalSkills;
-
     public long getId() {
         return id;
     }
@@ -324,14 +319,6 @@ public class Account implements Serializable {
 
     public void setSkills(List<Skill> skills) {
         this.skills = skills;
-    }
-
-    public Long getTotalSkills() {
-        return totalSkills;
-    }
-
-    public void setTotalSkills(Long totalSkills) {
-        this.totalSkills = totalSkills;
     }
 
     @Transient
