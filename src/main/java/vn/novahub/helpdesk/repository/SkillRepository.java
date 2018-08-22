@@ -65,8 +65,6 @@ public interface SkillRepository extends PagingAndSortingRepository<Skill, Long>
     Page<Skill> getAllByAccountId(@Param("accountId") long accountId,
                                   Pageable pageable);
 
-    List<Skill> getAllBy();
-
     boolean deleteByIdAndCategoryId(long skillId, long categoryId);
 
 }
