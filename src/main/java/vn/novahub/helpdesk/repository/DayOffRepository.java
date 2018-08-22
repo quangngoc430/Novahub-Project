@@ -46,8 +46,8 @@ public interface DayOffRepository extends PagingAndSortingRepository<DayOff, Lon
             "ON dayOffAccount.dayOffTypeId = dayOffType.id " +
             "JOIN Account account " +
             "ON dayOffAccount.accountId = account.id " +
-            "WHERE dayOffType.type LIKE CONCAT('%', :keyword ,'%') " +
-            "OR account.email LIKE CONCAT('%', :keyword, '%')")
+            "WHERE lower(dayOffType.type) LIKE lower(CONCAT('%', :keyword ,'%')) " +
+            "OR lower(account.email) LIKE lower(CONCAT('%', :keyword, '%'))")
     Page<DayOff> findByKeyword(@Param("keyword") String keyword,
                                                 Pageable pageable);
 
@@ -60,8 +60,8 @@ public interface DayOffRepository extends PagingAndSortingRepository<DayOff, Lon
             "ON dayOffAccount.dayOffTypeId = dayOffType.id " +
             "JOIN Account account " +
             "ON dayOffAccount.accountId = account.id " +
-            "WHERE (dayOffType.type LIKE CONCAT('%', :keyword ,'%') " +
-            "OR account.email LIKE CONCAT('%', :keyword, '%')) " +
+            "WHERE (lower(dayOffType.type) LIKE lower(CONCAT('%', :keyword, '%')) " +
+            "OR lower(account.email) LIKE lower(CONCAT('%', :keyword, '%'))) " +
             "AND dayOff.status <> 'CANCELLED'")
     Page<DayOff> findNonCancelledByKeyword( @Param("keyword") String keyword,
                                 Pageable pageable);
