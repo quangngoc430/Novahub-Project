@@ -5,9 +5,6 @@ public class View {
     public interface Public {}
 
     public interface AccountWithSkills {}
-<<<<<<< HEAD
 
     public interface SkillWithLevel extends Public {}
-=======
->>>>>>> develop
 }
