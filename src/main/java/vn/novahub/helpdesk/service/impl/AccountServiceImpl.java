@@ -18,9 +18,8 @@ import vn.novahub.helpdesk.enums.RoleEnum;
 import vn.novahub.helpdesk.enums.TokenEnum;
 import vn.novahub.helpdesk.exception.*;
 import vn.novahub.helpdesk.model.*;
+import vn.novahub.helpdesk.repository.AccountHasSkillRepository;
 import vn.novahub.helpdesk.repository.AccountRepository;
-import vn.novahub.helpdesk.repository.LevelRepository;
-import vn.novahub.helpdesk.repository.SkillRepository;
 import vn.novahub.helpdesk.repository.TokenRepository;
 import vn.novahub.helpdesk.service.*;
 import vn.novahub.helpdesk.validation.*;
@@ -75,10 +74,8 @@ public class AccountServiceImpl implements AccountService {
     private GoogleService googleService;
 
     @Autowired
-    private SkillRepository skillRepository;
+    private AccountHasSkillRepository accountHasSkillRepository;
 
-    @Autowired
-    private LevelRepository levelRepository;
 
     @Override
     public boolean isAccountLogin(long accountId) {
@@ -241,19 +238,18 @@ public class AccountServiceImpl implements AccountService {
             accountIds.add(account.getId());
         }
 
-        List<Skill> skills = skillRepository.getAllBy();
+        List<AccountHasSkill> accountHasSkills = accountHasSkillRepository.getAllByAccountIdIn(accountIds);
 
-        List<Level> levels = levelRepository.getAllByAccountIdIn(accountIds);
+        Skill skill;
 
         for (Account account : accounts.getContent()) {
             account.setSkills(new ArrayList<>());
-            for (int i = skills.size() - 1; i >= 0; i--) {
-                for (int j = levels.size() - 1; j >= 0; j--) {
-                    if(levels.get(j).getSkillId() == skills.get(i).getId() && levels.get(j).getAccountId() == account.getId()) {
-                        skills.get(i).setLevel(levels.get(j));
-                        account.getSkills().add(0, skills.get(i));
-                        levels.remove(j);
-                    }
+            for (int i = accountHasSkills.size() - 1; i >= 0; i--) {
+                if(account.getId() == accountHasSkills.get(i).getAccountId()) {
+                    skill = accountHasSkills.get(i).getSkill();
+                    skill.setLevel(accountHasSkills.get(i).getLevel());
+                    account.getSkills().add(skill);
+                    accountHasSkills.remove(i);
                 }
             }
         }

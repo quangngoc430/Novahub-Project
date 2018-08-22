@@ -27,9 +27,6 @@ public class ApplicationSeeder {
     private SkillsSeeder skillsSeeder;
 
     @Autowired
-    private LevelsSeeder levelsSeeder;
-
-    @Autowired
     private IssuesSeeder issuesSeeder;
 
     @Autowired
@@ -40,9 +37,6 @@ public class ApplicationSeeder {
 
     @Autowired
     private CategoryRepository categoryRepository;
-
-    @Autowired
-    private LevelRepository levelRepository;
 
     @Autowired
     private IssueRepository issueRepository;
@@ -67,14 +61,12 @@ public class ApplicationSeeder {
         roleRepository.deleteAll();
         accountRepository.deleteAll();
         categoryRepository.deleteAll();
-        levelRepository.deleteAll();
         issueRepository.deleteAll();
 
         ArrayList<Role> roleArrayList = rolesSeeder.generateData("seeding/roles.json");
         ArrayList<Account> accountArrayList = accountsSeeder.generateData("seeding/accounts.json");
         ArrayList<Category> categoryArrayList = categoriesSeeder.generateData("seeding/categories.json");
         ArrayList<Skill> skillArrayList = skillsSeeder.generateData("seeding/skills.json");
-        ArrayList<Level> levelArrayList = levelsSeeder.generateData(accountArrayList, skillArrayList);
         ArrayList<Issue> issueArrayList = issuesSeeder.generateData("seeding/issues.json", accountArrayList);
 
         dayOffTypeRepository.saveAll(

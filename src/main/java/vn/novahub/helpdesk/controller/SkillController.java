@@ -1,5 +1,6 @@
 package vn.novahub.helpdesk.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,6 +15,7 @@ import vn.novahub.helpdesk.model.Account;
 import vn.novahub.helpdesk.model.Skill;
 import vn.novahub.helpdesk.service.AccountSkillService;
 import vn.novahub.helpdesk.service.AdminSkillService;
+import vn.novahub.helpdesk.view.View;
 
 @RestController
 @RequestMapping(path = "/api/skills")
@@ -25,6 +27,7 @@ public class SkillController {
     @Autowired
     private AdminSkillService adminSkillService;
 
+    @JsonView(View.Public.class)
     @PreAuthorize("isAuthenticated()")
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Page<Skill>> getAll(@RequestParam(value = "categoryId") long categoryId,
@@ -33,6 +36,7 @@ public class SkillController {
         return new ResponseEntity<>(accountSkillService.getAllByKeyword(categoryId, keyword, pageable), HttpStatus.OK);
     }
 
+    @JsonView(View.Public.class)
     @PreAuthorize("isAuthenticated()")
     @GetMapping(path = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Skill> getById(@PathVariable("id") long skillId) throws SkillNotFoundException {
@@ -46,6 +50,7 @@ public class SkillController {
         return new ResponseEntity<>(accountSkillService.getAllUsersBySkillId(skillId, pageable), HttpStatus.OK);
     }
 
+    @JsonView(View.SkillWithLevel.class)
     @PreAuthorize("isAuthenticated()")
     @GetMapping(path = "/me", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Page<Skill>> getAllByAccountLogin(@RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
@@ -59,6 +64,7 @@ public class SkillController {
         return new ResponseEntity<>(accountSkillService.create(skill), HttpStatus.OK);
     }
 
+    @JsonView(View.SkillWithLevel.class)
     @PreAuthorize("isAuthenticated()")
     @GetMapping(path = "/me/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Skill> get(@PathVariable("id") long skillId) throws SkillNotFoundException {

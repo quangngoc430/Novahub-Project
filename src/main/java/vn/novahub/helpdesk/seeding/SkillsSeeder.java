@@ -51,8 +51,6 @@ public class SkillsSeeder {
                     skill = new Skill();
                     skill.setName(skillName);
                     skill.setCategoryId(category.getId());
-                    skill.setCreatedAt(new Date());
-                    skill.setUpdatedAt(new Date());
                     skill = skillRepository.save(skill);
                 }
 
