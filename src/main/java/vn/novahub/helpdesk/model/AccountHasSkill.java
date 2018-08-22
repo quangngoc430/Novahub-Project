@@ -37,15 +37,16 @@ public class AccountHasSkill implements Serializable {
     @Column(name = "updated_at")
     private Date updatedAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(targetEntity = Account.class)
     @JoinColumn(name = "account_id", insertable = false, updatable = false)
     private Account account;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(targetEntity = Skill.class)
     @JoinColumn(name = "skill_id", insertable = false, updatable = false)
     private Skill skill;
 
     public AccountHasSkill() {
+        super();
         this.createdAt = new Date();
         this.updatedAt = new Date();
     }
