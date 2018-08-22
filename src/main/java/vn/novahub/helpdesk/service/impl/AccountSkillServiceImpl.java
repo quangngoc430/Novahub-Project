@@ -15,6 +15,7 @@ import vn.novahub.helpdesk.validation.GroupUpdateSkillWithLevel;
 import vn.novahub.helpdesk.validation.SkillValidation;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -73,8 +74,26 @@ public class AccountSkillServiceImpl implements AccountSkillService {
     @Override
     public Page<Skill> getAllByKeywordForAccountLogin(String keyword, Pageable pageable) {
         Account accountLogin = accountService.getAccountLogin();
+<<<<<<< HEAD
         
         return skillRepository.getAllByNameContainingAndAccountId(keyword, accountLogin.getId(), pageable);
+=======
+
+        Page<Skill> skills = skillRepository.getAllByNameContainingAndAccountId(keyword, accountLogin.getId(), pageable);
+
+        List<Level> levels = levelRepository.getAllByAccountId(accountLogin.getId());
+
+        for (Skill skill : skills.getContent()) {
+            for (int i = levels.size() - 1; i >= 0; i--) {
+                if (levels.get(i).getSkillId() == skill.getId()) {
+                    skill.setLevel(levels.get(i));
+                    levels.remove(i);
+                }
+            }
+        }
+
+        return skills;
+>>>>>>> develop
     }
 
     @Override
@@ -217,7 +236,24 @@ public class AccountSkillServiceImpl implements AccountSkillService {
         if(!accountOptional.isPresent())
             throw new AccountNotFoundException(accountId);
 
+<<<<<<< HEAD
         return skillRepository.getAllByAccountId(accountId, pageable);
+=======
+        Page<Skill> skills = skillRepository.getAllByAccountId(accountId, pageable);
+
+        List<Level> levels = levelRepository.getAllByAccountId(accountId);
+
+        for (Skill skill : skills.getContent()) {
+            for (int i = levels.size() - 1; i >= 0; i--) {
+                if (skill.getId() == levels.get(i).getSkillId()) {
+                    skill.setLevel(levels.get(i));
+                    levels.remove(i);
+                }
+            }
+        }
+
+        return skills;
+>>>>>>> develop
     }
 
 }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import vn.novahub.helpdesk.model.Skill;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Repository
 @Transactional
@@ -17,7 +18,10 @@ public interface SkillRepository extends PagingAndSortingRepository<Skill, Long>
     @Query("SELECT new Skill(skill.id, skill.name, accountHasSkill.level, skill.categoryId, skill.createdAt, skill.updatedAt, category) " +
            "FROM Skill skill " +
            "JOIN AccountHasSkill accountHasSkill ON accountHasSkill.skillId = skill.id " +
+<<<<<<< HEAD
            "JOIN Category category ON category.id = skill.categoryId " +
+=======
+>>>>>>> develop
            "WHERE accountHasSkill.accountId = :accountId AND skill.name LIKE CONCAT('%', :name, '%')")
     Page<Skill> getAllByNameContainingAndAccountId(@Param("name") String name,
                                                    @Param("accountId") long accountId,
@@ -58,11 +62,18 @@ public interface SkillRepository extends PagingAndSortingRepository<Skill, Long>
 
     @Query("SELECT new Skill(skill.id, skill.name, accountHasSkill.level, skill.categoryId, skill.createdAt, skill.updatedAt, category) " +
            "FROM Skill skill " +
+<<<<<<< HEAD
            "JOIN AccountHasSkill accountHasSkill ON accountHasSkill.skillId = skill.id " +
            "JOIN Category category ON skill.categoryId = category.id " +
+=======
+           "JOIN AccountHasSkill accountHasSkill " +
+           "ON accountHasSkill.skillId = skill.id " +
+>>>>>>> develop
            "WHERE accountHasSkill.accountId = :accountId")
     Page<Skill> getAllByAccountId(@Param("accountId") long accountId,
                                   Pageable pageable);
+
+    List<Skill> getAllBy();
 
     boolean deleteByIdAndCategoryId(long skillId, long categoryId);
 
