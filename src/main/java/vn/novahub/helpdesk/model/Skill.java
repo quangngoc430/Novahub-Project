@@ -23,16 +23,14 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Skill implements Serializable {
 
-    @JsonView(View.Public.class)
+    @JsonView({View.Public.class, View.AccountWithSkills.class})
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView({View.Public.class, View.AccountWithSkills.class})
     @Column(name = "id")
     private long id;
 
-    @JsonView(View.Public.class)
-    @NotEmpty(message = "name is not empty", groups = {GroupCreateSkill.class, GroupUpdateSkill.class})
     @JsonView({View.Public.class, View.AccountWithSkills.class})
+    @NotEmpty(message = "name is not empty", groups = {GroupCreateSkill.class, GroupUpdateSkill.class})
     @Column(name = "name")
     private String name;
 
