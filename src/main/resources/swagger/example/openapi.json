@@ -3741,216 +3741,6 @@
         }
       }
     },
-<<<<<<< HEAD
-=======
-    "/skills": {
-      "get": {
-        "tags": [
-          "Skill"
-        ],
-        "summary": "Get all skills",
-        "description": "Get all skills",
-        "parameters": [
-          {
-            "in": "header",
-            "name": "access_token",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "dff4d0d4891bfd8bafdb859dac4cbccb218bcf5adc9887a627c6c159f76ef0b9"
-            }
-          },
-          {
-            "in": "query",
-            "name": "categoryId",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "example": 1
-            }
-          },
-          {
-            "in": "query",
-            "name": "keyword",
-            "schema": {
-              "type": "string",
-              "example": "Java"
-            }
-          },
-          {
-            "in": "query",
-            "name": "page",
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "in": "query",
-            "name": "size",
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "in": "query",
-            "name": "sort",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "id,asc",
-                "id,desc",
-                "name,asc",
-                "name,desc",
-                "createdAt,asc",
-                "createdAt,desc",
-                "updatedAt,asc",
-                "updatedAt,desc"
-              ],
-              "example": "name,desc"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Get all skills successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Sort",
-                  "properties": {
-                    "content": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/Skill",
-                        "properties": {
-                          "category": {
-                            "$ref": "#/components/schemas/Category"
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Token is expired",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "timestamp": {
-                      "type": "string",
-                      "example": 1532589762.947
-                    },
-                    "status": {
-                      "type": "integer",
-                      "example": 400
-                    },
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "message": {
-                          "type": "string",
-                          "example": "Token is expired"
-                        }
-                      }
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "TokenIsExpiredException with token = 579989c508208d49c978e6cb99383688e6f1fedabfc22c27d3542ab0341d3b13"
-                    },
-                    "path": {
-                      "type": "string",
-                      "example": "/skills"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "timestamp": {
-                      "type": "string",
-                      "example": "1532506012.933"
-                    },
-                    "status": {
-                      "type": "integer",
-                      "format": "int64",
-                      "example": 401
-                    },
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "message": {
-                          "type": "string",
-                          "example": "Unauthorized"
-                        }
-                      }
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Invalid token"
-                    },
-                    "path": {
-                      "type": "string",
-                      "example": "/skills"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Access is denied",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "timestamp": {
-                      "type": "string",
-                      "example": "1532506012.933"
-                    },
-                    "status": {
-                      "type": "integer",
-                      "format": "int64",
-                      "example": 403
-                    },
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "message": {
-                          "type": "string",
-                          "example": "Access is denied"
-                        }
-                      }
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Access is denied"
-                    },
-                    "path": {
-                      "type": "string",
-                      "example": "/skills"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
->>>>>>> develop
     "/admin/skills": {
       "post": {
         "tags": [
@@ -4205,13 +3995,8 @@
         "tags": [
           "Skill"
         ],
-<<<<<<< HEAD
         "summary": "Edit a skill by id (ADMIN)",
         "description": "Edit a skill by id (ADMIN)",
-=======
-        "summary": "Get a skill by id",
-        "description": "Get a skill by id",
->>>>>>> develop
         "parameters": [
           {
             "in": "header",
@@ -4510,15 +4295,8 @@
             }
           }
         }
-<<<<<<< HEAD
       },
       "delete": {
-=======
-      }
-    },
-    "/admin/skills/{id}": {
-      "put": {
->>>>>>> develop
         "tags": [
           "Skill"
         ],
@@ -4861,11 +4639,7 @@
                     },
                     "path": {
                       "type": "string",
-<<<<<<< HEAD
                       "example": "/skills"
-=======
-                      "example": "/admin/skills/{id}"
->>>>>>> develop
                     }
                   }
                 }
@@ -4903,11 +4677,7 @@
                     },
                     "path": {
                       "type": "string",
-<<<<<<< HEAD
                       "example": "/skills"
-=======
-                      "example": "/admin/skills/{id}"
->>>>>>> develop
                     }
                   }
                 }
