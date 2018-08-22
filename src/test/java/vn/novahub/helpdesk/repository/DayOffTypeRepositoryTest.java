@@ -1,10 +1,13 @@
 package vn.novahub.helpdesk.repository;
 
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import vn.novahub.helpdesk.model.DayOffType;
+
+import java.io.IOException;
 
 import static org.junit.Assert.*;
 
@@ -16,10 +19,10 @@ public class DayOffTypeRepositoryTest extends BaseRepositoryTest{
     private DayOffType dayOffType;
 
     @Before
-    public void before() {
+    public void before() throws IOException {
         dayOffTypeRepository.deleteAll();
         dayOffType = new DayOffType();
-        dayOffType.setType("Pregnant");
+        dayOffType.setType("Test");
         dayOffType.setDefaultQuota(24);
     }
 
@@ -31,7 +34,6 @@ public class DayOffTypeRepositoryTest extends BaseRepositoryTest{
     @Test
     public void testSaveAndFindByType() throws Exception {
         dayOffTypeRepository.save(dayOffType);
-        assertEquals(dayOffType, dayOffTypeRepository.findByType("Pregnant"));
+        assertEquals(dayOffType, dayOffTypeRepository.findByType("Test"));
     }
-
 }

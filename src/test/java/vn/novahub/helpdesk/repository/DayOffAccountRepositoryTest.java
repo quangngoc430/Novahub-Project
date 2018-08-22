@@ -3,12 +3,10 @@ package vn.novahub.helpdesk.repository;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static org.junit.Assert.*;
-
-public class DayOffAccountRepositoryTest {
+public class DayOffAccountRepositoryTest extends BaseRepositoryTest{
 
     @Autowired
-    private DayOffAccountRepository repository;
+    private DayOffAccountRepository dayOffAccountRepository;
 
     @Test
     public void findAllByAccountId() throws Exception {
