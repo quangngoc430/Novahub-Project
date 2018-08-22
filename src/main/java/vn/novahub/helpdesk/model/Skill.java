@@ -1,13 +1,12 @@
 package vn.novahub.helpdesk.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.*;
+
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import vn.novahub.helpdesk.validation.GroupCreateSkill;
 import vn.novahub.helpdesk.validation.GroupUpdateSkill;
+import vn.novahub.helpdesk.view.View;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -22,31 +21,37 @@ public class Skill implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView({View.Public.class, View.AccountWithSkills.class})
     @Column(name = "id")
     private long id;
 
     @NotEmpty(message = "name is not empty", groups = {GroupCreateSkill.class, GroupUpdateSkill.class})
+    @JsonView({View.Public.class, View.AccountWithSkills.class})
     @Column(name = "name")
     private String name;
 
     @Transient
+    @JsonView({View.Public.class, View.AccountWithSkills.class})
     @NotNull(message = "level is not null", groups = {GroupCreateSkill.class, GroupUpdateSkill.class})
     private Level level;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty(value = "created_at")
     @NotNull(message = "created_at is not null")
+    @JsonView(View.Public.class)
     @Column(name = "created_at")
     private Date createdAt;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty(value = "updated_at")
     @NotNull(message = "updated_at is not null")
+    @JsonView(View.Public.class)
     @Column(name = "updated_at")
     private Date updatedAt;
 
     @JsonProperty(value = "category_id")
     @NotNull(message = "category_id is not null", groups = {GroupCreateSkill.class, GroupUpdateSkill.class})
+    @JsonView(View.Public.class)
     @Column(name = "category_id")
     private long categoryId;
 
@@ -58,6 +63,8 @@ public class Skill implements Serializable {
     @ManyToOne(targetEntity = Category.class)
     @JoinColumn(name = "category_id", insertable = false, updatable = false)
     private Category category;
+
+    public Skill() {}
 
     public long getId() {
         return id;

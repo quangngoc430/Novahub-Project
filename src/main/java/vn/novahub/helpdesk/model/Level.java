@@ -3,8 +3,10 @@ package vn.novahub.helpdesk.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
 import vn.novahub.helpdesk.validation.GroupCreateSkill;
 import vn.novahub.helpdesk.validation.GroupUpdateSkill;
+import vn.novahub.helpdesk.view.View;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -20,31 +22,37 @@ public class Level implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView({View.Public.class, View.AccountWithSkills.class})
     @Column(name = "id")
     private long id;
 
+    @JsonView({View.Public.class, View.AccountWithSkills.class})
     @Column(name = "value")
     @NotNull(message = "value is not null", groups = {GroupCreateSkill.class, GroupUpdateSkill.class})
     @Min(value = 1, message = "value must be greater than or equal to 1", groups = {GroupCreateSkill.class, GroupUpdateSkill.class})
     @Max(value = 10, message = "value must be less than or equal to 10", groups = {GroupCreateSkill.class, GroupUpdateSkill.class})
     private long value;
 
+    @JsonView({View.Public.class})
     @JsonProperty(value = "account_id")
     @Column(name = "account_id")
     @NotNull(message = "account_id is not null")
     private long accountId;
 
+    @JsonView(View.Public.class)
     @JsonProperty(value = "skill_id")
     @Column(name = "skill_id")
     @NotNull(message = "skill_id is not null")
     private long skillId;
 
+    @JsonView(View.Public.class)
     @JsonProperty(value = "created_at")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "created_at")
     @NotNull(message = "created_at is not null")
     private Date createdAt;
 
+    @JsonView(View.Public.class)
     @JsonProperty(value = "updated_at")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "updated_at")

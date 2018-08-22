@@ -19,6 +19,8 @@ import vn.novahub.helpdesk.enums.TokenEnum;
 import vn.novahub.helpdesk.exception.*;
 import vn.novahub.helpdesk.model.*;
 import vn.novahub.helpdesk.repository.AccountRepository;
+import vn.novahub.helpdesk.repository.LevelRepository;
+import vn.novahub.helpdesk.repository.SkillRepository;
 import vn.novahub.helpdesk.repository.TokenRepository;
 import vn.novahub.helpdesk.service.*;
 import vn.novahub.helpdesk.validation.*;
@@ -29,6 +31,7 @@ import javax.validation.groups.Default;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -70,6 +73,12 @@ public class AccountServiceImpl implements AccountService {
 
     @Autowired
     private GoogleService googleService;
+
+    @Autowired
+    private SkillRepository skillRepository;
+
+    @Autowired
+    private LevelRepository levelRepository;
 
     @Override
     public boolean isAccountLogin(long accountId) {
@@ -215,17 +224,41 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Page<Account> getAll(String keyword, String status, String role, Pageable pageable) {
+        Page<Account> accounts;
+
         if(status.equals("") && role.equals(""))
-            return accountRepository.getAllByEmailContainingOrFirstNameContainingOrLastNameContaining(keyword, pageable);
+            accounts = accountRepository.getAllByEmailContainingOrFirstNameContainingOrLastNameContaining(keyword, pageable);
+        else if(!status.equals("") && role.equals(""))
+            accounts = accountRepository.getAllByEmailContainingOrFirstNameContainingOrLastNameContainingAndStatus(keyword, status, pageable);
+        else if(status.equals("") && !role.equals(""))
+            accounts = accountRepository.getAllByEmailContainingOrFirstNameContainingOrLastNameContainingAndRole(keyword, role, pageable);
+        else
+            accounts = accountRepository.getAllByEmailContainingOrFirstNameContainingOrLastNameContainingAndStatusAndRole(keyword, status, role, pageable);
 
-        if(!status.equals("") && role.equals(""))
-            return accountRepository.getAllByEmailContainingOrFirstNameContainingOrLastNameContainingAndStatus(keyword, status, pageable);
+        List<Long> accountIds = new ArrayList<>();
 
-        if(status.equals("") && !role.equals(""))
-            return accountRepository.getAllByEmailContainingOrFirstNameContainingOrLastNameContainingAndRole(keyword, role, pageable);
+        for (Account account : accounts.getContent()) {
+            accountIds.add(account.getId());
+        }
 
-        //if status != "" and role != ""
-        return accountRepository.getAllByEmailContainingOrFirstNameContainingOrLastNameContainingAndStatusAndRole(keyword, status, role, pageable);
+        List<Skill> skills = skillRepository.getAllBy();
+
+        List<Level> levels = levelRepository.getAllByAccountIdIn(accountIds);
+
+        for (Account account : accounts.getContent()) {
+            account.setSkills(new ArrayList<>());
+            for (int i = skills.size() - 1; i >= 0; i--) {
+                for (int j = levels.size() - 1; j >= 0; j--) {
+                    if(levels.get(j).getSkillId() == skills.get(i).getId() && levels.get(j).getAccountId() == account.getId()) {
+                        skills.get(i).setLevel(levels.get(j));
+                        account.getSkills().add(0, skills.get(i));
+                        levels.remove(j);
+                    }
+                }
+            }
+        }
+
+        return accounts;
     }
 
     @Override
