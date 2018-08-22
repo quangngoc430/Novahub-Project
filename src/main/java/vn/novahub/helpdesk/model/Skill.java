@@ -7,10 +7,7 @@ import javax.persistence.*;
 import vn.novahub.helpdesk.validation.GroupCreateSkill;
 import vn.novahub.helpdesk.validation.GroupCreateSkillWithLevel;
 import vn.novahub.helpdesk.validation.GroupUpdateSkill;
-<<<<<<< HEAD
 import vn.novahub.helpdesk.validation.GroupUpdateSkillWithLevel;
-=======
->>>>>>> develop
 import vn.novahub.helpdesk.view.View;
 
 import javax.validation.constraints.Max;
@@ -41,22 +38,15 @@ public class Skill implements Serializable {
 
     @JsonView(View.SkillWithLevel.class)
     @Transient
-<<<<<<< HEAD
     @NotNull(message = "level is not null", groups = {GroupCreateSkillWithLevel.class, GroupUpdateSkillWithLevel.class})
     @Min(value = 1, message = "level must be greater than or equal to 1", groups = {GroupCreateSkillWithLevel.class, GroupUpdateSkillWithLevel.class})
     @Max(value = 10, message = "level must be less than or equal to 10", groups = {GroupCreateSkillWithLevel.class, GroupUpdateSkillWithLevel.class})
     private Long level;
-=======
-    @JsonView({View.Public.class, View.AccountWithSkills.class})
-    @NotNull(message = "level is not null", groups = {GroupCreateSkill.class, GroupUpdateSkill.class})
-    private Level level;
->>>>>>> develop
 
     @JsonView(View.Public.class)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty(value = "created_at")
     @NotNull(message = "created_at is not null")
-    @JsonView(View.Public.class)
     @Column(name = "created_at")
     private Date createdAt;
 
@@ -64,14 +54,12 @@ public class Skill implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty(value = "updated_at")
     @NotNull(message = "updated_at is not null")
-    @JsonView(View.Public.class)
     @Column(name = "updated_at")
     private Date updatedAt;
 
     @JsonView(View.Public.class)
     @JsonProperty(value = "category_id")
     @NotNull(message = "category_id is not null", groups = {GroupCreateSkill.class, GroupUpdateSkill.class})
-    @JsonView(View.Public.class)
     @Column(name = "category_id")
     private long categoryId;
 
@@ -85,7 +73,6 @@ public class Skill implements Serializable {
     @JoinColumn(name = "category_id", insertable = false, updatable = false)
     private Category category;
 
-<<<<<<< HEAD
     public Skill() {
         super();
         this.createdAt = new Date();
@@ -122,9 +109,6 @@ public class Skill implements Serializable {
         this.updatedAt = updatedAt;
         this.category = category;
     }
-=======
-    public Skill() {}
->>>>>>> develop
 
     public long getId() {
         return id;
@@ -203,5 +187,4 @@ public class Skill implements Serializable {
                 ", category=" + category +
                 '}';
     }
-
 }
