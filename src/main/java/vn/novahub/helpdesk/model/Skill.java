@@ -23,18 +23,18 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Skill implements Serializable {
 
-    @JsonView({View.Public.class, View.AccountWithSkills.class})
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView({View.Public.class, View.AccountWithSkills.class})
     @Column(name = "id")
     private long id;
 
-    @JsonView({View.Public.class, View.AccountWithSkills.class})
     @NotEmpty(message = "name is not empty", groups = {GroupCreateSkill.class, GroupUpdateSkill.class})
+    @JsonView({View.Public.class, View.AccountWithSkills.class})
     @Column(name = "name")
     private String name;
 
-    @JsonView(View.SkillWithLevel.class)
+    @JsonView({View.SkillWithLevel.class, View.AccountWithSkills.class})
     @Transient
     @NotNull(message = "level is not null", groups = {GroupCreateSkillWithLevel.class, GroupUpdateSkillWithLevel.class})
     @Min(value = 1, message = "level must be greater than or equal to 1", groups = {GroupCreateSkillWithLevel.class, GroupUpdateSkillWithLevel.class})
