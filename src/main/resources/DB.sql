@@ -66,22 +66,10 @@ CREATE TABLE `skill` (
   CONSTRAINT `fk_skill_category` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `level`;
-CREATE TABLE `level` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `value` int NOT NULL,
-  `skill_id` int NOT NULL,
-  `account_id` int NOT NULL,
-  `created_at` datetime NOT NULL DEFAULT NOW(),
-  `updated_at` datetime NOT NULL DEFAULT NOW(),
-  PRIMARY KEY (`id`),
-  CONSTRAINT `fk_level_skill` FOREIGN KEY (`skill_id`) REFERENCES `skill`(`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_level_account` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`) ON DELETE CASCADE
-);
-
 DROP TABLE IF EXISTS `account_has_skill`;
 CREATE TABLE `account_has_skill` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `level` int NOT NULL,
   `account_id` int(11) NOT NULL,
   `skill_id` int(11) NOT NULL,
   `created_at` datetime NOT NULL DEFAULT NOW(),
