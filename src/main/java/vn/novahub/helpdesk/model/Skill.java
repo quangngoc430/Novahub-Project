@@ -71,6 +71,9 @@ public class Skill implements Serializable {
     @JoinColumn(name = "category_id", insertable = false, updatable = false)
     private Category category;
 
+    @Transient
+    private List<Account> accounts;
+
     public Skill() {
         super();
         this.createdAt = new Date();
@@ -86,6 +89,7 @@ public class Skill implements Serializable {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
+
 
     public Skill(long id, String name, long level, long categoryId, Date createdAt, Date updatedAt, Category category) {
         super();
@@ -162,6 +166,18 @@ public class Skill implements Serializable {
 
     public void setAccountHasSkillList(List<AccountHasSkill> accountHasSkillList) {
         this.accountHasSkillList = accountHasSkillList;
+    }
+
+    public void setLevel(Long level) {
+        this.level = level;
+    }
+
+    public List<Account> getAccounts() {
+        return accounts;
+    }
+
+    public void setAccounts(List<Account> accounts) {
+        this.accounts = accounts;
     }
 
     public Category getCategory() {

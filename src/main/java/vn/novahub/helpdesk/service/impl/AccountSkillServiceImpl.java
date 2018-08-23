@@ -9,11 +9,10 @@ import vn.novahub.helpdesk.model.*;
 import vn.novahub.helpdesk.repository.*;
 import vn.novahub.helpdesk.service.AccountService;
 import vn.novahub.helpdesk.service.AccountSkillService;
-import vn.novahub.helpdesk.validation.GroupCreateSkill;
-import vn.novahub.helpdesk.validation.GroupUpdateSkill;
 import vn.novahub.helpdesk.validation.GroupUpdateSkillWithLevel;
 import vn.novahub.helpdesk.validation.SkillValidation;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -219,6 +218,52 @@ public class AccountSkillServiceImpl implements AccountSkillService {
             throw new AccountNotFoundException(accountId);
 
         return skillRepository.getAllByAccountId(accountId, pageable);
+    }
+
+    @Override
+    public Page<Skill> search(List<Long> skillIds, Pageable pageable) {
+        Page<Skill> skillPage = skillRepository.getAllByIdIsIn(skillIds, pageable);
+
+        List<Skill> skills = skillRepository.getAllBy();
+        List<Category> categories = categoryRepository.getAllBy();
+        List<AccountHasSkill> accountHasSkills = accountHasSkillRepository.getAllBy();
+        List<Account> accounts = accountRepository.getAllBySkillIdIsIn(skillIds);
+
+        for (Account account : accounts) {
+            account.setSkills(new ArrayList<>());
+            for (AccountHasSkill accountHasSkill : accountHasSkills) {
+                if (accountHasSkill.getAccountId() == account.getId()) {
+                    for (Skill skill : skills) {
+                        if (skill.getId() == accountHasSkill.getId()) {
+                            account.getSkills().add(new Skill(skill.getId(), skill.getName(), accountHasSkill.getLevel(), skill.getCategoryId(), skill.getCreatedAt(), skill.getUpdatedAt()));
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        for (Skill skill : skillPage.getContent()) {
+            for (Category category : categories) {
+                if (skill.getCategoryId() == category.getId()) {
+                    skill.setCategory(category);
+                    break;
+                }
+            }
+            skill.setAccounts(new ArrayList<>());
+            for (AccountHasSkill accountHasSkill : accountHasSkills) {
+                if (accountHasSkill.getSkillId() == skill.getId()) {
+                    for (Account account : accounts) {
+                        if(account.getId() == accountHasSkill.getAccountId()) {
+                            skill.getAccounts().add(account);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        return skillPage;
     }
 
 }

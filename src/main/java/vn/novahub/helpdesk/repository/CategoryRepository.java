@@ -6,6 +6,8 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 import vn.novahub.helpdesk.model.Category;
 
+import java.util.List;
+
 @Repository
 public interface CategoryRepository extends PagingAndSortingRepository<Category, Long> {
 
@@ -16,4 +18,6 @@ public interface CategoryRepository extends PagingAndSortingRepository<Category,
     boolean existsById(long categoryId);
 
     Category getByName(String name);
+
+    List<Category> getAllBy();
 }

@@ -17,6 +17,8 @@ import vn.novahub.helpdesk.service.AccountSkillService;
 import vn.novahub.helpdesk.service.AdminSkillService;
 import vn.novahub.helpdesk.view.View;
 
+import java.util.ArrayList;
+
 @RestController
 @RequestMapping(path = "/api/skills")
 public class SkillController {
@@ -34,6 +36,16 @@ public class SkillController {
                                               @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
                                               Pageable pageable) throws CategoryNotFoundException {
         return new ResponseEntity<>(accountSkillService.getAllByKeyword(categoryId, keyword, pageable), HttpStatus.OK);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping(path = "/search", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Page<Skill>> search(Pageable pageable) {
+        ArrayList<Long> skillIds = new ArrayList<>();
+        skillIds.add(1l);
+        skillIds.add(2l);
+        skillIds.add(4l);
+        return new ResponseEntity<>(accountSkillService.search(skillIds, pageable), HttpStatus.OK);
     }
 
     @JsonView(View.Public.class)
