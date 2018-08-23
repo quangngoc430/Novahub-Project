@@ -1,81 +1,187 @@
-{
-  "skill": [
-    {
-      "category": "Industry Knowledge",
-      "name": [
-        "Android Development",
-        "IOS Development",
-        "Research",
-        "Machine Learning",
-        "Infrastructure"
-      ]
-    },
-    {
-      "category": "Tools & Technologies",
-      "name": [
-        "Microsoft Office",
-        "Microsoft Word",
-        "Microsoft Excel",
-        "PostgreSQL",
-        "Blockchain"
-      ]
-    },
-    {
-      "category": "Interpersonal Skills",
-      "name": [
-        "Time Management Skills",
-        "Critical Thinking and Problem Solving",
-        "interpersonal skills 3",
-        "Flexibility",
-        "Communication"
-      ]
-    },
-    {
-      "category": "Front-end Development",
-      "name": [
-        "AngularJS",
-        "ReactJS",
-        "Javascript"
-      ]
-    },
-    {
-      "category": "Back-end Development",
-      "name": [
-        "Spring Framework",
-        "Ruby On Rails",
-        "NodeJS",
-        "Python"
-      ]
-    },
-    {
-      "category": "Web Design",
-      "name": [
-        "Photoshop",
-        "CSS3",
-        "HTML5"
-      ]
-    },
-    {
-      "category": "Mobile Development",
-      "name": [
-        "Java",
-        "Kotlin",
-        "Swift",
-        "Object C",
-        "React Native",
-        "Xamarin"
-      ]
-    },
-    {
-      "category": "Programing Language",
-      "name": [
-        "Java",
-        "Javascript",
-        "C++",
-        "C#",
-        "Python",
-        "Ruby"
-      ]
-    }
-  ]
-}
+[
+  {
+    "id": 1,
+    "name": "Android Development",
+    "category_id": 1
+  },
+  {
+    "id": 2,
+    "name": "IOS Development",
+    "category_id": 1
+  },
+  {
+    "id": 3,
+    "name": "Research",
+    "category_id": 1
+  },
+  {
+    "id": 4,
+    "name": "Machine Learning",
+    "category_id": 1
+  },
+  {
+    "id": 5,
+    "name": "Infrastructure",
+    "category_id": 1
+  },
+  {
+    "id": 6,
+    "name": "Microsoft Office",
+    "category_id": 2
+  },
+  {
+    "id": 7,
+    "name": "Microsoft Word",
+    "category_id": 2
+  },
+  {
+    "id": 8,
+    "name": "Microsoft Excel",
+    "category_id": 2
+  },
+  {
+    "id": 9,
+    "name": "PostgreSQL",
+    "category_id": 2
+  },
+  {
+    "id": 10,
+    "name": "Blockchain",
+    "category_id": 2
+  },
+  {
+    "id": 11,
+    "name": "Time Management Skills",
+    "category_id": 3
+  },
+  {
+    "id": 12,
+    "name": "Critical Thinking and Problem Solving",
+    "category_id": 3
+  },
+  {
+    "id": 13,
+    "name": "Interpersonal Skills",
+    "category_id": 3
+  },
+  {
+    "id": 14,
+    "name": "Flexibility",
+    "category_id": 3
+  },
+  {
+    "id": 15,
+    "name": "Communication",
+    "category_id": 3
+  },
+  {
+    "id": 16,
+    "name": "AngularJS",
+    "category_id": 4
+  },
+  {
+    "id": 17,
+    "name": "ReactJS",
+    "category_id": 4
+  },
+  {
+    "id": 18,
+    "name": "Javascript",
+    "category_id": 4
+  },
+  {
+    "id": 19,
+    "name": "Spring Framework",
+    "category_id": 5
+  },
+  {
+    "id": 20,
+    "name": "Ruby On Rails",
+    "category_id": 5
+  },
+  {
+    "id": 21,
+    "name": "NodeJS",
+    "category_id": 5
+  },
+  {
+    "id": 22,
+    "name": "Python",
+    "category_id": 5
+  },
+  {
+    "id": 23,
+    "name": "Photoshop",
+    "category_id": 6
+  },
+  {
+    "id": 24,
+    "name": "CSS3",
+    "category_id": 6
+  },
+  {
+    "id": 25,
+    "name": "HTML5",
+    "category_id": 6
+  },
+  {
+    "id": 26,
+    "name": "Java",
+    "category_id": 7
+  },
+  {
+    "id": 27,
+    "name": "Kotlin",
+    "category_id": 7
+  },
+  {
+    "id": 28,
+    "name": "Swift",
+    "category_id": 7
+  },
+  {
+    "id": 29,
+    "name": "Object C",
+    "category_id": 7
+  },
+  {
+    "id": 30,
+    "name": "React Native",
+    "category_id": 7
+  },
+  {
+    "id": 31,
+    "name": "Xamarin",
+    "category_id": 7
+  },
+  {
+    "id": 32,
+    "name": "Java",
+    "category_id": 8
+  },
+  {
+    "id": 33,
+    "name": "Javascript",
+    "category_id": 8
+  },
+  {
+    "id": 34,
+    "name": "C++",
+    "category_id": 8
+  },
+  {
+    "id": 35,
+    "name": "C#",
+    "category_id": 8
+  },
+  {
+    "id": 36,
+    "name": "Python",
+    "category_id": 8
+  },
+  {
+    "id": 37,
+    "name": "Ruby",
+    "category_id": 8
+  }
+]

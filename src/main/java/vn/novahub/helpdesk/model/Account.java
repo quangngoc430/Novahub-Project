@@ -145,6 +145,12 @@ public class Account implements Serializable {
     @Transient
     private List<Skill> skills;
 
+    public Account() {
+        super();
+        this.createdAt = new Date();
+        this.updatedAt = new Date();
+    }
+
     public long getId() {
         return id;
     }

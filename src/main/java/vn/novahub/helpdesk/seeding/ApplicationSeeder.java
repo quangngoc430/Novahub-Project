@@ -15,28 +15,19 @@ import java.util.List;
 public class ApplicationSeeder {
 
     @Autowired
-    private RolesSeeder rolesSeeder;
-
-    @Autowired
-    private AccountsSeeder accountsSeeder;
-
-    @Autowired
-    private CategoriesSeeder categoriesSeeder;
-
-    @Autowired
-    private SkillsSeeder skillsSeeder;
-
-    @Autowired
-    private IssuesSeeder issuesSeeder;
-
-    @Autowired
     private RoleRepository roleRepository;
 
     @Autowired
     private AccountRepository accountRepository;
 
     @Autowired
+    private SkillRepository skillRepository;
+
+    @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private AccountHasSkillRepository accountHasSkillRepository;
 
     @Autowired
     private IssueRepository issueRepository;
@@ -53,27 +44,34 @@ public class ApplicationSeeder {
     @Autowired
     private Seeder seeder;
 
-    public void generateData() throws IOException, ParseException, ClassNotFoundException {
+    public void generateData() throws IOException {
 
         dayOffRepository.deleteAll();
         dayOffAccountRepository.deleteAll();
         dayOffTypeRepository.deleteAll();
         roleRepository.deleteAll();
-        accountRepository.deleteAll();
+        accountHasSkillRepository.deleteAll();
         categoryRepository.deleteAll();
         issueRepository.deleteAll();
+        accountRepository.deleteAll();
 
-        ArrayList<Role> roleArrayList = rolesSeeder.generateData("seeding/roles.json");
-        ArrayList<Account> accountArrayList = accountsSeeder.generateData("seeding/accounts.json");
-        ArrayList<Category> categoryArrayList = categoriesSeeder.generateData("seeding/categories.json");
-        ArrayList<Skill> skillArrayList = skillsSeeder.generateData("seeding/skills.json");
-        ArrayList<Issue> issueArrayList = issuesSeeder.generateData("seeding/issues.json", accountArrayList);
-
-        dayOffTypeRepository.saveAll(
-                seeder.generate("seeding/day_off_type.json", new TypeReference<List<DayOffType>>() {}));
-        dayOffAccountRepository.saveAll(
-                seeder.generate("seeding/day_off_account.json", new TypeReference<List<DayOffAccount>>() {}));
-        dayOffRepository.saveAll(
-                seeder.generate("seeding/day_off.json", new TypeReference<List<DayOff>>() {}));
+        roleRepository.saveAll(
+                seeder.generate("seeding/roles.json", new TypeReference<List<Role>>() {}));
+        accountRepository.saveAll(
+                seeder.generate("seeding/accounts.json", new TypeReference<List<Account>>() {}));
+        categoryRepository.saveAll(
+                seeder.generate("seeding/categories.json", new TypeReference<List<Category>>() {}));
+        skillRepository.saveAll(
+                seeder.generate("seeding/skills.json", new TypeReference<List<Skill>>() {}));
+        accountHasSkillRepository.saveAll(
+                seeder.generate("seeding/accountHasSkills.json", new TypeReference<List<AccountHasSkill>>() {}));
+        issueRepository.saveAll(
+                seeder.generate("seeding/issues.json", new TypeReference<List<Issue>>() {}));
+//        dayOffTypeRepository.saveAll(
+//                seeder.generate("seeding/day_off_type.json", new TypeReference<List<DayOffType>>() {}));
+//        dayOffAccountRepository.saveAll(
+//                seeder.generate("seeding/day_off_account.json", new TypeReference<List<DayOffAccount>>() {}));
+//        dayOffRepository.saveAll(
+//                seeder.generate("seeding/day_off.json", new TypeReference<List<DayOff>>() {}));
     }
 }

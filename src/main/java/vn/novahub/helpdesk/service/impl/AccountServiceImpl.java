@@ -149,8 +149,6 @@ public class AccountServiceImpl implements AccountService {
         accessToken.setExpiredIn(TokenEnum.TIME_OF_TOKEN.value());
         accessToken.setExpiredAt(new Date((new Date()).getTime() + TokenEnum.TIME_OF_TOKEN.value() * 1000));
         accessToken.setAccountId(account.getId());
-        accessToken.setCreatedAt(new Date());
-        accessToken.setUpdatedAt(new Date());
         accessToken = tokenRepository.save(accessToken);
         accessToken.setAccount(account);
 
@@ -177,8 +175,6 @@ public class AccountServiceImpl implements AccountService {
             account.setStatus(AccountEnum.ACTIVE.name());
             Role role = roleService.getByName(RoleEnum.EMPLOYEE.name());
             account.setRoleId(role.getId());
-            account.setCreatedAt(new Date());
-            account.setUpdatedAt(new Date());
 
             account = accountRepository.save(account);
             account.setRole(role);
@@ -196,8 +192,6 @@ public class AccountServiceImpl implements AccountService {
             accessToken.setExpiredIn(TokenEnum.TIME_OF_TOKEN.value());
             accessToken.setExpiredAt((new Date((new Date()).getTime() + TokenEnum.TIME_OF_TOKEN.value() * 1000)));
             accessToken.setAccountId(account.getId());
-            accessToken.setCreatedAt(new Date());
-            accessToken.setUpdatedAt(new Date());
             accessToken = tokenRepository.save(accessToken);
             accessToken.setAccount(account);
         } else {
@@ -280,8 +274,6 @@ public class AccountServiceImpl implements AccountService {
         account.setStatus(AccountEnum.INACTIVE.name());
         account.setVerificationToken(tokenService.generateToken(account.getEmail() + account.getEmail()));
         account.setRoleId(roleService.getByName(RoleEnum.EMPLOYEE.name()).getId());
-        account.setCreatedAt(new Date());
-        account.setUpdatedAt(new Date());
 
         account = accountRepository.save(account);
 

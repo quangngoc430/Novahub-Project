@@ -50,6 +50,12 @@ public class Category implements Serializable {
     @OneToMany
     private List<Skill> skillList;
 
+    public Category() {
+        super();
+        this.createdAt = new Date();
+        this.updatedAt = new Date();
+    }
+
     public long getId() {
         return id;
     }
