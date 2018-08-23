@@ -1,5 +1,6 @@
 package vn.novahub.helpdesk.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -12,6 +13,7 @@ import vn.novahub.helpdesk.exception.SkillNotFoundException;
 import vn.novahub.helpdesk.exception.SkillValidationException;
 import vn.novahub.helpdesk.model.Skill;
 import vn.novahub.helpdesk.service.AdminSkillService;
+import vn.novahub.helpdesk.view.View;
 
 @RestController
 @RequestMapping(path = "/api/admin/skills")
@@ -20,12 +22,14 @@ public class SkillAdminController {
     @Autowired
     private AdminSkillService adminSkillService;
 
+    @JsonView(View.Public.class)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Skill> createByAdmin(@RequestBody Skill skill) throws SkillIsExistException, SkillValidationException, CategoryNotFoundException {
         return new ResponseEntity<>(adminSkillService.create(skill), HttpStatus.OK);
     }
 
+    @JsonView(View.Public.class)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping(path = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Skill> updateByAdmin(@PathVariable("id") long skillId,

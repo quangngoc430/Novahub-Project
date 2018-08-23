@@ -2,7 +2,6 @@ package vn.novahub.helpdesk.model;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import vn.novahub.helpdesk.annotation.Status;
 import vn.novahub.helpdesk.validation.GroupCreateIssue;
@@ -65,6 +64,12 @@ public class Issue implements Serializable {
     @ManyToOne(targetEntity = Account.class)
     @JoinColumn(name = "account_id", insertable = false, updatable = false)
     private Account account;
+
+    public Issue() {
+        super();
+        this.createdAt = new Date();
+        this.updatedAt = new Date();
+    }
 
     public long getId() {
         return id;

@@ -30,7 +30,7 @@ public class Application {
 
 	@Bean
 	@Profile("dev")
-	public String dev() throws IOException, ParseException {
+	public String dev() throws IOException, ParseException, ClassNotFoundException {
 		logger.info("\n-------------------------- DEV ENVIRONMENT --------------------------");
 		applicationSeeder.generateData();
 		return "dev";

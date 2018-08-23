@@ -3,7 +3,9 @@ package vn.novahub.helpdesk.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
 import vn.novahub.helpdesk.validation.GroupLoginWithGoogle;
+import vn.novahub.helpdesk.view.View;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -16,21 +18,25 @@ import java.util.Date;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Token implements Serializable {
 
+    @JsonView(View.Public.class)
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private long id;
 
+    @JsonView(View.Public.class)
     @JsonProperty(value = "access_token")
     @NotEmpty(message = "access_token is not empty", groups = {GroupLoginWithGoogle.class})
     @Column(name = "access_token")
     private String accessToken;
 
+    @JsonView(View.Public.class)
     @JsonProperty(value = "expired_in")
     @NotNull(message = "expired_in is not null")
     @Column(name = "expired_in")
     private long expiredIn;
 
+    @JsonView(View.Public.class)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty(value = "expired_at")
     @Temporal(TemporalType.TIMESTAMP)
@@ -38,26 +44,36 @@ public class Token implements Serializable {
     @Column(name = "expired_at")
     private Date expiredAt;
 
+    @JsonView(View.Public.class)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Temporal(TemporalType.TIMESTAMP)
     @NotNull(message = "create_at is not null")
     @Column(name = "created_at")
     private Date createdAt;
 
+    @JsonView(View.Public.class)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Temporal(TemporalType.TIMESTAMP)
     @NotNull(message = "updated_at is not null")
     @Column(name = "updated_at")
     private Date updatedAt;
 
+    @JsonView(View.Public.class)
     @JsonProperty(value = "account_id")
     @NotNull(message = "account_id is not null")
     @Column(name = "account_id")
     private long accountId;
 
+    @JsonView(View.Public.class)
     @ManyToOne(fetch = FetchType.EAGER, targetEntity = Account.class)
     @JoinColumn(name = "account_id", insertable = false, updatable = false)
     private Account account;
+
+    public Token() {
+        super();
+        this.createdAt = new Date();
+        this.updatedAt = new Date();
+    }
 
     public long getId() {
         return id;

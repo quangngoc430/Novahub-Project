@@ -28,6 +28,4 @@ public interface AccountSkillService {
 
     Page<Skill> getAllByAccountId(long accountId, Pageable pageable) throws AccountNotFoundException;
 
-    Page<Skill> searchByKeyword(String keyword, Pageable pageable);
-
 }

@@ -56,7 +56,7 @@ public class DayOff {
     @Column(name = "status")
     private String status;
 
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(name = "token")
     private String token;
 

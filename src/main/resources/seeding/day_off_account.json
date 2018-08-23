@@ -1,0 +1,26 @@
+[
+  {
+    "id" : 1,
+    "year" : 2018,
+    "privateQuota" : 88,
+    "remainingTime" : 88,
+    "dayOffTypeId" : 1,
+    "accountId" : 1
+  },
+  {
+    "id" : 2,
+    "year" : 2018,
+    "privateQuota" : 8,
+    "remainingTime" : 8,
+    "dayOffTypeId" : 2,
+    "accountId" : 1
+  },
+  {
+    "id" : 3,
+    "year" : 2018,
+    "privateQuota" : 16,
+    "remainingTime" : 16,
+    "dayOffTypeId" : 3,
+    "accountId" : 2
+  }
+]
