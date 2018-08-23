@@ -33,7 +33,7 @@ public class DayOffController {
                                                            Pageable pageable) {
         Account account = accountService.getAccountLogin();
         return new ResponseEntity<>(
-                dayOffService.getAllByAccountIdAndStatus(account.getId(), status,pageable),
+                dayOffService.getAllByAccountIdAndStatus(account.getId(), status, pageable),
                 HttpStatus.OK);
     }
 
