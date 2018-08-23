@@ -67,11 +67,11 @@ public class ApplicationSeeder {
                 seeder.generate("seeding/accountHasSkills.json", new TypeReference<List<AccountHasSkill>>() {}));
         issueRepository.saveAll(
                 seeder.generate("seeding/issues.json", new TypeReference<List<Issue>>() {}));
-//        dayOffTypeRepository.saveAll(
-//                seeder.generate("seeding/day_off_type.json", new TypeReference<List<DayOffType>>() {}));
-//        dayOffAccountRepository.saveAll(
-//                seeder.generate("seeding/day_off_account.json", new TypeReference<List<DayOffAccount>>() {}));
-//        dayOffRepository.saveAll(
-//                seeder.generate("seeding/day_off.json", new TypeReference<List<DayOff>>() {}));
+        dayOffTypeRepository.saveAll(
+                seeder.generate("seeding/day_off_type.json", new TypeReference<List<DayOffType>>() {}));
+        dayOffAccountRepository.saveAll(
+                seeder.generate("seeding/day_off_account.json", new TypeReference<List<DayOffAccount>>() {}));
+        dayOffRepository.saveAll(
+                seeder.generate("seeding/day_off.json", new TypeReference<List<DayOff>>() {}));
     }
 }
