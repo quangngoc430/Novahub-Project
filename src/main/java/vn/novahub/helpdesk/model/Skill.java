@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.*;
 
 import javax.persistence.*;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import vn.novahub.helpdesk.validation.GroupCreateSkill;
 import vn.novahub.helpdesk.validation.GroupCreateSkillWithLevel;
 import vn.novahub.helpdesk.validation.GroupUpdateSkill;
@@ -19,6 +22,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "skill")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Skill implements Serializable {
@@ -45,6 +49,8 @@ public class Skill implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty(value = "created_at")
     @NotNull(message = "created_at is not null")
+    @Temporal(TemporalType.TIMESTAMP)
+    @CreatedDate
     @Column(name = "created_at")
     private Date createdAt;
 
@@ -52,6 +58,8 @@ public class Skill implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty(value = "updated_at")
     @NotNull(message = "updated_at is not null")
+    @Temporal(TemporalType.TIMESTAMP)
+    @LastModifiedDate
     @Column(name = "updated_at")
     private Date updatedAt;
 
@@ -71,11 +79,7 @@ public class Skill implements Serializable {
     @JoinColumn(name = "category_id", insertable = false, updatable = false)
     private Category category;
 
-    public Skill() {
-        super();
-        this.createdAt = new Date();
-        this.updatedAt = new Date();
-    }
+    public Skill() {}
 
     public Skill(long id, String name, long level, long categoryId, Date createdAt, Date updatedAt) {
         super();
