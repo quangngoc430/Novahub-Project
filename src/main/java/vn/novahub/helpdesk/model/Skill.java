@@ -49,6 +49,7 @@ public class Skill implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty(value = "created_at")
     @NotNull(message = "created_at is not null")
+    @Temporal(TemporalType.TIMESTAMP)
     @CreatedDate
     @Column(name = "created_at")
     private Date createdAt;
@@ -57,6 +58,7 @@ public class Skill implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty(value = "updated_at")
     @NotNull(message = "updated_at is not null")
+    @Temporal(TemporalType.TIMESTAMP)
     @LastModifiedDate
     @Column(name = "updated_at")
     private Date updatedAt;

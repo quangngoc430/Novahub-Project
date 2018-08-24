@@ -2,6 +2,8 @@ package vn.novahub.helpdesk.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -29,11 +31,15 @@ public class AccountHasSkill implements Serializable {
 
     @JsonProperty(value = "created_at")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Temporal(TemporalType.TIMESTAMP)
+    @CreatedDate
     @Column(name = "created_at")
     private Date createdAt;
 
     @JsonProperty(value = "updated_at")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Temporal(TemporalType.TIMESTAMP)
+    @LastModifiedDate
     @Column(name = "updated_at")
     private Date updatedAt;
 
@@ -44,12 +50,6 @@ public class AccountHasSkill implements Serializable {
     @OneToOne(targetEntity = Skill.class)
     @JoinColumn(name = "skill_id", insertable = false, updatable = false)
     private Skill skill;
-
-    public AccountHasSkill() {
-        super();
-        this.createdAt = new Date();
-        this.updatedAt = new Date();
-    }
 
     public long getId() {
         return id;

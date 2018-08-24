@@ -98,6 +98,7 @@ public class Account implements Serializable {
     @JsonProperty(value = "created_at")
     @NotNull(message = "created_at is not null")
     @JsonView(View.Public.class)
+    @Temporal(TemporalType.TIMESTAMP)
     @CreatedDate
     @Column(name = "created_at")
     private Date createdAt;
@@ -106,6 +107,7 @@ public class Account implements Serializable {
     @JsonProperty(value = "updated_at")
     @NotNull(message = "updated_at is not null")
     @JsonView(View.Public.class)
+    @Temporal(TemporalType.TIMESTAMP)
     @LastModifiedDate
     @Column(name = "updated_at")
     private Date updatedAt;

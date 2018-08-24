@@ -39,6 +39,7 @@ public class Category implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @NotNull(message = "created_at is not null")
     @JsonView({View.Public.class})
+    @Temporal(TemporalType.TIMESTAMP)
     @CreatedDate
     @Column(name = "created_at")
     private Date createdAt;
@@ -47,6 +48,7 @@ public class Category implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @NotNull(message = "updated_at is not null")
     @JsonView(View.Public.class)
+    @Temporal(TemporalType.TIMESTAMP)
     @LastModifiedDate
     @Column(name = "updated_at")
     private Date updatedAt;
