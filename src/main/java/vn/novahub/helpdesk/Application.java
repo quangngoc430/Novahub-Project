@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.scheduling.annotation.EnableAsync;
 import vn.novahub.helpdesk.seeding.ApplicationSeeder;
 
@@ -17,6 +18,7 @@ import java.text.ParseException;
 @Configuration
 @SpringBootApplication
 @EnableAsync
+@EnableJpaAuditing
 public class Application {
 
 	private final static Logger logger = LoggerFactory.getLogger(Application.class);

@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import vn.novahub.helpdesk.validation.GroupLoginWithGoogle;
 import vn.novahub.helpdesk.view.View;
 
@@ -14,6 +17,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "token")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Token implements Serializable {
@@ -48,6 +52,7 @@ public class Token implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Temporal(TemporalType.TIMESTAMP)
     @NotNull(message = "create_at is not null")
+    @CreatedDate
     @Column(name = "created_at")
     private Date createdAt;
 
@@ -55,6 +60,7 @@ public class Token implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Temporal(TemporalType.TIMESTAMP)
     @NotNull(message = "updated_at is not null")
+    @LastModifiedDate
     @Column(name = "updated_at")
     private Date updatedAt;
 
@@ -68,12 +74,6 @@ public class Token implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER, targetEntity = Account.class)
     @JoinColumn(name = "account_id", insertable = false, updatable = false)
     private Account account;
-
-    public Token() {
-        super();
-        this.createdAt = new Date();
-        this.updatedAt = new Date();
-    }
 
     public long getId() {
         return id;

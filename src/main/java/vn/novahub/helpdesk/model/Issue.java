@@ -3,6 +3,9 @@ package vn.novahub.helpdesk.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import vn.novahub.helpdesk.annotation.Status;
 import vn.novahub.helpdesk.validation.GroupCreateIssue;
 
@@ -13,6 +16,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "issue")
 public class Issue implements Serializable {
 
@@ -38,6 +42,7 @@ public class Issue implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Temporal(TemporalType.TIMESTAMP)
     @NotNull(message = "created_at is not null")
+    @CreatedDate
     @Column(name = "created_at")
     private Date createdAt;
 
@@ -45,6 +50,7 @@ public class Issue implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Temporal(TemporalType.TIMESTAMP)
     @NotNull(message = "updated_at is not null")
+    @LastModifiedDate
     @Column(name = "updated_at")
     private Date updatedAt;
 
@@ -64,12 +70,6 @@ public class Issue implements Serializable {
     @ManyToOne(targetEntity = Account.class)
     @JoinColumn(name = "account_id", insertable = false, updatable = false)
     private Account account;
-
-    public Issue() {
-        super();
-        this.createdAt = new Date();
-        this.updatedAt = new Date();
-    }
 
     public long getId() {
         return id;
