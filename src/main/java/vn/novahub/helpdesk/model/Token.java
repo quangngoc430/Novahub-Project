@@ -3,7 +3,12 @@ package vn.novahub.helpdesk.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import vn.novahub.helpdesk.validation.GroupLoginWithGoogle;
+import vn.novahub.helpdesk.view.View;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -12,25 +17,30 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "token")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Token implements Serializable {
 
+    @JsonView(View.Public.class)
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private long id;
 
+    @JsonView(View.Public.class)
     @JsonProperty(value = "access_token")
     @NotEmpty(message = "access_token is not empty", groups = {GroupLoginWithGoogle.class})
     @Column(name = "access_token")
     private String accessToken;
 
+    @JsonView(View.Public.class)
     @JsonProperty(value = "expired_in")
     @NotNull(message = "expired_in is not null")
     @Column(name = "expired_in")
     private long expiredIn;
 
+    @JsonView(View.Public.class)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty(value = "expired_at")
     @Temporal(TemporalType.TIMESTAMP)
@@ -38,23 +48,29 @@ public class Token implements Serializable {
     @Column(name = "expired_at")
     private Date expiredAt;
 
+    @JsonView(View.Public.class)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Temporal(TemporalType.TIMESTAMP)
     @NotNull(message = "create_at is not null")
+    @CreatedDate
     @Column(name = "created_at")
     private Date createdAt;
 
+    @JsonView(View.Public.class)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Temporal(TemporalType.TIMESTAMP)
     @NotNull(message = "updated_at is not null")
+    @LastModifiedDate
     @Column(name = "updated_at")
     private Date updatedAt;
 
+    @JsonView(View.Public.class)
     @JsonProperty(value = "account_id")
     @NotNull(message = "account_id is not null")
     @Column(name = "account_id")
     private long accountId;
 
+    @JsonView(View.Public.class)
     @ManyToOne(fetch = FetchType.EAGER, targetEntity = Account.class)
     @JoinColumn(name = "account_id", insertable = false, updatable = false)
     private Account account;

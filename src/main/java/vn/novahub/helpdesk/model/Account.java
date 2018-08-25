@@ -1,10 +1,14 @@
 package vn.novahub.helpdesk.model;
 
 import com.fasterxml.jackson.annotation.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import vn.novahub.helpdesk.annotation.Status;
 import vn.novahub.helpdesk.validation.*;
+import vn.novahub.helpdesk.view.View;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -12,15 +16,16 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "account")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Account implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView({View.Public.class, View.AccountWithSkills.class})
     @Column(name = "id")
     private long id;
 
@@ -29,38 +34,47 @@ public class Account implements Serializable {
             groups = {GroupCreateAccount.class, GroupLoginAccount.class})
     @Size(min = 8, max = 80, message = "email must have between 8 and 80 characters",
             groups = {GroupCreateAccount.class, GroupLoginAccount.class})
+    @JsonView({View.Public.class, View.AccountWithSkills.class})
     @Column(name = "email", unique = true)
     private String email;
 
     @JsonProperty(value = "first_name")
+    @JsonView({View.Public.class, View.AccountWithSkills.class})
     @Column(name = "first_name")
     private String firstName;
 
     @JsonProperty(value = "last_name")
+    @JsonView({View.Public.class, View.AccountWithSkills.class})
     @Column(name = "last_name")
     private String lastName;
 
     @JsonProperty(value = "birth_day")
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonView(View.Public.class)
     @Column(name = "birth_day")
     private Date dayOfBirth;
 
+    @JsonView({View.Public.class, View.AccountWithSkills.class})
     @Column(name = "address")
     private String address;
 
     @Pattern(regexp = "^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\\s\\./0-9]*$", message = "phone have the wrong pattern",
              groups = {GroupCreateAccount.class})
+    @JsonView(View.Public.class)
     @Column(name = "phone")
     private String phone;
 
+    @JsonView({View.Public.class, View.AccountWithSkills.class})
     @Column(name = "title")
     private String title;
 
+    @JsonView(View.Public.class)
     @Column(name = "introduction")
     private String introduction;
 
     @JsonProperty(value = "avatar_url")
+    @JsonView({View.Public.class})
     @Column(name = "avatar_url")
     private String avatarUrl;
 
@@ -76,24 +90,32 @@ public class Account implements Serializable {
 
     @Status(message = "status does not match any statuses", targetClass = Account.class)
     @NotEmpty(message = "status is not empty")
+    @JsonView(View.Public.class)
     @Column(name = "status")
     private String status;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty(value = "created_at")
     @NotNull(message = "created_at is not null")
+    @JsonView(View.Public.class)
+    @Temporal(TemporalType.TIMESTAMP)
+    @CreatedDate
     @Column(name = "created_at")
     private Date createdAt;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty(value = "updated_at")
     @NotNull(message = "updated_at is not null")
+    @JsonView(View.Public.class)
+    @Temporal(TemporalType.TIMESTAMP)
+    @LastModifiedDate
     @Column(name = "updated_at")
     private Date updatedAt;
 
     @JsonProperty(value = "joining_date")
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonView(View.Public.class)
     @Column(name = "joiningDate")
     private Date joiningDate;
 
@@ -103,6 +125,7 @@ public class Account implements Serializable {
 
     @JsonProperty("role_id")
     @NotNull(message = "role_id is not empty")
+    @JsonView({View.Public.class})
     @Column(name = "role_id")
     private long roleId;
 
@@ -114,12 +137,14 @@ public class Account implements Serializable {
             groups = {GroupUpdatePasswordByAccount.class})
     private String newPassword;
 
+    @JsonView({View.Public.class})
     @ManyToOne(fetch = FetchType.EAGER, targetEntity = Role.class)
     @JoinColumn(name = "role_id", insertable = false, updatable = false)
     private Role role;
 
-    @OneToMany(mappedBy = "account")
-    private Set<DayOffAccount> dayOffAccounts;
+    @JsonView({View.AccountWithSkills.class})
+    @Transient
+    private List<Skill> skills;
 
     @Transient
     private Token accessToken;
@@ -276,13 +301,6 @@ public class Account implements Serializable {
         this.joiningDate = joiningDate;
     }
 
-    public Set<DayOffAccount> getDayOffAccounts() {
-        return dayOffAccounts;
-    }
-
-    public void setDayOffAccounts(Set<DayOffAccount> dayOffAccounts) {
-        this.dayOffAccounts = dayOffAccounts;
-    }
 
     public Token getAccessToken() {
         return accessToken;
@@ -290,6 +308,14 @@ public class Account implements Serializable {
 
     public void setAccessToken(Token accessToken) {
         this.accessToken = accessToken;
+    }
+
+    public List<Skill> getSkills() {
+        return skills;
+    }
+
+    public void setSkills(List<Skill> skills) {
+        this.skills = skills;
     }
 
     @Transient

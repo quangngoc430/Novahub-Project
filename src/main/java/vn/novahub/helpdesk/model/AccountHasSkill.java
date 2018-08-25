@@ -2,6 +2,8 @@ package vn.novahub.helpdesk.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -16,6 +18,9 @@ public class AccountHasSkill implements Serializable {
     @Column(name = "id")
     private long id;
 
+    @Column(name = "level")
+    private long level;
+
     @JsonProperty(value = "account_id")
     @Column(name = "account_id")
     private long accountId;
@@ -26,19 +31,23 @@ public class AccountHasSkill implements Serializable {
 
     @JsonProperty(value = "created_at")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Temporal(TemporalType.TIMESTAMP)
+    @CreatedDate
     @Column(name = "created_at")
     private Date createdAt;
 
     @JsonProperty(value = "updated_at")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Temporal(TemporalType.TIMESTAMP)
+    @LastModifiedDate
     @Column(name = "updated_at")
     private Date updatedAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(targetEntity = Account.class)
     @JoinColumn(name = "account_id", insertable = false, updatable = false)
     private Account account;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(targetEntity = Skill.class)
     @JoinColumn(name = "skill_id", insertable = false, updatable = false)
     private Skill skill;
 
@@ -48,6 +57,14 @@ public class AccountHasSkill implements Serializable {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public long getLevel() {
+        return level;
+    }
+
+    public void setLevel(long level) {
+        this.level = level;
     }
 
     public long getAccountId() {
@@ -102,6 +119,7 @@ public class AccountHasSkill implements Serializable {
     public String toString() {
         return "AccountHasSkill{" +
                 "id=" + id +
+                ", level=" + level +
                 ", accountId=" + accountId +
                 ", skillId=" + skillId +
                 ", createdAt=" + createdAt +

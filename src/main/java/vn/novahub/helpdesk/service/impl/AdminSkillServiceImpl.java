@@ -82,7 +82,6 @@ public class AdminSkillServiceImpl implements AdminSkillService {
             throw new SkillIsExistException(skill.getName(), skill.getCategoryId());
 
         oldSkill.setName(skill.getName());
-        oldSkill.setLevel(skill.getLevel());
         oldSkill.setCategoryId(skill.getCategoryId());
         oldSkill.setUpdatedAt(new Date());
 

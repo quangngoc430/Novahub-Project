@@ -7,30 +7,10 @@ import vn.novahub.helpdesk.model.*;
 import vn.novahub.helpdesk.repository.*;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Component
 public class ApplicationSeeder {
-
-    @Autowired
-    private RolesSeeder rolesSeeder;
-
-    @Autowired
-    private AccountsSeeder accountsSeeder;
-
-    @Autowired
-    private CategoriesSeeder categoriesSeeder;
-
-    @Autowired
-    private SkillsSeeder skillsSeeder;
-
-    @Autowired
-    private LevelsSeeder levelsSeeder;
-
-    @Autowired
-    private IssuesSeeder issuesSeeder;
 
     @Autowired
     private RoleRepository roleRepository;
@@ -39,10 +19,13 @@ public class ApplicationSeeder {
     private AccountRepository accountRepository;
 
     @Autowired
+    private SkillRepository skillRepository;
+
+    @Autowired
     private CategoryRepository categoryRepository;
 
     @Autowired
-    private LevelRepository levelRepository;
+    private AccountHasSkillRepository accountHasSkillRepository;
 
     @Autowired
     private IssueRepository issueRepository;
@@ -59,24 +42,29 @@ public class ApplicationSeeder {
     @Autowired
     private Seeder seeder;
 
-    public void generateData() throws IOException, ParseException, ClassNotFoundException {
+    public void generateData() throws IOException {
 
         dayOffRepository.deleteAll();
         dayOffAccountRepository.deleteAll();
         dayOffTypeRepository.deleteAll();
         roleRepository.deleteAll();
-        accountRepository.deleteAll();
+        accountHasSkillRepository.deleteAll();
         categoryRepository.deleteAll();
-        levelRepository.deleteAll();
         issueRepository.deleteAll();
+        accountRepository.deleteAll();
 
-        ArrayList<Role> roleArrayList = rolesSeeder.generateData("seeding/roles.json");
-        ArrayList<Account> accountArrayList = accountsSeeder.generateData("seeding/accounts.json");
-        ArrayList<Category> categoryArrayList = categoriesSeeder.generateData("seeding/categories.json");
-        ArrayList<Skill> skillArrayList = skillsSeeder.generateData("seeding/skills.json");
-        ArrayList<Level> levelArrayList = levelsSeeder.generateData(accountArrayList, skillArrayList);
-        ArrayList<Issue> issueArrayList = issuesSeeder.generateData("seeding/issues.json", accountArrayList);
-
+        roleRepository.saveAll(
+                seeder.generate("seeding/roles.json", new TypeReference<List<Role>>() {}));
+        accountRepository.saveAll(
+                seeder.generate("seeding/accounts.json", new TypeReference<List<Account>>() {}));
+        categoryRepository.saveAll(
+                seeder.generate("seeding/categories.json", new TypeReference<List<Category>>() {}));
+        skillRepository.saveAll(
+                seeder.generate("seeding/skills.json", new TypeReference<List<Skill>>() {}));
+        accountHasSkillRepository.saveAll(
+                seeder.generate("seeding/accountHasSkills.json", new TypeReference<List<AccountHasSkill>>() {}));
+        issueRepository.saveAll(
+                seeder.generate("seeding/issues.json", new TypeReference<List<Issue>>() {}));
         dayOffTypeRepository.saveAll(
                 seeder.generate("seeding/day_off_type.json", new TypeReference<List<DayOffType>>() {}));
         dayOffAccountRepository.saveAll(
