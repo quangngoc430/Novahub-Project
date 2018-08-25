@@ -101,7 +101,7 @@ public class AccountExceptionHandler {
         apiError.setPath(request.getRequestURI());
         apiError.setMessage(ex.getMessage());
         return new ResponseEntity<>(apiError, HttpStatus.FORBIDDEN);
-    }
+}
 
     @ExceptionHandler(value = AccountLockedException.class)
     public ResponseEntity<ApiError> handleAccountLockedException(HttpServletRequest request, Exception ex){

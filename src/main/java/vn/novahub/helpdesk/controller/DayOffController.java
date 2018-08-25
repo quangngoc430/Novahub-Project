@@ -54,9 +54,9 @@ public class DayOffController {
             DayOffTypeNotFoundException,
             AccountNotFoundException {
 
-        dayOff = dayOffService.add(dayOff);
+        DayOff newDayOff = dayOffService.add(dayOff);
 
-        return new ResponseEntity<>(dayOff, HttpStatus.OK);
+        return new ResponseEntity<>(newDayOff, HttpStatus.OK);
     }
 
 }

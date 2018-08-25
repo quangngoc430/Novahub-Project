@@ -31,6 +31,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -140,42 +141,53 @@ public class DayOffControllerTest extends BaseControllerTest {
     @Test
     public void testCreate() throws Exception {
         Logger logger = LoggerFactory.getLogger(this.getClass());
-        Account account = accounts.get(0);
-        DayOff newDayOff = mockDayOff();
+//        Account adminAccount = accounts.get(0);
+//        given(accountService.getAccountLogin()).willReturn(adminAccount);
 
-        given(accountService.getAccountLogin()).willReturn(account);
+        DayOff newDayOff = mockDayOff(1);
+        String json = new ObjectMapper().writeValueAsString(newDayOff);
+
+
         given(dayOffService.add(newDayOff)).willReturn(dayOffs.get(1));
-        logger.info(createJsonPost(newDayOff));
+        logger.info(json);
 
         mvc.perform(post("/api/day-offs")
-                .with(user(EMAIL).password(PASSWORD))
+                .with(user(EMAIL).password(PASSWORD).roles("USER", "ADMIN"))
+                .with(csrf().asHeader())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(createJsonPost(newDayOff)))
+                .accept(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status", is("PENDING")));
     }
 
-    private DayOff mockDayOff() {
+    private DayOff mockDayOff(int index) {
         DayOff newDayOff = new DayOff();
-        newDayOff.setNumberOfHours(dayOffs.get(1).getNumberOfHours());
-        newDayOff.setStartDate(dayOffs.get(1).getStartDate());
-        newDayOff.setEndDate(dayOffs.get(1).getEndDate());
-        newDayOff.setComment(dayOffs.get(1).getComment());
+        newDayOff.setNumberOfHours(dayOffs.get(index).getNumberOfHours());
+        newDayOff.setStartDate(dayOffs.get(index).getStartDate());
+        newDayOff.setEndDate(dayOffs.get(index).getEndDate());
+        newDayOff.setComment(dayOffs.get(index).getComment());
         return newDayOff;
     }
 
-    private String createJsonPost(DayOff newDayOff) throws JsonProcessingException {
+    private DayOffAccount mockDayOffAccount(int index) {
+        DayOffAccount dayOffAccount= new DayOffAccount();
+        dayOffAccount.setDayOffTypeId(dayOffAccounts.get(index).getDayOffTypeId());
+        dayOffAccount.setYear(dayOffAccounts.get(index).getYear());
+        return dayOffAccount;
+    }
+
+    private String createJsonPost(DayOff newDayOff, DayOffAccount dayOffAccount) throws JsonProcessingException {
 
         String jsonDayOff = new ObjectMapper().writeValueAsString(newDayOff);
         jsonDayOff = jsonDayOff.replace("}", ",");
 
-        DayOffAccount dayOffAccount= new DayOffAccount();
-        dayOffAccount.setDayOffTypeId(2);
-        dayOffAccount.setYear(2018);
         String jsonDayOffAccount = new ObjectMapper().writeValueAsString(dayOffAccount);
 
 
         return jsonDayOff + "\"dayOffAccount\": " + jsonDayOffAccount + "}";
+
     }
 
 

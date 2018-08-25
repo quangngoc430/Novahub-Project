@@ -25,7 +25,7 @@ public class Application {
 	@Autowired
 	private ApplicationSeeder applicationSeeder;
 
-	public static void main(String[] args) throws IOException, ParseException, ClassNotFoundException {
+	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
 	}
 
