@@ -14,8 +14,6 @@ import vn.novahub.helpdesk.exception.DayOffIsNotExistException;
 import vn.novahub.helpdesk.exception.RoleNotFoundException;
 import vn.novahub.helpdesk.model.Account;
 import vn.novahub.helpdesk.model.DayOff;
-import vn.novahub.helpdesk.model.DayOffAccount;
-import vn.novahub.helpdesk.model.DayOffType;
 import vn.novahub.helpdesk.service.AccountService;
 import vn.novahub.helpdesk.service.DayOffService;
 
@@ -44,10 +42,6 @@ public class DayOffControllerTest extends BaseControllerTest {
 
     private List<Account> accounts;
 
-    private List<DayOffType> dayOffTypes;
-
-    private List<DayOffAccount> dayOffAccounts;
-
     private List<DayOff> dayOffs;
 
     @Before
@@ -55,16 +49,9 @@ public class DayOffControllerTest extends BaseControllerTest {
         accounts = convertJsonFileToObjectList(
                 "seeding/accounts.json",
                 new TypeReference<List<Account>>(){});
-        dayOffTypes = convertJsonFileToObjectList(
-                "seeding/day_off_type.json",
-                new TypeReference<List<DayOffType>>(){});
-        dayOffAccounts = convertJsonFileToObjectList(
-                "seeding/day_off_account.json",
-                new TypeReference<List<DayOffAccount>>(){});
         dayOffs = convertJsonFileToObjectList(
                 "seeding/day_off.json",
                 new TypeReference<List<DayOff>>(){});
-
         given(dayOffService.getAllByAccountIdAndStatus(1, "", PageRequest.of(0, 20)))
                 .willReturn(new PageImpl<>(dayOffs));
 

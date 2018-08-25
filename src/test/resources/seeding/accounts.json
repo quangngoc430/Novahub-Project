@@ -1,44 +1,38 @@
 [
-    {
-      "id" : 1,
-      "email": "helpdesk@novahub.vn",
-      "password": "password",
-      "first_name": "Desk",
-      "last_name": "Help",
-      "birth_day": "1990-01-01T00:00:00.000Z",
-      "address": "Đà Nẵng",
-      "status": "ACTIVE",
-      "created_at" : "2018-08-05 00:00:00",
-      "updated_at" : "2018-08-05 00:00:00",
-      "joining_date": "2015-08-05T00:00:00.000Z",
-      "role_id": 1
-    },
-    {
-      "id" : 2,
-      "email": "ngocbui@novahub.vn",
-      "password": "password",
-      "first_name": "Bùi Lâm",
-      "last_name": "Quang Ngọc",
-      "birth_day": "1997-09-01T00:00:00.000Z",
-      "address": "Lô 14, An Thượng 32 street, Đà Nẵng city",
-      "status": "ACTIVE",
-      "created_at" : "2018-08-05 00:00:00",
-      "updated_at" : "2018-08-05 00:00:00",
-      "joining_date": "2017-11-07T00:00:00.000Z",
-      "role_id": 2
-    },
-    {
-      "id" : 3,
-      "email": "linhtran@novahub.vn",
-      "password": "password",
-      "first_name": "Trần",
-      "last_name": "Mạnh Linh",
-      "birth_day": "1990-01-01T00:00:00.000Z",
-      "address": "Đà Nẵng",
-      "status": "ACTIVE",
-      "created_at" : "2018-08-05 00:00:00",
-      "updated_at" : "2018-08-05 00:00:00",
-      "joining_date": "2015-08-05T00:00:00.000Z",
-      "role_id": 2
-    }
+  {
+    "id" : 1,
+    "email": "helpdesk@novahub.vn",
+    "password": "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja",
+    "first_name": "Desk",
+    "last_name": "Help",
+    "birth_day": "1990-01-01T00:00:00.000Z",
+    "address": "Da Nang",
+    "status": "ACTIVE",
+    "joining_date": "2015-08-05T00:00:00.000Z",
+    "role_id": 1
+  },
+  {
+    "id" : 2,
+    "email": "ngocbui@novahub.vn",
+    "password": "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja",
+    "first_name": "Bui Lam",
+    "last_name": "Quang Ngoc",
+    "birth_day": "1997-09-01T00:00:00.000Z",
+    "address": "Lo 14, An Thuong 32 street, Da Nang city",
+    "status": "ACTIVE",
+    "joining_date": "2017-11-07T00:00:00.000Z",
+    "role_id": 2
+  },
+  {
+    "id" : 3,
+    "email": "linhtran@novahub.vn",
+    "password": "$2a$10$A21YwZHzKPMTQy1dnZEFyuA5KOHlGqfIMUdpU5Uk3LehhhfY1/2ja",
+    "first_name": "Tran",
+    "last_name": "Manh Linh",
+    "birth_day": "1990-01-01T00:00:00.000Z",
+    "address": "Da Nang",
+    "status": "ACTIVE",
+    "joining_date": "2015-08-05T00:00:00.000Z",
+    "role_id": 3
+  }
   ]
