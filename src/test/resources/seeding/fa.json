@@ -3,18 +3,9 @@
   "comment": "Cho em nghi ca ngay",
   "startDate": "2018-08-20",
   "endDate": "2018-08-21",
-  "createdAt": "2018-08-24T21:21:55.865",
-  "updatedAt": "2018-08-24T21:21:55.865",
+  "createdAt": null,
+  "updatedAt": null,
   "numberOfHours": 20,
   "status": null,
-  "dayOffAccountId": 0,
-  "dayOffAccount": {
-    "id": 0,
-    "year": 2018,
-    "privateQuota": 0,
-    "remainingTime": 0,
-    "dayOffTypeId": 2,
-    "accountId": 0,
-    "dayOffs": null
-  }
+  "dayOffAccountId": 0
 }

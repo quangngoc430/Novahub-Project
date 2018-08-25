@@ -118,11 +118,11 @@ public class Account implements Serializable {
     @JoinColumn(name = "role_id", insertable = false, updatable = false)
     private Role role;
 
-    @Transient
-    private Token accessToken;
-
     @OneToMany(mappedBy = "account")
     private Set<DayOffAccount> dayOffAccounts;
+
+    @Transient
+    private Token accessToken;
 
     public long getId() {
         return id;
@@ -276,20 +276,20 @@ public class Account implements Serializable {
         this.joiningDate = joiningDate;
     }
 
-    public Token getAccessToken() {
-        return accessToken;
-    }
-
-    public void setAccessToken(Token accessToken) {
-        this.accessToken = accessToken;
-    }
-
     public Set<DayOffAccount> getDayOffAccounts() {
         return dayOffAccounts;
     }
 
     public void setDayOffAccounts(Set<DayOffAccount> dayOffAccounts) {
         this.dayOffAccounts = dayOffAccounts;
+    }
+
+    public Token getAccessToken() {
+        return accessToken;
+    }
+
+    public void setAccessToken(Token accessToken) {
+        this.accessToken = accessToken;
     }
 
     @Transient

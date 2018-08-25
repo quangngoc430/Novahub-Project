@@ -1,12 +1,9 @@
 package vn.novahub.helpdesk.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
@@ -26,6 +23,7 @@ import java.io.IOException;
 import java.util.List;
 
 import static org.hamcrest.core.Is.is;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
@@ -109,6 +107,7 @@ public class DayOffControllerTest extends BaseControllerTest {
         mvc.perform(get("/api/day-offs/2")
                 .with(user(USER_EMAIL).password(USER_PASSWORD))
                 .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(2)))
                 .andExpect(jsonPath("$.status", is("PENDING")));
@@ -140,56 +139,33 @@ public class DayOffControllerTest extends BaseControllerTest {
 
     @Test
     public void testCreate() throws Exception {
-        Logger logger = LoggerFactory.getLogger(this.getClass());
-//        Account adminAccount = accounts.get(0);
-//        given(accountService.getAccountLogin()).willReturn(adminAccount);
+        ObjectMapper objectMapper = new ObjectMapper();
 
-        DayOff newDayOff = mockDayOff(1);
-        String json = new ObjectMapper().writeValueAsString(newDayOff);
+        DayOff newDayOff = mockDayOff();
+        String json = objectMapper.writeValueAsString(newDayOff);
 
 
-        given(dayOffService.add(newDayOff)).willReturn(dayOffs.get(1));
-        logger.info(json);
+        given(dayOffService.add(any(DayOff.class)))
+                .willReturn(dayOffs.get(1));
 
         mvc.perform(post("/api/day-offs")
-                .with(user(EMAIL).password(PASSWORD).roles("USER", "ADMIN"))
-                .with(csrf().asHeader())
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
+                .with(user(EMAIL).password(PASSWORD))
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(json))
-                .andDo(print())
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(2)))
                 .andExpect(jsonPath("$.status", is("PENDING")));
     }
 
-    private DayOff mockDayOff(int index) {
+    private DayOff mockDayOff() {
         DayOff newDayOff = new DayOff();
-        newDayOff.setNumberOfHours(dayOffs.get(index).getNumberOfHours());
-        newDayOff.setStartDate(dayOffs.get(index).getStartDate());
-        newDayOff.setEndDate(dayOffs.get(index).getEndDate());
-        newDayOff.setComment(dayOffs.get(index).getComment());
+        newDayOff.setNumberOfHours(dayOffs.get(1).getNumberOfHours());
+        newDayOff.setStartDate(dayOffs.get(1).getStartDate());
+        newDayOff.setEndDate(dayOffs.get(1).getEndDate());
+        newDayOff.setComment(dayOffs.get(1).getComment());
         return newDayOff;
     }
-
-    private DayOffAccount mockDayOffAccount(int index) {
-        DayOffAccount dayOffAccount= new DayOffAccount();
-        dayOffAccount.setDayOffTypeId(dayOffAccounts.get(index).getDayOffTypeId());
-        dayOffAccount.setYear(dayOffAccounts.get(index).getYear());
-        return dayOffAccount;
-    }
-
-    private String createJsonPost(DayOff newDayOff, DayOffAccount dayOffAccount) throws JsonProcessingException {
-
-        String jsonDayOff = new ObjectMapper().writeValueAsString(newDayOff);
-        jsonDayOff = jsonDayOff.replace("}", ",");
-
-        String jsonDayOffAccount = new ObjectMapper().writeValueAsString(dayOffAccount);
-
-
-        return jsonDayOff + "\"dayOffAccount\": " + jsonDayOffAccount + "}";
-
-    }
-
 
 
 }
