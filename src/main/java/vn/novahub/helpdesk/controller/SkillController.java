@@ -1,10 +1,6 @@
 package vn.novahub.helpdesk.controller;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonView;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.MapperFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,7 +17,6 @@ import vn.novahub.helpdesk.service.AccountSkillService;
 import vn.novahub.helpdesk.service.AdminSkillService;
 import vn.novahub.helpdesk.view.View;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController

@@ -7,8 +7,6 @@ import vn.novahub.helpdesk.model.*;
 import vn.novahub.helpdesk.repository.*;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Component

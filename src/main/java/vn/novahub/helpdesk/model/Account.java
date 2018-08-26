@@ -1,6 +1,9 @@
 package vn.novahub.helpdesk.model;
 
 import com.fasterxml.jackson.annotation.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import vn.novahub.helpdesk.annotation.Status;
@@ -15,6 +18,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "account")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Account implements Serializable {
@@ -94,6 +98,8 @@ public class Account implements Serializable {
     @JsonProperty(value = "created_at")
     @NotNull(message = "created_at is not null")
     @JsonView(View.Public.class)
+    @Temporal(TemporalType.TIMESTAMP)
+    @CreatedDate
     @Column(name = "created_at")
     private Date createdAt;
 
@@ -101,6 +107,8 @@ public class Account implements Serializable {
     @JsonProperty(value = "updated_at")
     @NotNull(message = "updated_at is not null")
     @JsonView(View.Public.class)
+    @Temporal(TemporalType.TIMESTAMP)
+    @LastModifiedDate
     @Column(name = "updated_at")
     private Date updatedAt;
 
@@ -144,12 +152,6 @@ public class Account implements Serializable {
     @JsonView({View.AccountWithSkills.class})
     @Transient
     private List<Skill> skills;
-
-    public Account() {
-        super();
-        this.createdAt = new Date();
-        this.updatedAt = new Date();
-    }
 
     public long getId() {
         return id;
