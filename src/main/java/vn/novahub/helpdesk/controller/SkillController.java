@@ -1,6 +1,10 @@
 package vn.novahub.helpdesk.controller;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.MapperFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,6 +22,7 @@ import vn.novahub.helpdesk.service.AdminSkillService;
 import vn.novahub.helpdesk.view.View;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "/api/skills")
@@ -38,13 +43,11 @@ public class SkillController {
         return new ResponseEntity<>(accountSkillService.getAllByKeyword(categoryId, keyword, pageable), HttpStatus.OK);
     }
 
+    @JsonView(View.AccountWithSkills.class)
     @PreAuthorize("isAuthenticated()")
     @GetMapping(path = "/search", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Page<Skill>> search(Pageable pageable) {
-        ArrayList<Long> skillIds = new ArrayList<>();
-        skillIds.add(1l);
-        skillIds.add(2l);
-        skillIds.add(4l);
+    public ResponseEntity<Page<Skill>> search(@RequestParam("id") List<Long> skillIds,
+                                           Pageable pageable) {
         return new ResponseEntity<>(accountSkillService.search(skillIds, pageable), HttpStatus.OK);
     }
 

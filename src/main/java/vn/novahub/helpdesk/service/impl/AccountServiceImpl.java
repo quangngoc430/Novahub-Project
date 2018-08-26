@@ -241,8 +241,7 @@ public class AccountServiceImpl implements AccountService {
             for (int i = accountHasSkills.size() - 1; i >= 0; i--) {
                 if(account.getId() == accountHasSkills.get(i).getAccountId()) {
                     skill = accountHasSkills.get(i).getSkill();
-                    skill.setLevel(accountHasSkills.get(i).getLevel());
-                    account.getSkills().add(skill);
+                    account.getSkills().add(new Skill(skill.getId(), skill.getName(), accountHasSkills.get(i).getLevel()));
                     accountHasSkills.remove(i);
                 }
             }

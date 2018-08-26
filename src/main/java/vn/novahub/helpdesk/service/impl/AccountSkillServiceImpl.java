@@ -234,7 +234,7 @@ public class AccountSkillServiceImpl implements AccountSkillService {
             for (AccountHasSkill accountHasSkill : accountHasSkills) {
                 if (accountHasSkill.getAccountId() == account.getId()) {
                     for (Skill skill : skills) {
-                        if (skill.getId() == accountHasSkill.getId()) {
+                        if (skill.getId() == accountHasSkill.getSkillId()) {
                             account.getSkills().add(new Skill(skill.getId(), skill.getName(), accountHasSkill.getLevel(), skill.getCategoryId(), skill.getCreatedAt(), skill.getUpdatedAt()));
                             break;
                         }

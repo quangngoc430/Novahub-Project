@@ -80,6 +80,13 @@ public class Skill implements Serializable {
         this.updatedAt = new Date();
     }
 
+    public Skill(long id, String name, long level) {
+        super();
+        this.id = id;
+        this.name = name;
+        this.level = level;
+    }
+
     public Skill(long id, String name, long level, long categoryId, Date createdAt, Date updatedAt) {
         super();
         this.id = id;
@@ -128,7 +135,7 @@ public class Skill implements Serializable {
         this.name = name;
     }
 
-    public long getLevel() {
+    public Long getLevel() {
         return level;
     }
 
@@ -166,10 +173,6 @@ public class Skill implements Serializable {
 
     public void setAccountHasSkillList(List<AccountHasSkill> accountHasSkillList) {
         this.accountHasSkillList = accountHasSkillList;
-    }
-
-    public void setLevel(Long level) {
-        this.level = level;
     }
 
     public List<Account> getAccounts() {

@@ -13,6 +13,7 @@ import vn.novahub.helpdesk.seeding.ApplicationSeeder;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.Random;
 
 @Configuration
 @SpringBootApplication
