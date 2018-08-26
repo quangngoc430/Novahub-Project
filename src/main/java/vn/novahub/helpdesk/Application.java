@@ -13,8 +13,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import vn.novahub.helpdesk.seeding.ApplicationSeeder;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.util.Random;
 
 @Configuration
 @SpringBootApplication
@@ -33,7 +31,7 @@ public class Application {
 
 	@Bean
 	@Profile("dev")
-	public String dev() throws IOException, ParseException, ClassNotFoundException {
+	public String dev() throws IOException {
 		logger.info("\n-------------------------- DEV ENVIRONMENT --------------------------");
 		applicationSeeder.generateData();
 		return "dev";
