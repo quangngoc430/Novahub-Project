@@ -69,6 +69,7 @@ public class DayOffTypeAdminControllerTest extends BaseControllerTest {
 
     @Test
     public void testDelete() throws Exception {
+
         given(dayOffTypeService.delete(1)).willReturn(dayOffTypes.get(0));
 
         mvc.perform(delete("/api/admin/day-off-types/1")
@@ -78,6 +79,5 @@ public class DayOffTypeAdminControllerTest extends BaseControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.type", is(dayOffTypes.get(0).getType())));
     }
-
 
 }

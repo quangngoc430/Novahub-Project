@@ -26,8 +26,8 @@ public class DayOffAccountController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping
     public ResponseEntity<Page<DayOffAccount>> userGet(Pageable pageable) {
-        Account account = accountService.getAccountLogin();
 
+        Account account = accountService.getAccountLogin();
         return new ResponseEntity<>(
                 dayOffAccountService.findByAccountId(account.getId(), pageable),
                 HttpStatus.OK);
