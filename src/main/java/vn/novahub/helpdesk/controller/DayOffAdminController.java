@@ -37,8 +37,12 @@ public class DayOffAdminController {
                                                     AccountNotFoundException,
                                                     IOException {
         DayOff dayOff;
-
-        DayOffStatus dayOffStatus = DayOffStatus.valueOf(status);
+        DayOffStatus dayOffStatus;
+        try {
+            dayOffStatus = DayOffStatus.valueOf(status);
+        } catch (Exception e) {
+            throw new RequestAbortedException("The parameter \'status\' is not valid");
+        }
 
         switch (dayOffStatus) {
             case APPROVED:
@@ -66,7 +70,13 @@ public class DayOffAdminController {
             IOException {
 
         DayOff dayOff;
-        DayOffStatus dayOffStatus = DayOffStatus.valueOf(status);
+        DayOffStatus dayOffStatus;
+
+        try {
+            dayOffStatus = DayOffStatus.valueOf(status);
+        } catch (Exception e) {
+            throw new RequestAbortedException("The parameter \'status\' is not valid");
+        }
 
         switch (dayOffStatus) {
             case APPROVED:

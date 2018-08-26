@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import vn.novahub.helpdesk.exception.AccountNotFoundException;
 import vn.novahub.helpdesk.exception.DayOffIsNotExistException;
+import vn.novahub.helpdesk.exception.DayOffTypeNotFoundException;
 import vn.novahub.helpdesk.exception.RoleNotFoundException;
 import vn.novahub.helpdesk.model.Account;
 import vn.novahub.helpdesk.model.DayOff;
@@ -143,6 +144,26 @@ public class DayOffControllerTest extends BaseControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(2)))
                 .andExpect(jsonPath("$.status", is("PENDING")));
+    }
+
+    @Test
+    public void testCreate_throwException() throws Exception {
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        DayOff newDayOff = mockDayOff();
+        String json = objectMapper.writeValueAsString(newDayOff);
+
+
+        given(dayOffService.add(any(DayOff.class)))
+                .willThrow(new DayOffTypeNotFoundException());
+
+        mvc.perform(post("/api/day-offs")
+                .with(user(EMAIL).password(PASSWORD))
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(json))
+                .andDo(print())
+                .andExpect(status().isNotFound());
     }
 
     private DayOff mockDayOff() {
