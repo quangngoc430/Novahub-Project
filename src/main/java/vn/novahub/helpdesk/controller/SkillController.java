@@ -47,12 +47,13 @@ public class SkillController {
         String[] ids = skillIds.split(",");
         List<Long> skillIdList = new ArrayList<>();
 
-        if (!skillIds.isEmpty())
-        for (String id : ids) {
-            try {
-                skillIdList.add(Long.parseLong(id));
-            } catch (Exception ex) {
-                throw new BadRequestException("Id must be type of long");
+        if (!skillIds.isEmpty()) {
+            for (String id : ids) {
+                try {
+                    skillIdList.add(Long.parseLong(id));
+                } catch (Exception ex) {
+                    throw new BadRequestException("Id must be type of long");
+                }
             }
         }
 
