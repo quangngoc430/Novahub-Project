@@ -69,6 +69,6 @@ public interface SkillRepository extends PagingAndSortingRepository<Skill, Long>
 
     Page<Skill> getAllByIdIsIn(List<Long> skillIds, Pageable pageable);
 
-    List<Skill> getAllBy();
+    List<Skill> findAllBy();
 
 }

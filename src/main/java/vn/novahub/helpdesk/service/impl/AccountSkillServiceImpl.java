@@ -224,8 +224,8 @@ public class AccountSkillServiceImpl implements AccountSkillService {
     public Page<Skill> search(List<Long> skillIds, Pageable pageable) {
         Page<Skill> skillPage = skillRepository.getAllByIdIsIn(skillIds, pageable);
 
-        List<Skill> skills = skillRepository.getAllBy();
-        List<Category> categories = categoryRepository.getAllBy();
+        List<Skill> skills = skillRepository.findAllBy();
+        List<Category> categories = categoryRepository.findAllBy();
         List<AccountHasSkill> accountHasSkills = accountHasSkillRepository.getAllBy();
         List<Account> accounts = accountRepository.getAllBySkillIdIsIn(skillIds);
 
