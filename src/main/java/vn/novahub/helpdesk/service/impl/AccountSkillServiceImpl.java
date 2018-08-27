@@ -1,5 +1,7 @@
 package vn.novahub.helpdesk.service.impl;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.IteratorUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,10 +14,7 @@ import vn.novahub.helpdesk.service.AccountSkillService;
 import vn.novahub.helpdesk.validation.GroupUpdateSkillWithLevel;
 import vn.novahub.helpdesk.validation.SkillValidation;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class AccountSkillServiceImpl implements AccountSkillService {
@@ -233,9 +232,9 @@ public class AccountSkillServiceImpl implements AccountSkillService {
         else
             skillPage = skillRepository.getAllByIdIsIn(skillIds, pageable);
 
-        List<Skill> skills = skillRepository.findAllBy();
-        List<Category> categories = categoryRepository.findAllBy();
-        List<AccountHasSkill> accountHasSkills = accountHasSkillRepository.getAllBy();
+        List<Skill> skills = IteratorUtils.toList(skillRepository.findAll().iterator());
+        List<Category> categories = IteratorUtils.toList(categoryRepository.findAll().iterator());
+        List<AccountHasSkill> accountHasSkills = IteratorUtils.toList(accountHasSkillRepository.findAll().iterator());
         List<Account> accounts = accountRepository.getAllBySkillIdIsIn(skillIds);
 
         for (Account account : accounts) {
@@ -273,6 +272,13 @@ public class AccountSkillServiceImpl implements AccountSkillService {
         }
 
         return skillPage;
+    }
+
+    public static <T> List<T> copyIterator(Iterator<T> iter) {
+        List<T> copy = new ArrayList<T>();
+        while (iter.hasNext())
+            copy.add(iter.next());
+        return copy;
     }
 
 }

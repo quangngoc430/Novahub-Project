@@ -30,6 +30,4 @@ public interface AccountHasSkillRepository extends PagingAndSortingRepository<Ac
            "FROM AccountHasSkill accountHasSkill " +
            "WHERE accountHasSkill.accountId IN :accountIds ")
     List<AccountHasSkill> getAllByAccountIdIn(@Param("accountIds") List<Long> accountIds);
-
-    List<AccountHasSkill> getAllBy();
 }

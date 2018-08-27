@@ -18,6 +18,4 @@ public interface CategoryRepository extends PagingAndSortingRepository<Category,
     boolean existsById(long categoryId);
 
     Category getByName(String name);
-
-    List<Category> findAllBy();
 }

@@ -68,7 +68,4 @@ public interface SkillRepository extends PagingAndSortingRepository<Skill, Long>
     boolean deleteByIdAndCategoryId(long skillId, long categoryId);
 
     Page<Skill> getAllByIdIsIn(List<Long> skillIds, Pageable pageable);
-
-    List<Skill> findAllBy();
-
 }
