@@ -43,11 +43,11 @@ public class AccountHasSkill implements Serializable {
     @Column(name = "updated_at")
     private Date updatedAt;
 
-    @OneToOne(targetEntity = Account.class)
+    @OneToOne(fetch = FetchType.LAZY, targetEntity = Account.class)
     @JoinColumn(name = "account_id", insertable = false, updatable = false)
     private Account account;
 
-    @OneToOne(targetEntity = Skill.class)
+    @OneToOne(fetch = FetchType.LAZY, targetEntity = Skill.class)
     @JoinColumn(name = "skill_id", insertable = false, updatable = false)
     private Skill skill;
 

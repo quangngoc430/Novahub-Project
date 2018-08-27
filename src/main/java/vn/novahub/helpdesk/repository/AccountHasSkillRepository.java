@@ -26,7 +26,7 @@ public interface AccountHasSkillRepository extends PagingAndSortingRepository<Ac
 
     boolean existsByAccountIdAndSkillId(long accountId, long skillId);
 
-    @Query("SELECT accountHasSkill " +
+    @Query("SELECT distinct accountHasSkill " +
            "FROM AccountHasSkill accountHasSkill " +
            "WHERE accountHasSkill.accountId IN :accountIds ")
     List<AccountHasSkill> getAllByAccountIdIn(@Param("accountIds") List<Long> accountIds);

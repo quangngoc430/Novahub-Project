@@ -28,6 +28,12 @@ public class CommonExceptionHandler {
                                     HttpStatus.FORBIDDEN);
     }
 
+    @ExceptionHandler(value = BadRequestException.class)
+    public ResponseEntity<ApiError> handleBadRequestException(HttpServletRequest request, Exception exception) {
+        return new ResponseEntity<>(createApiError(HttpStatus.BAD_REQUEST, "Bad request", request.getRequestURI(), exception),
+                                    HttpStatus.BAD_REQUEST);
+    }
+
     private ApiError createApiError(HttpStatus httpStatus, String message, String requestURI, Exception exception) {
         ApiError apiError = new ApiError();
 

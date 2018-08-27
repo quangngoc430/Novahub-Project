@@ -1,5 +1,7 @@
 package vn.novahub.helpdesk.service.impl;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.IteratorUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -9,14 +11,10 @@ import vn.novahub.helpdesk.model.*;
 import vn.novahub.helpdesk.repository.*;
 import vn.novahub.helpdesk.service.AccountService;
 import vn.novahub.helpdesk.service.AccountSkillService;
-import vn.novahub.helpdesk.validation.GroupCreateSkill;
-import vn.novahub.helpdesk.validation.GroupUpdateSkill;
 import vn.novahub.helpdesk.validation.GroupUpdateSkillWithLevel;
 import vn.novahub.helpdesk.validation.SkillValidation;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class AccountSkillServiceImpl implements AccountSkillService {
@@ -219,6 +217,68 @@ public class AccountSkillServiceImpl implements AccountSkillService {
             throw new AccountNotFoundException(accountId);
 
         return skillRepository.getAllByAccountId(accountId, pageable);
+    }
+
+    @Override
+    public Page<Skill> search(List<Long> skillIds, Pageable pageable) {
+        Page<Skill> skillPage;
+
+        if (skillIds.isEmpty()) {
+            skillPage = skillRepository.findAll(pageable);
+            for (Skill skill : skillPage.getContent()) {
+                skillIds.add(skill.getId());
+            }
+        }
+        else
+            skillPage = skillRepository.getAllByIdIsIn(skillIds, pageable);
+
+        List<Skill> skills = IteratorUtils.toList(skillRepository.findAll().iterator());
+        List<Category> categories = IteratorUtils.toList(categoryRepository.findAll().iterator());
+        List<AccountHasSkill> accountHasSkills = IteratorUtils.toList(accountHasSkillRepository.findAll().iterator());
+        List<Account> accounts = accountRepository.getAllBySkillIdIsIn(skillIds);
+
+        for (Account account : accounts) {
+            account.setSkills(new ArrayList<>());
+            for (AccountHasSkill accountHasSkill : accountHasSkills) {
+                if (accountHasSkill.getAccountId() == account.getId()) {
+                    for (Skill skill : skills) {
+                        if (skill.getId() == accountHasSkill.getSkillId()) {
+                            account.getSkills().add(new Skill(skill.getId(), skill.getName(), accountHasSkill.getLevel(), skill.getCategoryId(), skill.getCreatedAt(), skill.getUpdatedAt()));
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        for (Skill skill : skillPage.getContent()) {
+            for (Category category : categories) {
+                if (skill.getCategoryId() == category.getId()) {
+                    skill.setCategory(category);
+                    break;
+                }
+            }
+            skill.setAccounts(new ArrayList<>());
+            for (AccountHasSkill accountHasSkill : accountHasSkills) {
+                if (accountHasSkill.getSkillId() == skill.getId()) {
+                    for (Account account : accounts) {
+                        if(account.getId() == accountHasSkill.getAccountId()) {
+                            skill.getAccounts().add(account);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        return skillPage;
+    }
+
+    public static <T> List<T> copyIterator(Iterator<T> iter) {
+        List<T> copy = new ArrayList<T>();
+        while (iter.hasNext())
+            copy.add(iter.next());
+        return copy;
     }
 
 }
