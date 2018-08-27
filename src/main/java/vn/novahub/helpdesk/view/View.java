@@ -7,4 +7,6 @@ public class View {
     public interface AccountWithSkills {}
 
     public interface SkillWithLevel extends Public {}
+
+    public interface AccountWithSkillsAndCategory extends AccountWithSkills {}
 }

@@ -222,7 +222,16 @@ public class AccountSkillServiceImpl implements AccountSkillService {
 
     @Override
     public Page<Skill> search(List<Long> skillIds, Pageable pageable) {
-        Page<Skill> skillPage = skillRepository.getAllByIdIsIn(skillIds, pageable);
+        Page<Skill> skillPage;
+
+        if (skillIds.isEmpty()) {
+            skillPage = skillRepository.findAll(pageable);
+            for (Skill skill : skillPage.getContent()) {
+                skillIds.add(skill.getId());
+            }
+        }
+        else
+            skillPage = skillRepository.getAllByIdIsIn(skillIds, pageable);
 
         List<Skill> skills = skillRepository.findAllBy();
         List<Category> categories = categoryRepository.findAllBy();

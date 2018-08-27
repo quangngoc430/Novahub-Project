@@ -63,7 +63,7 @@ public class Skill implements Serializable {
     @Column(name = "updated_at")
     private Date updatedAt;
 
-    @JsonView(View.Public.class)
+    @JsonView({View.Public.class, View.AccountWithSkillsAndCategory.class})
     @JsonProperty(value = "category_id")
     @NotNull(message = "category_id is not null", groups = {GroupCreateSkill.class, GroupUpdateSkill.class})
     @Column(name = "category_id")
@@ -74,7 +74,7 @@ public class Skill implements Serializable {
     @Transient
     private List<AccountHasSkill> accountHasSkillList;
 
-    @JsonView({View.Public.class})
+    @JsonView({View.Public.class, View.AccountWithSkillsAndCategory.class})
     @ManyToOne(targetEntity = Category.class)
     @JoinColumn(name = "category_id", insertable = false, updatable = false)
     private Category category;
