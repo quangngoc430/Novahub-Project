@@ -71,12 +71,6 @@ public class Issue implements Serializable {
     @JoinColumn(name = "account_id", insertable = false, updatable = false)
     private Account account;
 
-    public Issue() {
-        super();
-        this.createdAt = new Date();
-        this.updatedAt = new Date();
-    }
-
     public long getId() {
         return id;
     }
