@@ -50,13 +50,7 @@ public class AccountHasSkill implements Serializable {
     @OneToOne(fetch = FetchType.LAZY, targetEntity = Skill.class)
     @JoinColumn(name = "skill_id", insertable = false, updatable = false)
     private Skill skill;
-
-    public AccountHasSkill() {
-        super();
-        this.createdAt = new Date();
-        this.updatedAt = new Date();
-    }
-
+    
     public long getId() {
         return id;
     }
