@@ -1,12 +1,14 @@
 package vn.novahub.helpdesk.repository;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.annotation.DirtiesContext;
-import vn.novahub.helpdesk.model.DayOff;
+import vn.novahub.helpdesk.model.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -15,7 +17,22 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class DayOffRepositoryTest extends BaseRepositoryTest{
+public class DayOffRepositoryTest extends BaseRepositoryTest {
+
+    @Autowired
+    protected DayOffRepository dayOffRepository;
+
+    @Autowired
+    protected DayOffTypeRepository dayOffTypeRepository;
+
+    @Autowired
+    protected DayOffAccountRepository dayOffAccountRepository;
+
+    @Autowired
+    protected RoleRepository roleRepository;
+
+    @Autowired
+    protected AccountRepository accountRepository;
 
     private Page<DayOff> expected;
 
@@ -44,9 +61,9 @@ public class DayOffRepositoryTest extends BaseRepositoryTest{
         this.dayOffs.remove(1);
         expected = new PageImpl<>(this.dayOffs);
         actual = dayOffRepository.findByAccountIdAndStatus(
-                        1,
-                        "APPROVED",
-                        PageRequest.of(0, 20));
+                1,
+                "APPROVED",
+                PageRequest.of(0, 20));
         assertTrue(isEquals(expected, actual));
     }
 
@@ -150,9 +167,36 @@ public class DayOffRepositoryTest extends BaseRepositoryTest{
     }
 
 
-    private <T extends Page>boolean isEquals(T expected, T actual) {
-        return  expected.getTotalElements() == actual.getTotalElements() &&
+    private <T extends Page> boolean isEquals(T expected, T actual) {
+        return expected.getTotalElements() == actual.getTotalElements() &&
                 expected.getContent().get(0).equals(actual.getContent().get(0));
     }
 
+    private void initData() throws IOException {
+
+        roleRepository.saveAll(convertJsonFileToObjectList(
+                "seeding/roles.json",
+                new TypeReference<List<Role>>() {
+                }));
+
+        accountRepository.saveAll(convertJsonFileToObjectList(
+                "seeding/accounts.json",
+                new TypeReference<List<Account>>() {
+                }));
+
+        dayOffTypeRepository.saveAll(convertJsonFileToObjectList(
+                "seeding/day_off_type.json",
+                new TypeReference<List<DayOffType>>() {
+                }));
+
+        dayOffAccountRepository.saveAll(convertJsonFileToObjectList(
+                "seeding/day_off_account.json",
+                new TypeReference<List<DayOffAccount>>() {
+                }));
+
+        dayOffRepository.saveAll(convertJsonFileToObjectList(
+                "seeding/day_off.json",
+                new TypeReference<List<DayOff>>() {
+                }));
+    }
 }
