@@ -19,7 +19,6 @@ public abstract class BaseTest {
     @MockBean
     private ApplicationSeeder seeder;
 
-
     public <T> List<T> convertJsonFileToObjectList(String fileName, TypeReference typeReference) throws IOException {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         ObjectMapper mapper = new ObjectMapper();

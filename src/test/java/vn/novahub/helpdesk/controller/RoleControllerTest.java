@@ -69,5 +69,4 @@ public class RoleControllerTest extends BaseControllerTest {
                 .andExpect(jsonPath("$.content.length()", is(3)))
                 .andExpect(jsonPath("$.content[0].name", is("ADMIN")));
     }
-
 }
