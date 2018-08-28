@@ -49,7 +49,8 @@ public class DayOffControllerTest extends BaseControllerTest {
     public void before() throws IOException, RoleNotFoundException {
         accounts = convertJsonFileToObjectList(
                 "seeding/accounts.json",
-                new TypeReference<List<Account>>(){});
+                new TypeReference<List<Account>>() {
+                });
         dayOffs = convertJsonFileToObjectList(
                 "seeding/day_off.json",
                 new TypeReference<List<DayOff>>(){});
