@@ -175,6 +175,4 @@ public class DayOffControllerTest extends BaseControllerTest {
         newDayOff.setComment(dayOffs.get(1).getComment());
         return newDayOff;
     }
-
-
 }

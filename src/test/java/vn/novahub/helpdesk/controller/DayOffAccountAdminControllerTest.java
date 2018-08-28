@@ -111,8 +111,4 @@ public class DayOffAccountAdminControllerTest extends BaseControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.privateQuota", is(dayOffAccounts.get(0).getPrivateQuota())));
     }
-
-
-
-
 }

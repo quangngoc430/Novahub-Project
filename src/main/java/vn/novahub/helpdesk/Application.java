@@ -17,7 +17,7 @@ import java.text.ParseException;
 
 @Configuration
 @SpringBootApplication
-@EnableJpaAuditing
+//@EnableJpaAuditing
 @EnableAsync
 public class Application {
 

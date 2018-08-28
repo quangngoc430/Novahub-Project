@@ -55,5 +55,4 @@ public class DayOffTypeControllerTest extends BaseControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.type", is(dayOffTypes.get(0).getType())));
     }
-
 }

@@ -50,7 +50,6 @@ public class DayOffAdminControllerTest extends BaseControllerTest {
                 new TypeReference<List<DayOff>>(){});
         given(dayOffService.getAllByAccountIdAndStatus(1, "", PageRequest.of(0, 20)))
                 .willReturn(new PageImpl<>(dayOffs));
-
     }
 
     @Test
@@ -159,5 +158,4 @@ public class DayOffAdminControllerTest extends BaseControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()", is(3)));
     }
-
 }
