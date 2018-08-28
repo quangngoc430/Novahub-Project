@@ -129,10 +129,8 @@ public class DayOffControllerTest extends BaseControllerTest {
     @Test
     public void testCreate() throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
-
         DayOff newDayOff = mockDayOff();
         String json = objectMapper.writeValueAsString(newDayOff);
-
 
         given(dayOffService.add(any(DayOff.class)))
                 .willReturn(dayOffs.get(1));
@@ -150,10 +148,8 @@ public class DayOffControllerTest extends BaseControllerTest {
     @Test
     public void testCreate_throwException() throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
-
         DayOff newDayOff = mockDayOff();
         String json = objectMapper.writeValueAsString(newDayOff);
-
 
         given(dayOffService.add(any(DayOff.class)))
                 .willThrow(new DayOffTypeNotFoundException());
@@ -175,6 +171,4 @@ public class DayOffControllerTest extends BaseControllerTest {
         newDayOff.setComment(dayOffs.get(1).getComment());
         return newDayOff;
     }
-
-
 }
