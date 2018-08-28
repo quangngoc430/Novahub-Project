@@ -166,7 +166,6 @@ public class DayOffRepositoryTest extends BaseRepositoryTest {
         assertEquals(expected.getTotalElements(), actual.getTotalElements());
     }
 
-
     private <T extends Page> boolean isEquals(T expected, T actual) {
         return expected.getTotalElements() == actual.getTotalElements() &&
                 expected.getContent().get(0).equals(actual.getContent().get(0));

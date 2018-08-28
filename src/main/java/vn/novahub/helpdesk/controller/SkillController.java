@@ -17,6 +17,9 @@ import vn.novahub.helpdesk.service.AccountSkillService;
 import vn.novahub.helpdesk.service.AdminSkillService;
 import vn.novahub.helpdesk.view.View;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @RequestMapping(path = "/api/skills")
 public class SkillController {
@@ -34,6 +37,27 @@ public class SkillController {
                                               @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
                                               Pageable pageable) throws CategoryNotFoundException {
         return new ResponseEntity<>(accountSkillService.getAllByKeyword(categoryId, keyword, pageable), HttpStatus.OK);
+    }
+
+    @JsonView(View.AccountWithSkillsAndCategory.class)
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping(path = "/search", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Page<Skill>> search(@RequestParam(name = "id", required = false, defaultValue = "") String skillIds,
+                                              Pageable pageable) throws BadRequestException {
+        String[] ids = skillIds.split(",");
+        List<Long> skillIdList = new ArrayList<>();
+
+        if (!skillIds.isEmpty()) {
+            for (String id : ids) {
+                try {
+                    skillIdList.add(Long.parseLong(id));
+                } catch (Exception ex) {
+                    throw new BadRequestException("Id must be type of long");
+                }
+            }
+        }
+
+        return new ResponseEntity<>(accountSkillService.search(skillIdList, pageable), HttpStatus.OK);
     }
 
     @JsonView(View.Public.class)

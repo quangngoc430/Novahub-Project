@@ -63,7 +63,7 @@ public class Skill implements Serializable {
     @Column(name = "updated_at")
     private Date updatedAt;
 
-    @JsonView(View.Public.class)
+    @JsonView({View.Public.class, View.AccountWithSkillsAndCategory.class})
     @JsonProperty(value = "category_id")
     @NotNull(message = "category_id is not null", groups = {GroupCreateSkill.class, GroupUpdateSkill.class})
     @Column(name = "category_id")
@@ -74,12 +74,22 @@ public class Skill implements Serializable {
     @Transient
     private List<AccountHasSkill> accountHasSkillList;
 
-    @JsonView({View.Public.class})
+    @JsonView({View.Public.class, View.AccountWithSkillsAndCategory.class})
     @ManyToOne(targetEntity = Category.class)
     @JoinColumn(name = "category_id", insertable = false, updatable = false)
     private Category category;
 
+    @Transient
+    private List<Account> accounts;
+
     public Skill() {}
+
+    public Skill(long id, String name, long level) {
+        super();
+        this.id = id;
+        this.name = name;
+        this.level = level;
+    }
 
     public Skill(long id, String name, long level, long categoryId, Date createdAt, Date updatedAt) {
         super();
@@ -128,7 +138,7 @@ public class Skill implements Serializable {
         this.name = name;
     }
 
-    public long getLevel() {
+    public Long getLevel() {
         return level;
     }
 
@@ -166,6 +176,14 @@ public class Skill implements Serializable {
 
     public void setAccountHasSkillList(List<AccountHasSkill> accountHasSkillList) {
         this.accountHasSkillList = accountHasSkillList;
+    }
+
+    public List<Account> getAccounts() {
+        return accounts;
+    }
+
+    public void setAccounts(List<Account> accounts) {
+        this.accounts = accounts;
     }
 
     public Category getCategory() {

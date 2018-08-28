@@ -6,6 +6,8 @@ import vn.novahub.helpdesk.exception.*;
 import vn.novahub.helpdesk.model.Account;
 import vn.novahub.helpdesk.model.Skill;
 
+import java.util.List;
+
 public interface AccountSkillService {
 
     Skill findOne(long skillId) throws SkillNotFoundException;
@@ -27,5 +29,7 @@ public interface AccountSkillService {
     Page<Skill> getAllByCategoryIdAndName(long categoryId, String name, Pageable pageable) throws CategoryNotFoundException;
 
     Page<Skill> getAllByAccountId(long accountId, Pageable pageable) throws AccountNotFoundException;
+
+    Page<Skill> search(List<Long> skillIds, Pageable pageable);
 
 }
