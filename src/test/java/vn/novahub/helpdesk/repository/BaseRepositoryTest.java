@@ -7,5 +7,4 @@ import vn.novahub.helpdesk.BaseTest;
 @DataJpaTest
 @SpringBootTest
 public abstract class BaseRepositoryTest extends BaseTest {
-
 }

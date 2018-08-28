@@ -33,7 +33,7 @@ public class DayOffController {
                                                            Pageable pageable) {
         Account account = accountService.getAccountLogin();
         return new ResponseEntity<>(
-                dayOffService.getAllByAccountIdAndStatus(account.getId(), status,pageable),
+                dayOffService.getAllByAccountIdAndStatus(account.getId(), status, pageable),
                 HttpStatus.OK);
     }
 
@@ -54,9 +54,9 @@ public class DayOffController {
             DayOffTypeNotFoundException,
             AccountNotFoundException {
 
-        dayOff = dayOffService.add(dayOff);
+        DayOff newDayOff = dayOffService.add(dayOff);
 
-        return new ResponseEntity<>(dayOff, HttpStatus.OK);
+        return new ResponseEntity<>(newDayOff, HttpStatus.OK);
     }
 
 }

@@ -16,8 +16,8 @@ import java.io.IOException;
 
 @Configuration
 @SpringBootApplication
-@EnableAsync
 @EnableJpaAuditing
+@EnableAsync
 public class Application {
 
 	private final static Logger logger = LoggerFactory.getLogger(Application.class);

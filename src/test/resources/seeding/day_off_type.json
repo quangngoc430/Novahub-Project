@@ -1,0 +1,12 @@
+ [
+   {
+      "id"  : 1,
+      "type" : "Vacation",
+      "defaultQuota" : 88
+    },
+    {
+      "id"  : 2,
+      "type" : "Public Holiday",
+      "defaultQuota" : 8
+    }
+ ]

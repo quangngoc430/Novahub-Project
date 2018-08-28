@@ -64,7 +64,7 @@ public class DayOff {
     private long dayOffAccountId;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @ManyToOne(fetch = FetchType.EAGER, targetEntity = DayOffAccount.class)
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = DayOffAccount.class)
     @JoinColumn(name = "day_off_account_id", insertable = false, updatable = false)
     private DayOffAccount dayOffAccount;
 

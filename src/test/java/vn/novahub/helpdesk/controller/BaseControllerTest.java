@@ -11,6 +11,10 @@ public abstract class BaseControllerTest extends BaseTest {
     public static final String EMAIL = "helpdesk@novahub.vn";
     public static final String PASSWORD = "password";
 
+    public static final String USER_EMAIL = "linhtran@novahub.vn";
+    public static final String USER_PASSWORD = "password";
+
     @Autowired
     public MockMvc mvc;
+
 }
