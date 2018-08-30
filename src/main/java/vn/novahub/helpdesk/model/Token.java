@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import vn.novahub.helpdesk.validation.GroupLoginWithGoogle;
 import vn.novahub.helpdesk.view.View;
 
@@ -17,7 +16,6 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-@EntityListeners(AuditingEntityListener.class)
 @Table(name = "token")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Token implements Serializable {
