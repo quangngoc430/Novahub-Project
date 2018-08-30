@@ -22,7 +22,6 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@EntityListeners(AuditingEntityListener.class)
 @Table(name = "skill")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Skill implements Serializable {

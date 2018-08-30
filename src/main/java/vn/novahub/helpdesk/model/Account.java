@@ -18,7 +18,6 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@EntityListeners(AuditingEntityListener.class)
 @Table(name = "account")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Account implements Serializable {

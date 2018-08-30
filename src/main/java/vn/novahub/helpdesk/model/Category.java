@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@EntityListeners(AuditingEntityListener.class)
 @Table(name = "category")
 public class Category implements Serializable {
 

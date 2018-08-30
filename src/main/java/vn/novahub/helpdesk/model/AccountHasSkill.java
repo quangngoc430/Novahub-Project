@@ -11,7 +11,6 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-@EntityListeners(AuditingEntityListener.class)
 @Table(name = "account_has_skill")
 public class AccountHasSkill implements Serializable {
 

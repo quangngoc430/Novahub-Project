@@ -16,7 +16,6 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-@EntityListeners(AuditingEntityListener.class)
 @Table(name = "issue")
 public class Issue implements Serializable {
 
