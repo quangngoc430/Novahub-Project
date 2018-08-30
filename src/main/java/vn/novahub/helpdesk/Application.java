@@ -10,13 +10,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import vn.novahub.helpdesk.seeding.ApplicationSeeder;
 
 import java.io.IOException;
 
-@Configuration
 @SpringBootApplication
-@EnableJpaAuditing
+@EnableTransactionManagement
 @EnableAsync
 public class Application {
 

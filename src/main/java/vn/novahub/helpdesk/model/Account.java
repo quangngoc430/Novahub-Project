@@ -101,7 +101,7 @@ public class Account implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @CreatedDate
     @Column(name = "created_at")
-    private Date createdAt;
+    private Date createdAt = new Date();
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty(value = "updated_at")
@@ -110,7 +110,7 @@ public class Account implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @LastModifiedDate
     @Column(name = "updated_at")
-    private Date updatedAt;
+    private Date updatedAt = new Date();
 
     @JsonProperty(value = "joining_date")
     @Temporal(TemporalType.TIMESTAMP)

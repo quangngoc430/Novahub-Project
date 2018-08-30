@@ -54,7 +54,7 @@ public class Token implements Serializable {
     @NotNull(message = "create_at is not null")
     @CreatedDate
     @Column(name = "created_at")
-    private Date createdAt;
+    private Date createdAt = new Date();
 
     @JsonView(View.Public.class)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -62,7 +62,7 @@ public class Token implements Serializable {
     @NotNull(message = "updated_at is not null")
     @LastModifiedDate
     @Column(name = "updated_at")
-    private Date updatedAt;
+    private Date updatedAt = new Date();
 
     @JsonView(View.Public.class)
     @JsonProperty(value = "account_id")

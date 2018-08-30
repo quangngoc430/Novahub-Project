@@ -42,7 +42,7 @@ public class Category implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @CreatedDate
     @Column(name = "created_at")
-    private Date createdAt;
+    private Date createdAt = new Date();
 
     @JsonProperty(value = "updated_at")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -51,7 +51,7 @@ public class Category implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @LastModifiedDate
     @Column(name = "updated_at")
-    private Date updatedAt;
+    private Date updatedAt = new Date();
 
     @Transient
     @JsonIgnore
