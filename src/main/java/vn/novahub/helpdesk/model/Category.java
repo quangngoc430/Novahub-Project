@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import vn.novahub.helpdesk.validation.GroupCreateCategory;
 import vn.novahub.helpdesk.validation.GroupUpdateCategory;
 import vn.novahub.helpdesk.view.View;

@@ -6,7 +6,6 @@ import javax.persistence.*;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import vn.novahub.helpdesk.validation.GroupCreateSkill;
 import vn.novahub.helpdesk.validation.GroupCreateSkillWithLevel;
 import vn.novahub.helpdesk.validation.GroupUpdateSkill;
