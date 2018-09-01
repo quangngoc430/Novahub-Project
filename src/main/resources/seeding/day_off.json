@@ -5,8 +5,7 @@
     "startDate" : "2018-08-20",
     "endDate" : "2018-08-21",
     "numberOfHours" : 16,
-    "status" : "PENDING",
-    "token"  : "abcd12345",
+    "status" : "APPROVED",
     "dayOffAccountId" : 1
   },
   {
