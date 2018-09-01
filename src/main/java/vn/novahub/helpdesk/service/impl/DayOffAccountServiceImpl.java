@@ -107,12 +107,12 @@ public class DayOffAccountServiceImpl implements DayOffAccountService {
             throws DayOffAccountIsExistException,
                     DayOffTypeNotFoundException {
         if (!isAccountHasAllDayOffAccount(accountId)) {
-            generateDayOffAccountList(accountId);
+            generateDayOffAccountIfNotExist(accountId);
         }
         return dayOffAccountRepository.findAllByAccountId(accountId, pageable);
     }
 
-    private void generateDayOffAccountList(long accountId)
+    private void generateDayOffAccountIfNotExist(long accountId)
             throws DayOffAccountIsExistException,
                    DayOffTypeNotFoundException {
 

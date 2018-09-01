@@ -25,7 +25,7 @@ public class Account implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView({View.Public.class, View.AccountWithSkills.class})
+    @JsonView({View.Public.class, View.AccountWithSkills.class, View.DayOffAccountRespond.class})
     @Column(name = "id")
     private long id;
 
@@ -34,7 +34,7 @@ public class Account implements Serializable {
             groups = {GroupCreateAccount.class, GroupLoginAccount.class})
     @Size(min = 8, max = 80, message = "email must have between 8 and 80 characters",
             groups = {GroupCreateAccount.class, GroupLoginAccount.class})
-    @JsonView({View.Public.class, View.AccountWithSkills.class})
+    @JsonView({View.Public.class, View.AccountWithSkills.class, View.DayOffAccountRespond.class})
     @Column(name = "email", unique = true)
     private String email;
 

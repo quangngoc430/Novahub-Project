@@ -1,5 +1,6 @@
 package vn.novahub.helpdesk.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +15,7 @@ import vn.novahub.helpdesk.model.Account;
 import vn.novahub.helpdesk.model.DayOffAccount;
 import vn.novahub.helpdesk.service.AccountService;
 import vn.novahub.helpdesk.service.DayOffAccountService;
+import vn.novahub.helpdesk.view.View;
 
 @RestController
 @RequestMapping(path = "/api/day-off-accounts", produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -26,6 +28,7 @@ public class DayOffAccountController {
     private AccountService accountService;
 
     @PreAuthorize("isAuthenticated()")
+    @JsonView(View.DayOffAccountRespond.class)
     @GetMapping
     public ResponseEntity<Page<DayOffAccount>> userGet(Pageable pageable)
             throws DayOffAccountIsExistException,
