@@ -10,6 +10,7 @@ import vn.novahub.helpdesk.exception.DayOffTypeNotFoundException;
 import vn.novahub.helpdesk.model.Account;
 import vn.novahub.helpdesk.model.DayOffAccount;
 import vn.novahub.helpdesk.model.DayOffType;
+import vn.novahub.helpdesk.repository.AccountRepository;
 import vn.novahub.helpdesk.repository.DayOffTypeRepository;
 import vn.novahub.helpdesk.repository.DayOffAccountRepository;
 import vn.novahub.helpdesk.service.AccountService;
@@ -25,6 +26,9 @@ public class DayOffAccountServiceImpl implements DayOffAccountService {
 
     @Autowired
     private DayOffTypeRepository dayOffTypeRepository;
+
+    @Autowired
+    private AccountRepository accountRepository;
 
     @Autowired
     private AccountService accountService;
@@ -125,11 +129,15 @@ public class DayOffAccountServiceImpl implements DayOffAccountService {
                                     accountId,
                                     dayOffType.getId(),
                                     getCreatedYear(new Date()));
+            Optional<Account> account = accountRepository.findById(accountId);
             if (dayOffAccount == null) {
                 dayOffAccount = new DayOffAccount();
                 dayOffAccount.setDayOffTypeId(dayOffType.getId());
                 dayOffAccount.setAccountId(accountId);
                 dayOffAccount.setDayOffType(dayOffType);
+                if(account.isPresent()) {
+                    dayOffAccount.setAccount(account.get());
+                }
                 add(dayOffAccount);
             }
         }

@@ -1,5 +1,6 @@
 package vn.novahub.helpdesk.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import org.apache.http.impl.execchain.RequestAbortedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,6 +14,7 @@ import vn.novahub.helpdesk.enums.DayOffStatus;
 import vn.novahub.helpdesk.exception.*;
 import vn.novahub.helpdesk.model.DayOff;
 import vn.novahub.helpdesk.service.DayOffService;
+import vn.novahub.helpdesk.view.View;
 
 import javax.annotation.security.PermitAll;
 import javax.mail.MessagingException;
@@ -26,6 +28,7 @@ public class DayOffAdminController {
     private DayOffService dayOffService;
 
     @PermitAll
+    @JsonView(View.DayOffRespond.class)
     @GetMapping("/{id}/answer-token")
     public ResponseEntity<DayOff> answerWithToken(@PathVariable("id") long dayOffId,
                                           @RequestParam("status") String status,
@@ -58,6 +61,7 @@ public class DayOffAdminController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @JsonView(View.DayOffRespond.class)
     @GetMapping("/{id}/answer")
     public ResponseEntity<DayOff> answerWithoutToken(@PathVariable("id") long dayOffId,
                                                   @RequestParam("status") String status)
@@ -95,6 +99,7 @@ public class DayOffAdminController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @JsonView(View.DayOffRespond.class)
     @GetMapping
     public ResponseEntity<Page<DayOff>> getAllDayOffs(
             @RequestParam(name = "status", required = false, defaultValue = "") String status,

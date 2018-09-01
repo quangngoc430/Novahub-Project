@@ -3,12 +3,14 @@ package vn.novahub.helpdesk.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import vn.novahub.helpdesk.view.View;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -63,7 +65,7 @@ public class DayOff {
     @Column(name = "day_off_account_id")
     private long dayOffAccountId;
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonView(View.DayOffRespond.class)
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = DayOffAccount.class)
     @JoinColumn(name = "day_off_account_id", insertable = false, updatable = false)
     private DayOffAccount dayOffAccount;
