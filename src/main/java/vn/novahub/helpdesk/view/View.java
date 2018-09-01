@@ -8,5 +8,9 @@ public class View {
 
     public interface SkillWithLevel extends Public {}
 
+    public interface DayOffAccountRespond {}
+
+    public interface DayOffRespond extends DayOffAccountRespond {}
+
     public interface AccountWithSkillsAndCategory extends AccountWithSkills {}
 }

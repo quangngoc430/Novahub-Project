@@ -34,7 +34,8 @@ public class DayOffAccountAdminController {
     @GetMapping
     public ResponseEntity<Page<DayOffAccount>> adminGet(
          @RequestParam(name = "accountId", required = false, defaultValue = "0") String accountIdString,
-         Pageable pageable) {
+         Pageable pageable) throws DayOffAccountIsExistException,
+                                        DayOffTypeNotFoundException {
 
         long accountId = Long.parseLong(accountIdString);
 
