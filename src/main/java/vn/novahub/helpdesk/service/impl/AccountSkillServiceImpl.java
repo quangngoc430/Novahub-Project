@@ -58,7 +58,12 @@ public class AccountSkillServiceImpl implements AccountSkillService {
     }
 
     @Override
-    public Page<Skill> getAllByKeyword(long categoryId, String keyword, Pageable pageable) throws CategoryNotFoundException {
+    public Page<Skill> getAllByKeyword(String keyword, Pageable pageable) {
+        return skillRepository.getAllByNameContaining(keyword, pageable);
+    }
+
+    @Override
+    public Page<Skill> getAllByCategoryIdAndKeyword(long categoryId, String keyword, Pageable pageable) throws CategoryNotFoundException {
         Optional<Category> categoryOptional = categoryRepository.findById(categoryId);
 
         if(!categoryOptional.isPresent())
