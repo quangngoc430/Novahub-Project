@@ -131,7 +131,7 @@ public class AccountRepositoryTest extends BaseRepositoryTest {
                 "seeding/skills.json",
                 new TypeReference<List<Skill>>(){}));
 
-        accountRepository.saveAll(convertJsonFileToObjectList(
+        accountHasSkillRepository.saveAll(convertJsonFileToObjectList(
                 "seeding/accountHasSkills.json",
                 new TypeReference<List<AccountHasSkill>>(){}));
     }
