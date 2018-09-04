@@ -39,12 +39,12 @@ public class Account implements Serializable {
     private String email;
 
     @JsonProperty(value = "first_name")
-    @JsonView({View.Public.class, View.AccountWithSkills.class})
+    @JsonView({View.Public.class, View.AccountWithSkills.class, View.DayOffAccountRespond.class})
     @Column(name = "first_name")
     private String firstName;
 
     @JsonProperty(value = "last_name")
-    @JsonView({View.Public.class, View.AccountWithSkills.class})
+    @JsonView({View.Public.class, View.AccountWithSkills.class, View.DayOffAccountRespond.class})
     @Column(name = "last_name")
     private String lastName;
 
