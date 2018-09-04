@@ -1,6 +1,5 @@
 package vn.novahub.helpdesk.service.impl;
 
-import org.apache.http.impl.execchain.RequestAbortedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
@@ -10,9 +9,9 @@ import vn.novahub.helpdesk.enums.DayOffStatus;
 import vn.novahub.helpdesk.enums.RoleEnum;
 import vn.novahub.helpdesk.exception.*;
 import vn.novahub.helpdesk.model.*;
-import vn.novahub.helpdesk.repository.DayOffTypeRepository;
-import vn.novahub.helpdesk.repository.DayOffRepository;
 import vn.novahub.helpdesk.repository.DayOffAccountRepository;
+import vn.novahub.helpdesk.repository.DayOffRepository;
+import vn.novahub.helpdesk.repository.DayOffTypeRepository;
 import vn.novahub.helpdesk.service.*;
 
 import javax.mail.MessagingException;
@@ -20,7 +19,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.Optional;
 
 @Service
 public class DayOffServiceImpl implements DayOffService {
@@ -69,28 +68,22 @@ public class DayOffServiceImpl implements DayOffService {
     }
 
     @Override
-    public Page<DayOff> getAllByAccountIdAndStatus(long accountId, String status, Pageable pageable)
-            throws RequestAbortedException {
+    public Page<DayOff> getAllByAccountIdAndStatus(long accountId, String status, Pageable pageable) {
 
-        DayOffStatus dayOffStatus;
-
-        try {
-            dayOffStatus = DayOffStatus.valueOf(status);
-        } catch (Exception e) {
-            throw new RequestAbortedException("The parameter \'status\' is not valid");
-        }
-
-        switch (dayOffStatus) {
-            case PENDING:
-                return dayOffRepository.findByAccountIdAndStatus(accountId, status, pageable);
-            default:
-                return dayOffRepository.findAnsweredByAccountId(accountId, pageable);
+        if (status.equals(DayOffStatus.PENDING.name())) {
+            return dayOffRepository.findByAccountIdAndStatus(accountId, status, pageable);
+        } else {
+            return dayOffRepository.findAnsweredByAccountId(accountId, pageable);
         }
     }
 
     @Override
-    public Page<DayOff> getAllByAccountId(long accountId, Pageable pageable) {
-        return dayOffRepository.findAllByAccountId(accountId, pageable);
+    public Page<DayOff> getAllByStatus(String status, Pageable pageable) {
+        if (status.equals(DayOffStatus.PENDING.name())) {
+            return dayOffRepository.findAllByStatus(status, pageable);
+        } else {
+            return dayOffRepository.findAllAnswered(pageable);
+        }
     }
 
     @Override

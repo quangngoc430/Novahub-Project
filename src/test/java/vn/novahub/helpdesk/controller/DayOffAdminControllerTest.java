@@ -33,9 +33,6 @@ public class DayOffAdminControllerTest extends BaseControllerTest {
     @MockBean
     private DayOffService dayOffService;
 
-    @MockBean
-    private AccountService accountService;
-
     private List<Account> accounts;
 
     private List<DayOff> dayOffs;
@@ -149,7 +146,7 @@ public class DayOffAdminControllerTest extends BaseControllerTest {
     @Test
     public void testGetAll() throws Exception {
 
-        given(dayOffService.getAllByStatusAndKeyword("", "", PageRequest.of(0, 20)))
+        given(dayOffService.getAllByAccountIdAndStatus(0, "", PageRequest.of(0, 20)))
                             .willReturn(new PageImpl<>(dayOffs));
 
         mvc.perform(get("/api/admin/day-offs")
