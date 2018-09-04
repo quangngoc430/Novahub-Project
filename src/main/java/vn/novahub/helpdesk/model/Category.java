@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import vn.novahub.helpdesk.validation.GroupCreateCategory;
 import vn.novahub.helpdesk.validation.GroupUpdateCategory;
 import vn.novahub.helpdesk.view.View;
@@ -20,7 +19,6 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@EntityListeners(AuditingEntityListener.class)
 @Table(name = "category")
 public class Category implements Serializable {
 
@@ -42,7 +40,7 @@ public class Category implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @CreatedDate
     @Column(name = "created_at")
-    private Date createdAt;
+    private Date createdAt = new Date();
 
     @JsonProperty(value = "updated_at")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -51,7 +49,7 @@ public class Category implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @LastModifiedDate
     @Column(name = "updated_at")
-    private Date updatedAt;
+    private Date updatedAt = new Date();
 
     @Transient
     @JsonIgnore
