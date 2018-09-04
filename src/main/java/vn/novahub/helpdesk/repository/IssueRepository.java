@@ -11,8 +11,6 @@ import vn.novahub.helpdesk.model.Issue;
 @Repository
 public interface IssueRepository extends PagingAndSortingRepository<Issue, Long> {
 
-    Issue getByIdAndAccountId(long issueId, long accountId);
-
     Page<Issue> getAllByTitleContainingOrContentContaining(String title,
                                                            String content,
                                                            Pageable pageable);
@@ -43,13 +41,7 @@ public interface IssueRepository extends PagingAndSortingRepository<Issue, Long>
                                                                                  @Param("status") String status,
                                                                                  Pageable pageable);
 
-    Issue getByIdAndToken(long issueId, String token);
-
     Issue getByIdAndStatusIsNot(long issueId, String status);
 
     Issue getByIdAndAccountIdAndStatusIsNot(long issueId, long accountId, String status);
-
-    boolean existsByIdAndAccountId(long issueId, long accountId);
-
-    void deleteByIdAndAccountId(long issueId, long accountId);
 }
