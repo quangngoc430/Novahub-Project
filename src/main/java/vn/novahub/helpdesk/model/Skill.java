@@ -6,7 +6,6 @@ import javax.persistence.*;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import vn.novahub.helpdesk.validation.GroupCreateSkill;
 import vn.novahub.helpdesk.validation.GroupCreateSkillWithLevel;
 import vn.novahub.helpdesk.validation.GroupUpdateSkill;
@@ -22,7 +21,6 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@EntityListeners(AuditingEntityListener.class)
 @Table(name = "skill")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Skill implements Serializable {
@@ -52,7 +50,7 @@ public class Skill implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @CreatedDate
     @Column(name = "created_at")
-    private Date createdAt;
+    private Date createdAt = new Date();
 
     @JsonView(View.Public.class)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -61,7 +59,7 @@ public class Skill implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @LastModifiedDate
     @Column(name = "updated_at")
-    private Date updatedAt;
+    private Date updatedAt = new Date();
 
     @JsonView({View.Public.class, View.AccountWithSkillsAndCategory.class})
     @JsonProperty(value = "category_id")

@@ -6,17 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import vn.novahub.helpdesk.seeding.ApplicationSeeder;
 
 import java.io.IOException;
 
-@Configuration
 @SpringBootApplication
-@EnableJpaAuditing
+@EnableTransactionManagement
 @EnableAsync
 public class Application {
 
