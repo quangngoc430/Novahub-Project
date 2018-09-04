@@ -213,7 +213,9 @@ public class DayOffServiceImpl implements DayOffService {
             throw new DayOffOverdueException(dayOffId);
         }
 
-        returnTheRemainingTime(dayOffOptional.get(), dayOffOptional.get().getDayOffAccount());
+        if (dayOffOptional.get().getStatus().equals(DayOffStatus.APPROVED.name())) {
+            returnTheRemainingTime(dayOffOptional.get(), dayOffOptional.get().getDayOffAccount());
+        }
 
         DayOff dayOff = answerDayOffRequest(dayOffOptional.get(), DayOffStatus.CANCELLED.name());
 
