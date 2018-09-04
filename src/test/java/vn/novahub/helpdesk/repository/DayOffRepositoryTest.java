@@ -71,7 +71,7 @@ public class DayOffRepositoryTest extends BaseRepositoryTest {
     public void testFindNonCancelledByAccountId() throws Exception {
         this.dayOffs.remove(2);
         expected = new PageImpl<>(this.dayOffs);
-        actual = dayOffRepository.findNonCancelledByAccountId(
+        actual = dayOffRepository.findAnsweredByAccountId(
                 1,
                 PageRequest.of(0, 20));
         assertTrue(isEquals(expected, actual));

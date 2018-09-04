@@ -1,6 +1,7 @@
 package vn.novahub.helpdesk.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import org.apache.http.impl.execchain.RequestAbortedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,7 +34,7 @@ public class DayOffController {
     @JsonView(View.DayOffRespond.class)
     @GetMapping
     public ResponseEntity<Page<DayOff>> getUserLoginDayOffs(@RequestParam(name = "status", required = false, defaultValue = "") String status,
-                                                           Pageable pageable) {
+                                                           Pageable pageable) throws RequestAbortedException {
         Account account = accountService.getAccountLogin();
         return new ResponseEntity<>(
                 dayOffService.getAllByAccountIdAndStatus(account.getId(), status, pageable),

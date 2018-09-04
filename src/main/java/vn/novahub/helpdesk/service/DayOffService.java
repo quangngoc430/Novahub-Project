@@ -1,5 +1,6 @@
 package vn.novahub.helpdesk.service;
 
+import org.apache.http.impl.execchain.RequestAbortedException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import vn.novahub.helpdesk.exception.*;
@@ -20,11 +21,9 @@ public interface DayOffService {
     Page<DayOff> getAllByAccountIdAndStatus(
             long accountId,
             String status,
-            Pageable pageable);
+            Pageable pageable) throws RequestAbortedException;
 
     Page<DayOff> getAllByAccountId(long accountId, Pageable pageable);
-
-    Page<DayOff> getAllByStatusAndKeyword(String status, String keyword, Pageable pageable);
 
     DayOff getById(long id)
             throws DayOffIsNotExistException,
