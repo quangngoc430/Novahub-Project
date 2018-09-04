@@ -107,12 +107,14 @@ public class DayOffAdminController {
             @RequestParam(name= "keyword", required = false, defaultValue = "") String keyword,
             Pageable pageable) {
 
-        long accountId = Long.parseLong(accountIdString);
-        if (accountId == 0) {
+
+        if (accountIdString.isEmpty()) {
             return new ResponseEntity<>(
                     dayOffService.getAllByStatusAndKeyword(status, keyword ,pageable),
                     HttpStatus.OK);
         }
+
+        long accountId = Long.parseLong(accountIdString);
 
         return new ResponseEntity<>(
                 dayOffService.getAllByAccountId(accountId, pageable),
