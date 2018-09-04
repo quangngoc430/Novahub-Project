@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import vn.novahub.helpdesk.validation.GroupLoginWithGoogle;
 import vn.novahub.helpdesk.view.View;
 
@@ -17,7 +16,6 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-@EntityListeners(AuditingEntityListener.class)
 @Table(name = "token")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Token implements Serializable {
@@ -54,7 +52,7 @@ public class Token implements Serializable {
     @NotNull(message = "create_at is not null")
     @CreatedDate
     @Column(name = "created_at")
-    private Date createdAt;
+    private Date createdAt = new Date();
 
     @JsonView(View.Public.class)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -62,7 +60,7 @@ public class Token implements Serializable {
     @NotNull(message = "updated_at is not null")
     @LastModifiedDate
     @Column(name = "updated_at")
-    private Date updatedAt;
+    private Date updatedAt = new Date();
 
     @JsonView(View.Public.class)
     @JsonProperty(value = "account_id")

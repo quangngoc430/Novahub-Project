@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import vn.novahub.helpdesk.annotation.Status;
 import vn.novahub.helpdesk.validation.GroupCreateIssue;
 
@@ -16,7 +15,6 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-@EntityListeners(AuditingEntityListener.class)
 @Table(name = "issue")
 public class Issue implements Serializable {
 
@@ -44,7 +42,7 @@ public class Issue implements Serializable {
     @NotNull(message = "created_at is not null")
     @CreatedDate
     @Column(name = "created_at")
-    private Date createdAt;
+    private Date createdAt = new Date();
 
     @JsonProperty(value = "updated_at")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -52,7 +50,7 @@ public class Issue implements Serializable {
     @NotNull(message = "updated_at is not null")
     @LastModifiedDate
     @Column(name = "updated_at")
-    private Date updatedAt;
+    private Date updatedAt = new Date();
 
     @JsonProperty(value = "reply_message")
     @Column(name = "reply_message")

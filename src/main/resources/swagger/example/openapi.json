@@ -4687,6 +4687,330 @@
         }
       }
     },
+    "/skills/search": {
+      "get": {
+        "tags": [
+          "Skill"
+        ],
+        "summary": "Search skills ( all or following list skillIds)",
+        "description": "Search skills (all or following list skillIds)",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "access_token",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "dff4d0d4891bfd8bafdb859dac4cbccb218bcf5adc9887a627c6c159f76ef0b9"
+            }
+          },
+          {
+            "in": "query",
+            "name": "id",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "1,2"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "content": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer",
+                            "example": 1
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "Java"
+                          },
+                          "first_name": {
+                            "type": "string",
+                            "example": "help"
+                          },
+                          "last_name": {
+                            "type": "string",
+                            "example": "desk"
+                          },
+                          "category_id": {
+                            "type": "integer",
+                            "example": 1
+                          },
+                          "category": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer",
+                                "example": 1
+                              },
+                              "name": {
+                                "type": "string",
+                                "example": "Programming Language"
+                              }
+                            }
+                          },
+                          "accounts": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "integer",
+                                  "example": 1
+                                },
+                                "email": {
+                                  "type": "string",
+                                  "example": "helpdesk@novahub.vn"
+                                },
+                                "skills": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "integer",
+                                        "example": 1
+                                      },
+                                      "name": {
+                                        "type": "string",
+                                        "example": "Java"
+                                      },
+                                      "level": {
+                                        "type": "integer",
+                                        "example": 7
+                                      },
+                                      "category_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "pageable": {
+                      "type": "object",
+                      "properties": {
+                        "sort": {
+                          "type": "object",
+                          "properties": {
+                            "sorted": {
+                              "type": "boolean",
+                              "example": false
+                            },
+                            "unsorted": {
+                              "type": "boolean",
+                              "example": true
+                            }
+                          }
+                        },
+                        "pageSize": {
+                          "type": "integer",
+                          "format": "int64",
+                          "example": 20
+                        },
+                        "pageNumber": {
+                          "type": "integer",
+                          "format": "int64",
+                          "example": 0
+                        },
+                        "offset": {
+                          "type": "integer",
+                          "format": "int64",
+                          "example": 0
+                        },
+                        "paged": {
+                          "type": "boolean",
+                          "example": true
+                        },
+                        "unpaged": {
+                          "type": "boolean",
+                          "example": false
+                        }
+                      }
+                    },
+                    "last": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "first": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "totalPages": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 1
+                    },
+                    "totalElements": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 1
+                    },
+                    "numberOfElements": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 1
+                    },
+                    "sort": {
+                      "type": "object",
+                      "properties": {
+                        "sorted": {
+                          "type": "boolean",
+                          "example": false
+                        },
+                        "unsorted": {
+                          "type": "boolean",
+                          "example": true
+                        }
+                      }
+                    },
+                    "size": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 20
+                    },
+                    "number": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 0
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Token is expired",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": 1532589762.947
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Token is expired"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "TokenIsExpiredException with token = 579989c508208d49c978e6cb99383688e6f1fedabfc22c27d3542ab0341d3b13"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/api/skills/search"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": "1532506012.933"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 401
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Unauthorized"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid token"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/api/skills/search"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access is denied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "example": "1532506012.933"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 403
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Access is denied"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Access is denied"
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/api/skills/search"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/skills/{id}": {
       "get": {
         "tags": [
