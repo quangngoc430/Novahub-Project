@@ -1,6 +1,5 @@
 package vn.novahub.helpdesk.service.impl;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.IteratorUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -272,13 +271,6 @@ public class AccountSkillServiceImpl implements AccountSkillService {
         }
 
         return skillPage;
-    }
-
-    public static <T> List<T> copyIterator(Iterator<T> iter) {
-        List<T> copy = new ArrayList<T>();
-        while (iter.hasNext())
-            copy.add(iter.next());
-        return copy;
     }
 
 }
