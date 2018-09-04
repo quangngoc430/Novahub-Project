@@ -22,6 +22,8 @@ public interface DayOffService {
             String status,
             Pageable pageable);
 
+    Page<DayOff> getAllByAccountId(long accountId, Pageable pageable);
+
     Page<DayOff> getAllByStatusAndKeyword(String status, String keyword, Pageable pageable);
 
     DayOff getById(long id)

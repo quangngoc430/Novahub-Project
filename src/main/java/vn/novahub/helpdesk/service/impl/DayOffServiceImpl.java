@@ -79,6 +79,11 @@ public class DayOffServiceImpl implements DayOffService {
     }
 
     @Override
+    public Page<DayOff> getAllByAccountId(long accountId, Pageable pageable) {
+        return dayOffRepository.findAllByAccountId(accountId, pageable);
+    }
+
+    @Override
     public Page<DayOff> getAllByStatusAndKeyword(String status, String keyword, Pageable pageable) {
         if (status.equals(DayOffStatus.NONCANCELLED.name())) {
             return dayOffRepository.findNonCancelledByKeyword(keyword, pageable);
