@@ -219,6 +219,7 @@ public class DayOffServiceImpl implements DayOffService {
 
         sendEmailDayOff(dayOff, RoleEnum.EMPLOYEE.name());
         sendEmailDayOff(dayOff, RoleEnum.CLERK.name());
+        sendEmailDayOff(dayOff, RoleEnum.ADMIN.name());
 
         return dayOff;
     }
