@@ -4500,7 +4500,6 @@
           {
             "in": "query",
             "name": "categoryId",
-            "required": true,
             "schema": {
               "type": "integer",
               "example": 1
@@ -4509,6 +4508,7 @@
           {
             "in": "query",
             "name": "keyword",
+            "required": true,
             "schema": {
               "type": "string",
               "example": "Java"

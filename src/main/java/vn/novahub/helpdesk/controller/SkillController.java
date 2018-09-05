@@ -33,10 +33,13 @@ public class SkillController {
     @JsonView(View.Public.class)
     @PreAuthorize("isAuthenticated()")
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Page<Skill>> getAll(@RequestParam(value = "categoryId") long categoryId,
-                                              @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
+    public ResponseEntity<Page<Skill>> getAll(@RequestParam(value = "categoryId", required = false, defaultValue = "-1") long categoryId,
+                                              @RequestParam(value = "keyword", defaultValue = "") String keyword,
                                               Pageable pageable) throws CategoryNotFoundException {
-        return new ResponseEntity<>(accountSkillService.getAllByKeyword(categoryId, keyword, pageable), HttpStatus.OK);
+        if(categoryId == -1)
+            return new ResponseEntity<>(accountSkillService.getAllByKeyword(keyword, pageable), HttpStatus.OK);
+
+        return new ResponseEntity<>(accountSkillService.getAllByCategoryIdAndKeyword(categoryId, keyword, pageable), HttpStatus.OK);
     }
 
     @JsonView(View.AccountWithSkillsAndCategory.class)

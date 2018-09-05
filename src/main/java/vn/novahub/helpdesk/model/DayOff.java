@@ -1,7 +1,6 @@
 package vn.novahub.helpdesk.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -162,7 +161,6 @@ public class DayOff {
     public void setDayOffAccount(DayOffAccount dayOffAccount) {
         this.dayOffAccount = dayOffAccount;
     }
-
 
     @Override
     public String toString() {

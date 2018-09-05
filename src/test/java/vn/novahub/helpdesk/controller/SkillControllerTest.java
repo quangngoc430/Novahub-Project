@@ -76,15 +76,9 @@ public class SkillControllerTest extends BaseControllerTest {
 
     @Test
     public void testGetAll() throws Exception {
-        for (int i = skills.size() - 1; i >= 0; i--) {
-            if(skills.get(i).getCategoryId() != 1) {
-                skills.remove(i);
-            }
-        }
+        given(accountSkillService.getAllByKeyword( "", new PageRequest(0, 20))).willReturn(new PageImpl<>(skills));
 
-        given(accountSkillService.getAllByKeyword(1L, "", new PageRequest(0, 20))).willReturn(new PageImpl<>(skills));
-
-        mvc.perform(get("/api/skills?categoryId=1")
+        mvc.perform(get("/api/skills?keyword=")
                     .with(user(EMAIL).password(PASSWORD))
                     .with(csrf().asHeader())
                     .contentType(MediaType.APPLICATION_JSON))
