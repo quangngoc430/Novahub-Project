@@ -1,5 +1,6 @@
 package vn.novahub.helpdesk.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +14,7 @@ import vn.novahub.helpdesk.exception.DayOffAccountNotFoundException;
 import vn.novahub.helpdesk.exception.DayOffTypeNotFoundException;
 import vn.novahub.helpdesk.model.DayOffAccount;
 import vn.novahub.helpdesk.service.DayOffAccountService;
+import vn.novahub.helpdesk.view.View;
 
 @RestController
 @RequestMapping(path = "/api/admin/day-off-accounts", produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -23,6 +25,7 @@ public class DayOffAccountAdminController {
 
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @JsonView(View.DayOffAccountRespond.class)
     @PostMapping
     public ResponseEntity<DayOffAccount> create(@RequestBody DayOffAccount dayOffAccount)
             throws DayOffAccountIsExistException, DayOffTypeNotFoundException {
@@ -31,10 +34,12 @@ public class DayOffAccountAdminController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @JsonView(View.DayOffAccountRespond.class)
     @GetMapping
     public ResponseEntity<Page<DayOffAccount>> adminGet(
          @RequestParam(name = "accountId", required = false, defaultValue = "0") String accountIdString,
-         Pageable pageable) {
+         Pageable pageable) throws DayOffAccountIsExistException,
+                                        DayOffTypeNotFoundException {
 
         long accountId = Long.parseLong(accountIdString);
 
@@ -50,6 +55,7 @@ public class DayOffAccountAdminController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @JsonView(View.DayOffAccountRespond.class)
     @PutMapping("/{id}")
     public ResponseEntity<DayOffAccount> update(@RequestBody DayOffAccount dayOffAccount,
                                                 @PathVariable("id") long id)

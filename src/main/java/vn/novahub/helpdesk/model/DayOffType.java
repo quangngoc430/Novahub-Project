@@ -1,5 +1,8 @@
 package vn.novahub.helpdesk.model;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import vn.novahub.helpdesk.view.View;
+
 import javax.persistence.*;
 
 @Entity
@@ -8,9 +11,11 @@ public class DayOffType {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView(View.DayOffAccountRespond.class)
     @Column(name = "id")
     private int id;
 
+    @JsonView(View.DayOffAccountRespond.class)
     @Column(name = "type")
     private String type;
 

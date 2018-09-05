@@ -10,15 +10,13 @@ import vn.novahub.helpdesk.exception.DayOffTypeNotFoundException;
 import vn.novahub.helpdesk.model.Account;
 import vn.novahub.helpdesk.model.DayOffAccount;
 import vn.novahub.helpdesk.model.DayOffType;
+import vn.novahub.helpdesk.repository.AccountRepository;
 import vn.novahub.helpdesk.repository.DayOffTypeRepository;
 import vn.novahub.helpdesk.repository.DayOffAccountRepository;
 import vn.novahub.helpdesk.service.AccountService;
 import vn.novahub.helpdesk.service.DayOffAccountService;
 
-import java.util.Date;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class DayOffAccountServiceImpl implements DayOffAccountService {
@@ -30,6 +28,9 @@ public class DayOffAccountServiceImpl implements DayOffAccountService {
     private DayOffTypeRepository dayOffTypeRepository;
 
     @Autowired
+    private AccountRepository accountRepository;
+
+    @Autowired
     private AccountService accountService;
 
     @Override
@@ -39,17 +40,17 @@ public class DayOffAccountServiceImpl implements DayOffAccountService {
 
         Account account = accountService.getAccountLogin();
 
-        Optional<DayOffType> commonDayOffType =
+        Optional<DayOffType> dayOffType =
                 dayOffTypeRepository.findById(dayOffAccount.getDayOffTypeId());
 
-        if (!commonDayOffType.isPresent()) {
+        if (!dayOffType.isPresent()) {
             throw new DayOffTypeNotFoundException();
         }
 
-        dayOffAccount.setPrivateQuota(commonDayOffType.get().getDefaultQuota());
+        dayOffAccount.setPrivateQuota(dayOffType.get().getDefaultQuota());
         dayOffAccount.setRemainingTime(dayOffAccount.getPrivateQuota());
         dayOffAccount.setYear(getCreatedYear(new Date()));
-        dayOffAccount.setDayOffType(commonDayOffType.get());
+        dayOffAccount.setDayOffType(dayOffType.get());
 
         if (dayOffAccount.getAccountId() == 0) {
             dayOffAccount.setAccountId(account.getId());
@@ -106,13 +107,53 @@ public class DayOffAccountServiceImpl implements DayOffAccountService {
     }
 
     @Override
-    public Page<DayOffAccount> findByAccountId(long accountId, Pageable pageable) {
+    public Page<DayOffAccount> findByAccountId(long accountId, Pageable pageable)
+            throws DayOffAccountIsExistException,
+                    DayOffTypeNotFoundException {
+        if (!isAccountHasAllDayOffAccount(accountId)) {
+            generateDayOffAccountIfNotExist(accountId);
+        }
         return dayOffAccountRepository.findAllByAccountId(accountId, pageable);
     }
 
-   private int getCreatedYear(Date createdDate) {
+    private void generateDayOffAccountIfNotExist(long accountId)
+            throws DayOffAccountIsExistException,
+                   DayOffTypeNotFoundException {
+
+        List<DayOffType> dayOffTypes = dayOffTypeRepository.findAll();
+
+        for (DayOffType dayOffType : dayOffTypes) {
+            DayOffAccount dayOffAccount =
+                    dayOffAccountRepository
+                            .findByAccountIdAndDayOffTypeIdAndYear(
+                                    accountId,
+                                    dayOffType.getId(),
+                                    getCreatedYear(new Date()));
+            Optional<Account> account = accountRepository.findById(accountId);
+            if (dayOffAccount == null) {
+                dayOffAccount = new DayOffAccount();
+                dayOffAccount.setDayOffTypeId(dayOffType.getId());
+                dayOffAccount.setAccountId(accountId);
+                dayOffAccount.setDayOffType(dayOffType);
+                if(account.isPresent()) {
+                    dayOffAccount.setAccount(account.get());
+                }
+                add(dayOffAccount);
+            }
+        }
+    }
+
+    private boolean isAccountHasAllDayOffAccount(long accountId) {
+        List<DayOffAccount> dayOffAccounts =
+                dayOffAccountRepository
+                        .findAllByAccountIdAndYear(accountId, getCreatedYear(new Date()));
+
+        return dayOffAccounts.size() == dayOffTypeRepository.findAll().size();
+    }
+
+    private int getCreatedYear(Date createdDate) {
        Calendar calendar = new GregorianCalendar();
        calendar.setTime(createdDate);
        return calendar.get(Calendar.YEAR);
-  }
+   }
 }
