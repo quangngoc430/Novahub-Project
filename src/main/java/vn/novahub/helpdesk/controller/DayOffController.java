@@ -1,5 +1,6 @@
 package vn.novahub.helpdesk.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +14,7 @@ import vn.novahub.helpdesk.model.Account;
 import vn.novahub.helpdesk.model.DayOff;
 import vn.novahub.helpdesk.service.AccountService;
 import vn.novahub.helpdesk.service.DayOffService;
+import vn.novahub.helpdesk.view.View;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
@@ -28,6 +30,7 @@ public class DayOffController {
     private AccountService accountService;
 
     @PreAuthorize("isAuthenticated()")
+    @JsonView(View.DayOffRespond.class)
     @GetMapping
     public ResponseEntity<Page<DayOff>> getUserLoginDayOffs(@RequestParam(name = "status", required = false, defaultValue = "") String status,
                                                            Pageable pageable) {
@@ -38,6 +41,7 @@ public class DayOffController {
     }
 
     @PreAuthorize("isAuthenticated()")
+    @JsonView(View.DayOffRespond.class)
     @GetMapping("/{id}")
     public ResponseEntity<DayOff> getById(@PathVariable("id") long id)
                                                throws DayOffIsNotExistException, AccountNotFoundException {
@@ -46,6 +50,7 @@ public class DayOffController {
     }
 
     @PreAuthorize("isAuthenticated()")
+    @JsonView(View.DayOffRespond.class)
     @PostMapping
     public ResponseEntity<DayOff> create(@RequestBody DayOff dayOff)
             throws MessagingException,

@@ -73,6 +73,15 @@ public class Token implements Serializable {
     @JoinColumn(name = "account_id", insertable = false, updatable = false)
     private Account account;
 
+    public Token() {
+        super();
+    }
+
+    public Token(String accessToken) {
+        super();
+        this.accessToken = accessToken;
+    }
+
     public long getId() {
         return id;
     }

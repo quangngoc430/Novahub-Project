@@ -12,7 +12,7 @@ public interface DayOffAccountService {
     DayOffAccount add(DayOffAccount dayOffAccount)
             throws DayOffAccountIsExistException, DayOffTypeNotFoundException;
 
-    Page<DayOffAccount> findByAccountId(long accountId, Pageable pageable);
+    Page<DayOffAccount> findByAccountId(long accountId, Pageable pageable) throws DayOffAccountIsExistException, DayOffTypeNotFoundException;
 
     Page<DayOffAccount> getAll(Pageable pageable);
 

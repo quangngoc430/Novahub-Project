@@ -1,6 +1,8 @@
 package vn.novahub.helpdesk.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
+import vn.novahub.helpdesk.view.View;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -11,15 +13,19 @@ public class DayOffAccount {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView(View.DayOffAccountRespond.class)
     @Column(name = "id")
     private long id;
 
+    @JsonView(View.DayOffAccountRespond.class)
     @Column(name = "year")
     private int year;
 
+    @JsonView(View.DayOffAccountRespond.class)
     @Column(name = "private_quota")
     private int privateQuota;
 
+    @JsonView(View.DayOffAccountRespond.class)
     @Column(name = "remaining_time")
     private int remainingTime;
 
@@ -29,16 +35,17 @@ public class DayOffAccount {
     @Column(name = "account_id")
     private long accountId;
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.EAGER, targetEntity = DayOffType.class)
+    @JsonView(View.DayOffAccountRespond.class)
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = DayOffType.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "day_off_type_id", insertable = false, updatable = false)
     private DayOffType dayOffType;
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Account.class)
+    @JsonView(View.DayOffAccountRespond.class)
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Account.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "account_id", insertable = false, updatable = false)
     private Account account;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "dayOffAccount")
     private Set<DayOff> dayOffs;
 
