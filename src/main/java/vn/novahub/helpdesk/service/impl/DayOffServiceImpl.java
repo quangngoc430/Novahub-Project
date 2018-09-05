@@ -9,9 +9,9 @@ import vn.novahub.helpdesk.enums.DayOffStatus;
 import vn.novahub.helpdesk.enums.RoleEnum;
 import vn.novahub.helpdesk.exception.*;
 import vn.novahub.helpdesk.model.*;
-import vn.novahub.helpdesk.repository.DayOffTypeRepository;
-import vn.novahub.helpdesk.repository.DayOffRepository;
 import vn.novahub.helpdesk.repository.DayOffAccountRepository;
+import vn.novahub.helpdesk.repository.DayOffRepository;
+import vn.novahub.helpdesk.repository.DayOffTypeRepository;
 import vn.novahub.helpdesk.service.*;
 
 import javax.mail.MessagingException;
@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.Optional;
 
 @Service
 public class DayOffServiceImpl implements DayOffService {
@@ -69,28 +69,21 @@ public class DayOffServiceImpl implements DayOffService {
 
     @Override
     public Page<DayOff> getAllByAccountIdAndStatus(long accountId, String status, Pageable pageable) {
-        if (status.equals(DayOffStatus.NONCANCELLED.name())) {
-            return dayOffRepository.findNonCancelledByAccountId(accountId, pageable);
-        } else if (status.equals("")) {
-            return dayOffRepository.findAllByAccountId(accountId, pageable);
-        } else {
+
+        if (status.equals(DayOffStatus.PENDING.name())) {
             return dayOffRepository.findByAccountIdAndStatus(accountId, status, pageable);
+        } else {
+            return dayOffRepository.findAnsweredByAccountId(accountId, pageable);
         }
     }
 
     @Override
-    public Page<DayOff> getAllByAccountId(long accountId, Pageable pageable) {
-        return dayOffRepository.findAllByAccountId(accountId, pageable);
-    }
-
-    @Override
-    public Page<DayOff> getAllByStatusAndKeyword(String status, String keyword, Pageable pageable) {
-        if (status.equals(DayOffStatus.NONCANCELLED.name())) {
-            return dayOffRepository.findNonCancelledByKeyword(keyword, pageable);
+    public Page<DayOff> getAllByStatus(String status, Pageable pageable) {
+        if (status.equals(DayOffStatus.PENDING.name())) {
+            return dayOffRepository.findAllByStatus(status, pageable);
+        } else {
+            return dayOffRepository.findAllAnswered(pageable);
         }
-
-        return dayOffRepository.findByKeyword(keyword, pageable);
-
     }
 
     @Override
@@ -220,12 +213,15 @@ public class DayOffServiceImpl implements DayOffService {
             throw new DayOffOverdueException(dayOffId);
         }
 
-        returnTheRemainingTime(dayOffOptional.get(), dayOffOptional.get().getDayOffAccount());
+        if (dayOffOptional.get().getStatus().equals(DayOffStatus.APPROVED.name())) {
+            returnTheRemainingTime(dayOffOptional.get(), dayOffOptional.get().getDayOffAccount());
+        }
 
         DayOff dayOff = answerDayOffRequest(dayOffOptional.get(), DayOffStatus.CANCELLED.name());
 
         sendEmailDayOff(dayOff, RoleEnum.EMPLOYEE.name());
         sendEmailDayOff(dayOff, RoleEnum.CLERK.name());
+        sendEmailDayOff(dayOff, RoleEnum.ADMIN.name());
 
         return dayOff;
     }

@@ -4,6 +4,5 @@ public enum DayOffStatus {
     PENDING ,
     APPROVED,
     DENIED,
-    CANCELLED,
-    NONCANCELLED
+    CANCELLED
 }

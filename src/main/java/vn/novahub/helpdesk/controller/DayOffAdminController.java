@@ -104,21 +104,20 @@ public class DayOffAdminController {
     public ResponseEntity<Page<DayOff>> getAllDayOffs(
             @RequestParam(name = "accountId", required = false, defaultValue = "") String accountIdString,
             @RequestParam(name = "status", required = false, defaultValue = "") String status,
-            @RequestParam(name= "keyword", required = false, defaultValue = "") String keyword,
             Pageable pageable) {
 
-
-        if (accountIdString.isEmpty()) {
-            return new ResponseEntity<>(
-                    dayOffService.getAllByStatusAndKeyword(status, keyword ,pageable),
-                    HttpStatus.OK);
+        long accountId = 0;
+        if (!accountIdString.isEmpty()) {
+            accountId = Long.parseLong(accountIdString);
         }
 
-        long accountId = Long.parseLong(accountIdString);
+        if (accountId == 0) {
+            return new ResponseEntity<>(dayOffService.getAllByStatus(status, pageable),
+            HttpStatus.OK);
+        }
 
         return new ResponseEntity<>(
-                dayOffService.getAllByAccountId(accountId, pageable),
+                dayOffService.getAllByAccountIdAndStatus(accountId, status, pageable),
                 HttpStatus.OK);
-
     }
 }

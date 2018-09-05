@@ -61,6 +61,7 @@ public class RequestsNeedAuthencationToken {
             requestArrayList.add(new Request("\\/api\\/day-offs\\/(\\d+)", new String[]{Method.GET.name(), Method.PUT.name(), Method.DELETE.name()}));
             requestArrayList.add(new Request("\\/api\\/admin\\/day-offs", new String[]{Method.GET.name(), Method.POST.name()}));
             requestArrayList.add(new Request("\\/api\\/admin\\/day-offs\\/(\\d+)", new String[]{Method.GET.name(), Method.PUT.name(), Method.DELETE.name()}));
+            requestArrayList.add(new Request("\\/api\\/admin\\/day-offs\\/(\\d+)\\/answer", new String[]{Method.GET.name(), Method.PUT.name(), Method.DELETE.name()}));
 
             // day-off-accounts
             requestArrayList.add(new Request("\\/api\\/day-off-accounts", new String[]{Method.POST.name(), Method.PUT.name(), Method.GET.name()}));
@@ -72,6 +73,8 @@ public class RequestsNeedAuthencationToken {
             requestArrayList.add(new Request("\\/api\\/day-off-types", new String[]{Method.GET.name(), Method.DELETE.name()}));
             requestArrayList.add(new Request("\\/api\\/day-off-types\\/(\\d+)", new String[]{Method.GET.name(), Method.DELETE.name()}));
             requestArrayList.add(new Request("\\/api\\/admin\\/day-off-types", new String[]{Method.POST.name(), Method.PUT.name(), Method.GET.name()}));
+            requestArrayList.add(new Request("\\/api\\/admin\\/day-off-types\\/(\\d+)", new String[]{Method.GET.name(), Method.DELETE.name()}));
+
 
         }
 

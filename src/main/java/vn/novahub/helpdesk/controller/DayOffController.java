@@ -1,14 +1,17 @@
 package vn.novahub.helpdesk.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import org.apache.http.impl.execchain.RequestAbortedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import vn.novahub.helpdesk.enums.DayOffStatus;
 import vn.novahub.helpdesk.exception.*;
 import vn.novahub.helpdesk.model.Account;
 import vn.novahub.helpdesk.model.DayOff;
@@ -33,7 +36,7 @@ public class DayOffController {
     @JsonView(View.DayOffRespond.class)
     @GetMapping
     public ResponseEntity<Page<DayOff>> getUserLoginDayOffs(@RequestParam(name = "status", required = false, defaultValue = "") String status,
-                                                           Pageable pageable) {
+                                                           Pageable pageable) throws RequestAbortedException {
         Account account = accountService.getAccountLogin();
         return new ResponseEntity<>(
                 dayOffService.getAllByAccountIdAndStatus(account.getId(), status, pageable),
@@ -64,4 +67,23 @@ public class DayOffController {
         return new ResponseEntity<>(newDayOff, HttpStatus.OK);
     }
 
+    @PreAuthorize("isAuthenticated()")
+    @JsonView(View.DayOffRespond.class)
+    @DeleteMapping("/{id}")
+    public ResponseEntity<DayOff> cancel(@PathVariable("id") long id)
+            throws MessagingException,
+            IOException,
+            AccountNotFoundException,
+            DayOffTokenIsNotMatchException,
+            DayOffOverdueException,
+            DayOffIsNotExistException,
+            DayOffIsAnsweredException {
+
+        DayOff dayOff = dayOffService.getById(id);
+
+        if (!dayOff.getStatus().equals(DayOffStatus.PENDING.name())) {
+            throw new AccessDeniedException("User can not cancelled the answered day offs ");
+        }
+        return new ResponseEntity<>(dayOffService.cancel(id), HttpStatus.OK);
+    }
 }
