@@ -162,7 +162,6 @@ public class DayOff {
         this.dayOffAccount = dayOffAccount;
     }
 
-
     @Override
     public String toString() {
         return "DayOff{" +
