@@ -102,12 +102,23 @@ public class DayOffAdminController {
     @JsonView(View.DayOffRespond.class)
     @GetMapping
     public ResponseEntity<Page<DayOff>> getAllDayOffs(
+            @RequestParam(name = "accountId", required = false, defaultValue = "") String accountIdString,
             @RequestParam(name = "status", required = false, defaultValue = "") String status,
             @RequestParam(name= "keyword", required = false, defaultValue = "") String keyword,
             Pageable pageable) {
-        return new ResponseEntity<>(
-                dayOffService.getAllByStatusAndKeyword(status, keyword ,pageable),
-                HttpStatus.OK);
-    }
 
+
+        if (accountIdString.isEmpty()) {
+            return new ResponseEntity<>(
+                    dayOffService.getAllByStatusAndKeyword(status, keyword ,pageable),
+                    HttpStatus.OK);
+        }
+
+        long accountId = Long.parseLong(accountIdString);
+
+        return new ResponseEntity<>(
+                dayOffService.getAllByAccountId(accountId, pageable),
+                HttpStatus.OK);
+
+    }
 }
