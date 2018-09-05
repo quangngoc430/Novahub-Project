@@ -32,8 +32,6 @@ public interface SkillRepository extends PagingAndSortingRepository<Skill, Long>
                                                     @Param("categoryId") long categoryId,
                                                     Pageable pageable);
 
-    Skill getByName(String skillName);
-
     Skill getByNameAndCategoryId(String skillName, long categoryId);
 
     Skill getByIdAndCategoryId(long skillId, long categoryId);

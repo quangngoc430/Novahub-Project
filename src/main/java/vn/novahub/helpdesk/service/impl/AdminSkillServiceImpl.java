@@ -134,7 +134,7 @@ public class AdminSkillServiceImpl implements AdminSkillService {
 
         if(skill.getName() != null &&
            !oldSkill.getName().equals(skill.getName())
-           && skillRepository.getByName(skill.getName()) != null)
+           && skillRepository.getByNameAndCategoryId(skill.getName(), categoryId) != null)
             throw new SkillIsExistException(skill.getName());
 
         oldSkill.setName(skill.getName());
