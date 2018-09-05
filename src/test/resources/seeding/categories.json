@@ -1,0 +1,34 @@
+[
+  {
+    "id": 1,
+    "name": "Industry Knowledge"
+  },
+  {
+    "id": 2,
+    "name": "Tools & Technologies"
+  },
+  {
+    "id": 3,
+    "name": "Interpersonal Skills"
+  },
+  {
+    "id": 4,
+    "name": "Front-end Development"
+  },
+  {
+    "id": 5,
+    "name": "Back-end Development"
+  },
+  {
+    "id": 6,
+    "name": "Web Design"
+  },
+  {
+    "id": 7,
+    "name": "Mobile Development"
+  },
+  {
+    "id": 8,
+    "name": "Programing Language"
+  }
+]

@@ -119,7 +119,5 @@ public class DayOffAdminController {
         return new ResponseEntity<>(
                 dayOffService.getAllByAccountId(accountId, pageable),
                 HttpStatus.OK);
-
     }
-
 }
