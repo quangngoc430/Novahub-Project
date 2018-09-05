@@ -1376,6 +1376,7 @@
             "in": "path",
             "name": "id",
             "required": true,
+            "description": "The ID of user",
             "schema": {
               "type": "integer",
               "format": "int64",
@@ -1572,6 +1573,7 @@
           {
             "in": "path",
             "name": "id",
+            "description": "The ID of user",
             "required": true,
             "schema": {
               "type": "integer",
@@ -1857,6 +1859,7 @@
           {
             "in": "path",
             "name": "id",
+            "description": "The ID of user",
             "required": true,
             "schema": {
               "type": "integer",
@@ -2231,6 +2234,7 @@
           {
             "in": "header",
             "name": "access_token",
+            "description": "The ID of role",
             "required": true,
             "schema": {
               "type": "string",
@@ -2859,6 +2863,7 @@
           {
             "in": "path",
             "name": "id",
+            "description": "The ID of category",
             "required": true,
             "schema": {
               "type": "integer",
@@ -3035,8 +3040,8 @@
         "tags": [
           "Category"
         ],
-        "summary": "Create a category by id (ADMIN)",
-        "description": "Create a category by id (ADMIN)",
+        "summary": "Update a category by id (ADMIN)",
+        "description": "Update a category by id (ADMIN)",
         "parameters": [
           {
             "in": "header",
@@ -3050,6 +3055,7 @@
           {
             "in": "path",
             "name": "id",
+            "description": "The ID of category",
             "required": true,
             "schema": {
               "type": "integer",
@@ -3502,8 +3508,8 @@
         "tags": [
           "Category"
         ],
-        "summary": "Get all skills by category id",
-        "description": "Get all skills by category id",
+        "summary": "Get all skills of the category by category id",
+        "description": "Get all skills of the category by category id",
         "parameters": [
           {
             "in": "header",
@@ -3517,6 +3523,7 @@
           {
             "in": "path",
             "name": "id",
+            "description": "The ID of category",
             "required": true,
             "schema": {
               "type": "integer",
@@ -4010,6 +4017,7 @@
           {
             "in": "path",
             "name": "id",
+            "description": "The ID of skill",
             "required": true,
             "schema": {
               "type": "integer",
@@ -4315,6 +4323,7 @@
           {
             "in": "path",
             "name": "id",
+            "description": "The ID of skill",
             "required": true,
             "schema": {
               "type": "integer",
@@ -5031,6 +5040,7 @@
           {
             "in": "path",
             "name": "id",
+            "description": "The ID of skill",
             "required": true,
             "schema": {
               "type": "integer",
@@ -5213,8 +5223,8 @@
         "tags": [
           "Skill"
         ],
-        "summary": "Get a skill by id",
-        "description": "Get a skill by id",
+        "summary": "Get all users of the skill by skillId",
+        "description": "Get all users of the skill by skillId",
         "parameters": [
           {
             "in": "header",
@@ -5939,6 +5949,7 @@
           {
             "in": "path",
             "name": "id",
+            "description": "The ID of skill",
             "required": true,
             "schema": {
               "type": "integer",
@@ -6136,6 +6147,7 @@
           {
             "in": "path",
             "name": "id",
+            "description": "The ID of skill",
             "required": true,
             "schema": {
               "type": "integer",
@@ -6401,6 +6413,7 @@
           {
             "in": "path",
             "name": "id",
+            "description": "The ID of skill",
             "required": true,
             "schema": {
               "type": "integer",
@@ -6570,8 +6583,8 @@
         "tags": [
           "Skill"
         ],
-        "summary": "Get an skill by id of user login",
-        "description": "Get an skill by id of user login",
+        "summary": "Get all skills of user login by skillId",
+        "description": "Get all skills of user login by skillId",
         "parameters": [
           {
             "in": "header",
@@ -6585,6 +6598,7 @@
           {
             "in": "path",
             "name": "id",
+            "description": "The ID of user",
             "required": true,
             "schema": {
               "type": "integer",
@@ -7037,6 +7051,7 @@
           {
             "in": "path",
             "name": "id",
+            "description": "The ID of issue",
             "required": true,
             "schema": {
               "type": "integer",
@@ -7236,6 +7251,7 @@
           {
             "in": "path",
             "name": "id",
+            "description": "The ID of issue",
             "required": true,
             "schema": {
               "type": "integer",
@@ -7504,6 +7520,7 @@
           {
             "in": "path",
             "name": "id",
+            "description": "The ID of issue",
             "required": true,
             "schema": {
               "type": "integer",
@@ -7688,6 +7705,7 @@
           {
             "in": "query",
             "name": "status",
+            "description": "The ID of issue",
             "required": true,
             "schema": {
               "type": "string",
@@ -7797,12 +7815,13 @@
         "tags": [
           "Issue"
         ],
-        "summary": "APPROVE or DENY issue",
-        "description": "APPROVE or DENY issue with token",
+        "summary": "APPROVE or DENY issue (ADMIN)",
+        "description": "APPROVE or DENY issue with token (ADMIN)",
         "parameters": [
           {
             "in": "path",
             "name": "id",
+            "description": "The ID of issue",
             "required": true,
             "schema": {
               "type": "integer",
@@ -8408,6 +8427,7 @@
           {
             "in": "path",
             "name": "id",
+            "description": "The ID of issue",
             "required": true,
             "schema": {
               "type": "integer",
@@ -8607,6 +8627,7 @@
           {
             "in": "path",
             "name": "id",
+            "description": "The ID of issue",
             "required": true,
             "schema": {
               "type": "integer",
@@ -8825,6 +8846,7 @@
           {
             "in": "path",
             "name": "id",
+            "description": "The ID of issue",
             "required": true,
             "schema": {
               "type": "integer",
