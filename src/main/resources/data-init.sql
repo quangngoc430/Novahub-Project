@@ -34,15 +34,15 @@ INSERT INTO `account_has_skill`(account_id, skill_id, level) VALUES
 (2, 3, 3),
 (2, 6, 10);
 
-INSERT INTO `issue`(title, content, status, account_id)
-VALUES("title", "content", "PENDING", 1);
-INSERT INTO `issue`(title, content, status, account_id)
-VALUES("title1", "content1", "PENDING", 1);
-INSERT INTO `issue`(title, content, status, account_id)
-VALUES("title", "content", "PENDING", 2);
-INSERT INTO `issue`(title, content, status, account_id)
-VALUES("title1", "content1", "PENDING", 2);
-INSERT INTO `issue`(title, content, status, account_id)
-VALUES("title", "content", "PENDING", 3);
-INSERT INTO `issue`(title, content, status, account_id)
-VALUES("title1", "content1", "PENDING", 3);
+INSERT INTO `issue`(title, content, status, account_id, token)
+VALUES("title", "content", "PENDING", 1, '12345');
+INSERT INTO `issue`(title, content, status, account_id, token)
+VALUES("title1", "content1", "PENDING", 1, '12345');
+INSERT INTO `issue`(title, content, status, account_id, token)
+VALUES("title", "content", "PENDING", 2, '12345');
+INSERT INTO `issue`(title, content, status, account_id, token)
+VALUES("title1", "content1", "PENDING", 2, '12345');
+INSERT INTO `issue`(title, content, status, account_id, token)
+VALUES("title", "content", "PENDING", 3, '12345');
+INSERT INTO `issue`(title, content, status, account_id, token)
+VALUES("title1", "content1", "PENDING", 3, '12345');
