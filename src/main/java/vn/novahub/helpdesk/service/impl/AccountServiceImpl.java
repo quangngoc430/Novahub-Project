@@ -76,7 +76,6 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     private AccountHasSkillRepository accountHasSkillRepository;
 
-
     @Override
     public boolean isAccountLogin(long accountId) {
         Account account = getAccountLogin();

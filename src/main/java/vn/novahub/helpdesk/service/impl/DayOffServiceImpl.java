@@ -159,6 +159,8 @@ public class DayOffServiceImpl implements DayOffService {
 
         DayOff dayOff = checkIfRequestIsAnswered(dayOffId);
 
+        dayOff.getDayOffAccount().subtractRemainingTime(dayOff.getNumberOfHours());
+
         answerDayOffRequest(dayOff, DayOffStatus.APPROVED.name());
 
         sendEmailDayOff(dayOff, RoleEnum.EMPLOYEE.name());

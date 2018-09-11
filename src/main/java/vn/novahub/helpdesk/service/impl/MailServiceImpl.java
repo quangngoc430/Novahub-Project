@@ -210,7 +210,6 @@ public class MailServiceImpl implements MailService {
         content = content.replace("{status}", issue.getStatus());
         content = content.replace("{reply-message}", (issue.getReplyMessage() == null) ? "NONE" : issue.getReplyMessage());
         mail.setContent(content);
-        ArrayList<String> emails = new ArrayList<>();
         mail.setEmailReceiving(getEmails(RoleEnum.CLERK.name()).toArray(new String[0]));
 
         sendHTMLMail(mail);

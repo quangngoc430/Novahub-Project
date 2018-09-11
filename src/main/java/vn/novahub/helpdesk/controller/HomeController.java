@@ -7,7 +7,12 @@ import org.springframework.web.bind.annotation.*;
 public class HomeController {
 
     @RequestMapping("/swagger/openapi.json")
-    public String swagger() {
+    public String swaggerFile() {
         return "../swagger/example/openapi.json";
+    }
+
+    @RequestMapping("/swagger")
+    public String swagger() {
+        return "swagger/index.html";
     }
 }
