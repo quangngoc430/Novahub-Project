@@ -9309,7 +9309,7 @@
             }
           },
           "404": {
-            "description": "CommonDayOffType Not found",
+            "description": "DayOffType Not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -9335,7 +9335,7 @@
                     },
                     "message": {
                       "type": "string",
-                      "example": "CommonType is not exist"
+                      "example": "DayOffType is not exist"
                     },
                     "path": {
                       "type": "string",
@@ -10324,6 +10324,14 @@
               "type": "string",
               "example": "dff4d0d4891bfd8bafdb859dac4cbccb218bcf5adc9887a627c6c159f76ef0b9"
             }
+          },
+          {
+            "in": "query",
+            "name": "accountId",
+            "schema": {
+              "type": "string",
+              "example": "1"
+            }
           }
         ],
         "responses": {
@@ -10496,8 +10504,8 @@
         "tags": [
           "DayOffAccount"
         ],
-        "summary": "Admin get all DayOffAccounts or search DayOffAccount by accountId",
-        "description": "Admin get all DayOffAccounts or search DayOffAccount by accountId",
+        "summary": "Admin modify privateQuota of DayOFFAccount",
+        "description": "Admin modify privateQuota of DayOffAccount",
         "parameters": [
           {
             "in": "header",
@@ -10705,8 +10713,8 @@
         "tags": [
           "DayOff"
         ],
-        "summary": "User get DayOff by status (APPROVED, DENIED, CANCELLED)",
-        "description": "User get DayOff by status (APPROVED, DENIED, CANCELLED)",
+        "summary": "User get DayOff by status (PENDING or not)",
+        "description": "If user request without parameter (status=PENDING), it will return all users dayoffs which were answer(APPROVED, DENIED, CANCELLED). Otherwise, return list dayoffs with status=PENDING",
         "parameters": [
           {
             "in": "header",
@@ -11134,8 +11142,8 @@
         "tags": [
           "DayOff"
         ],
-        "summary": "User get DayOff by status (APPROVED, DENIED, CANCELLED)",
-        "description": "User get DayOff by status (APPROVED, DENIED, CANCELLED)",
+        "summary": "User get DayOff by id",
+        "description": "User get DayOff by id",
         "parameters": [
           {
             "in": "header",
@@ -11478,8 +11486,8 @@
         "tags": [
           "DayOff"
         ],
-        "summary": "Admin get day off by status and keyword",
-        "description": "User get DayOff by status (APPROVED, DENIED, CANCELLED)",
+        "summary": "Admin get DayOff by status (PENDING or not)",
+        "description": "If admin request without parameter (status=PENDING), it will return all users dayoffs which were answer(APPROVED, DENIED, CANCELLED). Otherwise, return list dayoffs with status=PENDING",
         "parameters": [
           {
             "in": "header",
@@ -11493,35 +11501,38 @@
           {
             "in": "query",
             "name": "status",
-            "required": true,
+            "required": false,
             "schema": {
               "type": "string",
-              "enum": [
-                "APPROVED",
-                "DENIED",
-                "CANCELLED",
-                "NONCANCELLED"
-              ],
-              "example": "APPROVED"
-            }
-          },
-          {
-            "in": "query",
-            "name": "keyword",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "hepdesk@novahub.vn"
+              "example": "PENDING"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Admin answer day off request successfully",
+            "description": "Admin get day off request successfully",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DayOff"
+                  "$ref": "#/components/schemas/Sort",
+                  "properties": {
+                    "content": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/DayOff",
+                        "properties": {
+                          "dayOffAccount": {
+                            "$ref": "#/components/schemas/DayOffAccount",
+                            "properties": {
+                              "dayOffType": {
+                                "$ref": "#/components/schemas/DayOffType"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }
