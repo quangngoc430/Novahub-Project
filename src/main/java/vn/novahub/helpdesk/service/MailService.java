@@ -1,5 +1,6 @@
 package vn.novahub.helpdesk.service;
 
+import org.springframework.context.annotation.Lazy;
 import vn.novahub.helpdesk.exception.AccountNotFoundException;
 import vn.novahub.helpdesk.model.Account;
 import vn.novahub.helpdesk.model.Issue;
@@ -9,6 +10,7 @@ import javax.mail.MessagingException;
 import java.io.IOException;
 import java.util.ArrayList;
 
+@Lazy
 public interface MailService {
 
     void sendSimpleMail(Mail mail);

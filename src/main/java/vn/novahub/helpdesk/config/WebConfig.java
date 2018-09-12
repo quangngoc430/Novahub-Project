@@ -11,6 +11,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 
 import java.util.List;
 
@@ -42,4 +43,11 @@ public class WebConfig implements WebMvcConfigurer {
 
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private abstract class IgnoreHibernatePropertiesInJackson{ }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry
+          .addResourceHandler("/resources/**")
+          .addResourceLocations("classpath:/templates/swagger/"); 
+    }
 }

@@ -52,7 +52,7 @@ public class RequestsNeedAuthencationToken {
             // issues
             requestArrayList.add(new Request("\\/api\\/admin\\/issues", new String[]{Method.GET.name()}));
             requestArrayList.add(new Request("\\/api\\/admin\\/issues\\/(\\d+)", new String[]{Method.GET.name(), Method.PUT.name(), Method.DELETE.name()}));
-            requestArrayList.add(new Request("\\/api\\/admin\\/issues\\/(\\d+)\\/action", new String[]{Method.GET.name()}));
+            requestArrayList.add(new Request("\\/api\\/admin\\/issues\\/(\\d+)\\/action", new String[]{Method.PUT.name()}));
             requestArrayList.add(new Request("\\/api\\/issues\\/me", new String[]{Method.GET.name(), Method.POST.name()}));
             requestArrayList.add(new Request("\\/api\\/issues\\/me\\/(\\d+)", new String[]{Method.GET.name(), Method.PUT.name(), Method.DELETE.name()}));
 
