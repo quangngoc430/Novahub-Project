@@ -30,12 +30,12 @@ public class DayOffTypeAdminController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PutMapping
-    public ResponseEntity<DayOffType> update(@RequestBody DayOffType newDayOffType)
+    @PutMapping("/{id}")
+    public ResponseEntity<DayOffType> update(@RequestBody DayOffType newDayOffType,
+                                             @PathVariable("id") int id)
                                                     throws DayOffTypeNotFoundException {
-
+        newDayOffType.setId(id);
         DayOffType dayOffType = dayOffTypeService.update(newDayOffType);
-
         return new ResponseEntity<>(dayOffType, HttpStatus.OK);
     }
 
