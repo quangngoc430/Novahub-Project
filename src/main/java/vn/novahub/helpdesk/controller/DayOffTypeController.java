@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import vn.novahub.helpdesk.exception.DayOffTypeNotFoundException;
+import vn.novahub.helpdesk.exception.dayofftype.DayOffTypeNotFoundException;
 import vn.novahub.helpdesk.model.DayOffType;
 import vn.novahub.helpdesk.service.DayOffTypeService;
 import java.util.List;

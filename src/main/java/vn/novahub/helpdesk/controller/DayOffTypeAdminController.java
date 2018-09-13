@@ -6,8 +6,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import vn.novahub.helpdesk.exception.DayOffTypeExistException;
-import vn.novahub.helpdesk.exception.DayOffTypeNotFoundException;
+import vn.novahub.helpdesk.exception.dayofftype.DayOffTypeExistException;
+import vn.novahub.helpdesk.exception.dayofftype.DayOffTypeNotFoundException;
 import vn.novahub.helpdesk.model.DayOffType;
 import vn.novahub.helpdesk.service.DayOffTypeService;
 
@@ -42,7 +42,7 @@ public class DayOffTypeAdminController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<DayOffType> delete(@PathVariable("id") int id)
-                                                    throws DayOffTypeNotFoundException {
+            throws DayOffTypeNotFoundException, DayOffTypeExistException {
 
         DayOffType dayOffType = dayOffTypeService.delete(id);
 
