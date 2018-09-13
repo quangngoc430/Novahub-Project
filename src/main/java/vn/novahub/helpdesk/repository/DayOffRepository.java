@@ -49,7 +49,7 @@ public interface DayOffRepository extends PagingAndSortingRepository<DayOff, Lon
             "JOIN DayOffType dayOffType " +
             "ON dayOffAccount.dayOffTypeId = dayOffType.id " +
             "WHERE dayOffType.type = :type")
-    List<DayOff> findByType(@Param("type") String type);
+    Page<DayOff> findByType(@Param("type") String type, Pageable pageable);
 
     @Query("SELECT dayOff " +
             "FROM DayOff dayOff " +
