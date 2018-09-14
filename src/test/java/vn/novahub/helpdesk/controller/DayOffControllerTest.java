@@ -9,8 +9,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
+import vn.novahub.helpdesk.enums.DayOffStatus;
 import vn.novahub.helpdesk.exception.AccountNotFoundException;
-import vn.novahub.helpdesk.exception.dayoff.DayOffIsNotExistException;
+import vn.novahub.helpdesk.exception.dayoff.DayOffNotFoundException;
 import vn.novahub.helpdesk.exception.dayofftype.DayOffTypeNotFoundException;
 import vn.novahub.helpdesk.exception.RoleNotFoundException;
 import vn.novahub.helpdesk.model.Account;
@@ -26,6 +27,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -106,7 +108,7 @@ public class DayOffControllerTest extends BaseControllerTest {
     public void testGetById_dayOffIsNotExist() throws Exception {
         Account adminAccount = accounts.get(0);
         given(accountService.getAccountLogin()).willReturn(adminAccount);
-        given(dayOffService.getById(5L)).willThrow(new DayOffIsNotExistException(5L));
+        given(dayOffService.getById(5L)).willThrow(new DayOffNotFoundException(5L));
 
         mvc.perform(get("/api/day-offs/5")
                 .with(user(EMAIL).password(PASSWORD))
@@ -161,6 +163,25 @@ public class DayOffControllerTest extends BaseControllerTest {
                 .content(json))
                 .andDo(print())
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void testCancel() throws Exception {
+
+        given(dayOffService.getById(2)).willReturn(dayOffs.get(1));
+        given(dayOffService.getById(1)).willReturn(dayOffs.get(0));
+
+        mvc.perform(delete("/api/day-offs/2")
+                .with(user(EMAIL).password(PASSWORD))
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk());
+
+        mvc.perform(delete("/api/day-offs/1")
+                .with(user(EMAIL).password(PASSWORD))
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isUnauthorized());
     }
 
     private DayOff mockDayOff() {

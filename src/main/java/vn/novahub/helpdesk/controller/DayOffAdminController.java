@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import vn.novahub.helpdesk.enums.DayOffStatus;
 import vn.novahub.helpdesk.exception.*;
 import vn.novahub.helpdesk.exception.dayoff.DayOffIsAnsweredException;
-import vn.novahub.helpdesk.exception.dayoff.DayOffIsNotExistException;
+import vn.novahub.helpdesk.exception.dayoff.DayOffNotFoundException;
 import vn.novahub.helpdesk.exception.dayoff.DayOffOverdueException;
 import vn.novahub.helpdesk.exception.dayoff.DayOffTokenIsNotMatchException;
 import vn.novahub.helpdesk.model.DayOff;
@@ -38,8 +38,8 @@ public class DayOffAdminController {
                                           @RequestParam("status") String status,
                                           @RequestParam(name = "token") String token)
                                              throws DayOffIsAnsweredException,
-            DayOffTokenIsNotMatchException,
-            DayOffIsNotExistException,
+                                                    DayOffTokenIsNotMatchException,
+                                                    DayOffNotFoundException,
                                                     MessagingException,
                                                     AccountNotFoundException,
                                                     IOException {
@@ -48,7 +48,7 @@ public class DayOffAdminController {
         try {
             dayOffStatus = DayOffStatus.valueOf(status);
         } catch (Exception e) {
-            throw new RequestAbortedException("The parameter \'status\' is not valid");
+            throw new DayOffNotFoundException("The parameter \'status\' is not valid");
         }
 
         switch (dayOffStatus) {
@@ -59,7 +59,7 @@ public class DayOffAdminController {
                 dayOff = dayOffService.deny(dayOffId, token);
                break;
             default:
-                throw new RequestAbortedException("The parameter \'status\' is not valid");
+                throw new DayOffNotFoundException("The parameter \'status\' is not valid");
         }
         return new ResponseEntity<>(dayOff, HttpStatus.OK);
     }
@@ -71,7 +71,7 @@ public class DayOffAdminController {
                                                   @RequestParam("status") String status)
             throws DayOffIsAnsweredException,
             DayOffTokenIsNotMatchException,
-            DayOffIsNotExistException,
+            DayOffNotFoundException,
             MessagingException,
             AccountNotFoundException,
             DayOffOverdueException,
@@ -83,7 +83,7 @@ public class DayOffAdminController {
         try {
             dayOffStatus = DayOffStatus.valueOf(status);
         } catch (Exception e) {
-            throw new RequestAbortedException("The parameter \'status\' is not valid");
+            throw new DayOffNotFoundException("The parameter \'status\' is not valid");
         }
 
         switch (dayOffStatus) {
@@ -97,7 +97,7 @@ public class DayOffAdminController {
                 dayOff = dayOffService.cancel(dayOffId);
                 break;
             default:
-                throw new RequestAbortedException("The parameter \'status\' is not valid");
+                throw new DayOffNotFoundException("The parameter \'status\' is not valid");
         }
         return new ResponseEntity<>(dayOff, HttpStatus.OK);
     }
@@ -111,7 +111,7 @@ public class DayOffAdminController {
             Pageable pageable) {
 
         long accountId = 0;
-        if (!accountIdString.isEmpty()) {
+        if (!accountIdString.equals("")) {
             accountId = Long.parseLong(accountIdString);
         }
 

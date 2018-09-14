@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import vn.novahub.helpdesk.exception.dayoff.DayOffIsAnsweredException;
-import vn.novahub.helpdesk.exception.dayoff.DayOffIsNotExistException;
+import vn.novahub.helpdesk.exception.dayoff.DayOffNotFoundException;
 import vn.novahub.helpdesk.exception.dayoff.DayOffOverdueException;
 import vn.novahub.helpdesk.exception.dayoff.DayOffTokenIsNotMatchException;
 import vn.novahub.helpdesk.model.ApiError;
@@ -67,7 +67,7 @@ public class DayOffExceptionHandler {
         return new ResponseEntity<>(this.apiError, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(value = DayOffIsNotExistException.class)
+    @ExceptionHandler(value = DayOffNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<ApiError> handleDayOffIsNotExistException(HttpServletRequest request, Exception ex){
         String message = "Day off is not exist exception";

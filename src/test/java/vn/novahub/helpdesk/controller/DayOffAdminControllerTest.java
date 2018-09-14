@@ -11,6 +11,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import vn.novahub.helpdesk.enums.DayOffStatus;
 import vn.novahub.helpdesk.exception.RoleNotFoundException;
+import vn.novahub.helpdesk.exception.dayoff.DayOffNotFoundException;
+import vn.novahub.helpdesk.exception.dayofftype.DayOffTypeNotFoundException;
 import vn.novahub.helpdesk.model.Account;
 import vn.novahub.helpdesk.model.DayOff;
 import vn.novahub.helpdesk.service.AccountService;
@@ -79,14 +81,23 @@ public class DayOffAdminControllerTest extends BaseControllerTest {
                 .andExpect(jsonPath("$.status", is(status)));
     }
 
-    @Test(expected = RequestAbortedException.class)
+    @Test
     public void testAnswerWithToken_exception() throws Exception {
-        String status = "wrong status";
+        String status1 = "wrong status";
+        String status2 = DayOffStatus.PENDING.name();
         mvc.perform(get("/api/admin/day-offs/1/answer-token")
                 .with(user(EMAIL).password(PASSWORD))
-                .param("status", status)
+                .param("status", status1)
                 .param("token", "12345")
-                .contentType(MediaType.APPLICATION_JSON));
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+
+        mvc.perform(get("/api/admin/day-offs/1/answer-token")
+                .with(user(EMAIL).password(PASSWORD))
+                .param("status", status2)
+                .param("token", "12345")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -134,19 +145,27 @@ public class DayOffAdminControllerTest extends BaseControllerTest {
                 .andExpect(jsonPath("$.status", is(status)));
     }
 
-    @Test(expected = RequestAbortedException.class)
+    @Test
     public void testAnswer_exception() throws Exception {
-        String status = "wrong status";
+        String status1 = "wrong status";
+        String status2 = DayOffStatus.PENDING.name();
         mvc.perform(get("/api/admin/day-offs/1/answer")
                 .with(user(EMAIL).password(PASSWORD))
-                .param("status", status)
-                .contentType(MediaType.APPLICATION_JSON));
+                .param("status", status1)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+
+        mvc.perform(get("/api/admin/day-offs/1/answer")
+                .with(user(EMAIL).password(PASSWORD))
+                .param("status", status2)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 
     @Test
     public void testGetAll() throws Exception {
 
-        given(dayOffService.getAllByAccountIdAndStatus(0, "", PageRequest.of(0, 20)))
+        given(dayOffService.getAllByStatus("", PageRequest.of(0, 20)))
                             .willReturn(new PageImpl<>(dayOffs));
 
         mvc.perform(get("/api/admin/day-offs")
@@ -154,5 +173,18 @@ public class DayOffAdminControllerTest extends BaseControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()", is(3)));
+    }
+
+    @Test
+    public void testGetAllByAccountId() throws Exception {
+        dayOffs.remove(2);
+        given(dayOffService.getAllByAccountIdAndStatus(1,"", PageRequest.of(0, 20)))
+                .willReturn(new PageImpl<>(dayOffs));
+
+        mvc.perform(get("/api/admin/day-offs?accountId=1")
+                .with(user(EMAIL).password(PASSWORD))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content.length()", is(2)));
     }
 }

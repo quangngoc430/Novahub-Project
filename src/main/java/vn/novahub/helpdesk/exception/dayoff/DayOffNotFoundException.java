@@ -4,9 +4,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(code = HttpStatus.NOT_FOUND, reason = "Day off is already answered")
-public class DayOffIsNotExistException extends Exception{
+public class DayOffNotFoundException extends Exception{
 
-    public DayOffIsNotExistException(long id){
+    public DayOffNotFoundException(long id){
         super("Day off with id = " + id + " is not exist");
     }
+    public DayOffNotFoundException(String message){
+        super(message);
+    }
+
 }
