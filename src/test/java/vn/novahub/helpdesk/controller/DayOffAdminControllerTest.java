@@ -1,7 +1,6 @@
 package vn.novahub.helpdesk.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import org.apache.http.impl.execchain.RequestAbortedException;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -11,11 +10,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import vn.novahub.helpdesk.enums.DayOffStatus;
 import vn.novahub.helpdesk.exception.RoleNotFoundException;
-import vn.novahub.helpdesk.exception.dayoff.DayOffNotFoundException;
-import vn.novahub.helpdesk.exception.dayofftype.DayOffTypeNotFoundException;
 import vn.novahub.helpdesk.model.Account;
 import vn.novahub.helpdesk.model.DayOff;
-import vn.novahub.helpdesk.service.AccountService;
 import vn.novahub.helpdesk.service.DayOffService;
 
 import java.io.IOException;
