@@ -3,7 +3,7 @@
   "servers": [
     {
       "description": "Development server",
-      "url": "https://http://helpdesk-develop.herokuapp.com//api"
+      "url": "https:/helpdesk-develop.herokuapp.com/api"
     }
   ],
   "info": {
