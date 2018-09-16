@@ -262,17 +262,6 @@ public class AccountSkillServiceImpl implements AccountSkillService {
                     break;
                 }
             }
-            skill.setAccounts(new ArrayList<>());
-            for (AccountHasSkill accountHasSkill : accountHasSkills) {
-                if (accountHasSkill.getSkillId() == skill.getId()) {
-                    for (Account account : accounts) {
-                        if(account.getId() == accountHasSkill.getAccountId()) {
-                            skill.getAccounts().add(account);
-                            break;
-                        }
-                    }
-                }
-            }
         }
 
         return skillPage;
