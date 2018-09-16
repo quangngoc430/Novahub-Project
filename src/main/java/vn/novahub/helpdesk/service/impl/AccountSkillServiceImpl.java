@@ -3,6 +3,7 @@ package vn.novahub.helpdesk.service.impl;
 import org.apache.commons.collections.IteratorUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import vn.novahub.helpdesk.exception.*;
@@ -227,41 +228,25 @@ public class AccountSkillServiceImpl implements AccountSkillService {
     public Page<Skill> search(List<Long> skillIds, Pageable pageable) {
         Page<Skill> skillPage;
 
-        if (skillIds.isEmpty()) {
-            skillPage = skillRepository.findAll(pageable);
-            for (Skill skill : skillPage.getContent()) {
-                skillIds.add(skill.getId());
-            }
-        }
+        if (skillIds.isEmpty())
+            skillPage = skillRepository.getAllByIdIsIn( pageable);
         else
             skillPage = skillRepository.getAllByIdIsIn(skillIds, pageable);
 
-        List<Skill> skills = IteratorUtils.toList(skillRepository.findAll().iterator());
         List<Category> categories = IteratorUtils.toList(categoryRepository.findAll().iterator());
-        List<AccountHasSkill> accountHasSkills = IteratorUtils.toList(accountHasSkillRepository.findAll().iterator());
-        List<Account> accounts = accountRepository.getAllBySkillIdIsIn(skillIds);
 
-        for (Account account : accounts) {
-            account.setSkills(new ArrayList<>());
-            for (AccountHasSkill accountHasSkill : accountHasSkills) {
-                if (accountHasSkill.getAccountId() == account.getId()) {
-                    for (Skill skill : skills) {
-                        if (skill.getId() == accountHasSkill.getSkillId()) {
-                            account.getSkills().add(new Skill(skill.getId(), skill.getName(), accountHasSkill.getLevel(), skill.getCategoryId(), skill.getCreatedAt(), skill.getUpdatedAt()));
-                            break;
-                        }
-                    }
+        int count = 0;
+        for (int i = 0; i < categories.size(); i++) {
+
+            for (int j = 0; j < skillPage.getContent().size(); j++) {
+                if (skillPage.getContent().get(j).getCategoryId() == categories.get(i).getId()) {
+                    skillPage.getContent().get(j).setCategory(categories.get(i));
+                    count++;
                 }
             }
-        }
 
-        for (Skill skill : skillPage.getContent()) {
-            for (Category category : categories) {
-                if (skill.getCategoryId() == category.getId()) {
-                    skill.setCategory(category);
-                    break;
-                }
-            }
+            if (count == skillPage.getContent().size())
+                break;
         }
 
         return skillPage;

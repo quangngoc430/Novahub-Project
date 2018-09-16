@@ -147,6 +147,17 @@ public class Account implements Serializable {
     @Transient
     private Token accessToken;
 
+    public Account() {
+        super();
+    }
+
+    public Account(long accountId, String firstName, String lastName) {
+        super();
+        this.id = accountId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
     public long getId() {
         return id;
     }

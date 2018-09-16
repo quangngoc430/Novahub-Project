@@ -92,12 +92,22 @@ public class Skill implements Serializable {
         this.level = level;
     }
 
-    public Skill(long id, String name, long level, Account account) {
+    public Skill(long id, String name, long categoryId, long level, Account account) {
         super();
         this.id = id;
         this.name = name;
         this.level = level;
+        this.categoryId = categoryId;
         this.account = account;
+    }
+
+    public Skill(long id, String name, long categoryId, long level, long accountId, String firstName, String lastName) {
+        super();
+        this.id = id;
+        this.name = name;
+        this.level = level;
+        this.categoryId = categoryId;
+        this.account = new Account(accountId, firstName, lastName);
     }
 
     public Skill(long id, String name, long level, long categoryId, Date createdAt, Date updatedAt) {
