@@ -61,7 +61,7 @@ public class Skill implements Serializable {
     @Column(name = "updated_at")
     private Date updatedAt = new Date();
 
-    @JsonView({View.Public.class, View.AccountWithSkillsAndCategory.class})
+    @JsonView({View.Public.class})
     @JsonProperty(value = "category_id")
     @NotNull(message = "category_id is not null", groups = {GroupCreateSkill.class, GroupUpdateSkill.class})
     @Column(name = "category_id")
