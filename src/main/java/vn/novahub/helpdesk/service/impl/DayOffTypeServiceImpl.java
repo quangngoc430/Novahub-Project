@@ -7,7 +7,9 @@ import org.springframework.stereotype.Service;
 import vn.novahub.helpdesk.exception.dayofftype.DayOffTypeExistException;
 import vn.novahub.helpdesk.exception.dayofftype.DayOffTypeNotFoundException;
 import vn.novahub.helpdesk.model.DayOff;
+import vn.novahub.helpdesk.model.DayOffAccount;
 import vn.novahub.helpdesk.model.DayOffType;
+import vn.novahub.helpdesk.repository.DayOffAccountRepository;
 import vn.novahub.helpdesk.repository.DayOffRepository;
 import vn.novahub.helpdesk.repository.DayOffTypeRepository;
 import vn.novahub.helpdesk.service.DayOffTypeService;
@@ -23,6 +25,9 @@ public class DayOffTypeServiceImpl implements DayOffTypeService {
 
     @Autowired
     private DayOffRepository dayOffRepository;
+
+    @Autowired
+    private DayOffAccountRepository dayOffAccountRepository;
 
     @Override
     public List<DayOffType> getAllDayOffType() {
@@ -86,6 +91,10 @@ public class DayOffTypeServiceImpl implements DayOffTypeService {
         if (dayOffs.getTotalElements() != 0) {
             throw new DayOffTypeExistException("This dayOffType can not be deleted because some dayOff reference to it");
         }
+
+        List<DayOffAccount> dayOffAccounts = dayOffAccountRepository.findByDayOffTypeId(id);
+
+        dayOffAccountRepository.deleteAll(dayOffAccounts);
 
         dayOffTypeRepository.delete(currentDayOffType.get());
 
