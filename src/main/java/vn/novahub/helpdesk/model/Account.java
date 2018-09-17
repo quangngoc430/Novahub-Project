@@ -151,27 +151,6 @@ public class Account implements Serializable {
     @Transient
     private AccountHasSkill accountHasSkill;
 
-    public Account() {
-        super();
-    }
-
-    public Account(long id, String email, String firstName, String lastName) {
-        super();
-        this.id = id;
-        this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
-    }
-
-    public Account(long id, String email, String firstName, String lastName, long skillId, long accountId, long level) {
-        super();
-        this.id = id;
-        this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.accountHasSkill = new AccountHasSkill(level, skillId, accountId);
-    }
-
     public long getId() {
         return id;
     }
