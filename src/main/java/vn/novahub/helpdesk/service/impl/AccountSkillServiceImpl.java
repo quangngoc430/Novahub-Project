@@ -244,7 +244,7 @@ public class AccountSkillServiceImpl implements AccountSkillService {
         if (skillIds.isEmpty()) {
             skills = skillRepository.findAllSkillsWithLevel(accountIds, new Sort(Sort.Direction.ASC, "id"));
         } else {
-            skills = skillRepository.findAllBySkillIdsIn(skillIds, accountIds, new Sort(Sort.Direction.ASC, "id"));
+            skills = skillRepository.findAllByIdsIn(skillIds, accountIds, new Sort(Sort.Direction.ASC, "id"));
         }
 
         List<Category> categories = IteratorUtils.toList(categoryRepository.findAll().iterator());
