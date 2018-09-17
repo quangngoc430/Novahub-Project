@@ -151,9 +151,10 @@ public class Account implements Serializable {
         super();
     }
 
-    public Account(long accountId, String firstName, String lastName) {
+    public Account(long accountId, String email, String firstName, String lastName) {
         super();
         this.id = accountId;
+        this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
     }
