@@ -147,10 +147,6 @@ public class Account implements Serializable {
     @Transient
     private Token accessToken;
 
-    @JsonIgnore
-    @Transient
-    private AccountHasSkill accountHasSkill;
-
     public long getId() {
         return id;
     }
@@ -317,14 +313,6 @@ public class Account implements Serializable {
 
     public void setSkills(List<Skill> skills) {
         this.skills = skills;
-    }
-
-    public AccountHasSkill getAccountHasSkill() {
-        return accountHasSkill;
-    }
-
-    public void setAccountHasSkill(AccountHasSkill accountHasSkill) {
-        this.accountHasSkill = accountHasSkill;
     }
 
     @Transient
