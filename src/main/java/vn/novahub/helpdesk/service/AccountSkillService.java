@@ -32,6 +32,6 @@ public interface AccountSkillService {
 
     Page<Skill> getAllByAccountId(long accountId, Pageable pageable) throws AccountNotFoundException;
 
-    Page<Skill> search(List<Long> skillIds, Pageable pageable);
+    Page<Account> search(List<Long> skillIds, Pageable pageable);
 
 }

@@ -241,34 +241,34 @@ public class SkillRepositoryTest extends BaseRepositoryTest {
         assertEquals(actual.getContent().get(0).getLevel(), expected.getContent().get(0).getLevel());
     }
 
-    @Test
-    public void testGetAllByIsIn() {
-        List<Long> skillIds = new ArrayList<>();
-        skillIds.add(1L);
-        skillIds.add(4L);
-        skillIds.add(7L);
-
-        List<Skill> skills = IteratorUtils.toList(skillRepository.findAll().iterator());
-        boolean check;
-
-        for (int i = skills.size() - 1; i >= 0; i--) {
-            check = false;
-            for (int j = skillIds.size() - 1; j >= 0; j--) {
-                if (skills.get(i).getId() == skillIds.get(j)) {
-                    check = true;
-                    break;
-                }
-            }
-            if (!check)
-                skills.remove(i);
-        }
-
-        Page<Skill> actual = skillRepository.getAllByIdIsIn(skillIds, new PageRequest(0, 20));
-        Page<Skill> expected = new PageImpl<>(skills);
-
-        assertEquals(actual.getTotalElements(), expected.getTotalElements());
-        assertEquals(actual.getContent().get(0).getName(), expected.getContent().get(0).getName());
-    }
+//    @Test
+//    public void testGetAllByIsIn() {
+//        List<Long> skillIds = new ArrayList<>();
+//        skillIds.add(1L);
+//        skillIds.add(4L);
+//        skillIds.add(7L);
+//
+//        List<Skill> skills = IteratorUtils.toList(skillRepository.findAll().iterator());
+//        boolean check;
+//
+//        for (int i = skills.size() - 1; i >= 0; i--) {
+//            check = false;
+//            for (int j = skillIds.size() - 1; j >= 0; j--) {
+//                if (skills.get(i).getId() == skillIds.get(j)) {
+//                    check = true;
+//                    break;
+//                }
+//            }
+//            if (!check)
+//                skills.remove(i);
+//        }
+//
+//        Page<Skill> actual = skillRepository.getAllByIdIsIn(skillIds, new PageRequest(0, 20));
+//        Page<Skill> expected = new PageImpl<>(skills);
+//
+//        assertEquals(actual.getTotalElements(), expected.getTotalElements());
+//        assertEquals(actual.getContent().get(0).getName(), expected.getContent().get(0).getName());
+//    }
 
     private void initData() throws IOException {
         roleRepository.saveAll(convertJsonFileToObjectList(

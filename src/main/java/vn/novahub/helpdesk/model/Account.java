@@ -144,6 +144,10 @@ public class Account implements Serializable {
     @Transient
     private List<Skill> skills;
 
+    @JsonView({View.AccountWithSkillsAndCategory.class})
+    @Transient
+    private Skill skill;
+
     @Transient
     private Token accessToken;
 
@@ -151,12 +155,13 @@ public class Account implements Serializable {
         super();
     }
 
-    public Account(long accountId, String email, String firstName, String lastName) {
+    public Account(long id, String email, String firstName, String lastName, long skillId, String skillName, long level, long categoryId) {
         super();
-        this.id = accountId;
+        this.id = id;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.skill = new Skill(skillId, skillName, level, categoryId);
     }
 
     public long getId() {
@@ -311,7 +316,6 @@ public class Account implements Serializable {
         this.joiningDate = joiningDate;
     }
 
-
     public Token getAccessToken() {
         return accessToken;
     }
@@ -326,6 +330,14 @@ public class Account implements Serializable {
 
     public void setSkills(List<Skill> skills) {
         this.skills = skills;
+    }
+
+    public Skill getSkill() {
+        return skill;
+    }
+
+    public void setSkill(Skill skill) {
+        this.skill = skill;
     }
 
     @Transient

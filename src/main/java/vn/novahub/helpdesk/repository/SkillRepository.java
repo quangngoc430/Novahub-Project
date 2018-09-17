@@ -66,17 +66,4 @@ public interface SkillRepository extends PagingAndSortingRepository<Skill, Long>
                                   Pageable pageable);
 
     boolean deleteByIdAndCategoryId(long skillId, long categoryId);
-
-    @Query("SELECT new Skill(skill.id, skill.name, skill.categoryId, accountHasSkill.level, account.id, account.email, account.firstName, account.lastName) " +
-           "FROM Skill skill " +
-           "JOIN AccountHasSkill accountHasSkill ON accountHasSkill.skillId = skill.id " +
-           "JOIN Account account ON account.id = accountHasSkill.accountId " +
-           "WHERE accountHasSkill.skillId IN :skillIds")
-    Page<Skill> getAllByIdIsIn(@Param("skillIds") List<Long> skillIds, Pageable pageable);
-
-    @Query("SELECT new Skill(skill.id, skill.name, skill.categoryId, accountHasSkill.level, account.id, account.email, account.firstName, account.lastName) " +
-           "FROM Skill skill " +
-           "JOIN AccountHasSkill accountHasSkill ON accountHasSkill.skillId = skill.id " +
-           "JOIN Account account ON account.id = accountHasSkill.accountId")
-    Page<Skill> getAllByIdIsIn(Pageable pageable);
 }

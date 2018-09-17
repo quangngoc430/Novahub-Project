@@ -45,7 +45,7 @@ public class SkillController {
     @JsonView(View.AccountWithSkillsAndCategory.class)
     @PreAuthorize("isAuthenticated()")
     @GetMapping(path = "/search", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Page<Skill>> search(@RequestParam(name = "id", required = false, defaultValue = "") String skillIds,
+    public ResponseEntity<Page<Account>> search(@RequestParam(name = "id", required = false, defaultValue = "") String skillIds,
                                               Pageable pageable) throws BadRequestException {
         String[] ids = skillIds.split(",");
         List<Long> skillIdList = new ArrayList<>();

@@ -225,31 +225,31 @@ public class AccountSkillServiceImpl implements AccountSkillService {
     }
 
     @Override
-    public Page<Skill> search(List<Long> skillIds, Pageable pageable) {
-        Page<Skill> skillPage;
+    public Page<Account> search(List<Long> skillIds, Pageable pageable) {
+        Page<Account> accountPage;
 
         if (skillIds.isEmpty())
-            skillPage = skillRepository.getAllByIdIsIn( pageable);
+            accountPage = accountRepository.getAllBySkillIdIsIn( pageable);
         else
-            skillPage = skillRepository.getAllByIdIsIn(skillIds, pageable);
+            accountPage = accountRepository.getAllBySkillIdIsIn(skillIds, pageable);
 
         List<Category> categories = IteratorUtils.toList(categoryRepository.findAll().iterator());
 
         int count = 0;
         for (int i = 0; i < categories.size(); i++) {
 
-            for (int j = 0; j < skillPage.getContent().size(); j++) {
-                if (skillPage.getContent().get(j).getCategoryId() == categories.get(i).getId()) {
-                    skillPage.getContent().get(j).setCategory(categories.get(i));
+            for (int j = 0; j < accountPage.getContent().size(); j++) {
+                if (accountPage.getContent().get(j).getSkill().getCategoryId() == categories.get(i).getId()) {
+                    accountPage.getContent().get(j).getSkill().setCategory(categories.get(i));
                     count++;
                 }
             }
 
-            if (count == skillPage.getContent().size())
+            if (count == accountPage.getContent().size())
                 break;
         }
 
-        return skillPage;
+        return accountPage;
     }
 
 }

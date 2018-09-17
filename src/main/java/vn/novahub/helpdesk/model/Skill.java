@@ -80,9 +80,6 @@ public class Skill implements Serializable {
     @Transient
     private List<Account> accounts;
 
-    @Transient
-    private Account account;
-
     public Skill() {}
 
     public Skill(long id, String name, long level) {
@@ -92,13 +89,12 @@ public class Skill implements Serializable {
         this.level = level;
     }
 
-    public Skill(long id, String name, long categoryId, long level, long accountId, String email, String firstName, String lastName) {
+    public Skill(long id, String name, long level, long categoryId) {
         super();
         this.id = id;
         this.name = name;
         this.level = level;
         this.categoryId = categoryId;
-        this.account = new Account(accountId, email, firstName, lastName);
     }
 
     public Skill(long id, String name, long level, long categoryId, Date createdAt, Date updatedAt) {
@@ -194,14 +190,6 @@ public class Skill implements Serializable {
 
     public void setAccounts(List<Account> accounts) {
         this.accounts = accounts;
-    }
-
-    public Account getAccount() {
-        return account;
-    }
-
-    public void setAccount(Account account) {
-        this.account = account;
     }
 
     public Category getCategory() {

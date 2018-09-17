@@ -7,6 +7,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import vn.novahub.helpdesk.model.Account;
+import vn.novahub.helpdesk.model.Skill;
 
 import java.util.List;
 
@@ -74,10 +75,16 @@ public interface AccountRepository extends PagingAndSortingRepository<Account, L
            "WHERE accountHasSkill.skillId = :skillId")
     Page<Account> getAllBySkillId(@Param("skillId") long skillId, Pageable pageable);
 
-    @Query("SELECT account " +
-           "FROM AccountHasSkill accountHasSkill " +
-           "JOIN Account account ON accountHasSkill.accountId = account.id " +
+    @Query("SELECT new Account(account.id, account.email, account.firstName, account.lastName, skill.id, skill.name, accountHasSkill.level, skill.categoryId) " +
+           "FROM Account account " +
+           "JOIN AccountHasSkill accountHasSkill ON accountHasSkill.accountId = account.id " +
+           "JOIN Skill skill ON skill.id = accountHasSkill.skillId " +
            "WHERE accountHasSkill.skillId IN :skillIds")
-    List<Account> getAllBySkillIdIsIn(@Param("skillIds") List<Long> skillIds);
+    Page<Account> getAllBySkillIdIsIn(@Param("skillIds") List<Long> skillIds, Pageable pageable);
 
+    @Query("SELECT new Account(account.id, account.email, account.firstName, account.lastName, skill.id, skill.name, accountHasSkill.level, skill.categoryId) " +
+           "FROM Account account " +
+           "JOIN AccountHasSkill accountHasSkill ON accountHasSkill.accountId = account.id " +
+           "JOIN Skill skill ON skill.id = accountHasSkill.skillId")
+    Page<Account> getAllBySkillIdIsIn(Pageable pageable);
 }
