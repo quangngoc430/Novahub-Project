@@ -72,7 +72,7 @@ public class Skill implements Serializable {
     @Transient
     private List<AccountHasSkill> accountHasSkillList;
 
-    @JsonView({View.Public.class, View.AccountWithSkillsAndCategory.class, View.AccountWithSkillsAndCategory.class})
+    @JsonView({View.Public.class, View.AccountWithSkillsAndCategory.class})
     @ManyToOne(targetEntity = Category.class)
     @JoinColumn(name = "category_id", insertable = false, updatable = false)
     private Category category;
