@@ -1,18 +1,14 @@
 package vn.novahub.helpdesk.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.commons.collections.IteratorUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
-import vn.novahub.helpdesk.exception.*;
 import vn.novahub.helpdesk.model.Account;
 import vn.novahub.helpdesk.model.AccountHasSkill;
 import vn.novahub.helpdesk.model.Category;
@@ -86,22 +82,21 @@ public class SkillControllerTest extends BaseControllerTest {
                     .andExpect(jsonPath("$.totalElements", is(skills.size())));
     }
 
-//    @Test
-//    public void testSearch() throws Exception {
-//        List<Long> skillIds = new ArrayList<>();
-//        skillIds.add(1L);
-//        skillIds.add(2L);
-//
-//        given(accountSkillService.search(skillIds, new PageRequest(0, 20))).willReturn(new PageImpl<>(skills));
-//
-//        mvc.perform(get("/api/skills/search?id=1,2")
-//                    .with(user(EMAIL).password(PASSWORD))
-//                    .with(csrf().asHeader())
-//                    .contentType(MediaType.APPLICATION_JSON))
-//                    .andExpect(status().isOk())
-//                    .andExpect(jsonPath("$.totalElements", is(skills.size())));
-//
-//    }
+    @Test
+    public void testSearch() throws Exception {
+        List<Long> skillIds = new ArrayList<>();
+        skillIds.add(1L);
+        skillIds.add(2L);
+
+        given(accountSkillService.search(skillIds, new PageRequest(0, 20))).willReturn(new PageImpl<>(accounts));
+
+        mvc.perform(get("/api/skills/search?id=1,2")
+                    .with(user(EMAIL).password(PASSWORD))
+                    .with(csrf().asHeader())
+                    .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.totalElements", is(accounts.size())));
+    }
 
     @Test
     public void testGetById() throws Exception {

@@ -75,16 +75,10 @@ public interface AccountRepository extends PagingAndSortingRepository<Account, L
            "WHERE accountHasSkill.skillId = :skillId")
     Page<Account> getAllBySkillId(@Param("skillId") long skillId, Pageable pageable);
 
-    @Query("SELECT new Account(account.id, account.email, account.firstName, account.lastName, skill.id, skill.name, accountHasSkill.level, skill.categoryId) " +
+    @Query("SELECT account " +
            "FROM Account account " +
-           "JOIN AccountHasSkill accountHasSkill ON accountHasSkill.accountId = account.id " +
-           "JOIN Skill skill ON skill.id = accountHasSkill.skillId " +
-           "WHERE accountHasSkill.skillId IN :skillIds")
+           "WHERE 0 < (SELECT count(accountHasSkill) " +
+                      "FROM AccountHasSkill accountHasSkill " +
+                      "WHERE accountHasSkill.skillId IN :skillIds AND accountHasSkill.accountId = account.id)")
     Page<Account> getAllBySkillIdIsIn(@Param("skillIds") List<Long> skillIds, Pageable pageable);
-
-    @Query("SELECT new Account(account.id, account.email, account.firstName, account.lastName, skill.id, skill.name, accountHasSkill.level, skill.categoryId) " +
-           "FROM Account account " +
-           "JOIN AccountHasSkill accountHasSkill ON accountHasSkill.accountId = account.id " +
-           "JOIN Skill skill ON skill.id = accountHasSkill.skillId")
-    Page<Account> getAllBySkillIdIsIn(Pageable pageable);
 }

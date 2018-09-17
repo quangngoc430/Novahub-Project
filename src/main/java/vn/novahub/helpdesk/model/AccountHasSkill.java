@@ -53,6 +53,17 @@ public class AccountHasSkill implements Serializable {
     @JoinColumn(name = "skill_id", insertable = false, updatable = false)
     private Skill skill;
 
+    public AccountHasSkill() {
+        super();
+    }
+
+    public AccountHasSkill(long level, long skillId, long accountId) {
+        super();
+        this.level = level;
+        this.skillId = skillId;
+        this.accountId = accountId;
+    }
+
     public long getId() {
         return id;
     }

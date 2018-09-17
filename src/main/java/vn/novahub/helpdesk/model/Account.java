@@ -144,24 +144,32 @@ public class Account implements Serializable {
     @Transient
     private List<Skill> skills;
 
-    @JsonView({View.AccountWithSkillsAndCategory.class})
-    @Transient
-    private Skill skill;
-
     @Transient
     private Token accessToken;
+
+    @JsonIgnore
+    @Transient
+    private AccountHasSkill accountHasSkill;
 
     public Account() {
         super();
     }
 
-    public Account(long id, String email, String firstName, String lastName, long skillId, String skillName, long level, long categoryId) {
+    public Account(long id, String email, String firstName, String lastName) {
         super();
         this.id = id;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.skill = new Skill(skillId, skillName, level, categoryId);
+    }
+
+    public Account(long id, String email, String firstName, String lastName, long skillId, long accountId, long level) {
+        super();
+        this.id = id;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.accountHasSkill = new AccountHasSkill(level, skillId, accountId);
     }
 
     public long getId() {
@@ -332,12 +340,12 @@ public class Account implements Serializable {
         this.skills = skills;
     }
 
-    public Skill getSkill() {
-        return skill;
+    public AccountHasSkill getAccountHasSkill() {
+        return accountHasSkill;
     }
 
-    public void setSkill(Skill skill) {
-        this.skill = skill;
+    public void setAccountHasSkill(AccountHasSkill accountHasSkill) {
+        this.accountHasSkill = accountHasSkill;
     }
 
     @Transient

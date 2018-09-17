@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import vn.novahub.helpdesk.exception.*;
 import vn.novahub.helpdesk.model.*;
@@ -227,28 +228,48 @@ public class AccountSkillServiceImpl implements AccountSkillService {
     @Override
     public Page<Account> search(List<Long> skillIds, Pageable pageable) {
         Page<Account> accountPage;
+        List<Skill> skills;
+        List<Long> accountIds = new ArrayList<>();
 
-        if (skillIds.isEmpty())
-            accountPage = accountRepository.getAllBySkillIdIsIn( pageable);
-        else
+        if (skillIds.isEmpty()) {
+            accountPage = accountRepository.findAll(pageable);
+        } else {
             accountPage = accountRepository.getAllBySkillIdIsIn(skillIds, pageable);
+        }
+
+        for (int i = 0; i < accountPage.getContent().size(); i++) {
+            accountIds.add(accountPage.getContent().get(i).getId());
+        }
+
+        if (skillIds.isEmpty()) {
+            skills = skillRepository.findAllSkillsWithLevel(accountIds, new Sort(Sort.Direction.ASC, "id"));
+        } else {
+            skills = skillRepository.findAllBySkillIdsIn(skillIds, accountIds, new Sort(Sort.Direction.ASC, "id"));
+        }
 
         List<Category> categories = IteratorUtils.toList(categoryRepository.findAll().iterator());
 
-        int count = 0;
-        for (int i = 0; i < categories.size(); i++) {
+        Skill currentSkill;
+        Account currentAccount;
 
-            for (int j = 0; j < accountPage.getContent().size(); j++) {
-                if (accountPage.getContent().get(j).getSkill().getCategoryId() == categories.get(i).getId()) {
-                    accountPage.getContent().get(j).getSkill().setCategory(categories.get(i));
-                    count++;
+        for (int i = 0; i < accountPage.getContent().size(); i++) {
+            currentAccount = accountPage.getContent().get(i);
+            currentAccount.setSkills(new ArrayList<>());
+            for (int j = skills.size() - 1; j >= 0 ; j--) {
+                currentSkill = skills.get(j);
+                if (currentAccount.getId() == currentSkill.getAccountHasSkill().getAccountId()) {
+                    Skill newSkill = new Skill(currentSkill.getId(), currentSkill.getName(), currentSkill.getLevel(), currentSkill.getCategoryId());
+                    for (int z = 0; z < categories.size(); z++) {
+                        if (newSkill.getCategoryId() == categories.get(z).getId()) {
+                            newSkill.setCategory(categories.get(z));
+                            break;
+                        }
+                    }
+                    currentAccount.getSkills().add(newSkill);
+                    skills.remove(j);
                 }
             }
-
-            if (count == accountPage.getContent().size())
-                break;
         }
-
         return accountPage;
     }
 

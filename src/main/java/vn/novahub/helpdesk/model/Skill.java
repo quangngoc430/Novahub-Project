@@ -75,10 +75,14 @@ public class Skill implements Serializable {
     @JsonView({View.Public.class, View.AccountWithSkillsAndCategory.class})
     @ManyToOne(targetEntity = Category.class)
     @JoinColumn(name = "category_id", insertable = false, updatable = false)
+
     private Category category;
 
     @Transient
     private List<Account> accounts;
+
+    @Transient
+    private AccountHasSkill accountHasSkill;
 
     public Skill() {}
 
@@ -95,6 +99,15 @@ public class Skill implements Serializable {
         this.name = name;
         this.level = level;
         this.categoryId = categoryId;
+    }
+
+    public Skill(long id, String name, long level, long categoryId, long accountHasSkillId, long skillId, long accountId) {
+        super();
+        this.id = id;
+        this.name = name;
+        this.level = level;
+        this.categoryId = categoryId;
+        this.accountHasSkill = new AccountHasSkill(accountHasSkillId, skillId, accountId);
     }
 
     public Skill(long id, String name, long level, long categoryId, Date createdAt, Date updatedAt) {
@@ -198,6 +211,14 @@ public class Skill implements Serializable {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public AccountHasSkill getAccountHasSkill() {
+        return accountHasSkill;
+    }
+
+    public void setAccountHasSkill(AccountHasSkill accountHasSkill) {
+        this.accountHasSkill = accountHasSkill;
     }
 
     @Override

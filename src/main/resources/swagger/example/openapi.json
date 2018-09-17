@@ -4,7 +4,7 @@
     {
       "description": "Development server",
       
-      "url" : "https://helpdesk-develop.herokuapp.com/api"
+      "url" : "http://localhost:8080/api"
     }
   ],
   "info": {
@@ -4721,6 +4721,28 @@
             "schema": {
               "type": "string",
               "example": "1,2"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "id,asc",
+                "id,desc",
+                "email,asc",
+                "email,desc",
+                "status,asc",
+                "status,desc",
+                "firstName,asc",
+                "firstName,desc",
+                "lastName,asc",
+                "lastName,desc",
+                "address,asc",
+                "address,desc"
+              ],
+              "example": "firstName,desc"
             }
           }
         ],
