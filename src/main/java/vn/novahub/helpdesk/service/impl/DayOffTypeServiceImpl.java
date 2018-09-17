@@ -6,14 +6,17 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import vn.novahub.helpdesk.exception.dayofftype.DayOffTypeExistException;
 import vn.novahub.helpdesk.exception.dayofftype.DayOffTypeNotFoundException;
+import vn.novahub.helpdesk.model.Account;
 import vn.novahub.helpdesk.model.DayOff;
 import vn.novahub.helpdesk.model.DayOffAccount;
 import vn.novahub.helpdesk.model.DayOffType;
+import vn.novahub.helpdesk.repository.AccountRepository;
 import vn.novahub.helpdesk.repository.DayOffAccountRepository;
 import vn.novahub.helpdesk.repository.DayOffRepository;
 import vn.novahub.helpdesk.repository.DayOffTypeRepository;
 import vn.novahub.helpdesk.service.DayOffTypeService;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,6 +31,9 @@ public class DayOffTypeServiceImpl implements DayOffTypeService {
 
     @Autowired
     private DayOffAccountRepository dayOffAccountRepository;
+
+    @Autowired
+    private AccountRepository accountRepository;
 
     @Override
     public List<DayOffType> getAllDayOffType() {
@@ -50,7 +56,12 @@ public class DayOffTypeServiceImpl implements DayOffTypeService {
         if (existingDayOffType != null) {
             throw new DayOffTypeExistException();
         }
-        return dayOffTypeRepository.save(dayOffType);
+
+        existingDayOffType = dayOffTypeRepository.save(dayOffType);
+
+        generateDayOffAccountList(existingDayOffType);
+
+        return existingDayOffType;
     }
 
     @Override
@@ -92,12 +103,34 @@ public class DayOffTypeServiceImpl implements DayOffTypeService {
             throw new DayOffTypeExistException("This dayOffType can not be deleted because some dayOff reference to it");
         }
 
-        List<DayOffAccount> dayOffAccounts = dayOffAccountRepository.findByDayOffTypeId(id);
+        List<DayOffAccount> dayOffAccounts = dayOffAccountRepository.findAllByDayOffTypeId(id);
 
         dayOffAccountRepository.deleteAll(dayOffAccounts);
 
         dayOffTypeRepository.delete(currentDayOffType.get());
 
         return currentDayOffType.get();
+    }
+
+    private void generateDayOffAccountList(DayOffType dayOffType) {
+        Iterable<Account> accounts = accountRepository.findAll();
+        for (Account account : accounts) {
+            generateDayOffAccount(account, dayOffType);
+        }
+    }
+
+    private void generateDayOffAccount(Account account, DayOffType dayOffType) {
+
+        DayOffAccount dayOffAccount = new DayOffAccount();
+
+        dayOffAccount.setDayOffTypeId(dayOffType.getId());
+        dayOffAccount.setAccountId(account.getId());
+        dayOffAccount.setDayOffType(dayOffType);
+        dayOffAccount.setAccount(account);
+        dayOffAccount.setPrivateQuota(dayOffType.getDefaultQuota());
+        dayOffAccount.setRemainingTime(dayOffAccount.getPrivateQuota());
+        dayOffAccount.setYear(Calendar.getInstance().get(Calendar.YEAR));
+
+        dayOffAccountRepository.save(dayOffAccount);
     }
 }

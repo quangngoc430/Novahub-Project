@@ -15,7 +15,7 @@ public interface DayOffAccountRepository extends PagingAndSortingRepository <Day
 
     List<DayOffAccount> findAllByAccountIdAndYear(long accountId, int year);
 
-    List<DayOffAccount> findByDayOffTypeId(int dayOffTypeId);
+    List<DayOffAccount> findAllByDayOffTypeId(int dayOffTypeId);
 
     DayOffAccount findByAccountIdAndDayOffTypeIdAndYear(long accountId, int dayOffTypeId, int year);
 
