@@ -92,7 +92,7 @@ public class DayOffTypeServiceImpl implements DayOffTypeService {
             throw new DayOffTypeExistException("This dayOffType can not be deleted because some dayOff reference to it");
         }
 
-        List<DayOffAccount> dayOffAccounts = dayOffAccountRepository.findByDayOffTypeId(id);
+        List<DayOffAccount> dayOffAccounts = dayOffAccountRepository.findAllByDayOffTypeId(id);
 
         dayOffAccountRepository.deleteAll(dayOffAccounts);
 

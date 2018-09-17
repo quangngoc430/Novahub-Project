@@ -36,7 +36,7 @@ public class DayOffAccount {
     private long accountId;
 
     @JsonView(View.DayOffAccountRespond.class)
-    @ManyToOne(fetch = FetchType.EAGER, targetEntity = DayOffType.class, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = DayOffType.class, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "day_off_type_id", insertable = false, updatable = false)
     private DayOffType dayOffType;
 
