@@ -27,16 +27,16 @@ public class Skill implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView({View.Public.class, View.AccountWithSkills.class})
+    @JsonView({View.Public.class, View.AccountWithSkills.class, View.AccountWithSkillsAndCategory.class})
     @Column(name = "id")
     private long id;
 
     @NotEmpty(message = "name is not empty", groups = {GroupCreateSkill.class, GroupUpdateSkill.class})
-    @JsonView({View.Public.class, View.AccountWithSkills.class})
+    @JsonView({View.Public.class, View.AccountWithSkills.class, View.AccountWithSkillsAndCategory.class})
     @Column(name = "name")
     private String name;
 
-    @JsonView({View.SkillWithLevel.class, View.AccountWithSkills.class})
+    @JsonView({View.SkillWithLevel.class, View.AccountWithSkills.class, View.AccountWithSkillsAndCategory.class})
     @Transient
     @NotNull(message = "level is not null", groups = {GroupCreateSkillWithLevel.class, GroupUpdateSkillWithLevel.class})
     @Min(value = 1, message = "level must be greater than or equal to 1", groups = {GroupCreateSkillWithLevel.class, GroupUpdateSkillWithLevel.class})
@@ -72,10 +72,9 @@ public class Skill implements Serializable {
     @Transient
     private List<AccountHasSkill> accountHasSkillList;
 
-    @JsonView({View.Public.class, View.AccountWithSkillsAndCategory.class})
+    @JsonView({View.Public.class, View.AccountWithSkillsAndCategory.class, View.AccountWithSkillsAndCategory.class})
     @ManyToOne(targetEntity = Category.class)
     @JoinColumn(name = "category_id", insertable = false, updatable = false)
-
     private Category category;
 
     @Transient

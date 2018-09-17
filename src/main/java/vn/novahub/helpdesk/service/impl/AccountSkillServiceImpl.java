@@ -265,7 +265,7 @@ public class AccountSkillServiceImpl implements AccountSkillService {
                             break;
                         }
                     }
-                    currentAccount.getSkills().add(newSkill);
+                    currentAccount.getSkills().add(0, newSkill);
                     skills.remove(j);
                 }
             }

@@ -24,12 +24,12 @@ public class Category implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView({View.Public.class, View.AccountWithSkills.class})
+    @JsonView({View.Public.class, View.AccountWithSkills.class, View.AccountWithSkillsAndCategory.class})
     @Column(name = "id")
     private long id;
 
     @NotEmpty(message = "name is not empty", groups = {GroupCreateCategory.class, GroupUpdateCategory.class})
-    @JsonView({View.Public.class, View.AccountWithSkills.class})
+    @JsonView({View.Public.class, View.AccountWithSkills.class, View.AccountWithSkillsAndCategory.class})
     @Column(name = "name", unique = true)
     private String name;
 
