@@ -3,6 +3,12 @@ package vn.novahub.helpdesk.service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import vn.novahub.helpdesk.exception.*;
+import vn.novahub.helpdesk.exception.dayoff.DayOffIsAnsweredException;
+import vn.novahub.helpdesk.exception.dayoff.DayOffNotFoundException;
+import vn.novahub.helpdesk.exception.dayoff.DayOffOverdueException;
+import vn.novahub.helpdesk.exception.dayoff.DayOffTokenIsNotMatchException;
+import vn.novahub.helpdesk.exception.dayoffaccount.DayOffAccountIsExistException;
+import vn.novahub.helpdesk.exception.dayofftype.DayOffTypeNotFoundException;
 import vn.novahub.helpdesk.model.DayOff;
 
 import javax.mail.MessagingException;
@@ -27,13 +33,13 @@ public interface DayOffService {
             Pageable pageable);
 
     DayOff getById(long id)
-            throws DayOffIsNotExistException,
+            throws DayOffNotFoundException,
             AccountNotFoundException;
 
     DayOff approve(long dayOffId, String token)
             throws DayOffIsAnsweredException,
             DayOffTokenIsNotMatchException,
-            DayOffIsNotExistException,
+            DayOffNotFoundException,
             MessagingException,
             AccountNotFoundException,
             IOException ;
@@ -42,7 +48,7 @@ public interface DayOffService {
     DayOff deny(long dayOffId, String token)
             throws DayOffIsAnsweredException,
             DayOffTokenIsNotMatchException,
-            DayOffIsNotExistException,
+            DayOffNotFoundException,
             MessagingException,
             AccountNotFoundException,
             IOException;
@@ -50,7 +56,7 @@ public interface DayOffService {
     DayOff approve(long dayOffId)
             throws DayOffIsAnsweredException,
             DayOffTokenIsNotMatchException,
-            DayOffIsNotExistException,
+            DayOffNotFoundException,
             MessagingException,
             AccountNotFoundException,
             IOException ;
@@ -59,7 +65,7 @@ public interface DayOffService {
     DayOff deny(long dayOffId)
             throws DayOffIsAnsweredException,
             DayOffTokenIsNotMatchException,
-            DayOffIsNotExistException,
+            DayOffNotFoundException,
             MessagingException,
             AccountNotFoundException,
             IOException;
@@ -67,7 +73,7 @@ public interface DayOffService {
     DayOff cancel(long dayOffId)
             throws DayOffIsAnsweredException,
             DayOffTokenIsNotMatchException,
-            DayOffIsNotExistException,
+            DayOffNotFoundException,
             MessagingException,
             AccountNotFoundException,
             DayOffOverdueException,

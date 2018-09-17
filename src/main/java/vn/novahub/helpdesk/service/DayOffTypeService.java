@@ -1,7 +1,7 @@
 package vn.novahub.helpdesk.service;
 
-import vn.novahub.helpdesk.exception.DayOffTypeExistException;
-import vn.novahub.helpdesk.exception.DayOffTypeNotFoundException;
+import vn.novahub.helpdesk.exception.dayofftype.DayOffTypeExistException;
+import vn.novahub.helpdesk.exception.dayofftype.DayOffTypeNotFoundException;
 import vn.novahub.helpdesk.model.DayOffType;
 
 import java.util.List;
@@ -16,5 +16,5 @@ public interface DayOffTypeService {
 
     DayOffType update(DayOffType dayOffType) throws DayOffTypeNotFoundException;
 
-    DayOffType delete(int id) throws DayOffTypeNotFoundException;
+    DayOffType delete(int id) throws DayOffTypeNotFoundException, DayOffTypeExistException;
 }

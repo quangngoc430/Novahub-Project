@@ -1,4 +1,4 @@
-package vn.novahub.helpdesk.exception;
+package vn.novahub.helpdesk.exception.dayoff;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

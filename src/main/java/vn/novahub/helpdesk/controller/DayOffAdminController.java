@@ -1,7 +1,6 @@
 package vn.novahub.helpdesk.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import org.apache.http.impl.execchain.RequestAbortedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,7 +10,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.novahub.helpdesk.enums.DayOffStatus;
-import vn.novahub.helpdesk.exception.*;
+import vn.novahub.helpdesk.exception.AccountNotFoundException;
+import vn.novahub.helpdesk.exception.dayoff.DayOffIsAnsweredException;
+import vn.novahub.helpdesk.exception.dayoff.DayOffNotFoundException;
+import vn.novahub.helpdesk.exception.dayoff.DayOffOverdueException;
+import vn.novahub.helpdesk.exception.dayoff.DayOffTokenIsNotMatchException;
 import vn.novahub.helpdesk.model.DayOff;
 import vn.novahub.helpdesk.service.DayOffService;
 import vn.novahub.helpdesk.view.View;
@@ -35,7 +38,7 @@ public class DayOffAdminController {
                                           @RequestParam(name = "token") String token)
                                              throws DayOffIsAnsweredException,
                                                     DayOffTokenIsNotMatchException,
-                                                    DayOffIsNotExistException,
+                                                    DayOffNotFoundException,
                                                     MessagingException,
                                                     AccountNotFoundException,
                                                     IOException {
@@ -44,7 +47,7 @@ public class DayOffAdminController {
         try {
             dayOffStatus = DayOffStatus.valueOf(status);
         } catch (Exception e) {
-            throw new RequestAbortedException("The parameter \'status\' is not valid");
+            throw new DayOffNotFoundException("The parameter \'status\' is not valid");
         }
 
         switch (dayOffStatus) {
@@ -55,7 +58,7 @@ public class DayOffAdminController {
                 dayOff = dayOffService.deny(dayOffId, token);
                break;
             default:
-                throw new RequestAbortedException("The parameter \'status\' is not valid");
+                throw new DayOffNotFoundException("The parameter \'status\' is not valid");
         }
         return new ResponseEntity<>(dayOff, HttpStatus.OK);
     }
@@ -67,7 +70,7 @@ public class DayOffAdminController {
                                                   @RequestParam("status") String status)
             throws DayOffIsAnsweredException,
             DayOffTokenIsNotMatchException,
-            DayOffIsNotExistException,
+            DayOffNotFoundException,
             MessagingException,
             AccountNotFoundException,
             DayOffOverdueException,
@@ -79,7 +82,7 @@ public class DayOffAdminController {
         try {
             dayOffStatus = DayOffStatus.valueOf(status);
         } catch (Exception e) {
-            throw new RequestAbortedException("The parameter \'status\' is not valid");
+            throw new DayOffNotFoundException("The parameter \'status\' is not valid");
         }
 
         switch (dayOffStatus) {
@@ -93,7 +96,7 @@ public class DayOffAdminController {
                 dayOff = dayOffService.cancel(dayOffId);
                 break;
             default:
-                throw new RequestAbortedException("The parameter \'status\' is not valid");
+                throw new DayOffNotFoundException("The parameter \'status\' is not valid");
         }
         return new ResponseEntity<>(dayOff, HttpStatus.OK);
     }
@@ -107,7 +110,7 @@ public class DayOffAdminController {
             Pageable pageable) {
 
         long accountId = 0;
-        if (!accountIdString.isEmpty()) {
+        if (!accountIdString.equals("")) {
             accountId = Long.parseLong(accountIdString);
         }
 

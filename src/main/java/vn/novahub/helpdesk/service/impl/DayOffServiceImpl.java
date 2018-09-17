@@ -8,6 +8,12 @@ import org.springframework.stereotype.Service;
 import vn.novahub.helpdesk.enums.DayOffStatus;
 import vn.novahub.helpdesk.enums.RoleEnum;
 import vn.novahub.helpdesk.exception.*;
+import vn.novahub.helpdesk.exception.dayoff.DayOffIsAnsweredException;
+import vn.novahub.helpdesk.exception.dayoff.DayOffNotFoundException;
+import vn.novahub.helpdesk.exception.dayoff.DayOffOverdueException;
+import vn.novahub.helpdesk.exception.dayoff.DayOffTokenIsNotMatchException;
+import vn.novahub.helpdesk.exception.dayoffaccount.DayOffAccountIsExistException;
+import vn.novahub.helpdesk.exception.dayofftype.DayOffTypeNotFoundException;
 import vn.novahub.helpdesk.model.*;
 import vn.novahub.helpdesk.repository.DayOffAccountRepository;
 import vn.novahub.helpdesk.repository.DayOffRepository;
@@ -87,12 +93,12 @@ public class DayOffServiceImpl implements DayOffService {
     }
 
     @Override
-    public DayOff getById(long id) throws DayOffIsNotExistException, AccountNotFoundException {
+    public DayOff getById(long id) throws DayOffNotFoundException, AccountNotFoundException {
         Optional<DayOff> dayOffOptional = dayOffRepository.findById(id);
         Account account = accountService.getAccountLogin();
 
         if (!dayOffOptional.isPresent()) {
-            throw new DayOffIsNotExistException(id);
+            throw new DayOffNotFoundException(id);
         }
         if (dayOffOptional.get().getDayOffAccount().getAccountId() != account.getId()
                 && !account.getRole().getName().equals(RoleEnum.ADMIN.name())) {
@@ -106,7 +112,7 @@ public class DayOffServiceImpl implements DayOffService {
     public DayOff approve(long dayOffId, String token)
             throws DayOffIsAnsweredException,
             DayOffTokenIsNotMatchException,
-            DayOffIsNotExistException,
+            DayOffNotFoundException,
             MessagingException,
             AccountNotFoundException,
             IOException {
@@ -129,7 +135,7 @@ public class DayOffServiceImpl implements DayOffService {
     public DayOff deny(long dayOffId, String token)
             throws DayOffIsAnsweredException,
             DayOffTokenIsNotMatchException,
-            DayOffIsNotExistException,
+            DayOffNotFoundException,
             MessagingException,
             AccountNotFoundException,
             IOException {
@@ -152,7 +158,7 @@ public class DayOffServiceImpl implements DayOffService {
     public DayOff approve(long dayOffId)
             throws DayOffIsAnsweredException,
             DayOffTokenIsNotMatchException,
-            DayOffIsNotExistException,
+            DayOffNotFoundException,
             MessagingException,
             AccountNotFoundException,
             IOException {
@@ -175,7 +181,7 @@ public class DayOffServiceImpl implements DayOffService {
             throws
             DayOffIsAnsweredException,
             DayOffTokenIsNotMatchException,
-            DayOffIsNotExistException,
+            DayOffNotFoundException,
             MessagingException,
             AccountNotFoundException,
             IOException {
@@ -195,7 +201,7 @@ public class DayOffServiceImpl implements DayOffService {
     public DayOff cancel(long dayOffId)
             throws DayOffIsAnsweredException,
             DayOffTokenIsNotMatchException,
-            DayOffIsNotExistException,
+            DayOffNotFoundException,
             MessagingException,
             AccountNotFoundException,
             DayOffOverdueException,
@@ -204,7 +210,7 @@ public class DayOffServiceImpl implements DayOffService {
         Optional<DayOff> dayOffOptional = dayOffRepository.findById(dayOffId);
 
         if (!dayOffOptional.isPresent()) {
-            throw new DayOffIsNotExistException(dayOffId);
+            throw new DayOffNotFoundException(dayOffId);
         }
 
         if (dayOffOptional.get().getStatus().equals(DayOffStatus.CANCELLED.name())) {
@@ -344,11 +350,11 @@ public class DayOffServiceImpl implements DayOffService {
 
     private DayOff checkIfRequestIsAnswered(long dayOffId)
             throws DayOffIsAnsweredException,
-                   DayOffIsNotExistException {
+            DayOffNotFoundException {
         Optional<DayOff> dayOff = dayOffRepository.findById(dayOffId);
 
         if (!dayOff.isPresent()) {
-            throw new DayOffIsNotExistException(dayOffId);
+            throw new DayOffNotFoundException(dayOffId);
         }
 
         if (dayOff.get().getToken().trim().isEmpty()) {

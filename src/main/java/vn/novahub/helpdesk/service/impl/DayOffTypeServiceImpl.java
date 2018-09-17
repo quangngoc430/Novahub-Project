@@ -1,10 +1,14 @@
 package vn.novahub.helpdesk.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import vn.novahub.helpdesk.exception.DayOffTypeExistException;
-import vn.novahub.helpdesk.exception.DayOffTypeNotFoundException;
+import vn.novahub.helpdesk.exception.dayofftype.DayOffTypeExistException;
+import vn.novahub.helpdesk.exception.dayofftype.DayOffTypeNotFoundException;
+import vn.novahub.helpdesk.model.DayOff;
 import vn.novahub.helpdesk.model.DayOffType;
+import vn.novahub.helpdesk.repository.DayOffRepository;
 import vn.novahub.helpdesk.repository.DayOffTypeRepository;
 import vn.novahub.helpdesk.service.DayOffTypeService;
 
@@ -16,6 +20,9 @@ public class DayOffTypeServiceImpl implements DayOffTypeService {
 
     @Autowired
     private DayOffTypeRepository dayOffTypeRepository;
+
+    @Autowired
+    private DayOffRepository dayOffRepository;
 
     @Override
     public List<DayOffType> getAllDayOffType() {
@@ -64,13 +71,20 @@ public class DayOffTypeServiceImpl implements DayOffTypeService {
     }
 
     @Override
-    public DayOffType delete(int id) throws DayOffTypeNotFoundException {
+    public DayOffType delete(int id) throws DayOffTypeNotFoundException, DayOffTypeExistException {
 
         Optional<DayOffType> currentDayOffType
                 = dayOffTypeRepository.findById(id);
 
         if (!currentDayOffType.isPresent()) {
             throw new DayOffTypeNotFoundException();
+        }
+
+        Page<DayOff> dayOffs = dayOffRepository.findByType(
+                currentDayOffType.get().getType(), PageRequest.of(0,10));
+
+        if (dayOffs.getTotalElements() != 0) {
+            throw new DayOffTypeExistException("This dayOffType can not be deleted because some dayOff reference to it");
         }
 
         dayOffTypeRepository.delete(currentDayOffType.get());

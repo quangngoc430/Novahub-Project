@@ -2,9 +2,9 @@ package vn.novahub.helpdesk.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import vn.novahub.helpdesk.exception.DayOffAccountNotFoundException;
-import vn.novahub.helpdesk.exception.DayOffTypeNotFoundException;
-import vn.novahub.helpdesk.exception.DayOffAccountIsExistException;
+import vn.novahub.helpdesk.exception.dayoffaccount.DayOffAccountNotFoundException;
+import vn.novahub.helpdesk.exception.dayofftype.DayOffTypeNotFoundException;
+import vn.novahub.helpdesk.exception.dayoffaccount.DayOffAccountIsExistException;
 import vn.novahub.helpdesk.model.DayOffAccount;
 
 public interface DayOffAccountService {

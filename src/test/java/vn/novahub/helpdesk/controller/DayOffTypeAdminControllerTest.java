@@ -58,7 +58,7 @@ public class DayOffTypeAdminControllerTest extends BaseControllerTest {
     public void testUpdate() throws Exception {
         given(dayOffTypeService.update(any(DayOffType.class))).willReturn(dayOffTypes.get(0));
 
-        mvc.perform(put("/api/admin/day-off-types")
+        mvc.perform(put("/api/admin/day-off-types/1")
                 .with(user(EMAIL).password(PASSWORD))
                 .with(csrf().asHeader())
                 .contentType(MediaType.APPLICATION_JSON)

@@ -1,4 +1,4 @@
-package vn.novahub.helpdesk.exception;
+package vn.novahub.helpdesk.exception.dayofftype;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -8,5 +8,9 @@ public class DayOffTypeExistException extends Exception{
 
     public DayOffTypeExistException(){
         super("Day off type was exist");
+    }
+
+    public DayOffTypeExistException(String message){
+        super(message);
     }
 }
