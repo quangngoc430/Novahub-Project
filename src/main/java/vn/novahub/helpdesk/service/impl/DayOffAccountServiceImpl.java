@@ -49,7 +49,7 @@ public class DayOffAccountServiceImpl implements DayOffAccountService {
 
         dayOffAccount.setPrivateQuota(dayOffType.get().getDefaultQuota());
         dayOffAccount.setRemainingTime(dayOffAccount.getPrivateQuota());
-        dayOffAccount.setYear(getCreatedYear(new Date()));
+        dayOffAccount.setYear(getYearOfDate(new Date()));
         dayOffAccount.setDayOffType(dayOffType.get());
 
         if (dayOffAccount.getAccountId() == 0) {
@@ -68,6 +68,20 @@ public class DayOffAccountServiceImpl implements DayOffAccountService {
         }
 
         return dayOffAccountRepository.save(dayOffAccount);
+    }
+
+    @Override
+    public void generateAllDayOffAccount(int year) throws DayOffAccountIsExistException, DayOffTypeNotFoundException {
+        List<DayOffAccount> dayOffAccounts = dayOffAccountRepository.findAllByYear(year);
+        List<Account> accounts = (List) accountRepository.findAll();
+        if (dayOffAccounts.size() == accounts.size()) {
+            throw new DayOffAccountIsExistException("DayOffAccount list in " + year + " have already generated");
+        }
+
+        for (Account account : accounts) {
+            generateDayOffAccountIfNotExist(account.getId(), year);
+            modifyYearlyQuota(account, year);
+        }
     }
 
     @Override
@@ -110,13 +124,13 @@ public class DayOffAccountServiceImpl implements DayOffAccountService {
     public Page<DayOffAccount> findByAccountId(long accountId, Pageable pageable)
             throws DayOffAccountIsExistException,
                     DayOffTypeNotFoundException {
-        if (!isAccountHasAllDayOffAccount(accountId)) {
-            generateDayOffAccountIfNotExist(accountId);
+        if (!isAccountHasAllDayOffAccount(accountId, getYearOfDate(new Date()))) {
+            generateDayOffAccountIfNotExist(accountId, getYearOfDate(new Date()));
         }
         return dayOffAccountRepository.findAllByAccountId(accountId, pageable);
     }
 
-    private void generateDayOffAccountIfNotExist(long accountId)
+    private void generateDayOffAccountIfNotExist(long accountId, int year)
             throws DayOffAccountIsExistException,
                    DayOffTypeNotFoundException {
 
@@ -128,7 +142,7 @@ public class DayOffAccountServiceImpl implements DayOffAccountService {
                             .findByAccountIdAndDayOffTypeIdAndYear(
                                     accountId,
                                     dayOffType.getId(),
-                                    getCreatedYear(new Date()));
+                                    year);
             Optional<Account> account = accountRepository.findById(accountId);
             if (dayOffAccount == null) {
                 dayOffAccount = new DayOffAccount();
@@ -143,17 +157,50 @@ public class DayOffAccountServiceImpl implements DayOffAccountService {
         }
     }
 
-    private boolean isAccountHasAllDayOffAccount(long accountId) {
+    private boolean isAccountHasAllDayOffAccount(long accountId, int year) {
         List<DayOffAccount> dayOffAccounts =
                 dayOffAccountRepository
-                        .findAllByAccountIdAndYear(accountId, getCreatedYear(new Date()));
+                        .findAllByAccountIdAndYear(accountId, year);
 
         return dayOffAccounts.size() == dayOffTypeRepository.findAll().size();
     }
 
-    private int getCreatedYear(Date createdDate) {
+    //This method is writen according to Company Policy
+    private void modifyYearlyQuota(Account account, int year) {
+        int joiningYear = getYearOfDate(account.getJoiningDate());
+        int joiningMonth = getMonthOfDate(account.getJoiningDate());
+        //Yearly is hardcode, may be change later
+        DayOffType dayOffType = dayOffTypeRepository.findByType("Yearly");
+        DayOffAccount dayOffAccount =
+                dayOffAccountRepository
+                        .findByAccountIdAndDayOffTypeIdAndYear(
+                                account.getId(),
+                                dayOffType.getId(),
+                                year);
+        if (year == joiningYear) {
+            return;
+        }
+        int modifiedPrivateQuota;
+        if (joiningMonth > Calendar.SEPTEMBER) {
+            modifiedPrivateQuota = dayOffAccount.getPrivateQuota() + 8 * (year - joiningYear - 1);
+        } else {
+            modifiedPrivateQuota = dayOffAccount.getPrivateQuota() + 8 * (year - joiningYear);
+        }
+
+        dayOffAccount.setPrivateQuota(modifiedPrivateQuota);
+
+        dayOffAccountRepository.save(dayOffAccount);
+    }
+
+    private int getYearOfDate(Date date) {
        Calendar calendar = new GregorianCalendar();
-       calendar.setTime(createdDate);
+       calendar.setTime(date);
        return calendar.get(Calendar.YEAR);
    }
+
+    private int getMonthOfDate(Date date) {
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(date);
+        return calendar.get(Calendar.MONTH);
+    }
 }

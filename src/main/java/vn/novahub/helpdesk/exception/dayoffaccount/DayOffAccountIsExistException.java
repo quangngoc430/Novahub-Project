@@ -9,4 +9,7 @@ public class DayOffAccountIsExistException extends Exception{
     public DayOffAccountIsExistException(int typeId){
         super("DayOffAccountIsExistException with type id = " + typeId);
     }
+    public DayOffAccountIsExistException(String message){
+        super(message);
+    }
 }

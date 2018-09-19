@@ -34,6 +34,16 @@ public class DayOffAccountAdminController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/generate/{year}")
+    public ResponseEntity<String> generate(@PathVariable("year") int year)
+            throws DayOffAccountIsExistException, DayOffTypeNotFoundException {
+
+        dayOffAccountService.generateAllDayOffAccount(year);
+
+        return new ResponseEntity<>("Generate DayOffAccounts successful", HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @JsonView(View.DayOffAccountRespond.class)
     @GetMapping
     public ResponseEntity<Page<DayOffAccount>> adminGet(
