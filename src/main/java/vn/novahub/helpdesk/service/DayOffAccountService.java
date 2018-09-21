@@ -14,6 +14,8 @@ public interface DayOffAccountService {
 
     void generateAllDayOffAccount(int year) throws DayOffAccountIsExistException, DayOffTypeNotFoundException;
 
+    void deleteAllDayOffAccount(int year) throws DayOffAccountNotFoundException;
+
     Page<DayOffAccount> findByAccountId(long accountId, Pageable pageable) throws DayOffAccountIsExistException, DayOffTypeNotFoundException;
 
     Page<DayOffAccount> getAll(Pageable pageable);

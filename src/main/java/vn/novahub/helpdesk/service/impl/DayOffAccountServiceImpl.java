@@ -8,9 +8,11 @@ import vn.novahub.helpdesk.exception.dayoffaccount.DayOffAccountIsExistException
 import vn.novahub.helpdesk.exception.dayoffaccount.DayOffAccountNotFoundException;
 import vn.novahub.helpdesk.exception.dayofftype.DayOffTypeNotFoundException;
 import vn.novahub.helpdesk.model.Account;
+import vn.novahub.helpdesk.model.DayOff;
 import vn.novahub.helpdesk.model.DayOffAccount;
 import vn.novahub.helpdesk.model.DayOffType;
 import vn.novahub.helpdesk.repository.AccountRepository;
+import vn.novahub.helpdesk.repository.DayOffRepository;
 import vn.novahub.helpdesk.repository.DayOffTypeRepository;
 import vn.novahub.helpdesk.repository.DayOffAccountRepository;
 import vn.novahub.helpdesk.service.AccountService;
@@ -26,6 +28,9 @@ public class DayOffAccountServiceImpl implements DayOffAccountService {
 
     @Autowired
     private DayOffTypeRepository dayOffTypeRepository;
+
+    @Autowired
+    private DayOffRepository dayOffRepository;
 
     @Autowired
     private AccountRepository accountRepository;
@@ -85,6 +90,21 @@ public class DayOffAccountServiceImpl implements DayOffAccountService {
     }
 
     @Override
+    public void deleteAllDayOffAccount(int year) throws DayOffAccountNotFoundException {
+        List<DayOffAccount> dayOffAccounts = dayOffAccountRepository.findAllByYear(year);
+        List<DayOff> dayOffs = dayOffRepository.findByYear(year);
+        if (dayOffAccounts.isEmpty()) {
+            throw new DayOffAccountNotFoundException("DayOffAccount list is not exist");
+        }
+
+        if (!dayOffs.isEmpty()) {
+            throw new DayOffAccountNotFoundException("Can not delete DayOffAccount list because it contains some DayOff request");
+        }
+
+        dayOffAccountRepository.deleteAll(dayOffAccounts);
+    }
+
+    @Override
     public DayOffAccount update(DayOffAccount dayOffAccount) throws DayOffAccountNotFoundException {
         Optional<DayOffAccount> currentDayOffType = dayOffAccountRepository.findById(dayOffAccount.getId());
         if (!currentDayOffType.isPresent()) {
@@ -130,9 +150,7 @@ public class DayOffAccountServiceImpl implements DayOffAccountService {
         return dayOffAccountRepository.findAllByAccountId(accountId, pageable);
     }
 
-    private void generateDayOffAccountIfNotExist(long accountId, int year)
-            throws DayOffAccountIsExistException,
-                   DayOffTypeNotFoundException {
+    private void generateDayOffAccountIfNotExist(long accountId, int year) {
 
         List<DayOffType> dayOffTypes = dayOffTypeRepository.findAll();
 
@@ -152,7 +170,11 @@ public class DayOffAccountServiceImpl implements DayOffAccountService {
                 if(account.isPresent()) {
                     dayOffAccount.setAccount(account.get());
                 }
-                add(dayOffAccount);
+                dayOffAccount.setPrivateQuota(dayOffType.getDefaultQuota());
+                dayOffAccount.setRemainingTime(dayOffAccount.getPrivateQuota());
+                dayOffAccount.setYear(year);
+
+                dayOffAccountRepository.save(dayOffAccount);
             }
         }
     }

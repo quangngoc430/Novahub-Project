@@ -44,6 +44,15 @@ public class DayOffAccountAdminController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/delete/{year}")
+    public ResponseEntity<String> deleteAll(@PathVariable("year") int year) throws DayOffAccountNotFoundException {
+
+        dayOffAccountService.deleteAllDayOffAccount(year);
+
+        return new ResponseEntity<>("Delete all DayOffAccounts in " + year + " successful", HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @JsonView(View.DayOffAccountRespond.class)
     @GetMapping
     public ResponseEntity<Page<DayOffAccount>> adminGet(
