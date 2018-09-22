@@ -12,5 +12,5 @@ public class View {
 
     public interface DayOffRespond extends DayOffAccountRespond {}
 
-    public interface AccountWithSkillsAndCategory extends AccountWithSkills {}
+    public interface AccountWithSkillsAndCategory {}
 }

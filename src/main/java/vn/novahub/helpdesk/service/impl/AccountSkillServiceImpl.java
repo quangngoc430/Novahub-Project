@@ -3,7 +3,9 @@ package vn.novahub.helpdesk.service.impl;
 import org.apache.commons.collections.IteratorUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import vn.novahub.helpdesk.exception.*;
 import vn.novahub.helpdesk.model.*;
@@ -224,58 +226,51 @@ public class AccountSkillServiceImpl implements AccountSkillService {
     }
 
     @Override
-    public Page<Skill> search(List<Long> skillIds, Pageable pageable) {
-        Page<Skill> skillPage;
+    public Page<Account> search(List<Long> skillIds, Pageable pageable) {
+        Page<Account> accountPage;
+        List<Skill> skills;
+        List<Long> accountIds = new ArrayList<>();
 
         if (skillIds.isEmpty()) {
-            skillPage = skillRepository.findAll(pageable);
-            for (Skill skill : skillPage.getContent()) {
-                skillIds.add(skill.getId());
-            }
+            accountPage = accountRepository.findAll(pageable);
+        } else {
+            accountPage = accountRepository.getAllBySkillIdIsIn(skillIds, pageable);
         }
-        else
-            skillPage = skillRepository.getAllByIdIsIn(skillIds, pageable);
 
-        List<Skill> skills = IteratorUtils.toList(skillRepository.findAll().iterator());
+        for (int i = 0; i < accountPage.getContent().size(); i++) {
+            accountIds.add(accountPage.getContent().get(i).getId());
+        }
+
+        if (skillIds.isEmpty()) {
+            skills = skillRepository.findAllSkillsWithLevel(accountIds, new Sort(Sort.Direction.ASC, "id"));
+        } else {
+            skills = skillRepository.findAllByIdsIn(skillIds, accountIds, new Sort(Sort.Direction.ASC, "id"));
+        }
+
         List<Category> categories = IteratorUtils.toList(categoryRepository.findAll().iterator());
-        List<AccountHasSkill> accountHasSkills = IteratorUtils.toList(accountHasSkillRepository.findAll().iterator());
-        List<Account> accounts = accountRepository.getAllBySkillIdIsIn(skillIds);
 
-        for (Account account : accounts) {
-            account.setSkills(new ArrayList<>());
-            for (AccountHasSkill accountHasSkill : accountHasSkills) {
-                if (accountHasSkill.getAccountId() == account.getId()) {
-                    for (Skill skill : skills) {
-                        if (skill.getId() == accountHasSkill.getSkillId()) {
-                            account.getSkills().add(new Skill(skill.getId(), skill.getName(), accountHasSkill.getLevel(), skill.getCategoryId(), skill.getCreatedAt(), skill.getUpdatedAt()));
+        Skill currentSkill;
+        Account currentAccount;
+
+        for (int i = 0; i < accountPage.getContent().size(); i++) {
+            currentAccount = accountPage.getContent().get(i);
+            currentAccount.setSkills(new ArrayList<>());
+            for (int j = skills.size() - 1; j >= 0 ; j--) {
+                currentSkill = skills.get(j);
+                if (currentAccount.getId() == currentSkill.getAccountHasSkill().getAccountId()) {
+                    Skill newSkill = new Skill(currentSkill.getId(), currentSkill.getName(), currentSkill.getLevel(), currentSkill.getCategoryId());
+                    for (int z = 0; z < categories.size(); z++) {
+                        if (newSkill.getCategoryId() == categories.get(z).getId()) {
+                            newSkill.setCategory(categories.get(z));
                             break;
                         }
                     }
+                    currentAccount.getSkills().add(0, newSkill);
+                    skills.remove(j);
                 }
             }
         }
-
-        for (Skill skill : skillPage.getContent()) {
-            for (Category category : categories) {
-                if (skill.getCategoryId() == category.getId()) {
-                    skill.setCategory(category);
-                    break;
-                }
-            }
-            skill.setAccounts(new ArrayList<>());
-            for (AccountHasSkill accountHasSkill : accountHasSkills) {
-                if (accountHasSkill.getSkillId() == skill.getId()) {
-                    for (Account account : accounts) {
-                        if(account.getId() == accountHasSkill.getAccountId()) {
-                            skill.getAccounts().add(account);
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-
-        return skillPage;
+        return accountPage;
     }
 
 }

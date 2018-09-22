@@ -248,26 +248,40 @@ public class SkillRepositoryTest extends BaseRepositoryTest {
         skillIds.add(4L);
         skillIds.add(7L);
 
-        List<Skill> skills = IteratorUtils.toList(skillRepository.findAll().iterator());
-        boolean check;
+        List<AccountHasSkill> accountHasSkills = IteratorUtils.toList(accountHasSkillRepository.findAll().iterator());
+        List<Long> accountIds = new ArrayList<>();
+        accountIds.add(1L);
+        accountIds.add(2L);
 
-        for (int i = skills.size() - 1; i >= 0; i--) {
-            check = false;
-            for (int j = skillIds.size() - 1; j >= 0; j--) {
-                if (skills.get(i).getId() == skillIds.get(j)) {
-                    check = true;
+        boolean checkAccountId, checkSkillId;
+
+        for (int i = accountHasSkills.size() - 1; i >= 0; i--) {
+            checkAccountId = false;
+            checkSkillId = false;
+            for (int j = accountIds.size() - 1; j >= 0; j--) {
+                if (accountHasSkills.get(i).getAccountId() == accountIds.get(j)) {
+                    checkAccountId = true;
                     break;
                 }
             }
-            if (!check)
-                skills.remove(i);
+
+            if (!checkAccountId)
+                accountHasSkills.remove(i);
+            else {
+                for (int j = skillIds.size() - 1; j >= 0; j--) {
+                    if (accountHasSkills.get(i).getSkillId() == skillIds.get(j)) {
+                        checkSkillId = true;
+                        break;
+                    }
+                }
+                if (!checkSkillId)
+                    accountHasSkills.remove(i);
+            }
         }
 
-        Page<Skill> actual = skillRepository.getAllByIdIsIn(skillIds, new PageRequest(0, 20));
-        Page<Skill> expected = new PageImpl<>(skills);
+        List<Skill> actual = skillRepository.findAllByIdsIn(skillIds, accountIds, new Sort(Sort.Direction.ASC, "id"));
 
-        assertEquals(actual.getTotalElements(), expected.getTotalElements());
-        assertEquals(actual.getContent().get(0).getName(), expected.getContent().get(0).getName());
+        assertEquals(accountHasSkills.size(), actual.size());
     }
 
     private void initData() throws IOException {

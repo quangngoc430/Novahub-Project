@@ -27,16 +27,16 @@ public class Skill implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView({View.Public.class, View.AccountWithSkills.class})
+    @JsonView({View.Public.class, View.AccountWithSkills.class, View.AccountWithSkillsAndCategory.class})
     @Column(name = "id")
     private long id;
 
     @NotEmpty(message = "name is not empty", groups = {GroupCreateSkill.class, GroupUpdateSkill.class})
-    @JsonView({View.Public.class, View.AccountWithSkills.class})
+    @JsonView({View.Public.class, View.AccountWithSkills.class, View.AccountWithSkillsAndCategory.class})
     @Column(name = "name")
     private String name;
 
-    @JsonView({View.SkillWithLevel.class, View.AccountWithSkills.class})
+    @JsonView({View.SkillWithLevel.class, View.AccountWithSkills.class, View.AccountWithSkillsAndCategory.class})
     @Transient
     @NotNull(message = "level is not null", groups = {GroupCreateSkillWithLevel.class, GroupUpdateSkillWithLevel.class})
     @Min(value = 1, message = "level must be greater than or equal to 1", groups = {GroupCreateSkillWithLevel.class, GroupUpdateSkillWithLevel.class})
@@ -61,7 +61,7 @@ public class Skill implements Serializable {
     @Column(name = "updated_at")
     private Date updatedAt = new Date();
 
-    @JsonView({View.Public.class, View.AccountWithSkillsAndCategory.class})
+    @JsonView({View.Public.class})
     @JsonProperty(value = "category_id")
     @NotNull(message = "category_id is not null", groups = {GroupCreateSkill.class, GroupUpdateSkill.class})
     @Column(name = "category_id")
@@ -80,6 +80,9 @@ public class Skill implements Serializable {
     @Transient
     private List<Account> accounts;
 
+    @Transient
+    private AccountHasSkill accountHasSkill;
+
     public Skill() {}
 
     public Skill(long id, String name, long level) {
@@ -87,6 +90,23 @@ public class Skill implements Serializable {
         this.id = id;
         this.name = name;
         this.level = level;
+    }
+
+    public Skill(long id, String name, long level, long categoryId) {
+        super();
+        this.id = id;
+        this.name = name;
+        this.level = level;
+        this.categoryId = categoryId;
+    }
+
+    public Skill(long id, String name, long level, long categoryId, long accountHasSkillId, long skillId, long accountId) {
+        super();
+        this.id = id;
+        this.name = name;
+        this.level = level;
+        this.categoryId = categoryId;
+        this.accountHasSkill = new AccountHasSkill(accountHasSkillId, skillId, accountId);
     }
 
     public Skill(long id, String name, long level, long categoryId, Date createdAt, Date updatedAt) {
@@ -190,6 +210,14 @@ public class Skill implements Serializable {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public AccountHasSkill getAccountHasSkill() {
+        return accountHasSkill;
+    }
+
+    public void setAccountHasSkill(AccountHasSkill accountHasSkill) {
+        this.accountHasSkill = accountHasSkill;
     }
 
     @Override

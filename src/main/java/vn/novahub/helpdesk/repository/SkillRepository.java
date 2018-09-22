@@ -2,6 +2,7 @@ package vn.novahub.helpdesk.repository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
@@ -67,5 +68,14 @@ public interface SkillRepository extends PagingAndSortingRepository<Skill, Long>
 
     boolean deleteByIdAndCategoryId(long skillId, long categoryId);
 
-    Page<Skill> getAllByIdIsIn(List<Long> skillIds, Pageable pageable);
+    @Query("SELECT new Skill(skill.id, skill.name, accountHasSkill.level, skill.categoryId, accountHasSkill.id, accountHasSkill.skillId, accountHasSkill.accountId) " +
+           "FROM Skill skill " +
+           "JOIN AccountHasSkill accountHasSkill ON skill.id = accountHasSkill.skillId " +
+           "WHERE skill.id IN :skillIds AND accountHasSkill.accountId IN :accountIds")
+    List<Skill> findAllByIdsIn(@Param("skillIds") List<Long> skillIds, @Param("accountIds") List<Long> accountIds, Sort sort);
+
+    @Query("SELECT new Skill(skill.id, skill.name, accountHasSkill.level, skill.categoryId, accountHasSkill.id, accountHasSkill.skillId, accountHasSkill.accountId) " +
+           "FROM Skill skill " +
+           "JOIN AccountHasSkill accountHasSkill ON skill.id = accountHasSkill.skillId ")
+    List<Skill> findAllSkillsWithLevel(@Param("accountIds") List<Long> accountIds, Sort sort);
 }
