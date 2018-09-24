@@ -7,7 +7,6 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import vn.novahub.helpdesk.model.Account;
-import vn.novahub.helpdesk.model.Skill;
 
 import java.util.List;
 
@@ -18,16 +17,16 @@ public interface AccountRepository extends PagingAndSortingRepository<Account, L
 
     @Query( "SELECT account " +
             "FROM Account account " +
-            "WHERE account.email LIKE CONCAT('%', :keyword, '%') " +
-            "or account.firstName LIKE CONCAT('%', :keyword, '%') " +
-            "or account.lastName LIKE CONCAT('%' ,:keyword, '%')")
+            "WHERE lower(account.email) LIKE CONCAT('%', lower(trim(:keyword)), '%') " +
+            "OR lower(account.firstName) LIKE CONCAT('%', lower(trim(:keyword)), '%') " +
+            "OR lower(account.lastName) LIKE CONCAT('%' , lower(trim(:keyword)), '%')")
     Page<Account> getAllByEmailContainingOrFirstNameContainingOrLastNameContaining(@Param("keyword") String keyword, Pageable pageable);
 
     @Query( "SELECT account " +
             "FROM Account account " +
-            "WHERE (account.email LIKE CONCAT('%', :keyword, '%') " +
-            "OR account.firstName LIKE CONCAT('%', :keyword, '%') " +
-            "OR account.lastName LIKE CONCAT('%' ,:keyword, '%')) " +
+            "WHERE (lower(account.email) LIKE CONCAT('%', lower(trim(:keyword)), '%') " +
+            "OR lower(account.firstName) LIKE CONCAT('%', lower(trim(:keyword)), '%') " +
+            "OR lower(account.lastName) LIKE CONCAT('%' , lower(trim(:keyword)), '%')) " +
             "AND account.status = :status")
     Page<Account> getAllByEmailContainingOrFirstNameContainingOrLastNameContainingAndStatus(@Param("keyword") String keyword,
                                                                                             @Param("status") String status,
@@ -37,9 +36,9 @@ public interface AccountRepository extends PagingAndSortingRepository<Account, L
            "FROM Account account " +
            "JOIN Role role " +
            "ON account.roleId = role.id " +
-           "WHERE (account.email LIKE CONCAT('%', :keyword, '%') " +
-           "OR account.firstName LIKE CONCAT('%', :keyword, '%') " +
-           "OR account.lastName LIKE CONCAT('%', :keyword, '%')) " +
+           "WHERE (lower(account.email) LIKE CONCAT('%', lower(trim(:keyword)), '%') " +
+           "OR lower(account.firstName) LIKE CONCAT('%', lower(trim(:keyword)), '%') " +
+           "OR lower(account.lastName) LIKE CONCAT('%', lower(trim(:keyword)), '%')) " +
            "AND role.name = :role")
     Page<Account> getAllByEmailContainingOrFirstNameContainingOrLastNameContainingAndRole(@Param("keyword") String keyword,
                                                                                           @Param("role") String role,
@@ -49,9 +48,9 @@ public interface AccountRepository extends PagingAndSortingRepository<Account, L
             "FROM Account account " +
             "JOIN Role role " +
             "ON account.roleId = role.id " +
-            "WHERE (account.email LIKE CONCAT('%', :keyword, '%') " +
-            "OR account.firstName LIKE CONCAT('%', :keyword, '%') " +
-            "OR account.lastName LIKE CONCAT('%', :keyword, '%')) " +
+            "WHERE (lower(account.email) LIKE CONCAT('%', lower(trim(:keyword)), '%') " +
+            "OR lower(account.firstName) LIKE CONCAT('%', lower(trim(:keyword)), '%') " +
+            "OR lower(account.lastName) LIKE CONCAT('%', lower(trim(:keyword)), '%')) " +
             "AND account.status = :status " +
             "AND role.name = :role")
     Page<Account> getAllByEmailContainingOrFirstNameContainingOrLastNameContainingAndStatusAndRole(@Param("keyword") String keyword,
