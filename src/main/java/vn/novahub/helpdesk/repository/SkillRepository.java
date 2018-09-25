@@ -20,7 +20,7 @@ public interface SkillRepository extends PagingAndSortingRepository<Skill, Long>
            "FROM Skill skill " +
            "JOIN AccountHasSkill accountHasSkill ON accountHasSkill.skillId = skill.id " +
            "JOIN Category category ON category.id = skill.categoryId " +
-           "WHERE accountHasSkill.accountId = :accountId AND skill.name LIKE CONCAT('%', :name, '%')")
+           "WHERE accountHasSkill.accountId = :accountId AND lower(skill.name) LIKE CONCAT('%', lower(trim(:name)), '%')")
     Page<Skill> getAllByNameContainingAndAccountId(@Param("name") String name,
                                                    @Param("accountId") long accountId,
                                                    Pageable pageable);
@@ -28,12 +28,14 @@ public interface SkillRepository extends PagingAndSortingRepository<Skill, Long>
     @Query("SELECT distinct new Skill(skill.id, skill.name, skill.categoryId, skill.createdAt, skill.updatedAt, category) " +
            "FROM Skill skill " +
            "JOIN Category category ON category.id = skill.categoryId " +
-           "WHERE skill.name LIKE CONCAT('%', :name, '%') AND skill.categoryId = :categoryId")
+           "WHERE lower(skill.name) LIKE CONCAT('%', lower(trim(:name)), '%') AND skill.categoryId = :categoryId")
     Page<Skill> getAllByNameContainingAndCategoryId(@Param("name") String name,
                                                     @Param("categoryId") long categoryId,
                                                     Pageable pageable);
 
-    Page<Skill> getAllByNameContaining(String name, Pageable pageable);
+    @Query("FROM Skill skill " +
+           "WHERE lower(skill.name) LIKE CONCAT('%', lower(trim(:name)), '%') ")
+    Page<Skill> getAllByNameContaining(@Param("name") String name, Pageable pageable);
 
     Skill getByNameAndCategoryId(String skillName, long categoryId);
 

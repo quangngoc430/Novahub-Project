@@ -11,11 +11,17 @@ import vn.novahub.helpdesk.model.Issue;
 @Repository
 public interface IssueRepository extends PagingAndSortingRepository<Issue, Long> {
 
-    Page<Issue> getAllByTitleContainingOrContentContaining(String title,
-                                                           String content,
+    @Query("FROM Issue issue " +
+           "WHERE (lower(issue.title) LIKE CONCAT('%', lower(trim(:title)), '%') " +
+           "OR lower(issue.content) LIKE CONCAT('%', lower(trim(:content)), '%'))")
+    Page<Issue> getAllByTitleContainingOrContentContaining(@Param("title") String title,
+                                                           @Param("content") String content,
                                                            Pageable pageable);
 
-    @Query("SELECT issue FROM Issue issue WHERE (issue.title LIKE CONCAT('%', :title, '%') OR issue.content LIKE CONCAT('%', :content, '%')) AND issue.status = :status")
+    @Query("FROM Issue issue " +
+           "WHERE (lower(issue.title) LIKE CONCAT('%', lower(trim(:title)), '%') " +
+           "OR lower(issue.content) LIKE CONCAT('%', lower(trim(:content)), '%')) " +
+           "AND issue.status = :status")
     Page<Issue> getAllByTitleContainingOrContentContainingAndStatus(@Param("title") String title,
                                                                     @Param("content") String content,
                                                                     @Param("status") String status,
@@ -23,8 +29,8 @@ public interface IssueRepository extends PagingAndSortingRepository<Issue, Long>
 
     @Query("FROM Issue issue " +
            "WHERE issue.accountId = :accountId " +
-           "AND (issue.title LIKE CONCAT('%', :keyword, '%') " +
-           "OR issue.content LIKE CONCAT('%', :keyword, '%')) " +
+           "AND (lower(issue.title) LIKE CONCAT('%', lower(trim(:keyword)), '%') " +
+           "OR lower(issue.content) LIKE CONCAT('%', lower(trim(:keyword)), '%')) " +
            "AND issue.status <> 'CANCELLED'")
     Page<Issue> getAllByAccountIdAndTitleContainingOrContentContaining(@Param("accountId") long accountId,
                                                                        @Param("keyword") String keyword,
@@ -34,8 +40,8 @@ public interface IssueRepository extends PagingAndSortingRepository<Issue, Long>
            "WHERE issue.status = :status " +
            "AND issue.status <> 'CANCELLED' " +
            "AND issue.accountId = :accountId " +
-           "AND (issue.title LIKE CONCAT('%', :keyword, '%') " +
-           "OR issue.content LIKE CONCAT('%', :keyword, '%'))")
+           "AND (lower(issue.title) LIKE CONCAT('%', lower(trim(:keyword)), '%') " +
+           "OR lower(issue.content) LIKE CONCAT('%', lower(trim(:keyword)), '%'))")
     Page<Issue> getAllByAccountIdAndStatusAndTitleContainingAndContentContaining(@Param("accountId") long accountId,
                                                                                  @Param("keyword") String keyword,
                                                                                  @Param("status") String status,
