@@ -53,6 +53,13 @@ public interface DayOffRepository extends PagingAndSortingRepository<DayOff, Lon
 
     @Query("SELECT dayOff " +
             "FROM DayOff dayOff " +
+            "JOIN DayOffAccount dayOffAccount " +
+            "ON dayOff.dayOffAccountId = dayOffAccount.id " +
+            "WHERE dayOffAccount.year = :year")
+    List<DayOff> findByYear(@Param("year") int year);
+
+    @Query("SELECT dayOff " +
+            "FROM DayOff dayOff " +
             "WHERE dayOff.status <> 'PENDING'")
     Page<DayOff> findAllAnswered(Pageable pageable);
 

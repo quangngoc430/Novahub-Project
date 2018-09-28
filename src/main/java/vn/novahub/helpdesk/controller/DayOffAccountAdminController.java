@@ -34,6 +34,25 @@ public class DayOffAccountAdminController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/generate/{year}")
+    public ResponseEntity<String> generate(@PathVariable("year") int year)
+            throws DayOffAccountIsExistException, DayOffTypeNotFoundException {
+
+        dayOffAccountService.generateAllDayOffAccount(year);
+
+        return new ResponseEntity<>("Generate DayOffAccounts successful", HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/delete/{year}")
+    public ResponseEntity<String> deleteAll(@PathVariable("year") int year) throws DayOffAccountNotFoundException {
+
+        dayOffAccountService.deleteAllDayOffAccount(year);
+
+        return new ResponseEntity<>("Delete all DayOffAccounts in " + year + " successful", HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @JsonView(View.DayOffAccountRespond.class)
     @GetMapping
     public ResponseEntity<Page<DayOffAccount>> adminGet(
