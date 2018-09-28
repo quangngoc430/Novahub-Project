@@ -64,7 +64,7 @@ public class AccountController {
     }
 
     private void handleAuthenticationToken(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, UnauthorizedException, TokenIsExpiredException {
-        String accessToken = request.getHeader("access_token");
+        String accessToken = request.getHeader("access-token");
         String urlRequest = (String) request.getAttribute("url_request");
 
         accountService.authenticationToken(accessToken, request);
