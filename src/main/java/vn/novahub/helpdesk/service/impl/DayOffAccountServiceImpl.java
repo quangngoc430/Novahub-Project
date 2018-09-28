@@ -188,10 +188,10 @@ public class DayOffAccountServiceImpl implements DayOffAccountService {
     }
 
     //This method is writen according to Company Policy
+    //TODO: Yearly is hardcode, may be change it later
     private void modifyYearlyQuota(Account account, int year) {
         int joiningYear = getYearOfDate(account.getJoiningDate());
         int joiningMonth = getMonthOfDate(account.getJoiningDate());
-        //Yearly is hardcode, may be change later
         DayOffType dayOffType = dayOffTypeRepository.findByType("Yearly");
         DayOffAccount dayOffAccount =
                 dayOffAccountRepository
