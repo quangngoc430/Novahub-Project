@@ -97,44 +97,71 @@ $ mvn spring-boot:run
 ```sh 
 $ mvn spring-boot:run -Dspring-boot.run.profiles=dev
 ```
-### Guide login via normal or google account
-##### Normal login:
-![image](https://i.imgur.com/l1cybAil.png)
-
-* Enter email and password to login.
-
-##### Login with google:
-* Click google icon on the login page
-* Then you will be redirected to the login page of Google
-
-![image](https://i.imgur.com/gIGd4hGl.png)
-
-### Guide use api
-* URL: 
-    * /api/users/me
-* Method: 
-    * GET
-* Parameters:
-    * header: 
-    * access_token: "ya29.GlwCBq8sw1QANaeE-gryVxOa-6JTD58Hk1wHANuvSYDJ0-j-_DsJ9n0AwmoLDMdbt5B4oYW8nR8coesOvZuAcMtje9wi6S17aDXE5gmA6oqSTXtVRGoUIDRwKLeo1A"
-
-## Guide use swagger (document)
-
-Get swagger ui
-```sh
-$ git clone https://github.com/swagger-api/swagger-ui.git
+## Deploy to server
+### Step 1: Build and upload .jar file to server
+- Modify application.properties
 ```
-
-Open file index.html into swagger ui
-/swagger-ui-master/dist/index.html
-
-![image](https://i.imgur.com/zOlWcPol.png)
-
-Run project:
-```sh
-$ mvn spring-boot:run
+spring.datasource.driver-class-name=your_db_driver
+spring.datasource.url=your_db_url
+spring.datasource.username=your_db_username
+spring.datasource.password=yor_db_password
+server.port=8888
+logging.file=/var/log/helpdesk.log
 ```
+- Build application
+```
+mvn clean package -Dmaven.test.skip=true
 
-Enter URL "http://localhost:8080/swagger/openapi.json" into the text box in the left of Explore button
+```
+- Connect server
+```
+ssh helpdesk@helpdesk.novahub.vn
+```
+- Make a new folder
+```
+$ cd /apps/helpdesk/be/releases/
+$ mkdir $(date + %Y%m%d_%H%M%S)
+```
+- Make a symbolic link current to new folder
+```
+ln -s /apps/helpdesk/be/releases/new_folder_name_just_created_above /apps/helpdesk/be/current
+```
+- Copy .jar file from local to server 
+```
+scp path/to/jar/file helpdesk@helpdesk.novahub.vn:/apps/helpdesk/be/releases/new_folder_name_just_created_above
+```
+### Step 2: Helpdesk configuration
+- Copy file helpdesk to server
+```
+sudo scp path/to/helpdesk/file helpdesk@helpdesk.novahub.vn:/etc/nginx/sites-available/helpdesk
+```
+- Make a symbolic link of helpdesk file inside sites-enabled folder
+```
+sudo ln -s /etc/nginx/sites-available/helpdesk /etc/nginx/sites-enabled/helpdesk
+```
+### Step 3: Modify nginx.conf (IMPORTANT)
+Add this line to http context of nginx.conf
+```
+underscores_in_headers on;
+```
+### Step 4: Make a service file
+Copy helpdesk.service to server
+```
+sudo scp path/to/helpdesk.service helpdesk@helpdesk.novahub.vn:/etc/systemd/system/helpdesk.service
+```
+### Step 5: Restart nginx and start service
+- Start helpdesk service
+```
+sudo systemctl start helpdesk
+```
+- Restart nginx
+```
+sudo systemctl restart nginx
+```
+### NOTE: Log file
+Log file of helpdesk app is stored in /var/log/helpdesk.log
+
+
+
 
 
