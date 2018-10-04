@@ -128,7 +128,7 @@ public class AccountSkillServiceImpl implements AccountSkillService {
 
         Account accountLogin = accountService.getAccountLogin();
 
-        Skill oldSkill = skillRepository.getByAccountIdAndSkillIdAndCategoryId(accountLogin.getId(), skillId, newSkill.getCategoryId());
+        Skill oldSkill = skillRepository.getByAccountIdAndSkillId(accountLogin.getId(), skillId);
 
         if(oldSkill == null)
             throw new SkillNotFoundException(skillId);
