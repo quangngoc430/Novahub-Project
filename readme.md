@@ -113,50 +113,16 @@ logging.file=/var/log/helpdesk.log
 mvn clean package -Dmaven.test.skip=true
 
 ```
-- Connect server
+- Nginx config:  Copy file helpdesk to helpdesk@helpdesk.novahub.vn:/etc/nginx/sites-available,  make
+symbolic link of this file to /etc/nginx/sites-enabled
+ 
+- Chmod file "deploy.sh"
 ```
-ssh helpdesk@helpdesk.novahub.vn
+chmod +x deploy.sh
 ```
-- Make a new folder
+- Run deploy script
 ```
-$ cd /apps/helpdesk/be/releases/
-$ mkdir $(date + %Y%m%d_%H%M%S)
-```
-- Make a symbolic link current to new folder
-```
-ln -s /apps/helpdesk/be/releases/new_folder_name_just_created_above /apps/helpdesk/be/current
-```
-- Copy .jar file from local to server 
-```
-scp path/to/jar/file helpdesk@helpdesk.novahub.vn:/apps/helpdesk/be/releases/new_folder_name_just_created_above
-```
-### Step 2: Helpdesk configuration
-- Copy file helpdesk to server
-```
-sudo scp path/to/helpdesk/file helpdesk@helpdesk.novahub.vn:/etc/nginx/sites-available/helpdesk
-```
-- Make a symbolic link of helpdesk file inside sites-enabled folder
-```
-sudo ln -s /etc/nginx/sites-available/helpdesk /etc/nginx/sites-enabled/helpdesk
-```
-### Step 3: Modify nginx.conf (IMPORTANT)
-Add this line to http context of nginx.conf
-```
-underscores_in_headers on;
-```
-### Step 4: Make a service file
-Copy helpdesk.service to server
-```
-sudo scp path/to/helpdesk.service helpdesk@helpdesk.novahub.vn:/etc/systemd/system/helpdesk.service
-```
-### Step 5: Restart nginx and start service
-- Start helpdesk service
-```
-sudo systemctl start helpdesk
-```
-- Restart nginx
-```
-sudo systemctl restart nginx
+./deploy.sh
 ```
 ### NOTE: Log file
 Log file of helpdesk app is stored in /var/log/helpdesk.log
