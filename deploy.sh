@@ -1,28 +1,37 @@
 #!/bin/bash
+
  currentDate=$(date +%Y%m%d_%H%M%S)
  beDirOnServer='/home/helpdesk/apps/helpdesk/be'
  server='helpdesk@helpdesk.novahub.vn'
- serverPwd='rzmbE76xsSC'
+ jarFile='helpdesk-0.0.1-SNAPSHOT.jar'
 
- sshpass -p $serverPwd ssh $server mkdir ${beDirOnServer}/releases/$currentDate
+#  Make new directory to store new jar file
+ ssh $server mkdir ${beDirOnServer}/releases/$currentDate
 
-#  sshpass -p $serverPwd ssh $server rm ${beDirOnServer}/current
+# Upload jar file to new directory
+ scp ./target/$jarFile ${server}:/$beDirOnServer/releases/$currentDate/helpdesk.jar
 
- sshpass -p $serverPwd ssh $server ln -s ${beDirOnServer}/releases/$currentDate ${beDirOnServer}/current1
+# Copy script to start and stop app to server
+ scp stop.sh start.sh ${server}:/$beDirOnServer
 
- sshpass -p $serverPwd scp ./target/helpdesk-0.0.1-SNAPSHOT.jar ${server}:/$beDirOnServer/releases/$currentDate/helpdesk.jar
+ scp stop.sh start.sh ${server}:/$beDirOnServer
 
- sshpass -p $serverPwd scp stop.sh start.sh ${server}:/$beDirOnServer
+ ssh $server chmod +x ${beDirOnServer}/stop.sh 
 
- sshpass -p $serverPwd scp stop.sh start.sh ${server}:/$beDirOnServer
+ ssh $server chmod +x ${beDirOnServer}/start.sh 
 
- sshpass -p $serverPwd ssh $server chmod +x ${beDirOnServer}/stop.sh 
+#  Stop app temporarily
+ ssh $server ${beDirOnServer}/stop.sh 
 
- sshpass -p $serverPwd ssh $server chmod +x ${beDirOnServer}/start.sh 
+# Remove 'current' symbolic link
+ ssh $server rm ${beDirOnServer}/current
 
-#  sshpass -p $serverPwd ssh $server ${beDirOnServer}/stop.sh 
 
-#  sshpass -p $serverPwd ssh $server $beDirOnServer/start.sh
+# Make new symbolic link to new directory
+ ssh $server ln -s ${beDirOnServer}/releases/$currentDate ${beDirOnServer}/current
+
+# Start application helpdesk
+ ssh $server $beDirOnServer/start.sh
 
 
 
