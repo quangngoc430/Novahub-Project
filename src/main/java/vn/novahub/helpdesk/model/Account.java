@@ -11,6 +11,7 @@ import vn.novahub.helpdesk.view.View;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import javax.validation.groups.Default;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,18 +32,22 @@ public class Account implements Serializable {
     @Email(regexp = "^[a-zA-Z0-9._]+\\@novahub.vn", message = "email contains [a-z|A-Z|0-9|.|_] and end with @novahub.vn",
             groups = {GroupCreateAccount.class, GroupLoginAccount.class})
     @Size(min = 8, max = 80, message = "email must have between 8 and 80 characters",
-            groups = {GroupCreateAccount.class, GroupLoginAccount.class})
+            groups = {GroupCreateAccount.class, GroupLoginAccount.class, Default.class})
     @JsonView({View.Public.class, View.AccountWithSkills.class, View.AccountWithSkillsAndCategory.class, View.DayOffAccountRespond.class})
     @Column(name = "email", unique = true)
     private String email;
 
     @JsonProperty(value = "first_name")
     @JsonView({View.Public.class, View.AccountWithSkills.class, View.AccountWithSkillsAndCategory.class, View.DayOffAccountRespond.class})
+    @Size(max = 45, message = "first name must have max 45 characters",
+            groups = {GroupCreateAccount.class, Default.class})
     @Column(name = "first_name")
     private String firstName;
 
     @JsonProperty(value = "last_name")
     @JsonView({View.Public.class, View.AccountWithSkills.class, View.AccountWithSkillsAndCategory.class, View.DayOffAccountRespond.class})
+    @Size(max = 45, message = "last name must have max 45 characters",
+            groups = {GroupCreateAccount.class, Default.class})
     @Column(name = "last_name")
     private String lastName;
 
@@ -54,25 +59,35 @@ public class Account implements Serializable {
     private Date dayOfBirth;
 
     @JsonView({View.Public.class, View.AccountWithSkills.class})
+    @Size(max = 250, message = "address must have max 250 characters",
+            groups = {GroupCreateAccount.class, Default.class})
     @Column(name = "address")
     private String address;
 
     @Pattern(regexp = "^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\\s\\./0-9]*$", message = "phone have the wrong pattern",
-             groups = {GroupCreateAccount.class})
+            groups = {GroupCreateAccount.class, Default.class})
     @JsonView(View.Public.class)
+    @Size(max = 20, message = "phone must have max 20 characters",
+            groups = {GroupCreateAccount.class, Default.class})
     @Column(name = "phone")
     private String phone;
 
     @JsonView({View.Public.class, View.AccountWithSkills.class})
+    @Size(max = 250, message = "title must have max 250 characters",
+            groups = {GroupCreateAccount.class, Default.class})
     @Column(name = "title")
     private String title;
 
     @JsonView(View.Public.class)
+    @Size(max = 1000, message = "introduction must have max 1000 characters",
+            groups = {GroupCreateAccount.class, Default.class})
     @Column(name = "introduction")
     private String introduction;
 
     @JsonProperty(value = "avatar_url")
     @JsonView({View.Public.class})
+    @Size(max = 500, message = "avatar_url must have max 500 characters",
+            groups = {GroupCreateAccount.class, Default.class})
     @Column(name = "avatar_url")
     private String avatarUrl;
 
@@ -89,6 +104,8 @@ public class Account implements Serializable {
     @Status(message = "status does not match any statuses", targetClass = Account.class)
     @NotEmpty(message = "status is not empty")
     @JsonView(View.Public.class)
+    @Size(max = 100, message = "status must have max 100 characters",
+            groups = {GroupCreateAccount.class, Default.class})
     @Column(name = "status")
     private String status;
 
