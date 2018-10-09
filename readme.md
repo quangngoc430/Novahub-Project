@@ -97,44 +97,37 @@ $ mvn spring-boot:run
 ```sh 
 $ mvn spring-boot:run -Dspring-boot.run.profiles=dev
 ```
-### Guide login via normal or google account
-##### Normal login:
-![image](https://i.imgur.com/l1cybAil.png)
-
-* Enter email and password to login.
-
-##### Login with google:
-* Click google icon on the login page
-* Then you will be redirected to the login page of Google
-
-![image](https://i.imgur.com/gIGd4hGl.png)
-
-### Guide use api
-* URL: 
-    * /api/users/me
-* Method: 
-    * GET
-* Parameters:
-    * header: 
-    * access_token: "ya29.GlwCBq8sw1QANaeE-gryVxOa-6JTD58Hk1wHANuvSYDJ0-j-_DsJ9n0AwmoLDMdbt5B4oYW8nR8coesOvZuAcMtje9wi6S17aDXE5gmA6oqSTXtVRGoUIDRwKLeo1A"
-
-## Guide use swagger (document)
-
-Get swagger ui
-```sh
-$ git clone https://github.com/swagger-api/swagger-ui.git
+## Deploy to server
+### Step 1: Build and upload .jar file to server
+- Modify application.properties
 ```
-
-Open file index.html into swagger ui
-/swagger-ui-master/dist/index.html
-
-![image](https://i.imgur.com/zOlWcPol.png)
-
-Run project:
-```sh
-$ mvn spring-boot:run
+spring.datasource.driver-class-name=your_db_driver
+spring.datasource.url=your_db_url
+spring.datasource.username=your_db_username
+spring.datasource.password=yor_db_password
+server.port=8888
+logging.file=/var/log/helpdesk.log
 ```
+- Build application
+```
+mvn clean package -Dmaven.test.skip=true
 
-Enter URL "http://localhost:8080/swagger/openapi.json" into the text box in the left of Explore button
+```
+- Nginx config:  Copy file helpdesk to helpdesk@helpdesk.novahub.vn:/etc/nginx/sites-available,  make
+symbolic link of this file to /etc/nginx/sites-enabled
+ 
+- Chmod file "deploy.sh"
+```
+chmod +x deploy.sh
+```
+- Run deploy script
+```
+./deploy.sh
+```
+### NOTE: Log file
+Log file of helpdesk app is stored in /var/log/helpdesk.log
+
+
+
 
 
