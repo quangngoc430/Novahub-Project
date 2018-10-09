@@ -9,8 +9,8 @@ import vn.novahub.helpdesk.annotation.Status;
 import vn.novahub.helpdesk.validation.GroupCreateIssue;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import javax.validation.groups.Default;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -24,15 +24,20 @@ public class Issue implements Serializable {
     private long id;
 
     @NotEmpty(message = "title is not empty", groups = {GroupCreateIssue.class})
+    @Size(max = 200, message = "title must have max 100 characters",
+            groups = {GroupCreateIssue.class, Default.class})
     @Column(name = "title")
     private String title;
 
     @NotEmpty(message = "content is not empty", groups = {GroupCreateIssue.class})
+    @Size(max = 1000, message = "content must have max 1000 characters",
+            groups = {GroupCreateIssue.class, Default.class})
     @Column(name = "content")
     private String content;
 
     @Status(message = "status does not match any statuses", targetClass = Issue.class)
     @NotEmpty(message = "status is not empty")
+    @Size(max = 45, message = "status must have max 45 characters")
     @Column(name = "status")
     private String status;
 
@@ -53,6 +58,7 @@ public class Issue implements Serializable {
     private Date updatedAt = new Date();
 
     @JsonProperty(value = "reply_message")
+    @Size(max = 1000, message = "reply message must have max 1000 characters")
     @Column(name = "reply_message")
     private String replyMessage;
 
@@ -62,6 +68,7 @@ public class Issue implements Serializable {
     private long accountId;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @Size(max = 256, message = "token must have max 256 characters")
     @Column(name = "token")
     private String token;
 

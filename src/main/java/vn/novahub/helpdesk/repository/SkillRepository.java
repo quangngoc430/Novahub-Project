@@ -73,11 +73,23 @@ public interface SkillRepository extends PagingAndSortingRepository<Skill, Long>
     @Query("SELECT new Skill(skill.id, skill.name, accountHasSkill.level, skill.categoryId, accountHasSkill.id, accountHasSkill.skillId, accountHasSkill.accountId) " +
            "FROM Skill skill " +
            "JOIN AccountHasSkill accountHasSkill ON skill.id = accountHasSkill.skillId " +
+           "WHERE skill.id IN :skillIds")
+    List<Skill> findAllByIdsIn(@Param("skillIds") List<Long> skillIds, Sort sort);
+
+    @Query("SELECT new Skill(skill.id, skill.name, accountHasSkill.level, skill.categoryId, accountHasSkill.id, accountHasSkill.skillId, accountHasSkill.accountId) " +
+           "FROM Skill skill " +
+           "JOIN AccountHasSkill accountHasSkill ON skill.id = accountHasSkill.skillId " +
            "WHERE skill.id IN :skillIds AND accountHasSkill.accountId IN :accountIds")
     List<Skill> findAllByIdsIn(@Param("skillIds") List<Long> skillIds, @Param("accountIds") List<Long> accountIds, Sort sort);
 
     @Query("SELECT new Skill(skill.id, skill.name, accountHasSkill.level, skill.categoryId, accountHasSkill.id, accountHasSkill.skillId, accountHasSkill.accountId) " +
            "FROM Skill skill " +
-           "JOIN AccountHasSkill accountHasSkill ON skill.id = accountHasSkill.skillId ")
+           "JOIN AccountHasSkill accountHasSkill ON skill.id = accountHasSkill.skillId " + 
+           "WHERE accountHasSkill.accountId IN :accountIds")
     List<Skill> findAllSkillsWithLevel(@Param("accountIds") List<Long> accountIds, Sort sort);
+
+    @Query("SELECT new Skill(skill.id, skill.name, accountHasSkill.level, skill.categoryId, accountHasSkill.id, accountHasSkill.skillId, accountHasSkill.accountId) " +
+           "FROM Skill skill " +
+           "JOIN AccountHasSkill accountHasSkill ON skill.id = accountHasSkill.skillId")
+    List<Skill> findAllSkillsWithLevel(Sort sort);
 }

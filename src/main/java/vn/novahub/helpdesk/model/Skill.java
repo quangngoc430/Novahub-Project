@@ -12,10 +12,8 @@ import vn.novahub.helpdesk.validation.GroupUpdateSkill;
 import vn.novahub.helpdesk.validation.GroupUpdateSkillWithLevel;
 import vn.novahub.helpdesk.view.View;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import javax.validation.groups.Default;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -33,6 +31,8 @@ public class Skill implements Serializable {
 
     @NotEmpty(message = "name is not empty", groups = {GroupCreateSkill.class, GroupUpdateSkill.class})
     @JsonView({View.Public.class, View.AccountWithSkills.class, View.AccountWithSkillsAndCategory.class})
+    @Size(max = 45, message = "name must have max 45 characters",
+            groups = {GroupUpdateSkillWithLevel.class, Default.class})
     @Column(name = "name")
     private String name;
 
