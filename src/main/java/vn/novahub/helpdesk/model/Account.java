@@ -95,6 +95,9 @@ public class Account implements Serializable {
     @NotEmpty(message = "password is not empty",
             groups = {GroupCreateAccount.class, GroupLoginAccount.class,
                       GroupUpdatePasswordByAccount.class, GroupUpdatePasswordByAdmin.class, GroupUpdatePasswordAccountSignupWithGoogle.class})
+    @Pattern(regexp = "^[a-zA-Z0-9]+", message = "password have the wrong pattern",
+            groups = {GroupCreateAccount.class, GroupLoginAccount.class,
+                      GroupUpdatePasswordByAccount.class, GroupUpdatePasswordByAdmin.class, GroupUpdatePasswordAccountSignupWithGoogle.class})
     @Size(min = 8, max = 40, message = "password must have between 8 and 40 characters",
             groups = {GroupCreateAccount.class, GroupLoginAccount.class,
                       GroupUpdatePasswordByAccount.class, GroupUpdatePasswordByAdmin.class, GroupUpdatePasswordAccountSignupWithGoogle.class})
@@ -147,6 +150,8 @@ public class Account implements Serializable {
     @Transient
     @JsonProperty(value = "new_password", access = JsonProperty.Access.WRITE_ONLY)
     @NotEmpty(message = "new_pasword is not empty",
+            groups = {GroupUpdatePasswordByAccount.class})
+    @Pattern(regexp = "^[a-zA-Z0-9]+", message = "new_password have the wrong pattern",
             groups = {GroupUpdatePasswordByAccount.class})
     @Size(min = 8, max = 40, message = "new_password must have between 8 and 40 characters",
             groups = {GroupUpdatePasswordByAccount.class})
