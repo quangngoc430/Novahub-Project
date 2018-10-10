@@ -30,13 +30,20 @@ public class DayOffAccountController {
     @PreAuthorize("isAuthenticated()")
     @JsonView(View.DayOffAccountRespond.class)
     @GetMapping
-    public ResponseEntity<Page<DayOffAccount>> userGet(Pageable pageable)
+    public ResponseEntity<Page<DayOffAccount>> userGet(
+            @RequestParam(name = "year", required = false, defaultValue = "") String yearString,
+            Pageable pageable)
             throws DayOffAccountIsExistException,
                    DayOffTypeNotFoundException {
-
         Account account = accountService.getAccountLogin();
-        return new ResponseEntity<>(
-                dayOffAccountService.findByAccountId(account.getId(), pageable),
-                HttpStatus.OK);
+        Page<DayOffAccount> dayOffAccounts;
+        if (yearString.equals("")) {
+            dayOffAccounts = dayOffAccountService.findByAccountId(account.getId(), pageable);
+        } else {
+            int year = Integer.parseInt(yearString);
+            dayOffAccounts = dayOffAccountService.findByAccountIdAndYear(account.getId(), year, pageable);
+        }
+
+        return new ResponseEntity<>(dayOffAccounts, HttpStatus.OK);
     }
 }
