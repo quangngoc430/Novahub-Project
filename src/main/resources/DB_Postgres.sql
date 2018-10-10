@@ -75,7 +75,7 @@ CREATE TABLE account_has_skill (
 
 CREATE TABLE day_off_type (
   id SERIAL PRIMARY KEY,
-  type VARCHAR(20) NOT NULL,
+  type VARCHAR(100) NOT NULL,
   default_quota INT NOT NULL
 );
 
