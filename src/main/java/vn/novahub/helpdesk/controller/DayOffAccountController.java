@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.novahub.helpdesk.exception.dayoffaccount.DayOffAccountIsExistException;
+import vn.novahub.helpdesk.exception.dayoffaccount.DayOffAccountNotFoundException;
 import vn.novahub.helpdesk.exception.dayofftype.DayOffTypeNotFoundException;
 import vn.novahub.helpdesk.model.Account;
 import vn.novahub.helpdesk.model.DayOffAccount;
@@ -34,7 +35,8 @@ public class DayOffAccountController {
             @RequestParam(name = "year", required = false, defaultValue = "") String yearString,
             Pageable pageable)
             throws DayOffAccountIsExistException,
-                   DayOffTypeNotFoundException {
+                    DayOffTypeNotFoundException,
+                    DayOffAccountNotFoundException {
         Account account = accountService.getAccountLogin();
         Page<DayOffAccount> dayOffAccounts;
         if (yearString.equals("")) {

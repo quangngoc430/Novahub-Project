@@ -153,12 +153,12 @@ public class DayOffAccountServiceImpl implements DayOffAccountService {
 
     @Override
     public Page<DayOffAccount> findByAccountIdAndYear(long accountId, int year, Pageable pageable)
-            throws DayOffAccountIsExistException,
-                    DayOffTypeNotFoundException {
-        if (!isAccountHasAllDayOffAccount(accountId, year)) {
-            generateAllDayOffAccount(year);
+            throws DayOffAccountNotFoundException {
+        List<DayOffAccount> dayOffAccounts =
+                dayOffAccountRepository.findAllByAccountIdAndYear(accountId, year);
+        if (dayOffAccounts.isEmpty()) {
+            throw new DayOffAccountNotFoundException(accountId, year);
         }
-        List<DayOffAccount> dayOffAccounts = dayOffAccountRepository.findAllByAccountIdAndYear(accountId, year);
         return new PageImpl<>(dayOffAccounts, pageable, dayOffAccounts.size());
     }
 
