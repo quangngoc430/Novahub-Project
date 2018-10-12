@@ -9,9 +9,14 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import org.hibernate.validator.constraints.Range;
 import vn.novahub.helpdesk.view.View;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -25,6 +30,7 @@ public class DayOff {
     private long id;
 
     @Column(name = "comment")
+    @Size(max = 1000, message = "This comment is too long")
     private String comment;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -52,13 +58,17 @@ public class DayOff {
     private LocalDateTime updatedAt;
 
     @Column(name = "number_of_hours")
+    @Min(value = 0, message = "Number of hours must not be negative")
+    @Max(value = 300, message = "Number of hours is too large")
     private int numberOfHours;
 
     @Column(name = "status")
+    @Size(max = 45)
     private String status;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(name = "token")
+    @Size(max = 255)
     private String token;
 
     @Column(name = "day_off_account_id")

@@ -1,9 +1,11 @@
 package vn.novahub.helpdesk.model;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import org.hibernate.validator.constraints.Range;
 import vn.novahub.helpdesk.view.View;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "day_off_type")
@@ -17,8 +19,10 @@ public class DayOffType {
 
     @JsonView(View.DayOffAccountRespond.class)
     @Column(name = "type")
+    @Size(max = 100, message = "Name of day off type is too long")
     private String type;
 
+    @Range(min = 1, max = 300, message = "Default quota is out of range")
     @Column(name = "default_quota")
     private int defaultQuota;
 
