@@ -134,7 +134,6 @@ Run project:
 ```sh
 $ mvn spring-boot:run
 ```
-
 Enter URL "http://localhost:8080/swagger/openapi.json" into the text box in the left of Explore button
 
 

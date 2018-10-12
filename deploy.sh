@@ -14,11 +14,7 @@
 # Copy script to start and stop app to server
  scp stop.sh start.sh ${server}:/$beDirOnServer
 
- scp stop.sh start.sh ${server}:/$beDirOnServer
-
- ssh $server chmod +x ${beDirOnServer}/stop.sh 
-
- ssh $server chmod +x ${beDirOnServer}/start.sh 
+ ssh $server chmod +x ${beDirOnServer}/stop.sh ${beDirOnServer}/start.sh
 
 #  Stop app temporarily
  ssh $server ${beDirOnServer}/stop.sh 
@@ -26,12 +22,8 @@
 # Remove 'current' symbolic link
  ssh $server rm ${beDirOnServer}/current
 
-
 # Make new symbolic link to new directory
  ssh $server ln -s ${beDirOnServer}/releases/$currentDate ${beDirOnServer}/current
 
 # Start application helpdesk
  ssh $server $beDirOnServer/start.sh
-
-
-
