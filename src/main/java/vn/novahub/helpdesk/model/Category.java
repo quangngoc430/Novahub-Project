@@ -11,8 +11,7 @@ import vn.novahub.helpdesk.validation.GroupUpdateCategory;
 import vn.novahub.helpdesk.view.View;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -30,6 +29,8 @@ public class Category implements Serializable {
 
     @NotEmpty(message = "name is not empty", groups = {GroupCreateCategory.class, GroupUpdateCategory.class})
     @JsonView({View.Public.class, View.AccountWithSkills.class, View.AccountWithSkillsAndCategory.class})
+    @Size(max = 100, message = "name must have max 100 characters", 
+            groups = {GroupCreateCategory.class, GroupUpdateCategory.class})
     @Column(name = "name", unique = true)
     private String name;
 

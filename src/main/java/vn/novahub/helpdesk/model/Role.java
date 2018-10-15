@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import vn.novahub.helpdesk.view.View;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 
 @Entity
@@ -19,6 +19,7 @@ public class Role implements Serializable {
 
     @JsonView({View.Public.class, View.AccountWithSkills.class})
     @NotEmpty
+    @Size(max = 80, message = "role must have max 80 characters")
     @Column(name = "name")
     private String name;
 

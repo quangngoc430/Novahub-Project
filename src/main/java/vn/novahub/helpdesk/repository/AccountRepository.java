@@ -69,6 +69,13 @@ public interface AccountRepository extends PagingAndSortingRepository<Account, L
 
     @Query("SELECT account " +
            "FROM Account account " +
+           "WHERE 0 < (SELECT count(accountHasSkill) " +
+                      "FROM AccountHasSkill accountHasSkill " +
+                      "WHERE accountHasSkill.accountId = account.id)")
+    Page<Account> getAllHaveSkills(Pageable pageable);
+
+    @Query("SELECT account " +
+           "FROM Account account " +
            "JOIN AccountHasSkill accountHasSkill " +
            "ON account.id = accountHasSkill.accountId " +
            "WHERE accountHasSkill.skillId = :skillId")

@@ -232,7 +232,7 @@ public class AccountSkillServiceImpl implements AccountSkillService {
         List<Long> accountIds = new ArrayList<>();
 
         if (skillIds.isEmpty()) {
-            accountPage = accountRepository.findAll(pageable);
+            accountPage = accountRepository.getAllHaveSkills(pageable);
         } else {
             accountPage = accountRepository.getAllBySkillIdIsIn(skillIds, pageable);
         }
@@ -242,9 +242,17 @@ public class AccountSkillServiceImpl implements AccountSkillService {
         }
 
         if (skillIds.isEmpty()) {
-            skills = skillRepository.findAllSkillsWithLevel(accountIds, new Sort(Sort.Direction.ASC, "id"));
+            if (accountIds.isEmpty()) {
+                skills = skillRepository.findAllSkillsWithLevel(new Sort(Sort.Direction.ASC, "id"));
+            } else {
+                skills = skillRepository.findAllSkillsWithLevel(accountIds, new Sort(Sort.Direction.ASC, "id"));
+            }
         } else {
-            skills = skillRepository.findAllByIdsIn(skillIds, accountIds, new Sort(Sort.Direction.ASC, "id"));
+            if (accountIds.isEmpty()) {
+                skills = skillRepository.findAllByIdsIn(skillIds, new Sort(Sort.Direction.ASC, "id"));
+            } else {
+                skills = skillRepository.findAllByIdsIn(skillIds, accountIds, new Sort(Sort.Direction.ASC, "id"));
+            }            
         }
 
         List<Category> categories = IteratorUtils.toList(categoryRepository.findAll().iterator());
