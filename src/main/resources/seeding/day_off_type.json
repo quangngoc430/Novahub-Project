@@ -1,6 +1,6 @@
     [{
       "id"  : 1,
-      "type" : "Vacation",
+      "type" : "Yearly",
       "defaultQuota" : 88
     },
     {

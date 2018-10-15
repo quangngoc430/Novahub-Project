@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.novahub.helpdesk.exception.dayoffaccount.DayOffAccountIsExistException;
+import vn.novahub.helpdesk.exception.dayoffaccount.DayOffAccountNotFoundException;
 import vn.novahub.helpdesk.exception.dayofftype.DayOffTypeNotFoundException;
 import vn.novahub.helpdesk.model.Account;
 import vn.novahub.helpdesk.model.DayOffAccount;
@@ -30,13 +31,21 @@ public class DayOffAccountController {
     @PreAuthorize("isAuthenticated()")
     @JsonView(View.DayOffAccountRespond.class)
     @GetMapping
-    public ResponseEntity<Page<DayOffAccount>> userGet(Pageable pageable)
+    public ResponseEntity<Page<DayOffAccount>> userGet(
+            @RequestParam(name = "year", required = false, defaultValue = "") String yearString,
+            Pageable pageable)
             throws DayOffAccountIsExistException,
-                   DayOffTypeNotFoundException {
-
+                    DayOffTypeNotFoundException,
+                    DayOffAccountNotFoundException {
         Account account = accountService.getAccountLogin();
-        return new ResponseEntity<>(
-                dayOffAccountService.findByAccountId(account.getId(), pageable),
-                HttpStatus.OK);
+        Page<DayOffAccount> dayOffAccounts;
+        if (yearString.equals("")) {
+            dayOffAccounts = dayOffAccountService.findByAccountId(account.getId(), pageable);
+        } else {
+            int year = Integer.parseInt(yearString);
+            dayOffAccounts = dayOffAccountService.findByAccountIdAndYear(account.getId(), year, pageable);
+        }
+
+        return new ResponseEntity<>(dayOffAccounts, HttpStatus.OK);
     }
 }

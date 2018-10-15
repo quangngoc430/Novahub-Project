@@ -10,5 +10,9 @@ public class DayOffAccountNotFoundException extends Exception{
         super("DayOffAccountNotFoundException with type = " + type);
     }
 
+    public DayOffAccountNotFoundException(long accountId, int year){
+        super("DayOffAccount of accountId = " + accountId + "in year of " + year + " is not found");
+    }
+
     public DayOffAccountNotFoundException(long id) { super("DayOffAccountNotFoundException with id = "+id); }
 }

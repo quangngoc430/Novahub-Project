@@ -18,6 +18,8 @@ public interface DayOffAccountService {
 
     Page<DayOffAccount> findByAccountId(long accountId, Pageable pageable) throws DayOffAccountIsExistException, DayOffTypeNotFoundException;
 
+    Page<DayOffAccount> findByAccountIdAndYear(long accountId, int year, Pageable pageable) throws DayOffAccountNotFoundException;
+
     Page<DayOffAccount> getAll(Pageable pageable);
 
     DayOffAccount getById(long id) throws DayOffAccountNotFoundException;

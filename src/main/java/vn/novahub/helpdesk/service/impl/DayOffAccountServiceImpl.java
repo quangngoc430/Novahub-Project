@@ -2,6 +2,7 @@ package vn.novahub.helpdesk.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import vn.novahub.helpdesk.exception.dayoffaccount.DayOffAccountIsExistException;
@@ -148,6 +149,17 @@ public class DayOffAccountServiceImpl implements DayOffAccountService {
             generateDayOffAccountIfNotExist(accountId, getYearOfDate(new Date()));
         }
         return dayOffAccountRepository.findAllByAccountId(accountId, pageable);
+    }
+
+    @Override
+    public Page<DayOffAccount> findByAccountIdAndYear(long accountId, int year, Pageable pageable)
+            throws DayOffAccountNotFoundException {
+        List<DayOffAccount> dayOffAccounts =
+                dayOffAccountRepository.findAllByAccountIdAndYear(accountId, year);
+        if (dayOffAccounts.isEmpty()) {
+            throw new DayOffAccountNotFoundException(accountId, year);
+        }
+        return new PageImpl<>(dayOffAccounts, pageable, dayOffAccounts.size());
     }
 
     private void generateDayOffAccountIfNotExist(long accountId, int year) {
