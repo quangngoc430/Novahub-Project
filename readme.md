@@ -68,18 +68,15 @@ Clone project from bitbucket
 ```sh
 $ git clone https://<account namet>@bitbucket.org/novahub_intern/java.git
 ```
-
 Then:
 ```sh
 $ mvn install clean
 ```
-
 ### Execute sql files
 
 Run two files data into the project
 file 1: /src/main/resources/DB.sql
 file 2: /src/main/resources/data-int.sql
-
 
 Copy content into two files
 
@@ -127,14 +124,8 @@ chmod +x deploy.sh
 ### NOTE: Log file
 Log file of helpdesk app is stored in /var/log/helpdesk.log
 
-
-<<<<<<< HEAD
 Run project:
 ```sh
 $ mvn spring-boot:run
 ```
 Enter URL "http://localhost:8080/swagger/openapi.json" into the text box in the left of Explore button
-
-
-
- 
