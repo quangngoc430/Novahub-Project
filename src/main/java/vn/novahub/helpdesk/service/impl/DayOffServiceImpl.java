@@ -208,6 +208,7 @@ public class DayOffServiceImpl implements DayOffService {
             IOException {
 
         Optional<DayOff> dayOffOptional = dayOffRepository.findById(dayOffId);
+        Account account = accountService.getAccountLogin();
 
         if (!dayOffOptional.isPresent()) {
             throw new DayOffNotFoundException(dayOffId);
@@ -217,7 +218,8 @@ public class DayOffServiceImpl implements DayOffService {
             throw new DayOffIsAnsweredException(dayOffId);
         }
 
-        if (LocalDate.now().isAfter(dayOffOptional.get().getStartDate())) {
+        if (LocalDate.now().isAfter(dayOffOptional.get().getStartDate())
+                && !account.getRole().getName().equals(RoleEnum.ADMIN.name())) {
             throw new DayOffOverdueException(dayOffId);
         }
 

@@ -2,9 +2,11 @@ package vn.novahub.helpdesk.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
+import org.hibernate.validator.constraints.Range;
 import vn.novahub.helpdesk.view.View;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import java.util.Set;
 
 @Entity
@@ -19,14 +21,17 @@ public class DayOffAccount {
 
     @JsonView(View.DayOffAccountRespond.class)
     @Column(name = "year")
+    @Min(value = 2018, message = "Year must be from 2018")
     private int year;
 
     @JsonView(View.DayOffAccountRespond.class)
     @Column(name = "private_quota")
+    @Range(min = 1, max = 300, message = "Quota is out of range")
     private int privateQuota;
 
     @JsonView(View.DayOffAccountRespond.class)
     @Column(name = "remaining_time")
+    @Range(min = 0, max = 300, message = "Quota is out of range")
     private int remainingTime;
 
     @Column(name = "day_off_type_id")
