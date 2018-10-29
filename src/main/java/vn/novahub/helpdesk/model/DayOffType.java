@@ -22,7 +22,7 @@ public class DayOffType {
     @Size(max = 100, message = "Name of day off type is too long")
     private String type;
 
-    @Range(min = 1, max = 300, message = "Default quota is out of range")
+    @Range(min = 0, max = 300, message = "Default quota is out of range")
     @Column(name = "default_quota")
     private int defaultQuota;
 

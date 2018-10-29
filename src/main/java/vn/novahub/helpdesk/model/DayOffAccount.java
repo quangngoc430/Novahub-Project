@@ -26,7 +26,7 @@ public class DayOffAccount {
 
     @JsonView(View.DayOffAccountRespond.class)
     @Column(name = "private_quota")
-    @Range(min = 1, max = 300, message = "Quota is out of range")
+    @Range(min = 0, max = 300, message = "Quota is out of range")
     private int privateQuota;
 
     @JsonView(View.DayOffAccountRespond.class)
